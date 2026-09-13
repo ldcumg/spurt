@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
 @theme {
+  /* Spacing */
+
+  --spacing: 1px;
+
   /* Primary - Growth Green */
 
   --color-primary-50: #f2f8f3;
@@ -47,7 +51,6 @@
   --color-neutral-100: #f0f3f1;
   --color-neutral-50: #f8faf9;
   --color-white: #ffffff;
-
 
   /* Surface */
 
@@ -107,19 +110,6 @@
   --radius-3xl: 24px;
   --radius-full: 9999px;
 
-  /* Spacing */
-
-  --spacing-1: 4px;
-  --spacing-2: 8px;
-  --spacing-3: 12px;
-  --spacing-4: 16px;
-  --spacing-5: 20px;
-  --spacing-6: 24px;
-  --spacing-8: 32px;
-  --spacing-10: 40px;
-  --spacing-12: 48px;
-  --spacing-16: 64px;
-
   /* Shadow */
 
   --shadow-sm: 0 2px 8px rgb(32 56 40 / 4%);
@@ -143,6 +133,8 @@
   }
 }
 
-@layer components {}
+@layer components {
+}
 
-@layer utilities {}
+@layer utilities {
+}
