@@ -4,16 +4,28 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 
-const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@": path.resolve(dirname, "src"),
+    },
+  },
   test: {
-    environment: "jsdom",
-    globals: true,
-    setupFiles: ["./vitest.setup.ts"],
     css: true,
     projects: [
+      {
+        test: {
+          name: "vitest",
+          environment: "jsdom",
+          globals: true,
+          setupFiles: ["./vitest.setup.ts"],
+          include: ["src/**/*.{test,spec}.{ts,tsx}"],
+          exclude: ["e2e/**"],
+        },
+      },
       {
         extends: true,
         plugins: [
@@ -23,6 +35,7 @@ export default defineConfig({
         ],
         test: {
           name: "storybook",
+          setupFiles: [],
           browser: {
             enabled: true,
             headless: true,

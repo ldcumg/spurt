@@ -2,8 +2,8 @@ name: Test
 on:
   workflow_dispatch:
   pull_request:
-    branches: [main, dev]
     types: [opened, synchronize, reopened]
+    branches: [main, dev]
 
 # 댓글 쓰기 권한을 부여
 permissions:
@@ -91,9 +91,9 @@ jobs:
           # 변경된 파일과 관련된 스토리만 테스트하여 빌드 속도를 최적화
           onlyChanged: true
 
-      # 빌드가 성공하든 실패하든(변경사항이 있든 없든) 항상 PR 코멘트를 남김
+      # 변경사항이 있을 때 항상 PR 코멘트를 남김
       - name: Comment PR with Chromatic results
-        if: always()
+        if: always() && steps.chromatic_build.outputs.changeCount != '0'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: "chromatic-review" # 여러 번 실행되어도 코멘트를 하나로 유지(업데이트)
