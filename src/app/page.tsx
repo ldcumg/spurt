@@ -2,7 +2,10 @@ import Badge from "@/components/ui/Badge";
 
 export default function HomePage() {
   return (
-  <Badge type="goal"></Badge>
+    <>
+      {" "}
+      <Badge type="goal"></Badge>
+      <div></div>
+    </>
   );
-  
 }
