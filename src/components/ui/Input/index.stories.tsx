@@ -2,42 +2,64 @@ import Input from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "Input",
+  title: "components/Input",
   component: Input,
   parameters: {
     layout: "centered",
   },
   tags: ["autodocs"],
-  args: {
-    label: "이메일",
-    placeholder: "이메일을 입력하세요",
-  },
 } satisfies Meta<typeof Input>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
-export const Error: Story = {
-  args: {
-    error: "유효한 이메일 형식이 아닙니다",
-  },
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="flex flex-col gap-12">
+      <h3 className="text-title-md text-neutral-900">{title}</h3>
+      {children}
+    </section>
+  );
+}
+
+export const AllStates: Story = {
+  render: () => (
+    <div className="flex w-320 flex-col gap-60">
+      <Section title="Default">
+        <Input
+          label="이메일"
+          placeholder="이메일을 입력하세요"
+        />
+      </Section>
+      <Section title="Error">
+        <Input
+          label="이메일"
+          placeholder="이메일을 입력하세요"
+          error="유효한 이메일 형식이 아닙니다"
+        />
+      </Section>
+      <Section title="Disabled">
+        <Input
+          label="이메일"
+          placeholder="이메일을 입력하세요"
+          disabled
+        />
+      </Section>
+      <Section title="No Label">
+        <Input placeholder="이메일을 입력하세요" />
+      </Section>
+      <Section title="Password">
+        <Input
+          label="비밀번호"
+          placeholder="비밀번호를 입력하세요"
+          type="password"
+        />
+      </Section>
+    </div>
+  ),
 };
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-  },
-};
-export const NoLabel: Story = {
-  args: {
-    label: undefined,
-    placeholder: "라벨이 없는 인풋입니다",
-  },
-};
-export const Password: Story = {
-  args: {
-    label: "비밀번호",
-    type: "password",
-  },
+
+export const Playground: Story = {
+  args: {label: "이메일", placeholder: "이메일을 입력하세요"}
 };
