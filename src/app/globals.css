@@ -62,6 +62,19 @@
   --color-foreground: var(--color-neutral-700);
   --color-foreground-title: var(--color-neutral-900);
 
+  /* Border */
+
+  --color-border: var(--color-neutral-200);
+  --color-input-border: var(--color-neutral-300);
+
+  /* Placeholder */
+
+  --color-placeholder: var(--color-neutral-400);
+
+  /* Track */
+
+  --color-track: var(--color-neutral-200);
+
   /* Typography */
 
   --text-display: 32px;
@@ -118,9 +131,22 @@
 }
 
 @layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
   body {
     background: var(--color-surface);
     color: var(--color-foreground);
+  }
+
+  input,
+  textarea {
+    border-color: var(--color-input-border);
+  }
+
+  ::placeholder {
+    color: var(--color-placeholder);
   }
 
   h1,
