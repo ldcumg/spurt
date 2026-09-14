@@ -35,7 +35,6 @@ export default defineConfig({
         ],
         test: {
           name: "storybook",
-          setupFiles: [],
           browser: {
             enabled: true,
             headless: true,
