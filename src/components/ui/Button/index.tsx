@@ -2,7 +2,7 @@ import { twMerge } from "@/lib/twMerge";
 import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
 
-const buttonVariants = cva("rounded-lg disabled:bg-disabled disabled:text-white", {
+const buttonVariants = cva("rounded-lg disabled:bg-disabled disabled:text-white active:opacity-80", {
   variants: {
     variant: {
       primary: "bg-primary-500 text-white hover:bg-primary-600",
