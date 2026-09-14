@@ -24,6 +24,10 @@ interface BadgeProps{
     className?: string;
 }
 
+/**
+ * @param type: 할 일의 상태를 넘겨주세요 (todo, done)
+ * @param className: css 수정이 필요한 경우 사용
+ */
 export default function Badge({type, className=""}: BadgeProps){
     const currentBadge = BADGE_CONFIG[type];
 
