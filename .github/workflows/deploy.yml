@@ -10,7 +10,7 @@ on:
     branches: [main, dev]
 
 jobs:
-  # dev 브랜치에 PR이 merge될 때 preview 배포
+  # dev 브랜치에 merge될 때 preview 배포
   deploy-preview:
     if: ${{ github.event.pull_request.merged == true &&
       github.event.pull_request.base.ref == 'dev'}}
@@ -38,7 +38,7 @@ jobs:
       - name: 프로젝트 빌드
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Vercel preview에 배포
+      - name: Vercel preview 배포
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
 
   # dev 브랜치에서 main 브랜치로 merge될 때 production 배포
@@ -48,7 +48,6 @@ jobs:
       github.event.pull_request.base.ref == 'main'}}
 
     runs-on: ubuntu-latest
-
     steps:
       - name: Github Repository 불러오기
         uses: actions/checkout@v7
@@ -71,5 +70,5 @@ jobs:
       - name: 프로젝트 빌드
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Vercel production에 배포
+      - name: Vercel production 배포
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}

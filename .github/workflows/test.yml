@@ -29,7 +29,7 @@ jobs:
       - name: 의존성 설치
         run: pnpm install --frozen-lockfile
 
-      - name: Jest 실행
+      - name: Vitest 실행
         run: pnpm test
 
   e2e-tests:
@@ -51,6 +51,9 @@ jobs:
       - name: 의존성 설치
         run: pnpm install --frozen-lockfile
 
+      - name: Build
+        run: pnpm build
+
       - name: Playwright Browsers 설치
         run: pnpm exec playwright install --with-deps
 
@@ -68,6 +71,8 @@ jobs:
     steps:
       - name: Github Repository 파일 불러오기
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: pnpm 설치 및 설정
         uses: pnpm/action-setup@v4
