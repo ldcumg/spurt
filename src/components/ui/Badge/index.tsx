@@ -3,7 +3,7 @@ export type BadgeType = "todo" | "done" | "goal"| "category";
 const BADGE_CONFIG: Record<BadgeType,{label:string; style: string}>={
     todo:{
         label:"TO DO",
-        style:"bg-coral-500 text-coral-500"
+        style:"bg-coral-light text-coral"
     },
     done:{
         label:"DONE",
@@ -11,11 +11,11 @@ const BADGE_CONFIG: Record<BadgeType,{label:string; style: string}>={
     },
     goal:{
         label:"GOAL",
-        style:"bg-blue-100 text-blue-500"
+        style:"bg-blue-light text-blue"
     },
     category:{
         label: "CATEGORY",
-        style: "bg-yellow-500 text-yellow-100"
+        style: "bg-yellow-light text-yellow"
     }
 }
 
@@ -28,7 +28,7 @@ export default function Badge({type, className=""}: BadgeProps){
     const currentBadge = BADGE_CONFIG[type];
 
     return(
-    <div className={`px-10 py-5 rounded-6 ${currentBadge.style} ${className}`}>
+    <div className={`inline-flex items-center justify-center w-fit px-10 py-5 rounded-sm text-caption ${currentBadge.style} ${className}`}>
         {currentBadge.label}
     </div>
     );
