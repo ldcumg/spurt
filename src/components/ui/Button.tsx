@@ -1,15 +1,16 @@
+import { twMerge } from "@/lib/twMerge";
 import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
-import { twMerge } from "tailwind-merge";
 
-const buttonVariants = cva("disabled:cursor-not-allowed disabled:bg-disabled", {
+const buttonVariants = cva("rounded-lg disabled:bg-disabled disabled:text-white", {
   variants: {
     variant: {
-      primary: "bg-primary-500 hover:bg-primary-600",
+      primary: "bg-primary-500 text-white hover:bg-primary-600",
       outline: "bg-transparent border",
+      ghost: "bg-transparent",
     },
     size: {
-      xs: "h-20 px-8",
+      xs: "h-20 px-8 text-caption",
       sm: "h-36 px-12",
       md: "h-40 px-16",
       lg: "h-48 px-16",
@@ -17,6 +18,10 @@ const buttonVariants = cva("disabled:cursor-not-allowed disabled:bg-disabled", {
       wide: "w-full h-48",
       square: "size-100 p-20",
     },
+  },
+  defaultVariants: {
+    variant: "primary",
+    size: "md",
   },
 });
 

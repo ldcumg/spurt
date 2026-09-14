@@ -14,6 +14,33 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+export const Default: Story = {
+  args: {
+    size: "md",
+    variant: "primary",
+    children: "버튼 내용",
+    disabled: false,
+  },
+};
+
+export const Outline: Story = {
+  args: {
+    size: "md",
+    variant: "outline",
+    children: "버튼 내용",
+    disabled: false,
+  },
+};
+
+export const Ghost: Story = {
+  args: {
+    size: "md",
+    variant: "ghost",
+    children: "버튼 내용",
+    disabled: false,
+  },
+};
+
 export const XSmall: Story = {
   args: {
     size: "xs",
