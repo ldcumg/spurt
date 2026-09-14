@@ -6,8 +6,9 @@ const buttonVariants = cva("rounded-lg disabled:bg-disabled disabled:text-white"
   variants: {
     variant: {
       primary: "bg-primary-500 text-white hover:bg-primary-600",
-      outline: "bg-transparent border border-primary-600 text-primary-600",
-      ghost: "bg-transparent",
+      outline:
+        "bg-transparent border border-primary-500 text-primary-500 hover:bg-neutral-100 hover:border-primary-600 hover:text-primary-600",
+      ghost: "bg-transparent hover:bg-neutral-100",
     },
     size: {
       xs: "h-20 px-8 text-caption",
