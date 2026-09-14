@@ -1,3 +1,5 @@
+"use client";
+
 import { twMerge } from "@/lib/twMerge";
 import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
