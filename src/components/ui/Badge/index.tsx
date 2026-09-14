@@ -27,5 +27,9 @@ interface BadgeProps{
 export default function Badge({type, className=""}: BadgeProps){
     const currentBadge = BADGE_CONFIG[type];
 
-    return<div></div>;
+    return(
+    <div className={`px-10 py-5 rounded-6 ${currentBadge.style} ${className}`}>
+        {currentBadge.label}
+    </div>
+    );
 }
