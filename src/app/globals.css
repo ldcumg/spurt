@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+<<<<<<< HEAD
 }
 
 @layer base {
@@ -9,5 +10,168 @@
 @layer components {
 }
 
+=======
+  /* Spacing */
+
+  --spacing: 1px;
+
+  /* Primary - Growth Green */
+
+  --color-primary-50: #f2f8f3;
+  --color-primary-100: #e3f2e7;
+  --color-primary-200: #cbe7d2;
+  --color-primary-300: #a6d5b3;
+  --color-primary-400: #74c08a;
+  --color-primary-500: #4ead6d;
+  --color-primary-600: #3b9259;
+  --color-primary-700: #2f7548;
+
+  /* Supporting Colors */
+
+  --color-blue: #5b8def;
+  --color-blue-light: #eef4ff;
+
+  --color-coral: #f58a6a;
+  --color-coral-light: #fff1ec;
+
+  --color-yellow: #f3be62;
+  --color-yellow-light: #fff8e8;
+
+  --color-mint: #64c6ae;
+  --color-mint-light: #eaf8f4;
+
+  /* Semantic */
+
+  --color-success: #3b9259;
+  --color-error: #df5656;
+  --color-warning: #e7a93b;
+  --color-information: #527fdf;
+  --color-disabled: #a8b0ab;
+
+  /* Neutral */
+
+  --color-neutral-900: #17211b;
+  --color-neutral-800: #27332b;
+  --color-neutral-700: #414c45;
+  --color-neutral-600: #66716a;
+  --color-neutral-500: #87918b;
+  --color-neutral-400: #a8b0ab;
+  --color-neutral-300: #ccd2ce;
+  --color-neutral-200: #e3e7e4;
+  --color-neutral-100: #f0f3f1;
+  --color-neutral-50: #f8faf9;
+  --color-white: #ffffff;
+
+  /* Surface */
+
+  --color-surface: var(--color-neutral-50);
+  --color-surface-card: var(--color-white);
+
+  /* Foreground */
+
+  --color-foreground: var(--color-neutral-700);
+  --color-foreground-title: var(--color-neutral-900);
+
+  /* Border */
+
+  --color-border: var(--color-neutral-200);
+  --color-input-border: var(--color-neutral-300);
+
+  /* Placeholder */
+
+  --color-placeholder: var(--color-neutral-400);
+
+  /* Track */
+
+  --color-track: var(--color-neutral-200);
+
+  /* Typography */
+
+  --text-display: 32px;
+  --text-display--font-weight: 700;
+  --text-display--line-height: 42px;
+
+  --text-title-lg: 28px;
+  --text-title-lg--font-weight: 700;
+  --text-title-lg--line-height: 38px;
+
+  --text-title-md: 24px;
+  --text-title-md--font-weight: 700;
+  --text-title-md--line-height: 34px;
+
+  --text-title-sm: 20px;
+  --text-title-sm--font-weight: 600;
+  --text-title-sm--line-height: 30px;
+
+  --text-title-xs: 16px;
+  --text-title-xs--font-weight: 600;
+  --text-title-xs--line-height: 24px;
+
+  --text-body-lg: 16px;
+  --text-body-lg--font-weight: 400;
+  --text-body-lg--line-height: 26px;
+
+  --text-body-md: 14px;
+  --text-body-md--font-weight: 400;
+  --text-body-md--line-height: 22px;
+
+  --text-body-sm: 13px;
+  --text-body-sm--font-weight: 400;
+  --text-body-sm--line-height: 20px;
+
+  --text-caption: 12px;
+  --text-caption--font-weight: 400;
+  --text-caption--line-height: 18px;
+
+  /* Radius */
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadow */
+
+  --shadow-sm: 0 2px 8px rgb(32 56 40 / 4%);
+  --shadow-md: 0 8px 24px rgb(32 56 40 / 7%);
+  --shadow-lg: 0 16px 40px rgb(32 56 40 / 10%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background: var(--color-surface);
+    color: var(--color-foreground);
+  }
+
+  input,
+  textarea {
+    border-color: var(--color-input-border);
+  }
+
+  ::placeholder {
+    color: var(--color-placeholder);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-foreground-title);
+  }
+}
+
+@layer components {
+}
+
+>>>>>>> dev
 @layer utilities {
 }
