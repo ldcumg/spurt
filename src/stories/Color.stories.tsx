@@ -63,7 +63,7 @@ function ColorPalette({ label, colors }: ColorPaletteProps) {
   return (
     <div>
       <h2 className="text-title-lg">{label}</h2>
-      <div className="grid grid-cols-4 gap-16">
+      <div className="mt-30 grid grid-cols-4 gap-16">
         {colors.map((color) => (
           <div key={color}>
             <div className={`h-80 rounded-md border bg-${color}`} />
@@ -77,43 +77,43 @@ function ColorPalette({ label, colors }: ColorPaletteProps) {
 
 type Story = StoryObj<typeof meta>;
 
-export const Colors: Story = {
+export const Color: Story = {
   render: () => (
     <div className="flex flex-col gap-50">
       <ColorPalette
-        label="Primary Color"
+        label="Primary Colors"
         colors={PRIMARY_COLORS}
       />
       <ColorPalette
-        label="Supporting Color"
+        label="Supporting Colors"
         colors={SUPPORTING_COLORS}
       />
       <ColorPalette
-        label="Semantic Color"
+        label="Semantic Colors"
         colors={SEMANTIC_COLORS}
       />
       <ColorPalette
-        label="Surface Color"
+        label="Surface Colors"
         colors={SURFACE_COLORS}
       />
       <ColorPalette
-        label="Foreground Color"
+        label="Foreground Colors"
         colors={FOREGROUND_COLORS}
       />
       <ColorPalette
-        label="Border Color"
+        label="Border Colors"
         colors={BORDER_COLORS}
       />
       <ColorPalette
-        label="Placeholder Color"
+        label="Placeholder Colors"
         colors={PLACEHOLDER_COLORS}
       />
       <ColorPalette
-        label="Track Color"
+        label="Track Colors"
         colors={TRACK_COLORS}
       />
       <ColorPalette
-        label="Neutral Color"
+        label="Neutral Colors"
         colors={NEUTRAL_COLORS}
       />
     </div>
