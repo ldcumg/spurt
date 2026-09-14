@@ -11,12 +11,12 @@ const buttonVariants = cva("rounded-lg disabled:bg-disabled disabled:text-white"
     },
     size: {
       xs: "h-20 px-8 text-caption",
-      sm: "h-36 px-12",
-      md: "h-40 px-16",
-      lg: "h-48 px-16",
-      xl: "h-30 px-20",
+      sm: "h-28 px-12",
+      md: "h-36 px-16",
+      lg: "h-40 px-16",
+      xl: "h-48 px-20",
       wide: "w-full h-48",
-      square: "size-100 p-20",
+      square: "size-100",
     },
   },
   defaultVariants: {
