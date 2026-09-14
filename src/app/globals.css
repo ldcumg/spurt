@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme {
+@theme static {
   /* Spacing */
 
   --spacing: 1px;
@@ -167,8 +167,6 @@
   }
 }
 
-@layer components {
-}
+@layer components {}
 
-@layer utilities {
-}
+@layer utilities {}
