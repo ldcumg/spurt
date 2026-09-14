@@ -25,7 +25,6 @@ type Story = StoryObj<typeof meta>;
 export const Variants: Story = {
   args: {
     children: "",
-    variant: "primary",
     size: "md",
     disabled: false,
   },
