@@ -33,12 +33,10 @@
 @source inline("border-white");
 @source inline("placeholder-{placeholder,neutral-400}");
 @source inline("divide-{border,input-border}");
-
 @source inline("text-{display,title-lg,title-md,title-sm,title-xs,body-lg,body-md,body-sm,caption}");
-
 @source inline("rounded-{sm,md,lg,xl,2xl,3xl,full}");
-
 @source inline("shadow-{sm,md,lg}");
+@source inline("mt-{10,50}");
 
 @theme {
   /* Spacing */
