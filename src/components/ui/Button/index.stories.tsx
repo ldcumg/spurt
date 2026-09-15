@@ -13,6 +13,9 @@ const meta = {
       options: ["xs", "sm", "md", "lg", "xl", "wide", "square"],
       control: "radio",
     },
+    children: {
+      control: "text",
+    },
   },
 } satisfies Meta<typeof Button>;
 
