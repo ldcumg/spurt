@@ -6,20 +6,18 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 /**
- * 
+ *
  * @param label 입력창 상단 라벨에 들어갈 텍스트
  * @param error 입력창 하단에 띄울 메시지
  * @param id (선택) 별도 id 지정할 때 사용
- * @returns 
+ * @returns
  */
 export default function Input({ label, error, id, ...props }: InputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const errorId = `${inputId}-error`;
 
-  const borderClass = error
-    ? "border-error"
-    : "border-input-border focus:border-primary-500";
+  const borderClass = error ? "border-error" : "border-input-border focus:border-primary-500";
 
   return (
     <div className="flex w-full flex-col gap-8">
@@ -37,14 +35,12 @@ export default function Input({ label, error, id, ...props }: InputProps) {
           className={`text-body-lg h-48 w-full rounded-lg border px-16 outline-none disabled:opacity-50 ${borderClass}`}
           {...props}
         />
-        {error && (
-          <p
-            id={errorId}
-            className="text-body-md text-error"
-          >
-            {error}
-          </p>
-        )}
+        <p
+          id={errorId}
+          className="text-body-md text-error min-h-22"
+        >
+          {error}
+        </p>
       </div>
     </div>
   );
