@@ -1,3 +1,11 @@
+import Badge from "@/components/ui/Badge";
+
 export default function HomePage() {
-  return <div>HomePage</div>;
+  return (
+    <>
+      {" "}
+      <Badge type="goal"></Badge>
+      <div></div>
+    </>
+  );
 }
