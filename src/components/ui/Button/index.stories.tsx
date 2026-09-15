@@ -11,9 +11,7 @@ const meta = {
   argTypes: {
     size: {
       options: ["xs", "sm", "md", "lg", "xl", "wide", "square"],
-      control: {
-        type: "radio",
-      },
+      control: "radio",
     },
   },
 } satisfies Meta<typeof Button>;
@@ -23,6 +21,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Variants: Story = {
+  // name: "Button",
   args: {
     children: "",
     size: "md",
