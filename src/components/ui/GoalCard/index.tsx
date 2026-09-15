@@ -1,4 +1,5 @@
-import FlagFilled from "@/assets/icons/Flag_filled.svg";
+import { FlagFilled, More } from "@/assets/icons/index";
+import flagfilled from "@/assets/icons/Flag_filled.svg";
 import ProgressBar from "../ProgessBar";
 import Button from "../Button";
 
@@ -14,8 +15,12 @@ export default function GoalCard() {
   return (
     <div className="flex max-w-[400px] flex-col gap-20 rounded-[20px] bg-white p-24">
       <div className="flex flex-col gap-12">
-        <div className="flex flex-row gap-12">
-          <div>dd</div>정보처리기사 합격하기<div>dd</div>
+        <div className="flex justify-between">
+          <div className="fles-row flex gap-12">
+            <img src={FlagFilled} />
+            <p>정보처리기사 합격하기</p>
+          </div>
+          <img src={More} />
         </div>
 
         <ProgressBar percentage={64}></ProgressBar>
