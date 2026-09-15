@@ -1,4 +1,4 @@
-import { FlagFilled, More } from "@/assets/icons/index";
+import { FlagFilled, More, Todo } from "@/assets/icons/index";
 import flagfilled from "@/assets/icons/Flag_filled.svg";
 import ProgressBar from "../ProgessBar";
 import Button from "../Button";
@@ -51,15 +51,15 @@ export default function GoalCard({ goal, todo }: GoalCardProps) {
       {/* 할 일 목록 */}
       <div className="flex flex-col gap-8 py-8">
         <div className="flex flex-row items-center gap-8">
-          <div className="h-12 w-12 bg-white"></div>
+          <img src={Todo} />
           <p className="truncate">{todo.title}</p>
         </div>
         <div className="flex flex-row items-center gap-8">
-          <div className="h-12 w-12 bg-white"></div>
+          <img src={Todo} />
           <p className="truncate">{todo.title}</p>
         </div>
         <div className="flex flex-row items-center gap-8">
-          <div className="h-12 w-12 bg-white"></div>
+          <img src={Todo} />
           <p className="truncate">{todo.title}</p>
         </div>
       </div>
