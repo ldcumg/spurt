@@ -25,7 +25,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export const AllStates: Story = {
   render: () => (
-    <div className="flex w-320 flex-col gap-60">
+    <div className="flex w-xs flex-col gap-60">
       <Section title="Default">
         <Input
           label="이메일"
