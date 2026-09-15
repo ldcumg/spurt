@@ -5,7 +5,7 @@ import ProgressRing from "@/components/ui/ProgressRing";
 export default function HomePage() {
   return (
     <div>
-      <ProgressBar percentage={60} />
+      <ProgressRing percentage={60} />
     </div>
   );
 }
