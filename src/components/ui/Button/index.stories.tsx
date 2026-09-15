@@ -12,6 +12,20 @@ const meta = {
     size: {
       options: ["xs", "sm", "md", "lg", "xl", "wide", "square"],
       control: "radio",
+      table: {
+        defaultValue: {
+          summary: "md",
+          detail: "medium",
+        },
+      },
+    },
+    disabled: {
+      control: "boolean",
+      table: {
+        defaultValue: {
+          summary: "false",
+        },
+      },
     },
     children: {
       control: "text",
