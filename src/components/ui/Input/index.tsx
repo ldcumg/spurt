@@ -32,7 +32,7 @@ export default function Input({ label, error, id, ...props }: InputProps) {
       <div className="flex flex-col gap-4">
         <input
           id={inputId}
-          className={`text-body-lg h-48 w-full rounded-lg border px-16 outline-none disabled:opacity-50 ${borderClass}`}
+          className={`text-body-lg h-48 w-full rounded-lg border bg-white px-16 outline-none disabled:opacity-50 ${borderClass}`}
           {...props}
         />
         <p
