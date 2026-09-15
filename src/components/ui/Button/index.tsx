@@ -6,7 +6,7 @@ const buttonVariants = cva("rounded-lg disabled:bg-disabled disabled:text-white"
   variants: {
     variant: {
       primary: "bg-primary-500 text-white hover:bg-primary-600",
-      outline: "bg-transparent border",
+      outline: "bg-transparent border border-primary-600 text-primary-600",
       ghost: "bg-transparent",
     },
     size: {
@@ -31,6 +31,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, Var
 
 export default function Button({ children, variant, size, className, ...props }: ButtonProps) {
   const buttonClasses = twMerge(clsx(buttonVariants({ variant, size }), className));
+
   return (
     <button
       className={buttonClasses}
