@@ -30,6 +30,10 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, Var
   children: React.ReactNode;
 }
 
+/**
+ * @param {"primary" | "outline" | "ghost"} variant - "primary" | "outline" | "ghost"
+ * @param {"xs" | "sm" | "md" | "lg" | "xl" | "wide" | "square"} size - "xs" | "sm" | "md" | "lg" | "xl" | "wide" | "square"
+ */
 export default function Button({ children, variant, size, className, ...props }: ButtonProps) {
   const buttonClasses = twMerge(clsx(buttonVariants({ variant, size }), className));
 
