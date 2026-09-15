@@ -5,6 +5,13 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
+/**
+ * 
+ * @param label 입력창 상단 라벨에 들어갈 텍스트
+ * @param error 입력창 하단에 띄울 메시지
+ * @param id (선택) 별도 id 지정할 때 사용
+ * @returns 
+ */
 export default function Input({ label, error, id, ...props }: InputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
