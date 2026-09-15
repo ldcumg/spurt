@@ -28,7 +28,7 @@ export const Variants: Story = {
     className: "",
   },
   render: ({ type, className }) => (
-    <div className="flex justify-center gap-80">
+    <div className="flex gap-80">
       {/* justify-center 사용할까 말까... */}
       <div className="flex flex-col gap-10">
         <p>Test</p>
