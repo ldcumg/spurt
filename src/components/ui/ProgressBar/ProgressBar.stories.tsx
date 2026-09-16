@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import ProgressBar from ".";
 
 const meta: Meta<typeof ProgressBar> = {
-  title: "ProgressBar",
+  title: "components/ProgressBar",
   component: ProgressBar,
   tags: ["autodocs"],
   argTypes: {
