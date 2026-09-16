@@ -4,7 +4,11 @@ export default function HomePage() {
   return (
     <>
       {" "}
-      <Badge type="goal"></Badge>
+      {/* todo 개수만 넘길 때 -> TO DO 5 */}
+      <Badge
+        type="todo"
+        todoCount={6}
+      />
       <div></div>
     </>
   );
