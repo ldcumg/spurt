@@ -1,10 +1,10 @@
-import { FlagFilled, More, Todo } from "@/assets/icons/index";
-import flagfilled from "@/assets/icons/Flag_filled.svg";
-import ProgressBar from "../ProgessBar";
+import { FlagFilled, More, Plus, Todo } from "@/assets/icons/index";
+
 import Button from "../Button";
 import Badge from "../Badge";
 
 import { Goal, Todos } from "./mock";
+import ProgressBar from "../ProgressBar";
 
 {
   /**
@@ -37,38 +37,45 @@ export default function GoalCard({ goal, todo }: GoalCardProps) {
       <div className="flex flex-col gap-12">
         <div className="flex justify-between">
           <div className="fles-row flex gap-12">
-            <img src={FlagFilled} />
+            <FlagFilled />
             <p>{goal.title}</p>
           </div>
-          <img src={More} />
+          <More />
         </div>
         <ProgressBar percentage={64}></ProgressBar>
         <div className="flex flex-row gap-12">
-          <Badge type="todo" />
-          <Badge type="done" />
+          <Badge
+            type="todo"
+            todoCount={goal.todoCount}
+          />
+          <Badge
+            type="done"
+            doneCount={goal.completedCount}
+          />
         </div>
       </div>
       {/* 할 일 목록 */}
       <div className="flex flex-col gap-8 py-8">
         <div className="flex flex-row items-center gap-8">
-          <img src={Todo} />
+          <Todo />
           <p className="truncate">{todo.title}</p>
         </div>
         <div className="flex flex-row items-center gap-8">
-          <img src={Todo} />
+          <Todo />
           <p className="truncate">{todo.title}</p>
         </div>
         <div className="flex flex-row items-center gap-8">
-          <img src={Todo} />
+          <Todo />
           <p className="truncate">{todo.title}</p>
         </div>
       </div>
       <Button
         variant={"outline"}
         size={"lg"}
-        className="border-primary-500 text-primary-600 w-full bg-white"
+        className="border-primary-500 flex w-full flex-row items-center justify-center gap-4 bg-white"
       >
-        + 할 일 추가
+        <Plus className="text-primary-600 h-16 w-16 shrink-0" />
+        <p className="text-primary-600">할 일 추가</p>
       </Button>
     </div>
   );
