@@ -1,23 +1,24 @@
 "use client";
 
+import { FlagFilled, Under } from "@/assets/icons";
 import { useEffect, useRef, useState } from "react";
 
 // 임시 svg
-function TempIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="size-[24px] fill-current stroke-current stroke-[1.8]"
-    >
-      <path
-        d="M6 3v18M7 4h11l-2.6 4L18 12H7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+// function TempIcon() {
+//   return (
+//     <svg
+//       viewBox="0 0 24 24"
+//       aria-hidden="true"
+//       className="size-[24px] fill-current stroke-current stroke-[1.8]"
+//     >
+//       <path
+//         d="M6 3v18M7 4h11l-2.6 4L18 12H7"
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//     </svg>
+//   );
+// }
 
 function ChevronDownIcon() {
   return (
@@ -122,12 +123,12 @@ export default function Dropdown({
       >
         <span className="flex items-center justify-center gap-[12px]">
           <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-            <TempIcon />
+            <FlagFilled />
           </span>
           <span className="text-title-xs">{selectedOption?.label ?? placeholder}</span>
         </span>
         <span className={["grid size-[36px] shrink-0 place-items-center", isOpen && "rotate-180"].join(" ")}>
-          <ChevronDownIcon />
+          <Under />
         </span>
       </button>
       {isOpen && (
@@ -143,7 +144,7 @@ export default function Dropdown({
         >
           {options.length === 0 ? (
             <li className="text-title-xs flex gap-[12px] rounded-xl p-8">
-              <TempIcon />
+              <FlagFilled />
               등록된 목표가 없습니다.
             </li>
           ) : (
@@ -165,7 +166,7 @@ export default function Dropdown({
                   ].join(" ")}
                 >
                   <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-                    <TempIcon />
+                    <FlagFilled />
                   </span>
                   <span className="min-w-0 grow truncate">{option.label}</span>
 

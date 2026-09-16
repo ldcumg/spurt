@@ -3,6 +3,7 @@ import { userEvent, within } from "storybook/test";
 import { useState } from "react";
 
 import Dropdown, { type DropDownOption } from "./";
+import { Burger } from "@/assets/icons";
 
 const goals: DropDownOption[] = [
   {
