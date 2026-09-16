@@ -1,3 +1,5 @@
+"use client";
+
 import { DISCLOSURE_ROOT_ID } from "@/constants/dom";
 import { useLockBodyScroll } from "@/hooks/disclosure/useLockBodyScroll";
 import { createPortal } from "react-dom";
