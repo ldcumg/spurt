@@ -4,8 +4,14 @@ import ProgressRing from "@/components/ui/ProgressRing";
 
 export default function HomePage() {
   return (
-    <div>
-      <ProgressRing percentage={60} />
-    </div>
+    <>
+      {" "}
+      {/* todo 개수만 넘길 때 -> TO DO 5 */}
+      <Badge
+        type="todo"
+        todoCount={6}
+      />
+      <div></div>
+    </>
   );
 }

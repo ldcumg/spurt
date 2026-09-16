@@ -3,7 +3,7 @@ import Badge from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta: Meta<typeof Badge> = {
-  title: "Badge",
+  title: "componets/Badge",
   component: Badge,
   tags: ["autodocs"],
   parameters: {
@@ -39,19 +39,30 @@ export const Variants: Story = {
       </div>
 
       <div className="flex flex-col gap-10">
-        <p>OverView</p>
+        <p>OverView 기본 / 숫자</p>
         <div className="flex gap-10">
           <Badge
             type="todo"
             className={className}
           />
           <Badge
+            type="todo"
+            className={className}
+            todoCount={6}
+          />
+          <Badge
             type="done"
             className={className}
           />
           <Badge
+            type="done"
+            className={className}
+            doneCount={6}
+          />
+          <Badge
             type="goal"
             className={className}
+            totalCount={12}
           />
           <Badge
             type="category"
