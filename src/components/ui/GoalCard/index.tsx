@@ -5,7 +5,7 @@ import Button from "../Button";
 import Badge from "../Badge";
 
 import { Goal, Todos } from "./mock";
-import ProgressBar from "../ProgressBar";
+import ProgressBar from "../Progress/ProgressBar";
 import { useState } from "react";
 
 interface GoalItem {
