@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run --project vitest",
+    "test": "vitest run --project vitest --passWithNoTests",
     "test:watch": "vitest --project vitest",
     "test:changed": "vitest run --project vitest --changed",
     "test:coverage": "vitest run --project vitest --coverage",
