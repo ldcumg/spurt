@@ -48,70 +48,55 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const icons = [
-  { name: "Burger", src: Burger },
-  { name: "Calendar", src: Calendar },
-  { name: "Delete", src: Delete },
-  { name: "Done", src: Done },
-  { name: "Edit", src: Edit },
-  { name: "File", src: File },
-  { name: "FlagFilled", src: FlagFilled },
-  { name: "Flag", src: Flag },
-  { name: "Hide", src: Hide },
-  { name: "HomeFilled", src: HomeFilled },
-  { name: "Home", src: Home },
-  { name: "Left", src: Left },
-  { name: "Link", src: Link },
-  { name: "Logout", src: Logout },
-  { name: "More", src: More },
-  { name: "NoteFilled", src: NoteFilled },
-  { name: "NoteFilledGray", src: NoteFilledGray },
-  { name: "NoteGray", src: NoteGray },
-  { name: "PlusWhite", src: PlusWhite },
-  { name: "Note", src: Note },
-  { name: "Plus", src: Plus },
-  { name: "Question", src: Question },
-  { name: "Right", src: Right },
-  { name: "StarFilled", src: StarFilled },
-  { name: "Star", src: Star },
-  { name: "Tag", src: Tag },
-  { name: "Temporary", src: Temporary },
-  { name: "Todo", src: Todo },
-  { name: "TodosFilled", src: TodosFilled },
-  { name: "Todos", src: Todos },
-  { name: "Under", src: Under },
-  { name: "Unhide", src: Unhide },
-  { name: "Upload", src: Upload },
-  { name: "X", src: X },
+  { name: "Burger", Icon: Burger },
+  { name: "Calendar", Icon: Calendar },
+  { name: "Delete", Icon: Delete },
+  { name: "Done", Icon: Done },
+  { name: "Edit", Icon: Edit },
+  { name: "File", Icon: File },
+  { name: "FlagFilled", Icon: FlagFilled },
+  { name: "Flag", Icon: Flag },
+  { name: "Hide", Icon: Hide },
+  { name: "HomeFilled", Icon: HomeFilled },
+  { name: "Home", Icon: Home },
+  { name: "Left", Icon: Left },
+  { name: "Link", Icon: Link },
+  { name: "Logout", Icon: Logout },
+  { name: "More", Icon: More },
+  { name: "NoteFilled", Icon: NoteFilled },
+  { name: "NoteFilledGray", Icon: NoteFilledGray },
+  { name: "NoteGray", Icon: NoteGray },
+  { name: "Note", Icon: Note },
+  { name: "PlusWhite", Icon: PlusWhite },
+  { name: "Plus", Icon: Plus },
+  { name: "Question", Icon: Question },
+  { name: "Right", Icon: Right },
+  { name: "StarFilled", Icon: StarFilled },
+  { name: "Star", Icon: Star },
+  { name: "Tag", Icon: Tag },
+  { name: "Temporary", Icon: Temporary },
+  { name: "Todo", Icon: Todo },
+  { name: "TodosFilled", Icon: TodosFilled },
+  { name: "Todos", Icon: Todos },
+  { name: "Under", Icon: Under },
+  { name: "Unhide", Icon: Unhide },
+  { name: "Upload", Icon: Upload },
+  { name: "X", Icon: X },
 ];
-function getImageSrc(src: unknown) {
-  if (typeof src === "string") {
-    return src;
-  }
 
-  if (typeof src === "object" && src !== null && "src" in src && typeof src.src === "string") {
-    return src.src;
-  }
-
-  return "";
-}
 export const Icon: Story = {
-  render: () => {
-    return (
-      <div className="flex flex-wrap gap-12">
-        {icons.map(({ name, src }) => (
-          <div
-            key={name}
-            className="flex min-h-[100px] min-w-[100px] flex-col items-center justify-center rounded-lg border border-neutral-700 p-16"
-          >
-            <img
-              src={getImageSrc(src)}
-              alt={name}
-            />
+  render: () => (
+    <div className="flex flex-wrap gap-12">
+      {icons.map(({ name, Icon }) => (
+        <div
+          key={name}
+          className="flex min-h-[100px] min-w-[100px] flex-col items-center justify-center gap-8 rounded-lg border border-neutral-700 p-16"
+        >
+          <Icon />
 
-            <span className="text-xs text-gray-600">{name}</span>
-          </div>
-        ))}
-      </div>
-    );
-  },
+          <span className="text-xs text-gray-600">{name}</span>
+        </div>
+      ))}
+    </div>
+  ),
 };

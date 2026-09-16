@@ -1,4 +1,5 @@
 import type { StorybookConfig } from "@storybook/nextjs-vite";
+import svgr from "vite-plugin-svgr";
 
 const config: StorybookConfig = {
   stories: [
@@ -6,8 +7,27 @@ const config: StorybookConfig = {
     // "../src/**/*.mdx"
   ],
   addons: ["@chromatic-com/storybook", "@storybook/addon-vitest", "@storybook/addon-a11y", "@storybook/addon-docs"],
-  framework: "@storybook/nextjs-vite",
+  framework: {
+    name: "@storybook/nextjs-vite",
+    options: {
+      image: {
+        // Next.js image plugin이 svg를 먼저 가져가지 않도록 함
+        excludeFiles: ["**/*.svg"],
+      },
+    },
+  },
   staticDirs: ["../public"],
+  async viteFinal(config) {
+    config.plugins ??= [];
+
+    config.plugins.push(
+      svgr({
+        include: "**/*.svg",
+      }),
+    );
+
+    return config;
+  },
 };
 
 export default config;
