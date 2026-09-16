@@ -7,7 +7,7 @@ export default function ProgressRing({ percentage, className = "" }: ProgressPro
   const clampedPercentage = Math.min(Math.max(percentage, 0), 100);
 
   const size = 100;
-  const strokeWidth = 4;
+  const strokeWidth = 8;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (circumference * clampedPercentage) / 100;

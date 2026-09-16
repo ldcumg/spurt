@@ -9,7 +9,7 @@ export default function ProgressBar({ percentage, className = "" }: ProgressProp
 
   return (
     <div className={`flex w-full items-center gap-12 ${className}`}>
-      <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-neutral-200">
+      <div className="relative h-8 flex-1 overflow-hidden rounded-full bg-neutral-200">
         <div
           className="bg-primary-500 h-full rounded-full"
           style={{ width: `${clampedPercentage}%` }}
