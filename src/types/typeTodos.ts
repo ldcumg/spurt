@@ -1,5 +1,3 @@
-import { GoalItem } from "./typeGoals";
-
 export type TodoListResponse = {
   todos: TodoItem[];
   nextCursor: number | null;
