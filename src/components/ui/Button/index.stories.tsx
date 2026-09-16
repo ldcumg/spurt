@@ -2,104 +2,72 @@ import Button from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "Button",
+  title: "components/Button",
   component: Button,
   parameters: {
     layout: "centered",
   },
   tags: ["autodocs"],
+  argTypes: {
+    size: {
+      options: ["xs", "sm", "md", "lg", "xl", "wide", "square"],
+      control: "radio",
+      table: {
+        defaultValue: {
+          summary: "md",
+          detail: "medium",
+        },
+      },
+    },
+    disabled: {
+      control: "boolean",
+      table: {
+        defaultValue: {
+          summary: "false",
+        },
+      },
+    },
+    children: {
+      control: "text",
+    },
+  },
 } satisfies Meta<typeof Button>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Variants: Story = {
+  // name: "Button",
   args: {
+    children: "",
     size: "md",
-    variant: "primary",
-    children: "버튼 내용",
     disabled: false,
   },
-};
 
-export const Outline: Story = {
-  args: {
-    size: "md",
-    variant: "outline",
-    children: "버튼 내용",
-    disabled: false,
-  },
-};
-
-export const Ghost: Story = {
-  args: {
-    size: "md",
-    variant: "ghost",
-    children: "버튼 내용",
-    disabled: false,
-  },
-};
-
-export const XSmall: Story = {
-  args: {
-    size: "xs",
-    variant: "primary",
-    children: "버튼 내용",
-    disabled: false,
-  },
-};
-
-export const Small: Story = {
-  args: {
-    size: "sm",
-    variant: "primary",
-    children: "버튼 내용",
-    disabled: false,
-  },
-};
-
-export const Medium: Story = {
-  args: {
-    size: "md",
-    variant: "primary",
-    children: "버튼 내용",
-    disabled: false,
-  },
-};
-
-export const Large: Story = {
-  args: {
-    size: "lg",
-    variant: "primary",
-    children: "버튼 내용",
-    disabled: false,
-  },
-};
-
-export const XLarge: Story = {
-  args: {
-    size: "xl",
-    variant: "primary",
-    children: "버튼 내용",
-    disabled: false,
-  },
-};
-
-export const Wide: Story = {
-  args: {
-    size: "wide",
-    variant: "primary",
-    children: "버튼 내용",
-    disabled: false,
-  },
-};
-
-export const Square: Story = {
-  args: {
-    size: "square",
-    variant: "primary",
-    children: "버튼 내용",
-    disabled: false,
-  },
+  render: ({ children, size, disabled }) => (
+    <div className="flex gap-200">
+      <Button
+        variant="primary"
+        size={size}
+        disabled={disabled}
+      >
+        {children || "Primary"}
+      </Button>
+      <Button
+        variant="outline"
+        size={size}
+        disabled={disabled}
+      >
+        {children || "Outline"}
+      </Button>
+      <Button
+        variant="ghost"
+        size={size}
+        disabled={disabled}
+      >
+        {children || "Ghost"}
+      </Button>
+    </div>
+  ),
 };

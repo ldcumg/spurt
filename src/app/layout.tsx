@@ -1,4 +1,5 @@
 import "./globals.css";
+import { DISCLOSURE_ROOT_ID } from "@/constants/dom";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
@@ -21,7 +22,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
       lang="ko"
       className={`${pretendard.className} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        {children}
+        <div id={DISCLOSURE_ROOT_ID}></div>
+      </body>
     </html>
   );
 }
