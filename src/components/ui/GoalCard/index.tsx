@@ -1,18 +1,12 @@
-import { FlagFilled, More, Plus, Todo } from "@/assets/icons/index";
+"use client";
+import { Done, FlagFilled, More, Plus, Todo } from "@/assets/icons/index";
 
 import Button from "../Button";
 import Badge from "../Badge";
 
 import { Goal, Todos } from "./mock";
 import ProgressBar from "../ProgressBar";
-
-{
-  /**
-    1. 아이콘 완성되면 추가하기
-    2. Badge 머지되면 교체하기
-    3. props 넘길 수 있게 하기
-*/
-}
+import { useState } from "react";
 
 interface GoalItem {
   id: number;
@@ -31,9 +25,15 @@ interface GoalCardProps {
   todo: TodosItem;
 }
 
+{
+  /** progress 안에서 계산 하게 하기 */
+}
+
 export default function GoalCard({ goal, todo }: GoalCardProps) {
+  const [isDone, setIsDone] = useState(todo.done);
+
   return (
-    <div className="flex max-w-[400px] flex-col gap-20 rounded-[20px] bg-white p-24">
+    <div className="flex w-full flex-col gap-20 rounded-[20px] bg-white p-24">
       <div className="flex flex-col gap-12">
         <div className="flex justify-between">
           <div className="fles-row flex gap-12">
@@ -57,15 +57,45 @@ export default function GoalCard({ goal, todo }: GoalCardProps) {
       {/* 할 일 목록 */}
       <div className="flex flex-col gap-8 py-8">
         <div className="flex flex-row items-center gap-8">
-          <Todo />
+          {isDone ? (
+            <Todo
+              onClick={() => setIsDone(!isDone)}
+              className="cursor-pointer"
+            />
+          ) : (
+            <Done
+              onClick={() => setIsDone(!isDone)}
+              className="cursor-pointer"
+            />
+          )}
           <p className="truncate">{todo.title}</p>
         </div>
         <div className="flex flex-row items-center gap-8">
-          <Todo />
+          {isDone ? (
+            <Todo
+              onClick={() => setIsDone(!isDone)}
+              className="cursor-pointer"
+            />
+          ) : (
+            <Done
+              onClick={() => setIsDone(!isDone)}
+              className="cursor-pointer"
+            />
+          )}
           <p className="truncate">{todo.title}</p>
         </div>
         <div className="flex flex-row items-center gap-8">
-          <Todo />
+          {isDone ? (
+            <Todo
+              onClick={() => setIsDone(!isDone)}
+              className="cursor-pointer"
+            />
+          ) : (
+            <Done
+              onClick={() => setIsDone(!isDone)}
+              className="cursor-pointer"
+            />
+          )}
           <p className="truncate">{todo.title}</p>
         </div>
       </div>
