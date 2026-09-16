@@ -1,52 +1,15 @@
+import {
+  BORDER_COLORS,
+  FOREGROUND_COLORS,
+  NEUTRAL_COLORS,
+  PLACEHOLDER_COLORS,
+  PRIMARY_COLORS,
+  SEMANTIC_COLORS,
+  SUPPORTING_COLORS,
+  SURFACE_COLORS,
+  TRACK_COLORS,
+} from "./constants";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-
-const PRIMARY_COLORS = [
-  "primary-50",
-  "primary-100",
-  "primary-200",
-  "primary-300",
-  "primary-400",
-  "primary-500",
-  "primary-600",
-  "primary-700",
-] as const;
-
-const SUPPORTING_COLORS = [
-  "blue",
-  "blue-light",
-  "coral",
-  "coral-light",
-  "yellow",
-  "yellow-light",
-  "mint",
-  "mint-light",
-] as const;
-
-const SEMANTIC_COLORS = ["success", "error", "warning", "information", "disabled"] as const;
-
-const SURFACE_COLORS = ["surface", "surface-card"] as const;
-
-const FOREGROUND_COLORS = ["foreground", "foreground-title"] as const;
-
-const BORDER_COLORS = ["border", "input-border"] as const;
-
-const PLACEHOLDER_COLORS = ["placeholder"] as const;
-
-const TRACK_COLORS = ["track"] as const;
-
-const NEUTRAL_COLORS = [
-  "neutral-50",
-  "neutral-100",
-  "neutral-200",
-  "neutral-300",
-  "neutral-400",
-  "neutral-500",
-  "neutral-600",
-  "neutral-700",
-  "neutral-800",
-  "neutral-900",
-  "white",
-] as const;
 
 const meta = {
   title: "foundations",

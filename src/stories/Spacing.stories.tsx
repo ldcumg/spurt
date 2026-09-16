@@ -1,6 +1,5 @@
+import { SPACINGS } from "./constants";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-
-const SPACINGS = [4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 100, 200] as const;
 
 const meta = {
   title: "foundations",
