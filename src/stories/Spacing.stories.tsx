@@ -17,9 +17,9 @@ export const Spacing: Story = {
         {SPACINGS.map((spacing) => (
           <div
             key={spacing}
-            className="flex items-center gap-20"
+            className="flex items-center justify-start gap-20"
           >
-            <span className="text-body-sm">space-{spacing}</span>
+            <span className="text-body-sm w-70">space-{spacing}</span>
             <div className={`bg-primary-500 h-16 w-${spacing}`} />
             <span className="text-body-sm">{spacing}px</span>
           </div>
