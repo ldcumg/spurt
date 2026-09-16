@@ -1,37 +1,18 @@
-"use client";
-import { Done, FlagFilled, More, Plus, Todo } from "@/assets/icons/index";
+import { FlagFilled, More, Plus } from "@/assets/icons/index";
 
 import Button from "../Button";
 import Badge from "../Badge";
-
-import { Goal, Todos } from "./mock";
 import ProgressBar from "../ProgressBar";
-import { useState } from "react";
-
-interface GoalItem {
-  id: number;
-  title: string;
-  todoCount: number;
-  completedCount: number;
-}
-interface TodosItem {
-  id: number;
-  title: string;
-  done: boolean;
-}
+import TodoListItem from "./Todos";
+import { TodoItem } from "@/types/typeTodos";
+import { GoalItem } from "@/types/typeGoals";
 
 interface GoalCardProps {
   goal: GoalItem;
-  todo: TodosItem;
+  todos: TodoItem[];
 }
 
-{
-  /** progress 안에서 계산 하게 하기 */
-}
-
-export default function GoalCard({ goal, todo }: GoalCardProps) {
-  const [isDone, setIsDone] = useState(todo.done);
-
+export default function GoalCard({ goal, todos }: GoalCardProps) {
   return (
     <div className="flex w-full flex-col gap-20 rounded-[20px] bg-white p-24">
       <div className="flex flex-col gap-12">
@@ -56,48 +37,14 @@ export default function GoalCard({ goal, todo }: GoalCardProps) {
       </div>
       {/* 할 일 목록 */}
       <div className="flex flex-col gap-8 py-8">
-        <div className="flex flex-row items-center gap-8">
-          {isDone ? (
-            <Todo
-              onClick={() => setIsDone(!isDone)}
-              className="cursor-pointer"
-            />
-          ) : (
-            <Done
-              onClick={() => setIsDone(!isDone)}
-              className="cursor-pointer"
-            />
-          )}
-          <p className="truncate">{todo.title}</p>
-        </div>
-        <div className="flex flex-row items-center gap-8">
-          {isDone ? (
-            <Todo
-              onClick={() => setIsDone(!isDone)}
-              className="cursor-pointer"
-            />
-          ) : (
-            <Done
-              onClick={() => setIsDone(!isDone)}
-              className="cursor-pointer"
-            />
-          )}
-          <p className="truncate">{todo.title}</p>
-        </div>
-        <div className="flex flex-row items-center gap-8">
-          {isDone ? (
-            <Todo
-              onClick={() => setIsDone(!isDone)}
-              className="cursor-pointer"
-            />
-          ) : (
-            <Done
-              onClick={() => setIsDone(!isDone)}
-              className="cursor-pointer"
-            />
-          )}
-          <p className="truncate">{todo.title}</p>
-        </div>
+        {todos.map((item) => (
+          <div
+            key={item.id}
+            className="flex flex-row items-center gap-8"
+          >
+            <TodoListItem todo={item} />
+          </div>
+        ))}
       </div>
       <Button
         variant={"outline"}

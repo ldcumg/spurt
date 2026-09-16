@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use client";
 import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
@@ -11,12 +10,8 @@ export default function HomePage() {
     <div>
       <GoalCard
         goal={Goal.goals[0]}
-        todo={Todos.todos[0]}
+        todos={Todos.todos}
       />
     </div>
   );
-=======
-export default function HomePage() {
-  return <></>;
->>>>>>> 4e88483217f868813a350233bc519368d5731d92
 }

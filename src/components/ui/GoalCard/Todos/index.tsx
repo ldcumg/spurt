@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import { Done, Todo } from "@/assets/icons/index";
+import { TodosItem } from "..";
 
 interface TodoListItemProps {
-  todo: TodoListItem;
+  todo: TodosItem;
 }
 
 export default function TodoListItem({ todo }: TodoListItemProps) {
