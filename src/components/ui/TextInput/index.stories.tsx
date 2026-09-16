@@ -1,14 +1,14 @@
-import Input from ".";
+import TextInput from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "components/Input",
-  component: Input,
+  title: "components/TextInput",
+  component: TextInput,
   parameters: {
     layout: "centered",
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof Input>;
+} satisfies Meta<typeof TextInput>;
 
 export default meta;
 
@@ -27,30 +27,30 @@ export const AllStates: Story = {
   render: () => (
     <div className="flex w-xs flex-col gap-60">
       <Section title="Default">
-        <Input
+        <TextInput
           label="이메일"
           placeholder="이메일을 입력하세요"
         />
       </Section>
       <Section title="Error">
-        <Input
+        <TextInput
           label="이메일"
           placeholder="이메일을 입력하세요"
           error="유효한 이메일 형식이 아닙니다"
         />
       </Section>
       <Section title="Disabled">
-        <Input
+        <TextInput
           label="이메일"
           placeholder="이메일을 입력하세요"
           disabled
         />
       </Section>
       <Section title="No Label">
-        <Input placeholder="이메일을 입력하세요" />
+        <TextInput placeholder="이메일을 입력하세요" />
       </Section>
       <Section title="Password">
-        <Input
+        <TextInput
           label="비밀번호"
           placeholder="비밀번호를 입력하세요"
           type="password"
@@ -61,5 +61,5 @@ export const AllStates: Story = {
 };
 
 export const Playground: Story = {
-  args: {label: "이메일", placeholder: "이메일을 입력하세요"}
+  args: { label: "이메일", placeholder: "이메일을 입력하세요" },
 };

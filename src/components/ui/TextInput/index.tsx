@@ -1,6 +1,6 @@
 import { useId } from "react";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
 }
@@ -12,7 +12,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
  * @param id (선택) 별도 id 지정할 때 사용
  * @returns
  */
-export default function Input({ label, error, id, ...props }: InputProps) {
+export default function TextInput({ label, error, id, ...props }: TextInputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const errorId = `${inputId}-error`;
