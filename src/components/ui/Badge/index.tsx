@@ -50,7 +50,7 @@ export default function Badge({ type, todoCount, doneCount, totalCount, classNam
       className={`text-caption inline-flex w-fit items-center justify-center gap-8 rounded-sm px-10 py-5 font-semibold ${currentBadge.style} ${className}`}
     >
       <p>{currentBadge.label}</p>
-      <p>{displayCount}</p>
+      {displayCount !== undefined ? <p>{displayCount}</p> : ""}
     </div>
   );
 }
