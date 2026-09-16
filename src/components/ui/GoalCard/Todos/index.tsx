@@ -14,15 +14,15 @@ export default function TodoListItem({ todo }: TodoListItemProps) {
       {isDone ? (
         <Done
           onClick={() => setIsDone((prev) => !prev)}
-          className="cursor-pointer"
+          className="w-24 cursor-pointer"
         />
       ) : (
         <Todo
           onClick={() => setIsDone((prev) => !prev)}
-          className="cursor-pointer"
+          className="w-24 cursor-pointer"
         />
       )}
-      <p className="truncate">{todo.title}</p>
+      <p className="text-title-xs truncate pb-1 text-neutral-700">{todo.title}</p>
     </div>
   );
 }

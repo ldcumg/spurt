@@ -8,55 +8,69 @@ import { TodoItem } from "@/types/typeTodos";
 import { GoalItem } from "@/types/typeGoals";
 
 interface GoalCardProps {
-  goal: GoalItem;
-  todos: TodoItem[];
+  goal?: GoalItem;
+  todos?: TodoItem[];
 }
 
-export default function GoalCard({ goal, todos }: GoalCardProps) {
+export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
+  // goal 데이터가 아예 없는 경우 방어
+  if (!goal) return null;
+
+  const todoCount = goal.todoCount ?? 0;
+  const completedCount = goal.completedCount ?? 0;
+
   return (
-    <div className="flex w-full flex-col gap-20 rounded-[20px] bg-white p-24">
+    <div className="flex min-h-356 w-full flex-col justify-between gap-20 rounded-[20px] bg-white p-24">
       <div className="flex flex-col gap-12">
         <div className="flex justify-between">
-          <div className="fles-row flex gap-12">
+          <div className="flex flex-row gap-12">
             <FlagFilled />
-            <p>{goal.title}</p>
+            <p className="text-title-sm truncate pt-2 leading-none text-neutral-700">
+              {goal.title || "목표를 추가하세요."}
+            </p>
           </div>
           <More />
         </div>
         <ProgressBar
-          doneCount={goal.completedCount}
-          totalCount={goal.todoCount}
+          doneCount={completedCount}
+          totalCount={todoCount}
         ></ProgressBar>
         <div className="flex flex-row gap-12">
           <Badge
             type="todo"
-            todoCount={goal.todoCount}
+            todoCount={todoCount}
           />
           <Badge
             type="done"
-            doneCount={goal.completedCount}
+            doneCount={completedCount}
           />
         </div>
       </div>
-      {/* 할 일 목록 */}
-      <div className="flex flex-col gap-8 py-8">
-        {todos.map((item) => (
-          <div
-            key={item.id}
-            className="flex flex-row items-center gap-8"
-          >
-            <TodoListItem todo={item} />
-          </div>
-        ))}
+      <div className="flex flex-1 flex-col justify-between gap-20">
+        {/* 할 일 목록 */}
+        <div className="flex flex-1 flex-col gap-8 py-8">
+          {todos.length > 0 ? (
+            todos.slice(0, 3).map((item) => (
+              <div
+                key={item.id}
+                className="flex flex-row items-center gap-8"
+              >
+                <TodoListItem todo={item} />
+              </div>
+            ))
+          ) : (
+            <p className="text-title-xs flex h-full items-center justify-center">등록된 할 일이 없습니다.</p>
+          )}
+        </div>
+        <Button
+          variant={"outline"}
+          size={"lg"}
+          className="border-primary-500 flex h-48 w-full flex-row items-center justify-center gap-4 bg-white"
+        >
+          <Plus className="text-primary-600 h-16 w-16 shrink-0" />
+          <p className="text-primary-600 text-title-xs">할 일 추가</p>
+        </Button>
       </div>
-      <Button
-        variant={"outline"}
-        size={"lg"}
-        className="border-primary-500 flex w-full flex-row items-center justify-center gap-4 bg-white"
-      >
-        <Plus className="text-primary-600 h-16 w-16 shrink-0" />
-        <p className="text-primary-600">할 일 추가</p>
-      </Button>
     </div>
   );
 }
