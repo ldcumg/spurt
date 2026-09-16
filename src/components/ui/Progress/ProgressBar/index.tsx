@@ -1,4 +1,4 @@
-import calc from "../calc";
+import calc from "../../../../utils/calc";
 interface ProgressProps {
   doneCount: number;
   totalCount: number;
