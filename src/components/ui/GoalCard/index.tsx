@@ -23,7 +23,10 @@ export default function GoalCard({ goal, todos }: GoalCardProps) {
           </div>
           <More />
         </div>
-        <ProgressBar percentage={64}></ProgressBar>
+        <ProgressBar
+          doneCount={goal.completedCount}
+          totalCount={goal.todoCount}
+        ></ProgressBar>
         <div className="flex flex-row gap-12">
           <Badge
             type="todo"
