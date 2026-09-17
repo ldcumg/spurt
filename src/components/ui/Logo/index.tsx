@@ -1,13 +1,13 @@
 import Image, { type StaticImageData } from "next/image";
 import { twMerge } from "tailwind-merge";
 
-import LogoAppIcon from "@/assets/logo/LogoAppIcon.webp";
-import LogoHorizontal from "@/assets/logo/LogoHorizontal.webp";
-import LogoHorizontalWhite from "@/assets/logo/LogoHorizontalWhite.webp";
-import LogoHorizontalMonochrome from "@/assets/logo/LogoHorizontalMonochrome.webp";
-import LogoHorizontalWithTagline from "@/assets/logo/LogoHorizontalWithTagline.webp";
-import LogoSymbol from "@/assets/logo/LogoSymbol.webp";
-import LogoVerticalWithTagline from "@/assets/logo/LogoVerticalWithTagline.webp";
+import LogoAppIcon from "@/assets/images/logo/LogoAppIcon.webp";
+import LogoHorizontal from "@/assets/images/logo/LogoHorizontal.webp";
+import LogoHorizontalWhite from "@/assets/images/logo/LogoHorizontalWhite.webp";
+import LogoHorizontalMonochrome from "@/assets/images/logo/LogoHorizontalMonochrome.webp";
+import LogoHorizontalWithTagline from "@/assets/images/logo/LogoHorizontalWithTagline.webp";
+import LogoSymbol from "@/assets/images/logo/LogoSymbol.webp";
+import LogoVerticalWithTagline from "@/assets/images/logo/LogoVerticalWithTagline.webp";
 
 export type LogoVariant =
   | "horizontal"
