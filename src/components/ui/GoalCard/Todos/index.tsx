@@ -10,7 +10,7 @@ interface TodoListItemProps {
 export default function TodoListItem({ todo }: TodoListItemProps) {
   const [isDone, setIsDone] = useState(todo.done);
   return (
-    <div className="flex flex-row items-center gap-8">
+    <div className="flex min-w-0 flex-1 flex-row items-center gap-8">
       {isDone ? (
         <Done
           onClick={() => setIsDone((prev) => !prev)}
@@ -22,7 +22,7 @@ export default function TodoListItem({ todo }: TodoListItemProps) {
           className="w-24 cursor-pointer"
         />
       )}
-      <p className="text-title-xs truncate pb-1 text-neutral-700">{todo.title}</p>
+      <p className="text-title-xs truncate pb-1 whitespace-nowrap text-neutral-700">{todo.title}</p>
     </div>
   );
 }

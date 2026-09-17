@@ -23,13 +23,13 @@ export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
     <div className="flex min-h-356 w-full flex-col justify-between gap-20 rounded-[20px] bg-white p-24">
       <div className="flex flex-col gap-12">
         <div className="flex justify-between">
-          <div className="flex flex-row gap-12">
-            <FlagFilled />
-            <p className="text-title-sm truncate pt-2 leading-none text-neutral-700">
+          <div className="flex min-w-0 flex-1 flex-row gap-12">
+            <FlagFilled className="shrink-0" />
+            <p className="text-title-sm truncate pt-2 leading-none whitespace-nowrap text-neutral-700">
               {goal.title || "목표를 추가하세요."}
             </p>
           </div>
-          <More />
+          <More className="shrink-0" />
         </div>
         <ProgressBar
           doneCount={completedCount}
