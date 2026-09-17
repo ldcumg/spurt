@@ -1,7 +1,3 @@
-// TODO: 모바일 ver
-// TODO: props 받기
-// TODO: JSDoc 주석 달기
-// TODO: 스토리북 추가
 export default function ProfileSection() {
   return (
     <div className="flex items-center gap-8 rounded-full border border-neutral-200 p-12">
