@@ -1,8 +1,8 @@
 const ROUTES = {
   home: "/",
   dashboard: "/dashboard",
+  calendar: "/calendar",
   goals: "/goals",
-  todos: "/todos",
   notes: "/notes",
 } as const;
 
