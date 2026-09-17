@@ -1,5 +1,13 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import { twMerge } from "tailwind-merge";
+
+import LogoAppIcon from "@/assets/logo/LogoAppIcon.webp";
+import LogoHorizontal from "@/assets/logo/LogoHorizontal.webp";
+import LogoHorizontalWhite from "@/assets/logo/LogoHorizontalWhite.webp";
+import LogoHorizontalMonochrome from "@/assets/logo/LogoHorizontalMonochrome.webp";
+import LogoHorizontalWithTagline from "@/assets/logo/LogoHorizontalWithTagline.webp";
+import LogoSymbol from "@/assets/logo/LogoSymbol.webp";
+import LogoVerticalWithTagline from "@/assets/logo/LogoVerticalWithTagline.webp";
 
 export type LogoVariant =
   | "horizontal"
@@ -19,45 +27,46 @@ interface LogoProps {
 const LOGO_MAP: Record<
   LogoVariant,
   {
-    src: string;
+    src: StaticImageData;
     alt: string;
   }
 > = {
   horizontal: {
-    src: "/src/assets/images/logo/LogoHorizontal.webp",
+    src: LogoHorizontal,
     alt: "Spurt",
   },
 
   horizontalWithTagline: {
-    src: "/src/assets/images/logo/LogoHorizontalWithTagline.webp",
+    src: LogoHorizontalWithTagline,
     alt: "Spurt - 오늘도, 한 걸음 더",
   },
 
   verticalWithTagline: {
-    src: "/src/assets/images/logo/LogoVerticalWithTagline.webp",
+    src: LogoVerticalWithTagline,
     alt: "Spurt - 오늘도, 한 걸음 더",
   },
 
   symbol: {
-    src: "/src/assets/images/logo/LogoSymbol.webp",
+    src: LogoSymbol,
     alt: "Spurt",
   },
 
   horizontalInverse: {
-    src: "/src/assets/images/logo/LogoHorizontalWhite.webp",
+    src: LogoHorizontalWhite,
     alt: "Spurt - 오늘도, 한 걸음 더",
   },
 
   horizontalMonochrome: {
-    src: "/src/assets/images/logo/LogoHorizontalMonochrome.webp",
+    src: LogoHorizontalMonochrome,
     alt: "Spurt - 오늘도, 한 걸음 더",
   },
 
   appIcon: {
-    src: "/src/assets/images/logo/LogoAppIcon.webp",
+    src: LogoAppIcon,
     alt: "Spurt",
   },
 };
+
 /**
  *
  * @param variant 로고의 다양한 모습, 이름은 파일명에서 Logo를 뺀 카멜케이스이다.
@@ -72,8 +81,6 @@ export default function Logo({ variant = "horizontal", className = "", priority 
     <Image
       src={logo.src}
       alt={logo.alt}
-      width={500}
-      height={500}
       priority={priority}
       className={twMerge("h-auto w-auto object-contain", className)}
     />
