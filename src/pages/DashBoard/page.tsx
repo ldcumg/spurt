@@ -29,7 +29,10 @@ export default function DashBoardPage() {
             variant={"outline"}
             className="flex max-w-150 items-center justify-center gap-10 rounded-full bg-white py-20 shadow-sm"
           >
-            <Plus className="h-16 w-16" />
+            <Plus
+              viewBox="0 0 24 24"
+              className="size-16 shrink-0"
+            />
             <p className="text-title-xs leading-none">새 할 일 추가</p>
           </Button>
         </div>
