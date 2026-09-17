@@ -57,7 +57,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: {
     onClose: () => alert("취소 버튼 실행"),
     onConfirm: () => alert("확인 버튼 실행"),
@@ -68,7 +68,7 @@ export const Default: Story = {
 
   render: function Render({ onClose, onConfirm, closeButtonLabel, confirmButtonLabel, isConfirmDisabled }) {
     return (
-      <div style={{ width: "600px" }}>
+      <div className="w-600">
         <ModalActions
           onClose={onClose}
           onConfirm={onConfirm}

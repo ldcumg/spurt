@@ -25,7 +25,7 @@ export default function ModalActions({
   isConfirmDisabled,
 }: ModalActionsProps) {
   return (
-    <div className="mt-auto flex w-full gap-10 border-t border-t-neutral-400 px-20 py-15">
+    <div className="mt-auto flex w-full gap-10 px-20 py-15">
       {onClose && (
         <Button
           onClick={onClose}

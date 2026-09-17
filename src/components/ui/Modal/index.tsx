@@ -12,6 +12,7 @@ interface ModalProps {
   isOpen: boolean;
   title: string;
   onClose: () => void;
+  className?: string;
 }
 
 /**
@@ -20,9 +21,12 @@ interface ModalProps {
  * @param title - 모달 제목
  * @param onClose - 모달 닫기 함수 const { close } = useDisclosure()
  */
-export default function Modal({ children, isOpen, title, onClose }: ModalProps) {
+export default function Modal({ children, isOpen, title, onClose, className }: ModalProps) {
   return (
-    <Disclosure isOpen={isOpen}>
+    <Disclosure
+      className={className}
+      isOpen={isOpen}
+    >
       <header className="flex w-full flex-row items-center justify-between px-20 py-30">
         <h1 className="text-title-sm">{title}</h1>
         <button onClick={onClose}>
