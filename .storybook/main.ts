@@ -2,7 +2,10 @@ import type { StorybookConfig } from "@storybook/nextjs-vite";
 import svgr from "vite-plugin-svgr";
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: [
+    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    // "../src/**/*.mdx"
+  ],
   addons: ["@chromatic-com/storybook", "@storybook/addon-vitest", "@storybook/addon-a11y", "@storybook/addon-docs"],
   framework: {
     name: "@storybook/nextjs-vite",

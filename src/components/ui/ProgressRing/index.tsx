@@ -1,16 +1,22 @@
+import calc from "../../../utils/calc";
 interface ProgressProps {
-  percentage: number;
+  doneCount: number;
+  totalCount: number;
   className?: string;
 }
-
-export default function ProgressRing({ percentage, className = "" }: ProgressProps) {
-  const clampedPercentage = Math.min(Math.max(percentage, 0), 100);
+/**
+ *
+ * @param doneCount : 완료된 할 일 갯수
+ * @param totalCount : 총 할 일 갯수
+ */
+export default function ProgressRing({ doneCount, totalCount, className = "" }: ProgressProps) {
+  const progress = calc(doneCount, totalCount);
 
   const size = 100;
   const strokeWidth = 8;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (circumference * clampedPercentage) / 100;
+  const strokeDashoffset = circumference - (circumference * progress) / 100;
 
   return (
     <div className={`flex w-full items-center justify-center ${className}`}>
@@ -43,7 +49,7 @@ export default function ProgressRing({ percentage, className = "" }: ProgressPro
             className="text-primary-500 transition-all duration-300"
           />
         </svg>
-        <span className="absolute inset-0 flex items-center justify-center text-sm font-semibold">{percentage}%</span>
+        <span className="absolute inset-0 flex items-center justify-center text-sm font-semibold">{progress}%</span>
       </div>
     </div>
   );

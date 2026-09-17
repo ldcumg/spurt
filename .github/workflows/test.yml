@@ -91,8 +91,6 @@ jobs:
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          # 변경사항이 있을 때 빌드를 실패(exit code 1)로 만들어 머지를 차단
-          exitZeroOnChanges: false
           # 변경된 파일과 관련된 스토리만 테스트하여 빌드 속도를 최적화
           onlyChanged: true
 
