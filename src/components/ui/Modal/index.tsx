@@ -23,7 +23,7 @@ interface ModalProps {
 export default function Modal({ children, isOpen, title, onClose }: ModalProps) {
   return (
     <Disclosure isOpen={isOpen}>
-      <div className="flex h-full w-full flex-col bg-white px-20 pb-15 md:h-auto md:w-360 md:rounded-2xl md:px-24 md:pb-24">
+      <div className="flex h-full w-full flex-col overflow-y-auto bg-white px-20 pb-15 md:h-auto md:w-360 md:rounded-2xl md:px-24 md:pb-24">
         <header className="flex w-full flex-row items-center justify-between py-30 md:py-24">
           <h1 className="text-title-sm">{title}</h1>
           <button onClick={onClose}>
