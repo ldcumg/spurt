@@ -1,6 +1,6 @@
 "use client";
 
-import { Done, FlagFilled, Plus, Under } from "@/assets/icons";
+import { Check, FlagFilled, Plus, Under } from "@/assets/icons";
 import { SubmitEventHandler, useEffect, useRef, useState } from "react";
 import TextInput from "../TextInput";
 
@@ -99,12 +99,12 @@ export default function Dropdown({
       >
         <span className="flex items-center justify-center gap-[12px]">
           <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-            <FlagFilled />
+            <FlagFilled className="size-[24px]" />
           </span>
           <span className="text-title-xs">{selectedOption?.label ?? placeholder}</span>
         </span>
         <span className={["grid size-[36px] shrink-0 place-items-center", isOpen && "rotate-180"].join(" ")}>
-          <Under />
+          <Under className="size-[24px]" />
         </span>
       </button>
       {isOpen && (
@@ -136,13 +136,13 @@ export default function Dropdown({
                 ].join(" ")}
               >
                 <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-                  <FlagFilled />
+                  <FlagFilled className="size-[24px]" />
                 </span>
                 <span className="min-w-0 grow truncate">{option.label}</span>
 
                 {isSelected && (
                   <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-                    <Done />
+                    <Check className="size-[24px]" />
                   </span>
                 )}
               </li>
@@ -153,7 +153,7 @@ export default function Dropdown({
               className="text-title-xs flex cursor-pointer justify-center gap-[12px] rounded-xl p-8"
               onClick={handleAddGoalClick}
             >
-              <Plus />새 목표 추가
+              <Plus className="size-[24px]" />새 목표 추가
             </li>
           ) : (
             <form
@@ -165,7 +165,7 @@ export default function Dropdown({
                 placeholder="목표를 입력해주세요"
               />
               <button type="submit">
-                <Plus />
+                <Plus className="size-[24px]" />
               </button>
             </form>
           )}
