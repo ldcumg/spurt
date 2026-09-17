@@ -58,7 +58,7 @@ export const WithActions: Story = {
       >
         {children}
         <ModalActions
-          onClose={() => alert("취소버튼 클릭")}
+          onClose={() => updateArgs({ isOpen: false })}
           onConfirm={() => alert("확인버튼 클릭")}
         />
       </Modal>
