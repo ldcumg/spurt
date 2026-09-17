@@ -116,6 +116,20 @@ export default function Dropdown({
             "p-12",
             "rounded-xl border border-[#D9DEE6] bg-white p-8",
             "text-title-xs font-bold",
+            // 추가: opacity와 transform의 변화에 애니메이션을 적용
+            "transition-[opacity,transform] duration-200 ease-out",
+
+            // 추가: 드롭다운이 위쪽을 기준으로 확대되도록 설정
+            "origin-top",
+
+            // 추가: DOM에 처음 생성될 때 투명한 상태에서 시작
+            "starting:opacity-0",
+
+            // 추가: 처음 생성될 때 약간 위쪽에 위치
+            "starting:-translate-y-1",
+
+            // 추가: 처음 생성될 때 약간 작게 시작
+            "starting:scale-[0.98]",
           ].join(" ")}
         >
           {options.map((option) => {
