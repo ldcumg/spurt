@@ -1,9 +1,7 @@
-const MOCK_GOALS = [
-  { id: 1, title: "자바스크립트로 웹 서비스 만들기", isActive: true },
-  { id: 2, title: "타입스크립트 마스터하기", isActive: false },
-  { id: 3, title: "자바스크립트로 웹 서비스 만들기와 같은 엄청 긴 제목", isActive: false },
-  { id: 4, title: "자바스크립트로 웹 서비스 만들기와 같은 엄청 긴 제목", isActive: false },
-];
+import { MOCK_GOALS } from "./mock";
+
+// TODO: 목표 상세 페이지 추가 시 usePathname으로 대체
+const ACTIVE_GOAL_ID = 1;
 
 export default function GoalSection() {
   return (
@@ -13,7 +11,7 @@ export default function GoalSection() {
           <button
             type="button"
             className={`text-body-md w-full truncate rounded-lg p-12 text-left ${
-              goal.isActive ? "bg-primary-100 text-primary-600" : "hover:bg-primary-50 text-neutral-700"
+              goal.id === ACTIVE_GOAL_ID ? "bg-primary-100 text-primary-600" : "hover:bg-primary-50 text-neutral-700"
             }`}
           >
             {goal.title}
