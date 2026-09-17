@@ -44,7 +44,7 @@ export default function UploadInput({
           className={`flex w-full cursor-pointer items-center gap-16 rounded-lg border border-dashed ${dragClass} py-12 pr-16 pl-12`}
         >
           <Upload className="size-24 shrink-0" />
-          <span className={`text-body-lg ${file ? "text-neutral-700" : "text-neutral-500"}`}>
+          <span className={`text-body-lg min-w-0 truncate ${file ? "text-neutral-700" : "text-neutral-500"}`}>
             {file ? file.name : placeholder}
           </span>
           <input
