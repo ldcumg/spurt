@@ -66,7 +66,7 @@ export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
           className="border-primary-500 flex h-48 w-full flex-row items-center justify-center gap-4 bg-white"
         >
           <Plus className="text-primary-600 h-16 w-16 shrink-0" />
-          <p className="text-primary-600 text-title-xs">할 일 추가</p>
+          <p className="text-primary-600 text-title-xs truncate">할 일 추가</p>
         </Button>
       </div>
     </div>
