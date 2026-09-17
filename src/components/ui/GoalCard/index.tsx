@@ -8,7 +8,7 @@ import { TodoItem } from "@/types/typeTodos";
 import { GoalItem } from "@/types/typeGoals";
 
 interface GoalCardProps {
-  goal?: GoalItem;
+  goal: GoalItem;
   todos?: TodoItem[];
 }
 
@@ -51,12 +51,10 @@ export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
         <div className="flex flex-1 flex-col gap-8 py-8">
           {todos.length > 0 ? (
             todos.slice(0, 3).map((item) => (
-              <div
+              <TodoListItem
                 key={item.id}
-                className="flex flex-row items-center gap-8"
-              >
-                <TodoListItem todo={item} />
-              </div>
+                todo={item}
+              />
             ))
           ) : (
             <p className="text-title-xs flex h-full items-center justify-center">등록된 할 일이 없습니다.</p>
