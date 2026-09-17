@@ -43,7 +43,6 @@ export default function Dropdown({
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [inputGoalOpen, setInputGoalOpen] = useState(false);
-  const [goal, setGoal] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -51,6 +50,7 @@ export default function Dropdown({
       if (!container) return;
       if (!container.contains(event.target as Node)) {
         setIsOpen(false);
+        setInputGoalOpen(false);
       }
     };
     document.addEventListener("mousedown", handleOutsideClick);
@@ -62,10 +62,10 @@ export default function Dropdown({
   const handleSelect = (option: DropDownOption) => {
     onChange(option);
     setIsOpen(false);
+    setInputGoalOpen(false);
   };
   const handleAddGoalClick = () => {
     setInputGoalOpen(true);
-    setGoal("");
   };
   const handleAddGoalSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -81,10 +81,14 @@ export default function Dropdown({
       <button
         type="button"
         disabled={disabled}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          setIsOpen(!isOpen);
+          if (isOpen) setInputGoalOpen(false);
+        }}
         onKeyDown={(e) => {
           if (e.key == "Escape") {
             setIsOpen(false);
+            setInputGoalOpen(false);
           }
         }}
         className={[
@@ -108,82 +112,83 @@ export default function Dropdown({
         </span>
       </button>
       {isOpen && (
-        <ul
+        // border와 rounded를 담당하는 바깥 컨테이너
+        <div
           className={[
-            "absolute top-[calc(100%+4px)] left-0 z-50",
-            "max-h-[246px] w-full overflow-y-auto",
-            "flex flex-col gap-[12px]",
-            "p-12",
-            "rounded-xl border border-[#D9DEE6] bg-white p-8",
-            "text-title-xs font-bold",
-            // 추가: opacity와 transform의 변화에 애니메이션을 적용
-            "transition-[opacity,transform] duration-200 ease-out",
+            "absolute top-[calc(100%+4px)] left-0 z-50 w-full",
 
-            // 추가: 드롭다운이 위쪽을 기준으로 확대되도록 설정
+            // 스크롤바가 둥근 모서리 영역 밖으로 침범하지 않도록 잘라냄
+            "overflow-hidden rounded-xl border border-[#D9DEE6] bg-white",
+
+            // 열릴 때 애니메이션
             "origin-top",
-
-            // 추가: DOM에 처음 생성될 때 투명한 상태에서 시작
-            "starting:opacity-0",
-
-            // 추가: 처음 생성될 때 약간 위쪽에 위치
-            "starting:-translate-y-1",
-
-            // 추가: 처음 생성될 때 약간 작게 시작
-            "starting:scale-[0.98]",
+            "transition-[opacity,transform] duration-200 ease-out",
+            "starting:-translate-y-1 starting:scale-[0.98] starting:opacity-0",
           ].join(" ")}
         >
-          {options.map((option) => {
-            const isSelected = option.id === value;
+          <ul
+            className={[
+              // 실제 스크롤은 내부 ul에서 담당
+              "max-h-[246px] overflow-y-auto",
 
-            return (
-              <li
-                key={option.id}
-                onClick={() => handleSelect(option)}
-                className={[
-                  "text-title-xs",
-                  "cursor-pointer",
-                  isSelected ? "bg-primary-200" : "bg-transparent",
-                  "hover:bg-primary-200",
-                  "p-8",
-                  "flex items-center justify-between gap-[12px]",
-                  "rounded-lg",
-                ].join(" ")}
-              >
-                <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-                  <FlagFilled className="size-[24px]" />
-                </span>
-                <span className="min-w-0 grow truncate">{option.label}</span>
+              "flex flex-col gap-[12px] p-12",
+              "text-title-xs font-bold",
+            ].join(" ")}
+          >
+            {options.map((option) => {
+              const isSelected = option.id === value;
 
-                {isSelected && (
+              return (
+                <li
+                  key={option.id}
+                  onClick={() => handleSelect(option)}
+                  className={[
+                    "text-title-xs cursor-pointer",
+                    isSelected ? "bg-primary-200" : "bg-transparent",
+                    "hover:bg-primary-200",
+                    "flex items-center justify-between gap-[12px]",
+                    "rounded-lg p-8",
+                  ].join(" ")}
+                >
                   <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-                    <Check className="size-[24px]" />
+                    <FlagFilled className="size-[24px]" />
                   </span>
-                )}
+
+                  <span className="min-w-0 grow truncate">{option.label}</span>
+
+                  {isSelected && (
+                    <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
+                      <Check className="size-[24px]" />
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+
+            {!inputGoalOpen ? (
+              <li
+                className="text-title-xs flex cursor-pointer justify-center gap-[12px] rounded-xl p-8"
+                onClick={handleAddGoalClick}
+              >
+                <Plus className="size-[24px]" />새 목표 추가
               </li>
-            );
-          })}
-          {!inputGoalOpen ? (
-            <li
-              className="text-title-xs flex cursor-pointer justify-center gap-[12px] rounded-xl p-8"
-              onClick={handleAddGoalClick}
-            >
-              <Plus className="size-[24px]" />새 목표 추가
-            </li>
-          ) : (
-            <form
-              className="text-title-xs flex cursor-pointer items-center justify-center gap-[12px] rounded-xl p-8"
-              onSubmit={handleAddGoalSubmit}
-            >
-              <TextInput
-                name="goal"
-                placeholder="목표를 입력해주세요"
-              />
-              <button type="submit">
-                <Plus className="size-[24px]" />
-              </button>
-            </form>
-          )}
-        </ul>
+            ) : (
+              <form
+                className="text-title-xs flex items-center justify-center gap-[12px] rounded-xl p-8"
+                onSubmit={handleAddGoalSubmit}
+              >
+                <TextInput
+                  name="goal"
+                  placeholder="목표를 입력해주세요"
+                />
+
+                <button type="submit">
+                  <Plus className="size-[24px]" />
+                </button>
+              </form>
+            )}
+          </ul>
+        </div>
       )}
     </div>
   );
