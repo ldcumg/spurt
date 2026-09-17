@@ -15,7 +15,7 @@ export default function Disclosure({ children, isOpen }: DisclosureProps) {
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-9999 flex items-center justify-center">{children}</div>,
+    <div className="fixed inset-0 z-9999 flex flex-col items-center">{children}</div>,
     document.getElementById(DISCLOSURE_ROOT_ID)!,
   );
 }
