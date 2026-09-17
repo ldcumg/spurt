@@ -1,7 +1,7 @@
 "use client";
 
 import { DISCLOSURE_ROOT_ID } from "@/constants/dom";
-import { useLockBodyScroll } from "@/hooks/disclosure/useLockBodyScroll";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 interface DisclosureProps {
@@ -10,7 +10,15 @@ interface DisclosureProps {
 }
 
 export default function Disclosure({ children, isOpen }: DisclosureProps) {
-  useLockBodyScroll(isOpen);
+  useEffect(() => {
+    if (!isOpen) return;
+
+    document.body.classList.add("overflow-hidden");
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
