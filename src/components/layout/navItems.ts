@@ -1,0 +1,17 @@
+import { Flag, FlagFilled, Home, HomeFilled, Note, NoteFilled, Todos, TodosFilled } from "@/assets/icons";
+import ROUTES from "@/constants/routes";
+import type { FC, SVGProps } from "react";
+
+interface NavItemProps {
+  href: string;
+  label: string;
+  Icon: FC<SVGProps<SVGSVGElement>>;
+  ActiveIcon: FC<SVGProps<SVGSVGElement>>;
+}
+
+export const NAV_ITEMS: NavItemProps[] = [
+  { href: ROUTES.dashboard, label: "대시보드", Icon: Home, ActiveIcon: HomeFilled },
+  { href: ROUTES.goals, label: "목표", Icon: Flag, ActiveIcon: FlagFilled },
+  { href: ROUTES.todos, label: "모든 할 일", Icon: Todos, ActiveIcon: TodosFilled },
+  { href: ROUTES.notes, label: "노트", Icon: Note, ActiveIcon: NoteFilled },
+];
