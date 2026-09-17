@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from "@storybook/nextjs-vite";
 import Sidebar from ".";
 import ROUTES from "@/constants/routes";
+import { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
   title: "Layout/Sidebar",
@@ -14,6 +14,7 @@ const meta = {
       },
     },
   },
+  tags: ["autodocs"],
 } satisfies Meta<typeof Sidebar>;
 
 export default meta;
