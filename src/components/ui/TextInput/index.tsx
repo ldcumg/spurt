@@ -35,12 +35,14 @@ export default function TextInput({ label, error, id, ...props }: TextInputProps
           className={`text-body-lg h-48 w-full rounded-lg border bg-white px-16 outline-none disabled:opacity-50 ${borderClass}`}
           {...props}
         />
-        <p
-          id={errorId}
-          className="text-body-md text-error min-h-22"
-        >
-          {error}
-        </p>
+        {error && (
+          <p
+            id={errorId}
+            className="text-body-md text-error"
+          >
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );
