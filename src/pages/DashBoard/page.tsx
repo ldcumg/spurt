@@ -1,11 +1,16 @@
+import { BarChart, Bar, ResponsiveContainer } from "recharts";
+
 import { Right, Done, Link, Note, Upload, Plus, FlagFilled, Todo } from "@/assets/icons/index";
 import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
 import ProgressRing from "@/components/ui/ProgressRing";
 
 import { Goal, Todos } from "@/components/ui/GoalCard/mock";
+import getDoneByDate from "@/utils/getDoneByDate";
 
 export default function DashBoardPage() {
+  const data = getDoneByDate(Todos.todos);
+
   return (
     <div className="mx-auto flex w-screen flex-col gap-10 px-30 py-40">
       <div className="p-20">
@@ -87,6 +92,36 @@ export default function DashBoardPage() {
             <span> 총</span>
             <span> 25개</span>
             <span> 완료</span>
+          </div>
+          <div>
+            {/**Tindy Bar Chart - Recharts 라이브러리 활용 */}
+            <ResponsiveContainer
+              width="100%"
+              height={100}
+            >
+              <BarChart
+                data={[
+                  //data 삽입 필요
+                  { name: "Mon", uv: 25, pv: 2400 },
+                  { name: "Tue", uv: 10, pv: 2210 },
+                  { name: "Wed", uv: 28, pv: 2290 },
+                  { name: "Thu", uv: 44, pv: 2000 },
+                  { name: "Fri", uv: 54, pv: 2181 },
+                  { name: "Sat", uv: 50, pv: 2500 },
+                  { name: "Sun", uv: 32, pv: 2500 },
+                ]}
+                responsive
+                style={{ maxHeight: "100px" }}
+              >
+                <Bar
+                  type="monotone"
+                  dataKey="uv"
+                  stroke="#3b9259"
+                  strokeWidth={1}
+                  fill="#3b9259"
+                ></Bar>
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
         <div className="flex flex-row justify-between px-20">
