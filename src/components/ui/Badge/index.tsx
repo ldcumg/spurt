@@ -47,9 +47,9 @@ export default function Badge({ type, todoCount, doneCount, totalCount, classNam
 
   return (
     <div
-      className={`text-caption inline-flex w-fit items-center justify-center gap-8 rounded-sm px-10 py-5 font-semibold ${currentBadge.style} ${className}`}
+      className={`text-caption inline-flex w-fit items-center justify-center gap-8 rounded-sm px-10 py-5 font-semibold whitespace-nowrap ${currentBadge.style} ${className}`}
     >
-      <p>{currentBadge.label}</p>
+      <p className="hidden sm:block">{currentBadge.label}</p>
       {displayCount !== undefined ? <p>{displayCount}</p> : ""}
     </div>
   );
