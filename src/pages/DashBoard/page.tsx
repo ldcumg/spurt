@@ -152,10 +152,7 @@ export default function DashBoardPage() {
               variant={"outline"}
               className="flex flex-row items-center justify-center gap-10 rounded-full bg-white"
             >
-              <Plus
-                className="h-16 w-16 shrink-0"
-                viewBox="0 0 24 24"
-              />
+              <Plus className="h-16 w-16 shrink-0" />
               목표 추가
             </Button>
             <p className="text-title-xs">더보기</p>
