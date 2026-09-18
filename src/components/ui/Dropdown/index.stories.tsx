@@ -3,6 +3,7 @@ import { userEvent, within } from "storybook/test";
 import { useState } from "react";
 
 import Dropdown, { type DropDownOption } from "./";
+import { Burger } from "@/assets/icons";
 
 const goals: DropDownOption[] = [
   {
@@ -26,6 +27,12 @@ const meta = {
     layout: "padded",
   },
   tags: ["autodocs"],
+  args: {
+    options: [],
+    value: "",
+    onChange: () => {},
+    onAddGoal: () => {},
+  },
 } satisfies Meta<typeof Dropdown>;
 
 export default meta;
@@ -45,6 +52,9 @@ function DropdownExample({ label }: { label: string }) {
         onChange={(option) => {
           setValue(option.id);
         }}
+        onAddGoal={(value) => {
+          console.log(value);
+        }}
       />
     </div>
   );
@@ -62,6 +72,9 @@ function DropdownNoList({ label }: { label: string }) {
         onChange={(option) => {
           setValue(option.id);
         }}
+        onAddGoal={(value) => {
+          console.log(value);
+        }}
       />
     </div>
   );
@@ -78,6 +91,9 @@ function DropdownInvalidValue({ label }: { label: string }) {
         value={value}
         onChange={(option) => {
           setValue(option.id);
+        }}
+        onAddGoal={(value) => {
+          console.log(value);
         }}
       />
     </div>
@@ -103,37 +119,32 @@ function DropdownOverflow({ label }: { label: string }) {
         onChange={(option) => {
           setValue(option.id);
         }}
+        onAddGoal={(value) => {
+          console.log(value);
+        }}
       />
     </div>
   );
 }
 
 export const Default: Story = {
-  args: {
-    options: goals,
-    value: "portfolio",
-    onChange: () => {},
-  },
-
-  render: () => {
-    return (
-      <div className="flex h-[120vh] flex-col gap-32">
-        {/* dropdown 메뉴가 absolute이므로 공간 확보 */}
-        <div className="min-h-[100px]">
-          <DropdownExample label="드롭다운" />
-        </div>
-
-        <div className="min-h-[100px]">
-          <DropdownNoList label="빈 리스트" />
-        </div>
-
-        <div className="min-h-[100px]">
-          <DropdownInvalidValue label="잘못된 값 입력" />
-        </div>
-        <div className="min-h-[100px]">
-          <DropdownOverflow label="텍스트 오버플로우" />
-        </div>
+  render: () => (
+    <div className="flex h-[120vh] flex-col gap-32">
+      <div className="min-h-[100px]">
+        <DropdownExample label="드롭다운" />
       </div>
-    );
-  },
+
+      <div className="min-h-[100px]">
+        <DropdownNoList label="빈 리스트" />
+      </div>
+
+      <div className="min-h-[100px]">
+        <DropdownInvalidValue label="잘못된 값 입력" />
+      </div>
+
+      <div className="min-h-[100px]">
+        <DropdownOverflow label="텍스트 오버플로우" />
+      </div>
+    </div>
+  ),
 };
