@@ -1,21 +1,27 @@
 import UploadInput from ".";
 import { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { fn } from "storybook/test";
+import { ComponentProps, useState } from "react";
+
+function StatefulUploadInput(props: Omit<ComponentProps<typeof UploadInput>, "file" | "onFileChange">) {
+  const [file, setFile] = useState<File | null>(null);
+
+  return (
+    <UploadInput
+      {...props}
+      file={file}
+      onFileChange={setFile}
+    />
+  );
+}
 
 const meta = {
   title: "components/UploadInput",
-  component: UploadInput,
+  component: StatefulUploadInput,
   parameters: {
     layout: "centered",
   },
   tags: ["autodocs"],
-  args: {
-    onFileChange: fn(),
-  },
-  argTypes: {
-    onFileChange: { control: false },
-  },
-} satisfies Meta<typeof UploadInput>;
+} satisfies Meta<typeof StatefulUploadInput>;
 
 export default meta;
 
@@ -27,17 +33,17 @@ export const AllStates: Story = {
   },
   render: (args) => (
     <div className="flex w-md flex-col gap-32">
-      <UploadInput {...args} />
-      <UploadInput
+      <StatefulUploadInput {...args} />
+      <StatefulUploadInput
         {...args}
         label="파일"
       />
-      <UploadInput
+      <StatefulUploadInput
         {...args}
         label="사진"
         placeholder="사진을 업로드해주세요"
       />
-      <UploadInput
+      <StatefulUploadInput
         {...args}
         label="파일"
         error="파일 크기는 5MB 이하로 업로드해주세요"
