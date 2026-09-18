@@ -41,8 +41,8 @@ const variants: {
     className: "w-[100px]",
   },
   {
-    name: "Horizontal Inverse",
-    variant: "horizontalInverse",
+    name: "Horizontal White",
+    variant: "horizontalWhite",
     className: "w-[240px]",
     dark: true,
   },
