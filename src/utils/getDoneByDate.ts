@@ -20,8 +20,8 @@ export default function getDoneByDate(todos: TodoItem[]): DailyDoneStat[] {
     const fullDate = `${year}-${month}-${date}`;
 
     result.push({
-      fullDate,
       date: `${month}/${date}`,
+      fullDate,
       count: 0,
     });
   }
@@ -29,7 +29,13 @@ export default function getDoneByDate(todos: TodoItem[]): DailyDoneStat[] {
   todos.forEach((item) => {
     if (item.done && item.updatedAt) {
       // "2026-09-17T09:00:00.000Z" -> "2026-09-17" 추출
-      const updatedDate = item.updatedAt.slice(0, 10);
+      const updated = new Date(item.updatedAt);
+      const updatedDate = [
+        updated.getFullYear(),
+        String(updated.getMonth() + 1).padStart(2, "0"),
+        String(updated.getDate()).padStart(2, "0"),
+      ].join("-");
+
       const targetDay = result.find((day) => day.fullDate === updatedDate);
 
       if (targetDay) {
