@@ -7,7 +7,7 @@ import ProgressRing from "@/components/ui/ProgressRing";
 
 import { Goal, Todos } from "@/components/ui/GoalCard/mock";
 import getDoneByDate, { DailyDoneStat } from "@/utils/getDoneByDate";
-import DashTodoItem from "../../components/ui/DashTodoItem";
+import DashTodoItem from "../../components/ui/DashBoardPage/DashTodoItem";
 
 type dataSet = {
   date: string;
@@ -17,6 +17,8 @@ type dataSet = {
 export default function DashBoardPage() {
   const data = getDoneByDate(Todos.todos);
   const dataSet: dataSet[] = data.map((item) => ({ date: item.date, count: item.count }));
+
+  const doneCount = Todos.todos.filter((todo) => todo.done).length;
 
   return (
     <div className="mx-auto flex w-screen flex-col gap-20 px-30 py-40">
@@ -54,14 +56,14 @@ export default function DashBoardPage() {
               <div className="bg-primary-600 h-16 w-16 rounded-full"></div>
               <div className="">
                 <p className="text-title-xs leading-none text-neutral-500">완료한 할 일</p>
-                <p className="text-title-md">34개</p>
+                <p className="text-title-md">{doneCount}</p>
               </div>
             </div>
             <div className="flex w-full flex-row gap-10 rounded-md bg-neutral-100 p-10">
               <div className="h-16 w-16 rounded-full bg-neutral-600"></div>
               <div>
                 <p className="text-title-xs leading-none text-neutral-500">전체 할 일</p>
-                <p className="text-title-md">50개</p>
+                <p className="text-title-md">{Todos.totalCount}</p>
               </div>
             </div>
           </div>
@@ -138,7 +140,7 @@ export default function DashBoardPage() {
           </div>
           <div className="bg-primary-50 text-body-md flex h-40 w-full flex-row items-center justify-center rounded-full">
             <p>
-              이번 주 총 <span className="text-title-sm text-primary-700">25개 </span>
+              이번 주 총 <span className="text-title-sm text-primary-700">{doneCount} </span>
               완료
             </p>
           </div>
