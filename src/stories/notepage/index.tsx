@@ -1,3 +1,11 @@
+import { Burger, Plus, Search } from "@/assets/icons";
+import Button from "@/components/ui/Button";
+import Logo from "@/components/ui/Logo";
+import Profile from "@/components/ui/Profile";
+import Image from "next/image";
+import infoImage from "@/assets/images/notepage/notepage_info_image.png";
+import TextInput from "@/components/ui/TextInput";
+
 const notes = [
   {
     title: "프로그래밍과 데이터 in JavaScript",
@@ -51,41 +59,30 @@ const notes = [
 
 export default function Page() {
   return (
-    <AppLayout>
-      <SidebarPlaceholder />
+    // <AppLayout>
+    // <SidebarPlaceholder />
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <Header />
+    <div className="flex flex-col">
+      <Header />
 
-        <main className="flex-1">
-          <div className="mx-auto w-full max-w-[1180px] px-4 py-4 md:px-6 md:py-8 xl:px-8">
-            {/*
-              PC에서만 검색창을 최상단에 표시합니다.
-              xl:block : PC(xl 이상)에서만 표시
-            */}
-            <div className="hidden xl:block">
-              <SearchSection />
-            </div>
+      <main className="flex flex-1 flex-col items-stretch gap-4 p-4">
+        <PageIntro />
 
-            <PageIntro />
+        {/* <div className="hidden xl:block">
+            <SearchSection />
+          </div> */}
 
-            {/*
-              모바일 / 태블릿에서는 기존 위치를 그대로 유지합니다.
-              xl:hidden : PC에서는 위쪽 SearchSection을 사용하므로 숨김
-            */}
-            <div className="xl:hidden">
-              <SearchSection />
-            </div>
+        {/* <TextInput placeholder="노트 제목, 내용, 할 일, 목표로 검색해보세요." /> */}
+        <SearchSection />
 
-            <FilterSection />
+        {/* <FilterSection /> */}
 
-            <NoteList />
-          </div>
-        </main>
+        {/* <NoteList /> */}
+      </main>
 
-        <BottomNavigation />
-      </div>
-    </AppLayout>
+      {/* <BottomNavigation /> */}
+    </div>
+    // </AppLayout>
   );
 }
 
@@ -142,77 +139,39 @@ function SidebarPlaceholder() {
 
 function Header() {
   return (
-    <header className="flex h-14 items-center justify-between bg-red-100 px-4 md:hidden">
-      {/*
-        반응형 추가
-
-        md:hidden
-        : 이미지 기준 태블릿/PC에서는 좌측 Sidebar가 있으므로
-          기존 모바일 Header를 숨김
-      */}
-
-      <button>☰</button>
+    <header className="flex items-center justify-between bg-gray-200 px-8">
+      <button>
+        <Burger className="size-[24px]" />
+      </button>
 
       <div className="text-center">
-        <strong>Sprut</strong>
-        <p className="text-[10px]">오늘도, 한 걸음 더</p>
+        <Logo
+          variant="horizontalWithTagline"
+          className="h-[48px]"
+        />
       </div>
 
-      <div>●</div>
+      <Profile />
     </header>
   );
 }
 
 function PageIntro() {
   return (
-    <section className="bg-yellow-100 py-4 md:py-0">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="hidden text-sm font-semibold md:mb-2 md:block">노트</p>
-
-          {/*
-            반응형 추가
-
-            모바일 이미지에는 별도의 작은 "노트" 텍스트가 없으므로 숨김
-            태블릿 이상부터 표시
-          */}
-
-          <h1 className="text-2xl font-bold md:text-3xl">노트 모아보기</h1>
-
-          {/*
-            반응형 추가
-
-            모바일: text-2xl
-            태블릿 이상: text-3xl
-          */}
-
-          <p className="mt-1 text-sm md:mt-2">
-            각 할 일에서 정리한 노트를 한눈에 확인하고,
-            <br className="hidden md:block" />
-            다시 성장의 재료로 활용해보세요.
-          </p>
-        </div>
-
-        <button className="shrink-0 rounded-lg bg-green-300 px-3 py-2 text-sm md:hidden">
-          {/*
-            모바일에서는 기존 위치 유지
-
-            태블릿부터는 SearchSection 오른쪽으로 이동시키기 위해 숨김
-          */}
-          + 새 노트
-        </button>
-
-        <div className="hidden bg-lime-200 md:block md:h-[110px] md:w-[240px] xl:h-[130px] xl:w-[320px]">
-          {/*
-            반응형 추가
-
-            참고 이미지의 우측 일러스트 영역
-
-            모바일에서는 기존처럼 생략
-            태블릿/PC에서만 공간 확보
-          */}
-          이미지 영역
-        </div>
+    <section className="bg-gray-300 px-4">
+      <div className="flex items-start justify-between gap-8">
+        <h1 className="text-title-lg mb-8 font-bold">노트 모아보기</h1>
+        <Button className="flex items-center justify-center gap-4">
+          <Plus className="size-[14px]" />새 노트
+        </Button>
+      </div>
+      <div className="flex items-start justify-between gap-8">
+        <p className="text-body-md">각 할 일에서 정리한 노트를 한눈에 확인하고, 다시 성장의 재료로 활용해보세요.</p>
+        <Image
+          src={infoImage}
+          alt="기록하는 내가 조금씩 더 성장하고 있어요"
+          className="w-[40%]"
+        />
       </div>
     </section>
   );
@@ -220,27 +179,13 @@ function PageIntro() {
 
 function SearchSection() {
   return (
-    <section className="bg-blue-100 py-3 md:mt-3 md:py-0 xl:mt-0 xl:mb-6">
-      {/*
-        모바일
-        - 기존 py-3 유지
-
-        태블릿
-        - 기존 위치 그대로
-        - md:mt-3 유지
-
-        PC
-        - 검색창이 최상단에 위치하므로 위쪽 margin 제거
-        - PageIntro와 간격을 위해 xl:mb-6 추가
-      */}
-
-      <div className="flex gap-3">
+    <section className="bg-gray-200">
+      <div className="relative flex items-center gap-4">
+        <Search className="pointer-events-none absolute top-1/2 left-8 -translate-y-1/2" />
         <input
           placeholder="노트 제목, 내용, 할 일, 목표로 검색해보세요."
-          className="h-10 min-w-0 flex-1 rounded-xl border bg-white px-4 text-sm md:h-12"
+          className={`text-body-lg h-48 flex-1 rounded-lg border bg-white pr-16 pl-40 outline-none disabled:opacity-50`}
         />
-
-        <button className="hidden shrink-0 rounded-xl bg-green-300 px-7 text-sm md:block">+ 새 노트</button>
       </div>
     </section>
   );
