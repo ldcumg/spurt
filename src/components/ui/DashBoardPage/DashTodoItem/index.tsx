@@ -38,9 +38,9 @@ export default function DashTodoItem({ todo }: TodoListItemProps) {
         </div>
       </div>
       <div className="flex flex-row items-center gap-10">
-        <Link className="size-24" />
-        <Note className="size-24" />
-        <Upload className="size-24" />
+        {todo.linkUrl && <Link className="size-24" />}
+        {todo.noteIds && <Note className="size-24" />}
+        {todo.fileUrl && <Upload className="size-24" />}
       </div>
     </div>
   );
