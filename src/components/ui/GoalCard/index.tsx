@@ -8,7 +8,7 @@ import { TodoItem } from "@/types/typeTodos";
 import { GoalItem } from "@/types/typeGoals";
 
 interface GoalCardProps {
-  goal?: GoalItem;
+  goal: GoalItem;
   todos?: TodoItem[];
 }
 
@@ -23,13 +23,13 @@ export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
     <div className="flex min-h-356 w-full flex-col justify-between gap-20 rounded-[20px] bg-white p-24">
       <div className="flex flex-col gap-12">
         <div className="flex justify-between">
-          <div className="flex flex-row gap-12">
-            <FlagFilled />
-            <p className="text-title-sm truncate pt-2 leading-none text-neutral-700">
+          <div className="flex min-w-0 flex-1 flex-row gap-12">
+            <FlagFilled className="shrink-0" />
+            <p className="text-title-sm truncate pt-2 leading-none whitespace-nowrap text-neutral-700">
               {goal.title || "목표를 추가하세요."}
             </p>
           </div>
-          <More />
+          <More className="shrink-0" />
         </div>
         <ProgressBar
           doneCount={completedCount}
@@ -51,12 +51,10 @@ export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
         <div className="flex flex-1 flex-col gap-8 py-8">
           {todos.length > 0 ? (
             todos.slice(0, 3).map((item) => (
-              <div
+              <TodoListItem
                 key={item.id}
-                className="flex flex-row items-center gap-8"
-              >
-                <TodoListItem todo={item} />
-              </div>
+                todo={item}
+              />
             ))
           ) : (
             <p className="text-title-xs flex h-full items-center justify-center">등록된 할 일이 없습니다.</p>
@@ -68,7 +66,7 @@ export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
           className="border-primary-500 flex h-48 w-full flex-row items-center justify-center gap-4 bg-white"
         >
           <Plus className="text-primary-600 h-16 w-16 shrink-0" />
-          <p className="text-primary-600 text-title-xs">할 일 추가</p>
+          <p className="text-primary-600 text-title-xs truncate">할 일 추가</p>
         </Button>
       </div>
     </div>
