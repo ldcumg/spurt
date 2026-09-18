@@ -6,7 +6,7 @@ import ProgressRing from "@/components/ui/ProgressRing";
 import { Goal, Todos } from "@/components/ui/GoalCard/mock";
 export default function GoalPage() {
   return (
-    <div className="bg-primary-50 flex flex-col gap-20 p-24">
+    <div className="bg-primary-50 flex h-screen flex-col gap-20 p-24 pt-32">
       <header>
         <p className="text-display">체다치즈님의 목표</p>
       </header>
@@ -33,18 +33,22 @@ export default function GoalPage() {
               </p>
             </div>
           </div>
-          <div className="bg-primary-100 flex flex-1 flex-row items-end justify-between gap-24 rounded-md p-20 shadow-sm">
+          <div className="bg-primary-100 flex flex-1 flex-row items-end gap-12 rounded-md p-20 shadow-sm">
             <p className="text-title-md">노트 모아보기</p>
-            <Right />
+            <Right className="size-32 shrink-0" />
           </div>
         </div>
       </section>
-      <section>
-        <div>
-          <div>
+      <section className="flex h-full flex-row gap-24">
+        <div className="flex-1 rounded-md bg-white p-12">
+          <div className="flex flex-row items-center justify-between p-8">
             <Badge type="todo" />
-            <Button variant={"outline"}>
-              <Plus />할 일 추가
+            <Button
+              variant={"outline"}
+              className="flex flex-row items-center justify-center gap-8 rounded-full"
+            >
+              <Plus className="size-16 shrink-0" />
+              <p>할 일 추가</p>
             </Button>
           </div>
           <div>
@@ -66,9 +70,16 @@ export default function GoalPage() {
             )}
           </div>
         </div>
-        <div>
-          <div>
+        <div className="flex-1 rounded-md bg-white p-12">
+          <div className="flex flex-row items-center justify-between p-8">
             <Badge type="done" />
+            <Button
+              variant={"outline"}
+              className="flex flex-row items-center justify-center gap-8 rounded-full"
+            >
+              <Plus className="size-16 shrink-0" />
+              <p>할 일 추가</p>
+            </Button>
           </div>
           <div>
             {Todos.todos ? (
