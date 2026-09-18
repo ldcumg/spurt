@@ -19,6 +19,12 @@ export default function DashBoardPage() {
   const dataSet: dataSet[] = data.map((item) => ({ date: item.date, count: item.count }));
 
   const doneCount = Todos.todos.filter((todo) => todo.done).length;
+  /**
+   * array.reduce((누적값, 현재요소) => {
+        return 다음누적값;
+      }, 초기값);
+   */
+  const weeklyTotal = dataSet.reduce((total, item) => total + item.count, 0);
 
   return (
     <div className="mx-auto flex w-screen flex-col gap-20 px-30 py-40">
@@ -84,12 +90,22 @@ export default function DashBoardPage() {
           {/** 최근 등록한 할 일을 3개까지 보여줌
            * - 최근 등록한 할 일이 없는 경우 방어 필요
            */}
-          {Todos.todos.slice(0, 3).map((item) => (
-            <DashTodoItem
-              key={item.id}
-              todo={item}
-            />
-          ))}
+          {Todos.todos ? (
+            [...Todos.todos]
+              .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
+              .slice(0, 3)
+              .map((item) => (
+                <DashTodoItem
+                  key={item.id}
+                  todo={item}
+                />
+              ))
+          ) : (
+            <p>
+              최근 등록한 할 일이 없어요
+              <br />할 일을 등록해 보세요.
+            </p>
+          )}
         </div>
         <div className="flex flex-col gap-10 rounded-md bg-white px-20 py-10 shadow-sm">
           <div className="flex flex-row items-center justify-between">
@@ -140,7 +156,7 @@ export default function DashBoardPage() {
           </div>
           <div className="bg-primary-50 text-body-md flex h-40 w-full flex-row items-center justify-center rounded-full">
             <p>
-              이번 주 총 <span className="text-title-sm text-primary-700">{doneCount} </span>
+              이번 주 총 <span className="text-title-sm text-primary-700">{weeklyTotal} </span>
               완료
             </p>
           </div>

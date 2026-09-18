@@ -1,3 +1,10 @@
+"use client";
+import DashBoardPage from "@/pages/DashBoard/page";
+
 export default function HomePage() {
-  return <div>HomePage</div>;
+  return (
+    <div>
+      <DashBoardPage />
+    </div>
+  );
 }
