@@ -22,7 +22,8 @@ export const Todos = {
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
-      title: "API 문서 작성sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+      title:
+        "길이를 늘려서 truncate를 실험해보자. 길이를 늘려서 truncate를 실험해보자. 길이를 늘려서 truncate를 실험해보자. 길이를 늘려서 truncate를 실험해보자. ",
       done: false,
       fileUrl: null,
       linkUrl: "https://docs.example.com",
