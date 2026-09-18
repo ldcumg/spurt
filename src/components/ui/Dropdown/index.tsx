@@ -1,82 +1,48 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-
-// 임시 svg
-function TempIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="size-[24px] fill-current stroke-current stroke-[1.8]"
-    >
-      <path
-        d="M6 3v18M7 4h11l-2.6 4L18 12H7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ChevronDownIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="size-[24px] shrink-0 fill-none stroke-current stroke-2"
-    >
-      <path
-        d="m6 9 6 6 6-6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="size-[24px] shrink-0 fill-none stroke-current stroke-2"
-    >
-      <path
-        d="m5 12.5 4.2 4.2L19 7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+import { Check, FlagFilled, Plus, Under } from "@/assets/icons";
+import { SubmitEventHandler, useEffect, useRef, useState } from "react";
+import TextInput from "../TextInput";
 
 export type DropDownOption = {
   id: string;
   label: string;
 };
 
-type DropdownProps = {
+interface DropdownProps {
   options: DropDownOption[];
   value: string;
   placeholder?: string;
   disabled?: boolean;
   onChange: (option: DropDownOption) => void;
-};
+  onAddGoal: (value: string) => void;
+}
+
 const goals: DropDownOption[] = [
   { id: "javascript-service", label: "자바스크립트로 웹 서비스 만들기" },
   { id: "design-system", label: "디자인 시스템 강의 듣기" },
   { id: "portfolio", label: "프론트엔드 포트폴리오 완성하기" },
 ];
-
+/**
+ * 드롭다운 컴포넌트입니다.
+ * @param options DropDownOption 타입을 담고있는 리스트입니다. 예: [{id: string, label: string}, ...]
+ * @param value option 리스트 중에서 선택한 항목의 id 입니다.
+ * @param placeholder option 이 없을 때 나오는 문구입니다.
+ * @param disabled
+ * @param onChange 드롭다운 메뉴중 하나를 클릭했을 때 발생하는 이벤트 (arg : DropDownOption) => void
+ * @param onAddGoal 목표 생성 아이콘을 클릭했을 때 발생하는 이벤트, 매개변수는 목표 텍스트이다. (arg: string) => void
+ * @returns
+ */
 export default function Dropdown({
-  options = goals,
-  value = "portfolio",
+  options,
+  value,
   placeholder = "목표를 선택해 주세요",
   disabled = false,
   onChange,
+  onAddGoal,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [inputGoalOpen, setInputGoalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -84,6 +50,7 @@ export default function Dropdown({
       if (!container) return;
       if (!container.contains(event.target as Node)) {
         setIsOpen(false);
+        setInputGoalOpen(false);
       }
     };
     document.addEventListener("mousedown", handleOutsideClick);
@@ -95,6 +62,16 @@ export default function Dropdown({
   const handleSelect = (option: DropDownOption) => {
     onChange(option);
     setIsOpen(false);
+    setInputGoalOpen(false);
+  };
+  const handleAddGoalClick = () => {
+    setInputGoalOpen(true);
+  };
+  const handleAddGoalSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const goal = formData.get("goal");
+    onAddGoal(String(goal));
   };
   return (
     <div
@@ -104,10 +81,14 @@ export default function Dropdown({
       <button
         type="button"
         disabled={disabled}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          setIsOpen(!isOpen);
+          if (isOpen) setInputGoalOpen(false);
+        }}
         onKeyDown={(e) => {
           if (e.key == "Escape") {
             setIsOpen(false);
+            setInputGoalOpen(false);
           }
         }}
         className={[
@@ -122,32 +103,39 @@ export default function Dropdown({
       >
         <span className="flex items-center justify-center gap-[12px]">
           <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-            <TempIcon />
+            <FlagFilled className="size-[24px]" />
           </span>
           <span className="text-title-xs">{selectedOption?.label ?? placeholder}</span>
         </span>
         <span className={["grid size-[36px] shrink-0 place-items-center", isOpen && "rotate-180"].join(" ")}>
-          <ChevronDownIcon />
+          <Under className="size-[24px]" />
         </span>
       </button>
       {isOpen && (
-        <ul
+        // border와 rounded를 담당하는 바깥 컨테이너
+        <div
           className={[
-            "absolute top-[calc(100%+4px)] left-0 z-50",
-            "max-h-[246px] w-full overflow-y-auto",
-            "flex flex-col gap-[12px]",
-            "p-12",
-            "rounded-xl border border-[#D9DEE6] bg-white p-8",
-            "text-title-xs font-bold",
+            "absolute top-[calc(100%+4px)] left-0 z-50 w-full",
+
+            // 스크롤바가 둥근 모서리 영역 밖으로 침범하지 않도록 잘라냄
+            "overflow-hidden rounded-xl border border-[#D9DEE6] bg-white",
+
+            // 열릴 때 애니메이션
+            "origin-top",
+            "transition-[opacity,transform] duration-200 ease-out",
+            "starting:-translate-y-1 starting:scale-[0.98] starting:opacity-0",
           ].join(" ")}
         >
-          {options.length === 0 ? (
-            <li className="text-title-xs flex gap-[12px] rounded-xl p-8">
-              <TempIcon />
-              등록된 목표가 없습니다.
-            </li>
-          ) : (
-            options.map((option) => {
+          <ul
+            className={[
+              // 실제 스크롤은 내부 ul에서 담당
+              "max-h-[246px] overflow-y-auto",
+
+              "flex flex-col gap-[12px] p-12",
+              "text-title-xs font-bold",
+            ].join(" ")}
+          >
+            {options.map((option) => {
               const isSelected = option.id === value;
 
               return (
@@ -155,30 +143,52 @@ export default function Dropdown({
                   key={option.id}
                   onClick={() => handleSelect(option)}
                   className={[
-                    "text-title-xs",
-                    "cursor-pointer",
+                    "text-title-xs cursor-pointer",
                     isSelected ? "bg-primary-200" : "bg-transparent",
                     "hover:bg-primary-200",
-                    "p-8",
                     "flex items-center justify-between gap-[12px]",
-                    "rounded-lg",
+                    "rounded-lg p-8",
                   ].join(" ")}
                 >
                   <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-                    <TempIcon />
+                    <FlagFilled className="size-[24px]" />
                   </span>
+
                   <span className="min-w-0 grow truncate">{option.label}</span>
 
                   {isSelected && (
                     <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-                      <CheckIcon />
+                      <Check className="size-[24px]" />
                     </span>
                   )}
                 </li>
               );
-            })
-          )}
-        </ul>
+            })}
+
+            {!inputGoalOpen ? (
+              <li
+                className="text-title-xs flex cursor-pointer justify-center gap-[12px] rounded-xl p-8"
+                onClick={handleAddGoalClick}
+              >
+                <Plus className="size-[24px]" />새 목표 추가
+              </li>
+            ) : (
+              <form
+                className="text-title-xs flex items-center justify-center gap-[12px] rounded-xl p-8"
+                onSubmit={handleAddGoalSubmit}
+              >
+                <TextInput
+                  name="goal"
+                  placeholder="목표를 입력해주세요"
+                />
+
+                <button type="submit">
+                  <Plus className="size-[24px]" />
+                </button>
+              </form>
+            )}
+          </ul>
+        </div>
       )}
     </div>
   );
