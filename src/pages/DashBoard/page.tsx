@@ -7,7 +7,7 @@ import ProgressRing from "@/components/ui/ProgressRing";
 
 import { Goal, Todos } from "@/components/ui/GoalCard/mock";
 import getDoneByDate, { DailyDoneStat } from "@/utils/getDoneByDate";
-import DashTodoItem from "./components/DashTodoItem";
+import DashTodoItem from "../../components/ui/DashTodoItem";
 
 type dataSet = {
   date: string;
