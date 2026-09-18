@@ -11,7 +11,7 @@ export default function TodoItem({ todo }: TodoListItemProps) {
   const [isDone, setIsDone] = useState(todo.done);
   return (
     <div className="hover:bg-primary-100 flex flex-row items-center justify-between rounded-md p-5">
-      <div className="flex flex-row items-center gap-8">
+      <div className="flex min-w-0 flex-row items-center gap-8">
         {isDone ? (
           <Done
             onClick={() => setIsDone((prev) => !prev)}
@@ -23,10 +23,10 @@ export default function TodoItem({ todo }: TodoListItemProps) {
             className="size-32 shrink-0 cursor-pointer text-neutral-600"
           />
         )}
-        <p className={`text-title-xs ${isDone ? "line-through" : ""}`}>{todo.title}</p>
+        <p className={`text-title-xs truncate ${isDone ? "line-through" : ""}`}>{todo.title}</p>
       </div>
       <div className="flex flex-row items-center gap-10">
-        {todo.noteIds && <Note className="size-24 text-neutral-600" />}
+        {todo.noteIds.length > 0 && <Note className="size-24 text-neutral-600" />}
         <More className="size-24 shrink-0 text-neutral-600" />
       </div>
     </div>
