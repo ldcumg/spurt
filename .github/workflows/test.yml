@@ -67,6 +67,7 @@ jobs:
           retention-days: 30
 
   chromatic:
+    if: github.base_ref == 'dev'
     runs-on: ubuntu-latest
     steps:
       - name: Github Repository 파일 불러오기
