@@ -12,17 +12,19 @@ export default function TodoItem({ todo }: TodoListItemProps) {
   return (
     <div className="hover:bg-primary-100 flex flex-row items-center justify-between rounded-md p-5">
       <div className="flex min-w-0 flex-row items-center gap-8">
-        {isDone ? (
-          <Done
-            onClick={() => setIsDone((prev) => !prev)}
-            className="text-primary-600 size-32 shrink-0 cursor-pointer"
-          />
-        ) : (
-          <Todo
-            onClick={() => setIsDone((prev) => !prev)}
-            className="size-32 shrink-0 cursor-pointer text-neutral-600"
-          />
-        )}
+        <button
+          type="button"
+          aria-label={isDone ? "할 일 완료 취소" : "할 일 완료"}
+          aria-pressed={isDone}
+          onClick={() => setIsDone((prev) => !prev)}
+          className="cursor-pointer"
+        >
+          {isDone ? (
+            <Done className="text-primary-600 size-32 shrink-0" />
+          ) : (
+            <Todo className="size-32 shrink-0 text-neutral-600" />
+          )}
+        </button>
         <p className={`text-title-xs truncate ${isDone ? "line-through" : ""}`}>{todo.title}</p>
       </div>
       <div className="flex flex-row items-center gap-10">
