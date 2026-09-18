@@ -1,11 +1,40 @@
 language: ko-KR
 
 reviews:
+  instructions: |
+    PR을 리뷰할 때 다음 PR 컨벤션을 준수하였는 지 확인한다.
+    - PR 제목은 `[타입] 작업 내용` 형식을 사용한다.
+    - PR 본문에는 작업 사항, 관련 이슈 내용을 포함한다.
+    - Assignees과 Labels를 설정한다.
+    - 관련 이슈가 있다면 이슈 번호를 명시한다.
+
   path_filters:
     - "!**/node_modules/**"
     - "!**/dist/**"
     - "!**/.next/**"
     - "!**/coverage/**"
+
+  instructions: |
+    다음 코드 컨벤션을 준수하였는 지 확인한다.
+    - 폴더명은 kebab-case를 사용한다.
+    - 컴포넌트명은 PascalCase를 사용한다.
+    - 함수와 변수명은 camelCase를 사용한다.
+    - 상수명은 UPPER_SNAKE_CASE를 사용한다.
+    - Boolean 변수명은 is- 접두사를 사용한다.
+    - 함수명은 함수의 동작을 알 수 있도록 동사로 작성한다.
+    - 이벤트 관련 함수명은 handle- 접두사를 사용한다.
+    - this 바인딩이 필요하지 않은 일반 함수는 화살표 함수를 사용한다.
+    - 호이스팅이 필요한 함수와 유틸 함수는 함수 선언문을 사용한다.
+    - 팀원이 함수의 역할과 사용 목적을 이해하는 데 도움이 필요한 경우 JSDoc(/** */)을 활용한다.
+    - 기존 UI 컴포넌트와 디자인 토큰을 우선 재사용한다.
+    - 컴포넌트의 하위 요소는 기능별로 폴더를 묶어 관리한다.
+    - 컴포넌트는 export default function 형태로 작성한다.
+    - 기본적으로 type alias를 사용한다.
+    - declaration file에서는 interface를 사용한다.
+    - Props에서 타입 병합이 필요한 경우 interface를 사용한다.
+    - 꼭 필요한 경우가 아니라면 값을 하드코딩하지 않고 상수화한다.
+    - 패키지 매니저로 pnpm을 사용한다.
+    - Tailwind CSS를 사용한다.
 
   path_instructions:
     - path: "src/components/**/*.tsx"
