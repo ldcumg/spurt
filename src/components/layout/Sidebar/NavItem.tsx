@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { twMerge } from "@/lib/twMerge";
 import clsx from "clsx";
