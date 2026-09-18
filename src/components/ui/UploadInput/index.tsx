@@ -7,6 +7,7 @@ interface UploadInputProps {
   label?: string;
   error?: string;
   placeholder?: string;
+  file: File | null;
   onFileChange: (file: File | null) => void;
 }
 
@@ -14,15 +15,10 @@ export default function UploadInput({
   label,
   error,
   placeholder = "파일을 업로드해주세요",
+  file,
   onFileChange,
 }: UploadInputProps) {
-  const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-
-  const handleFile = (newFile: File | null) => {
-    setFile(newFile);
-    onFileChange(newFile);
-  };
 
   const dragClass = isDragging ? "border-primary-500 bg-primary-50 shadow-md" : "border-neutral-400 bg-neutral-50";
 
@@ -39,7 +35,7 @@ export default function UploadInput({
           onDrop={(e) => {
             e.preventDefault();
             setIsDragging(false);
-            handleFile(e.dataTransfer.files?.[0] ?? null);
+            onFileChange(e.dataTransfer.files?.[0] ?? null);
           }}
           className={`flex w-full cursor-pointer items-center gap-16 rounded-lg border border-dashed ${dragClass} py-12 pr-16 pl-12`}
         >
@@ -51,7 +47,7 @@ export default function UploadInput({
             type="file"
             className="hidden"
             onChange={(e) => {
-              handleFile(e.target.files?.[0] ?? null);
+              onFileChange(e.target.files?.[0] ?? null);
             }}
           />
         </label>
