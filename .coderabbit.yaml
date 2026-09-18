@@ -1,0 +1,36 @@
+language: ko-KR
+
+reviews:
+  profile: chill
+
+  path_filters:
+    - "!**/node_modules/**"
+    - "!**/dist/**"
+    - "!**/.next/**"
+    - "!**/coverage/**"
+
+  high_level_summary_instructions: |
+    다음 내용을 간결하게 작성한다.
+    - 주요 변경사항
+    - 사용자에게 영향을 주는 변경사항
+
+  path_instructions:
+    - path: "src/components/**/*.tsx"
+      instructions: |
+        컴포넌트의 책임이 명확한지 확인한다.
+        불필요한 state와 useEffect 사용 여부를 확인한다.
+        비즈니스 로직이 컴포넌트에 과도하게 들어가 있지 않은지 확인한다.
+        기존 UI 컴포넌트를 재사용할 수 있는지 확인한다.
+
+    - path: "src/components/ui/**/*.tsx"
+      instructions: |
+        재사용 가능한 UI 컴포넌트인지 확인한다.
+        특정 페이지나 도메인에 결합되어 있지 않은지 확인한다.
+        Props와 variant, size 등의 API가 과도하게 복잡하지 않은지 확인한다.
+        비즈니스 로직이 포함되어 있지 않은지 확인한다.
+
+    - path: "src/hooks/**/*.{ts,tsx}"
+      instructions: |
+        Hook의 책임이 명확한지 확인한다.
+        불필요한 useEffect와 state 사용 여부를 확인한다.
+        파생 가능한 값을 state로 관리하지 않는지 확인한다.
