@@ -1,5 +1,5 @@
 import BottomNav from ".";
-import ROUTES from "@/constants/routes";
+import { NAV_ITEMS } from "../navItems";
 import { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
@@ -9,18 +9,8 @@ const meta = {
     layout: "centered",
     nextjs: {
       appDirectory: true,
-      navigation: {
-        pathname: ROUTES.dashboard,
-      },
     },
   },
-  decorators: [
-    (Story) => (
-      <div className="w-390 [&>nav]:static">
-        <Story />
-      </div>
-    ),
-  ],
   tags: ["autodocs"],
 } satisfies Meta<typeof BottomNav>;
 
@@ -28,4 +18,21 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const AllStates: Story = {
+  decorators: [
+    (Story) => (
+      <div className="flex w-390 flex-col gap-32 [&_nav]:static">
+        <Story />
+      </div>
+    ),
+  ],
+  render: () => (
+    <>
+      {NAV_ITEMS.map((item) => (
+        <div key={item.href}>
+          <BottomNav activeHref={item.href} />
+        </div>
+      ))}
+    </>
+  ),
+};
