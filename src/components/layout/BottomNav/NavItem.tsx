@@ -11,12 +11,13 @@ interface NavItemProps {
   label: string;
   Icon: FC<SVGProps<SVGSVGElement>>;
   ActiveIcon: FC<SVGProps<SVGSVGElement>>;
+  isActive?: boolean;
 }
 
-export default function NavItem({ href, label, Icon, ActiveIcon }: NavItemProps) {
+export default function NavItem({ href, label, Icon, ActiveIcon, isActive }: NavItemProps) {
   const pathname = usePathname();
-  const isActive = pathname === href;
-  const CurrentIcon = isActive ? ActiveIcon : Icon;
+  const active = isActive ?? pathname === href;
+  const CurrentIcon = active ? ActiveIcon : Icon;
 
   return (
     <Link
@@ -24,7 +25,7 @@ export default function NavItem({ href, label, Icon, ActiveIcon }: NavItemProps)
       className={twMerge(
         clsx(
           "text-caption flex flex-1 flex-col items-center gap-2 rounded-md px-8 py-4 font-semibold",
-          isActive ? "text-primary-500" : "text-neutral-600",
+          active ? "text-primary-500" : "text-neutral-600",
         ),
       )}
     >
