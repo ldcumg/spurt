@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import TodoItem from ".";
 
-export const Todos = {
+const Todos = {
   todos: [
     {
       id: 12,
@@ -166,6 +166,19 @@ export const All_States: Story = {
       <TodoItem todo={Todos.todos[3]} />
       <h1>(Done)</h1>
       <TodoItem todo={Todos.todos[1]} />
+      <h1>(Goal)</h1>
+      <TodoItem
+        todo={Todos.todos[3]}
+        type="goal"
+      />
+      <h1>(Goal md)</h1>
+      <div className="w-[448px] border border-dashed p-4">
+        <TodoItem
+          todo={Todos.todos[3]}
+          type="goal"
+        />
+      </div>
+
       <h1>Test (truncate)</h1>
       <TodoItem todo={Todos.todos[0]} />
     </div>
