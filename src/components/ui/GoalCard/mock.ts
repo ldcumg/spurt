@@ -23,8 +23,9 @@ export const Todos = {
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
-      title: "대시보드 차트 Recharts 레이블 버그 수정",
-      done: true,
+      title:
+        "길이를 늘려서 truncate를 실험해보자. 길이를 늘려서 truncate를 실험해보자. 길이를 늘려서 truncate를 실험해보자. 길이를 늘려서 truncate를 실험해보자. ",
+      done: false,
       fileUrl: null,
       linkUrl: null,
       dueDate: "2026-09-17T18:00:00.000Z",
