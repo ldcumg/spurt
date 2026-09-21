@@ -1,21 +1,7 @@
-export const Goal = {
-  goals: [
-    {
-      id: 3,
-      teamId: "team-abc",
-      userId: 1,
-      title: "프로젝트 완성",
-      todoCount: 5,
-      completedCount: 2,
-      createdAt: "2026-02-15T09:00:00.000Z",
-      updatedAt: "2026-02-15T09:00:00.000Z",
-    },
-  ],
-  nextCursor: 2,
-  totalCount: 8,
-};
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import TodoItem from ".";
 
-export const Todos = {
+const Todos = {
   todos: [
     {
       id: 12,
@@ -154,4 +140,61 @@ export const Todos = {
   ],
   nextCursor: 17,
   totalCount: 25,
+};
+
+const meta = {
+  title: "components/TodoItem",
+  component: TodoItem,
+  tags: ["autodocs"],
+  argTypes: {
+    todo: {
+      description: "할 일",
+      control: "object",
+    },
+  },
+} satisfies Meta<typeof TodoItem>;
+
+export default meta;
+
+type Story = StoryObj<typeof TodoItem>;
+
+export const All_States: Story = {
+  render: () => (
+    <div className="flex flex-col gap-24">
+      <p>*호버도 테스트 해보세요</p>
+      <h1>(Todo)</h1>
+      <TodoItem todo={Todos.todos[3]} />
+      <h1>(Done)</h1>
+      <TodoItem todo={Todos.todos[1]} />
+      <h1>(Goal)</h1>
+      <TodoItem
+        todo={Todos.todos[3]}
+        type="goal"
+      />
+      <h1>(Goal md)</h1>
+      <div className="w-[468px] border border-dashed p-4">
+        <TodoItem
+          todo={Todos.todos[3]}
+          type="goal"
+        />
+      </div>
+
+      <h1>Test (truncate)</h1>
+      <TodoItem todo={Todos.todos[0]} />
+    </div>
+  ),
+};
+
+export const Playground: Story = {
+  args: {
+    todo: {
+      ...Todos.todos[3],
+      title: Todos.todos[3].title,
+      done: Todos.todos[3].done,
+      fileUrl: Todos.todos[3].fileUrl,
+      linkUrl: Todos.todos[3].linkUrl,
+      noteIds: Todos.todos[3].noteIds,
+      goal: Todos.todos[3].goal,
+    },
+  },
 };
