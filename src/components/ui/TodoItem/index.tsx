@@ -38,7 +38,9 @@ export default function TodoItem({ todo, type = "default" }: TodoListItemProps) 
           {type === "goal" ? (
             <div className="flex min-w-0 gap-4">
               <FlagFilled className="text-primary-600 size-16 shrink-0 @md:size-24" />
-              <p className="text-body-md @md:text-title-xs truncate">{todo.goal?.title}</p>
+              <p className="text-body-md @md:text-title-xs truncate leading-none @md:leading-normal">
+                {todo.goal?.title}
+              </p>
             </div>
           ) : (
             <></> // goal이 없을 때도 2번 컬럼 공간 비워두기 (레이아웃 틀어짐 방지)
