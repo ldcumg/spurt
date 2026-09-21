@@ -13,7 +13,7 @@ export default function ProgressRing({ doneCount, totalCount, className = "" }: 
   const progress = calc(doneCount, totalCount);
 
   const size = 100;
-  const strokeWidth = 8;
+  const strokeWidth = 10;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (circumference * progress) / 100;
@@ -49,7 +49,7 @@ export default function ProgressRing({ doneCount, totalCount, className = "" }: 
             className="text-primary-500 transition-all duration-300"
           />
         </svg>
-        <span className="absolute inset-0 flex items-center justify-center text-sm font-semibold">{progress}%</span>
+        <span className="text-title-sm absolute inset-0 flex items-center justify-center">{progress}%</span>
       </div>
     </div>
   );

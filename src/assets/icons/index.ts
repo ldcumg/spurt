@@ -12,8 +12,7 @@ export { default as Logout } from "./Logout.svg";
 export { default as More } from "./More.svg";
 export { default as Note } from "./Note.svg";
 export { default as NoteFilled } from "./Note_filled.svg";
-export { default as NoteFilledGray } from "./Note_filled_gray.svg";
-export { default as NoteGray } from "./Note_gray.svg";
+
 export { default as Question } from "./Question.svg";
 export { default as Star } from "./Star.svg";
 export { default as StarFilled } from "./Star_filled.svg";
@@ -29,7 +28,8 @@ export { default as Calendar } from "./Calendar.svg";
 export { default as Right } from "./Right.svg";
 export { default as Left } from "./Left.svg";
 export { default as Burger } from "./Burger.svg";
-export { default as PlusWhite } from "./Plus_white.svg";
+
 export { default as Plus } from "./Plus.svg";
 export { default as X } from "./X.svg";
 export { default as Under } from "./Under.svg";
+export { default as Check } from "./Check.svg";
