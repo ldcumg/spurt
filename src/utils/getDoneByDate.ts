@@ -20,8 +20,8 @@ export default function getDoneByDate(todos: TodoItem[]): DailyDoneStat[] {
     const fullDate = `${year}-${month}-${date}`;
 
     result.push({
-      fullDate,
       date: `${month}/${date}`,
+      fullDate,
       count: 0,
     });
   }
