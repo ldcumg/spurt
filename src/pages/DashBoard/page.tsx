@@ -1,6 +1,6 @@
 import { BarChart, Bar, ResponsiveContainer, LabelList, YAxis, CartesianGrid, XAxis } from "recharts";
 
-import { Right, Done, Link, Note, Upload, Plus, FlagFilled, Todo } from "@/assets/icons/index";
+import { Right, Plus } from "@/assets/icons/index";
 import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
 import ProgressRing from "@/components/ui/ProgressRing";
@@ -44,18 +44,15 @@ export default function DashBoardPage() {
             variant={"outline"}
             className="flex max-w-150 items-center justify-center gap-10 rounded-full bg-white py-20 shadow-sm"
           >
-            <Plus
-              viewBox="0 0 24 24"
-              className="size-16 shrink-0"
-            />
+            <Plus className="size-16 shrink-0" />
             <p className="text-title-xs leading-none">새 할 일 추가</p>
           </Button>
         </div>
         <div className="flex flex-col gap-10 rounded-md bg-white p-20 shadow-sm">
           <p className="text-title-md">전체 진행 상황</p>
           <ProgressRing
-            doneCount={34}
-            totalCount={50}
+            doneCount={doneCount}
+            totalCount={Todos.totalCount}
           />
           <div className="flex justify-between gap-15">
             <div className="bg-primary-50 flex w-full flex-row gap-10 rounded-md p-10">
@@ -81,10 +78,7 @@ export default function DashBoardPage() {
             <p className="text-title-md">최근 등록한 할 일</p>
             <div className="text-body-xs flex flex-row gap-5 leading-none">
               모두 보기
-              <Right
-                viewBox="0 0 24 24"
-                className="h-16 w-16 shrink-0"
-              />
+              <Right className="h-16 w-16 shrink-0" />
             </div>
           </div>
           {/** 최근 등록한 할 일을 3개까지 보여줌
