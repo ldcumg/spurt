@@ -1,30 +1,19 @@
 "use client";
 
-import Dropdown from "@/components/ui/Dropdown";
-import Modal from "@/components/ui/Modal";
-import ModalActions from "@/components/ui/Modal/ModalActions";
-import TextInput from "@/components/ui/TextInput";
+import AddTodoModal from "@/components/AddTodoModal";
+import Button from "@/components/ui/Button";
+import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 
 export default function HomePage() {
+  const { isOpen, open, close } = useDisclosure();
+
   return (
-    <Modal
-      title="할 일 생성"
-      isOpen={true}
-      onClose={() => {}}
-    >
-      <TextInput
-        label="제목"
-        placeholder="할 일의 제목을 적어 주세요"
+    <>
+      <Button onClick={open}>할 일 생성</Button>
+      <AddTodoModal
+        isOpen={isOpen}
+        onClose={close}
       />
-      <Dropdown />
-      <TextInput
-        label="링크"
-        placeholder="링크를 업로드해 주세요"
-      />
-      <ModalActions
-        onClose={() => {}}
-        onConfirm={() => {}}
-      />
-    </Modal>
+    </>
   );
 }
