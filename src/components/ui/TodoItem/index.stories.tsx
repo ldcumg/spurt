@@ -172,7 +172,7 @@ export const All_States: Story = {
         type="goal"
       />
       <h1>(Goal md)</h1>
-      <div className="w-[448px] border border-dashed p-4">
+      <div className="w-[468px] border border-dashed p-4">
         <TodoItem
           todo={Todos.todos[3]}
           type="goal"
