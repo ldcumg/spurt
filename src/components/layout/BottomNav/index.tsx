@@ -9,7 +9,7 @@ interface BottomNavProps {
 
 export default function BottomNav({ activeHref }: BottomNavProps) {
   return (
-    <nav className="fixed bottom-0 left-0 w-full bg-white pb-34 shadow-md">
+    <nav className="fixed bottom-0 left-0 w-full bg-white pb-34">
       <ul className="flex items-center gap-8 px-8 py-4">
         {NAV_ITEMS.map((item) => (
           <li
