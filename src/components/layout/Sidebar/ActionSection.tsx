@@ -7,7 +7,7 @@ export default function ActionSection() {
       <Button
         variant="primary"
         size="square"
-        className="aspect-square h-auto flex-1"
+        className="text-body-md aspect-square h-auto flex-1 font-semibold"
       >
         <div className="flex flex-col items-center gap-4">
           <Flag className="size-24 shrink-0" />새 목표
@@ -16,7 +16,7 @@ export default function ActionSection() {
       <Button
         variant="outline"
         size="square"
-        className="aspect-square h-auto flex-1"
+        className="text-body-md aspect-square h-auto flex-1 font-semibold"
       >
         <div className="flex flex-col items-center gap-4">
           <Todos className="size-24 shrink-0" />새 할일

@@ -23,7 +23,7 @@ export default function NavItem({ href, label, Icon, ActiveIcon }: NavItemProps)
       href={href}
       className={twMerge(
         clsx(
-          "text-title-xs flex h-44 w-full items-center gap-12 rounded-lg px-16 py-12",
+          "text-body-md font-semibold flex h-44 w-full items-center gap-12 rounded-lg px-16 py-12",
           isActive ? "bg-primary-100 text-primary-700" : "hover:bg-primary-50 text-neutral-700",
         ),
       )}
