@@ -1,6 +1,7 @@
 import {
   Burger,
   Calendar,
+  CalendarFilled,
   Delete,
   Done,
   Edit,
@@ -47,6 +48,7 @@ type Story = StoryObj<typeof meta>;
 const icons = [
   { name: "Burger", Icon: Burger },
   { name: "Calendar", Icon: Calendar },
+  { name: "CalendarFilled", Icon: CalendarFilled },
   { name: "Delete", Icon: Delete },
   { name: "Done", Icon: Done },
   { name: "Edit", Icon: Edit },
