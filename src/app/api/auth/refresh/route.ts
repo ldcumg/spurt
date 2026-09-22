@@ -12,19 +12,22 @@ export async function POST(request: NextRequest) {
 
   try {
     const { data } = await axios.post(`${BASE_URL}/${TEAM_ID}${API_PATH.auth.refresh}`, { refreshToken });
-    const { accessToken, refreshToken: newRefreshToken } = data;
+    const { accessToken, refreshToken: newRefreshToken, ...rest } = data;
 
-    const response = NextResponse.json({ message: "토큰 재발급 완료" });
+    const response = NextResponse.json(rest);
 
     response.cookies.set(ACCESS_TOKEN, accessToken, {
       ...AUTH_COOKIE_OPTIONS,
       maxAge: ACCESS_TOKEN_MAX_AGE,
     });
 
-    response.cookies.set(REFRESH_TOKEN, newRefreshToken, {
-      ...AUTH_COOKIE_OPTIONS,
-      maxAge: REFRESH_TOKEN_MAX_AGE,
-    });
+    // 10초 유예시간 내 재요청 대응
+    if (newRefreshToken) {
+      response.cookies.set(REFRESH_TOKEN, newRefreshToken, {
+        ...AUTH_COOKIE_OPTIONS,
+        maxAge: REFRESH_TOKEN_MAX_AGE,
+      });
+    }
 
     return response;
   } catch (error) {
