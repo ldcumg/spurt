@@ -4,10 +4,10 @@ import { Right, Plus } from "@/assets/icons/index";
 import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
 import ProgressRing from "@/components/ui/ProgressRing";
+import TodoItem from "@/components/ui/TodoItem";
 
-import { Goal, Todos } from "@/components/ui/GoalCard/mock";
-import getDoneByDate, { DailyDoneStat } from "@/utils/getDoneByDate";
-import DashTodoItem from "../../components/ui/DashBoardPage/DashTodoItem";
+import { MockGoalList, Todos } from "@/components/ui/GoalCard/mock";
+import getDoneByDate from "@/utils/getDoneByDate";
 
 type dataSet = {
   date: string;
@@ -36,6 +36,7 @@ export default function DashBoardPage() {
         </p>
         <p className="text-title-xs text-neutral-500">오늘도 당신의 목표를 향해 한 걸음 더 나아가요.</p>
       </header>
+      {/**1열 */}
       <section className="flex flex-col gap-20">
         <div className="bg-primary-100 flex flex-col gap-10 rounded-md p-20 shadow-sm">
           <p className="text-title-md leading-none">지금까지 정말 잘하고 있어요!</p>
@@ -50,28 +51,32 @@ export default function DashBoardPage() {
         </div>
         <div className="flex flex-col gap-10 rounded-md bg-white p-20 shadow-sm">
           <p className="text-title-md">전체 진행 상황</p>
-          <ProgressRing
-            doneCount={doneCount}
-            totalCount={Todos.totalCount}
-          />
-          <div className="flex justify-between gap-15">
-            <div className="bg-primary-50 flex w-full flex-row gap-10 rounded-md p-10">
-              <div className="bg-primary-600 h-16 w-16 rounded-full"></div>
-              <div className="">
-                <p className="text-title-xs leading-none text-neutral-500">완료한 할 일</p>
-                <p className="text-title-md">{doneCount}</p>
+          <div className="flex flex-col gap-16 md:flex-row">
+            <ProgressRing
+              doneCount={doneCount}
+              totalCount={Todos.totalCount}
+              className="flex-1"
+            />
+            <div className="flex flex-1 justify-between gap-15">
+              <div className="bg-primary-50 flex w-full flex-row gap-10 rounded-md p-16">
+                <div className="bg-primary-600 h-16 w-16 rounded-full"></div>
+                <div className="flex flex-col justify-between">
+                  <p className="text-title-xs leading-none text-neutral-500">완료한 할 일</p>
+                  <p className="text-title-md md:text-display">{doneCount}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex w-full flex-row gap-10 rounded-md bg-neutral-100 p-10">
-              <div className="h-16 w-16 rounded-full bg-neutral-600"></div>
-              <div>
-                <p className="text-title-xs leading-none text-neutral-500">전체 할 일</p>
-                <p className="text-title-md">{Todos.totalCount}</p>
+              <div className="flex w-full flex-row gap-10 rounded-md bg-neutral-100 p-16">
+                <div className="h-16 w-16 rounded-full bg-neutral-600"></div>
+                <div className="flex flex-col justify-between">
+                  <p className="text-title-xs leading-none text-neutral-500">전체 할 일</p>
+                  <p className="text-title-md md:text-display">{Todos.totalCount}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
+      {/**2열 */}
       <section className="flex flex-col gap-20">
         <div className="flex flex-col rounded-md bg-white px-20 py-10 shadow-sm">
           <div className="flex flex-row items-center justify-between border-b">
@@ -89,9 +94,10 @@ export default function DashBoardPage() {
               .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
               .slice(0, 3)
               .map((item) => (
-                <DashTodoItem
+                <TodoItem
                   key={item.id}
                   todo={item}
+                  type="goal"
                 />
               ))
           ) : (
@@ -156,6 +162,7 @@ export default function DashBoardPage() {
           </div>
         </div>
       </section>
+      {/**3열 */}
       <section className="flex flex-col gap-10">
         <div className="flex flex-row justify-between px-20">
           <p className="text-title-md">목표별 할 일</p>
@@ -173,19 +180,24 @@ export default function DashBoardPage() {
             <p className="text-title-xs">더보기</p>
           </div>
         </div>
-        <div className="flex flex-col gap-10">
-          <GoalCard
-            goal={Goal.goals[0]}
-            todos={Todos.todos}
-          />
-          <GoalCard
-            goal={Goal.goals[0]}
-            todos={Todos.todos}
-          />
-          <GoalCard
-            goal={Goal.goals[0]}
-            todos={Todos.todos}
-          />
+        <div className="flex flex-col gap-10 md:grid md:grid-cols-2 lg:grid-cols-3">
+          {MockGoalList.goals.length > 0 ? (
+            [...MockGoalList.goals]
+              .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
+              .slice(0, 3)
+              .map((item) => {
+                const matchedTodos = Todos.todos.filter((todo) => todo.goalId === item.id);
+                return (
+                  <GoalCard
+                    key={item.id}
+                    goal={item}
+                    todos={Todos.todos.filter((todo) => todo.goalId === item.id)}
+                  />
+                );
+              })
+          ) : (
+            <p className="text-center text-neutral-400">등록된 목표가 없습니다.</p>
+          )}
         </div>
       </section>
     </div>
