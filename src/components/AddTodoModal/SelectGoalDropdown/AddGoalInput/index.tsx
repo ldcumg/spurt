@@ -9,6 +9,7 @@ interface AddGoalInputProps {
   setIsGoalInputOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+/** 새 목표 입력 폼을 열고 제출하는 드롭다운 항목입니다. */
 export default function AddGoalInput({ isGoalInputOpen, setIsGoalInputOpen }: AddGoalInputProps) {
   /** 새 목표 추가 */
   const handleAddGoalSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {

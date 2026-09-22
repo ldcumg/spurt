@@ -11,6 +11,7 @@ interface GoalOptionItemProps {
   setIsGoalInputOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+/** 선택 상태를 표시하고 선택 이벤트를 처리하는 목표 옵션입니다. */
 export default function GoalOptionItem({
   option,
   isSelected,

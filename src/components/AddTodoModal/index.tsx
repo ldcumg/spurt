@@ -17,6 +17,7 @@ interface AddTodoModalProps {
   onClose: () => void;
 }
 
+/** 할 일 정보를 입력하고 제출하는 모달을 렌더링합니다. */
 export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [file, setFile] = useState<File | null>(null);

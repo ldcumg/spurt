@@ -49,6 +49,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+/** 선택된 목표가 있는 기본 드롭다운 예시를 렌더링합니다. */
 function AddTodoDropdownExample() {
   const [selectedOption, setSelectedOption] = useState<GoalItem | null>({
     id: 3,
@@ -72,6 +73,7 @@ function AddTodoDropdownExample() {
   );
 }
 
+/** 선택할 목표가 없는 드롭다운 예시를 렌더링합니다. */
 function AddTodoDropdownNoList() {
   const [selectedOption, setSelectedOption] = useState<GoalItem | null>(null);
 
@@ -86,6 +88,7 @@ function AddTodoDropdownNoList() {
   );
 }
 
+/** 목표를 선택하지 않아 오류가 표시되는 예시를 렌더링합니다. */
 function AddTodoDropdownNoSelect() {
   const [selectedOption, setSelectedOption] = useState<GoalItem | null>(null);
 
@@ -100,6 +103,7 @@ function AddTodoDropdownNoSelect() {
   );
 }
 
+/** 긴 목표명이 말줄임 처리되는 드롭다운 예시를 렌더링합니다. */
 function AddTodoDropdownOverflow() {
   const [selectedOption, setSelectedOption] = useState<GoalItem | null>({
     id: 4,

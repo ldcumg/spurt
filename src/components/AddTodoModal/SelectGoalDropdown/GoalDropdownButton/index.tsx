@@ -12,6 +12,7 @@ interface GoalDropdownButtonProps {
   error?: string;
 }
 
+/** 선택된 목표를 표시하고 목표 옵션 목록을 여닫는 버튼입니다. */
 export default function GoalDropdownButton({
   isOptionOpen,
   setIsOptionOpen,

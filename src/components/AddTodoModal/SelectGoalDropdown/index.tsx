@@ -14,6 +14,7 @@ interface SelectGoalDropdownProps {
   error: string;
 }
 
+/** 할 일에 연결할 목표를 선택하거나 새 목표 입력을 여는 드롭다운입니다. */
 export default function SelectGoalDropdown({
   label,
   goalOptions,
