@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 500 구체적인 원인 확인
-    console.log("[auth/signup]", error);
+    console.error("[auth/signup]", error);
 
     return NextResponse.json({ message: "회원가입 처리 중 오류가 발생했습니다." }, { status: 500 });
   }
