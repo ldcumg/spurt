@@ -16,7 +16,7 @@ export default function Sidebar() {
         <hr className="border-neutral-200" />
         <GoalSection />
       </div>
-      <div className="flex flex-col gap-32">
+      <div className="flex flex-col gap-24">
         <ActionSection />
         <ProfileSection />
       </div>
