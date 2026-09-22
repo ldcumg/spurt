@@ -23,7 +23,7 @@ jobs:
       - name: Node.js 설치 및 설정
         uses: actions/setup-node@v7
         with:
-          node-version: 26.10.0
+          node-version-file: .nvmrc
           cache: "pnpm"
 
       - name: 의존성 설치
@@ -45,7 +45,7 @@ jobs:
       - name: Node.js 설치 및 설정
         uses: actions/setup-node@v7
         with:
-          node-version: 26.10.0
+          node-version-file: .nvmrc
           cache: "pnpm"
 
       - name: 의존성 설치
@@ -81,7 +81,7 @@ jobs:
       - name: Node.js 설치 및 설정
         uses: actions/setup-node@v7
         with:
-          node-version: 26.10.0
+          node-version-file: .nvmrc
           cache: "pnpm"
 
       - name: 의존성 설치
