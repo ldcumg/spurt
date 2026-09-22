@@ -1,11 +1,6 @@
-"use client";
-import DashBoardPage from "@/pages/DashBoard/page";
-import GoalPage from "@/pages/GoalPage/page";
+import ROUTES from "@/constants/routes";
+import { redirect } from "next/navigation";
 
 export default function HomePage() {
-  return (
-    <div>
-      <GoalPage />
-    </div>
-  );
+  redirect(ROUTES.dashboard);
 }
