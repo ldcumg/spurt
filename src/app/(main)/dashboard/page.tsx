@@ -8,8 +8,8 @@ import GoalCard from "@/components/ui/GoalCard";
 import ProgressRing from "@/components/ui/ProgressRing";
 import TodoItem from "@/components/ui/TodoItem";
 
-import { MockGoalList, Todos } from "@/components/ui/GoalCard/mock";
 import getDoneByDate from "@/utils/getDoneByDate";
+import { MockGoalList, Todos } from "@/components/ui/GoalCard/mock";
 
 type dataSet = {
   date: string;
