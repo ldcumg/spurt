@@ -109,30 +109,45 @@ function DropdownNoList() {
   );
 }
 
-function DropdownInvalidValue() {
-  const [value, setValue] = useState("invalid");
-  return (
-    <Dropdown
-      label="잘못된 값 입력"
-      options={goals}
-      value={value}
-      onChange={(option) => {
-        setValue(option.id);
-      }}
-      onAddGoal={(value) => {
-        console.log(value);
-      }}
-    />
-  );
-}
+// function DropdownInvalidValue() {
+//   const [value, setValue] = useState<GoalItem | undefined>("invalid");
+//   return (
+//     <Dropdown
+//       label="잘못된 값 입력"
+//       options={goals}
+//       value={value}
+//       onChange={(option) => {
+//         setValue(option);
+//       }}
+//       onAddGoal={(value) => {
+//         console.log(value);
+//       }}
+//     />
+//   );
+// }
 
 function DropdownOverflow() {
-  const [value, setValue] = useState("overflow-text");
+  const [value, setValue] = useState<GoalItem | undefined>({
+    id: 4,
+    title: "컨텐츠 내용이 오버플로우가 되도록 아주 많이 텍스트를 입력해보자.",
+    teamId: "string",
+    userId: 1,
+    todoCount: 1,
+    completedCount: 1,
+    createdAt: "",
+    updatedAt: "",
+  });
   const goalsWithOverflow = [
     ...goals,
     {
-      id: "overflow-text",
+      id: 4,
       title: "컨텐츠 내용이 오버플로우가 되도록 아주 많이 텍스트를 입력해보자.",
+      teamId: "string",
+      userId: 1,
+      todoCount: 1,
+      completedCount: 1,
+      createdAt: "",
+      updatedAt: "",
     },
   ];
   return (
@@ -141,7 +156,7 @@ function DropdownOverflow() {
       options={goalsWithOverflow}
       value={value}
       onChange={(option) => {
-        setValue(option.id);
+        setValue(option);
       }}
       onAddGoal={(value) => {
         console.log(value);
@@ -161,9 +176,9 @@ export const Default: Story = {
         <DropdownNoList />
       </div>
 
-      <div className="min-h-100">
+      {/* <div className="min-h-100">
         <DropdownInvalidValue />
-      </div>
+      </div> */}
 
       <div className="min-h-100">
         <DropdownOverflow />
