@@ -1,10 +1,10 @@
 import { FlagFilled, More, Plus, Right } from "@/assets/icons/index";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import GoalTodoItem from "@/components/ui/GoalPage/GoalTodoItem";
 import ProgressRing from "@/components/ui/ProgressRing";
-import { Goal, Todos } from "@/components/ui/GoalCard/mock";
+import { Todos, MockGoalList, MockGoalDetail } from "@/components/ui/GoalCard/mock";
 import TodoItem from "@/components/ui/TodoItem";
+
 export default function GoalPage() {
   return (
     <div className="bg-primary-50 flex h-screen flex-col gap-20 p-24 pt-32">
@@ -22,7 +22,7 @@ export default function GoalPage() {
             </div>
             <More className="size-32" />
           </div>
-          <div className="bg-primary-100 flex flex-1 flex-row items-center justify-between gap-24 rounded-md p-20 shadow-sm">
+          <div className="bg-primary-200 flex flex-1 flex-row items-center justify-between gap-24 rounded-md p-20 shadow-sm">
             <ProgressRing
               totalCount={100}
               doneCount={64}
@@ -41,7 +41,7 @@ export default function GoalPage() {
         </div>
       </section>
       <section className="flex h-full flex-row gap-24">
-        <div className="flex-1 rounded-md bg-white p-12">
+        <div className="flex-1 rounded-md bg-white p-12 shadow-sm">
           <div className="flex flex-row items-center justify-between p-8">
             <Badge type="todo" />
             <Button
@@ -71,16 +71,9 @@ export default function GoalPage() {
             )}
           </div>
         </div>
-        <div className="flex-1 rounded-md bg-white p-12">
+        <div className="flex-1 rounded-md bg-white p-12 shadow-sm">
           <div className="flex flex-row items-center justify-between p-8">
             <Badge type="done" />
-            <Button
-              variant={"outline"}
-              className="flex flex-row items-center justify-center gap-8 rounded-full"
-            >
-              <Plus className="size-16 shrink-0" />
-              <p>할 일 추가</p>
-            </Button>
           </div>
           <div>
             {Todos.todos ? (
