@@ -4,6 +4,8 @@ import axios, { AxiosError } from "axios";
 
 export const clientFetcher = axios.create({ baseURL: "/api" });
 
+let refreshPromise: Promise<unknown> | null = null;
+
 clientFetcher.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -13,13 +15,17 @@ clientFetcher.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // 토큰 재발급 요청의 401 (로그인 페이지 이동)
+    // 토큰 재발급 요청의 401은 재요청 불가 처리
     if (original.url?.includes(API_PATH.auth.refresh)) {
       return Promise.reject(error);
     }
 
+    refreshPromise ??= clientFetcher.post(API_PATH.auth.refresh).finally(() => {
+      refreshPromise = null;
+    });
+
     try {
-      await clientFetcher.post(API_PATH.auth.refresh);
+      await refreshPromise;
       return clientFetcher(original);
     } catch {
       window.location.href = ROUTES.login;
