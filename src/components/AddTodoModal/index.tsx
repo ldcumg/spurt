@@ -7,7 +7,7 @@ import Modal from "@/components/ui/Modal";
 import ModalActions from "@/components/ui/Modal/ModalActions";
 import TextInput from "@/components/ui/TextInput";
 import { handleAddTodo } from "@/services/todo/addTodo";
-import { validateLinkUrl, validateTitle } from "@/services/todo/validate";
+import { validateLinkUrl, validateTitle } from "@/services/todo/addTodoValidate";
 import type { GoalItem } from "@/types/typeGoals";
 import { createStateKeySetter } from "@/utils/stateUtills";
 import { useState, useRef } from "react";
