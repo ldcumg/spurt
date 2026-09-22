@@ -1,3 +1,5 @@
+// NOTE - 임시 에러 메세지
+/** title 입력 유효성 검사 */
 export const validateTitle = (
   event: React.FocusEvent<HTMLInputElement, Element>,
   setError: (errorMassage: string) => void,
@@ -9,6 +11,7 @@ export const validateTitle = (
   return "";
 };
 
+/** goalId 입력 유효성 검사 */
 export const validateGoalId = (
   event: React.FocusEvent<HTMLInputElement, Element>,
   setError: (errorMassage: string) => void,
@@ -20,6 +23,7 @@ export const validateGoalId = (
   return "";
 };
 
+/** file 입력 유효성 검사 */
 export const validateFile = (
   event: React.FocusEvent<HTMLInputElement, Element>,
   setError: (errorMassage: string) => void,
@@ -31,6 +35,7 @@ export const validateFile = (
   return "";
 };
 
+/** linkUrl 입력 유효성 검사 */
 export const validateLinkUrl = (
   event: React.FocusEvent<HTMLInputElement, Element>,
   setError: (errorMassage: string) => void,

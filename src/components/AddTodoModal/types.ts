@@ -1,6 +1,6 @@
 export type AddTodoErrorMassage = {
   title: string;
-  goalId: string;
+  goal: string;
   file: string;
   linkUrl: string;
 };

@@ -6,7 +6,7 @@ import Dropdown from "@/components/ui/Dropdown";
 import Modal from "@/components/ui/Modal";
 import ModalActions from "@/components/ui/Modal/ModalActions";
 import TextInput from "@/components/ui/TextInput";
-import { handleSubmit } from "@/services/todo/addTodo";
+import { handleAddTodo } from "@/services/todo/addTodo";
 import { validateLinkUrl, validateTitle } from "@/services/todo/validate";
 import type { GoalItem } from "@/types/typeGoals";
 import { createStateKeySetter } from "@/utils/stateUtills";
@@ -21,8 +21,9 @@ export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [selectedGoal, setSelectedGoal] = useState<GoalItem | null>(null);
-  const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goalId: "", file: "", linkUrl: "" });
+  const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goal: "", file: "", linkUrl: "" });
   const setErrorByKey = createStateKeySetter(setError);
+  const isDisabled = !!(!selectedGoal || error.title || error.file || error.linkUrl);
 
   //NOTE - 임시 데이터
   const goals: GoalItem[] = [
@@ -67,7 +68,13 @@ export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
       onClose={onClose}
     >
       <form
-        onSubmit={(e) => handleSubmit(e, formRef)}
+        onSubmit={(e) =>
+          handleAddTodo(e, {
+            selectedGoal,
+            setGoalError: setErrorByKey("goal"),
+            isDisabled,
+          })
+        }
         ref={formRef}
         className="flex h-full flex-col"
       >
@@ -79,6 +86,7 @@ export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
           placeholder="할 일의 제목을 적어 주세요"
         />
         <Dropdown
+          error={error.goal}
           label="목표"
           options={goals}
           selectedOption={selectedGoal}
@@ -98,7 +106,10 @@ export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
           label="링크"
           placeholder="링크를 업로드해 주세요"
         />
-        <ModalActions onClose={onClose} />
+        <ModalActions
+          onClose={onClose}
+          isConfirmDisabled={isDisabled}
+        />
       </form>
     </Modal>
   );

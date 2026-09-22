@@ -14,6 +14,7 @@ interface DropdownProps {
   disabled?: boolean;
   onChange: (option: GoalItem) => void;
   onAddGoal: (title: string) => void;
+  error?: string;
 }
 
 /**
@@ -33,6 +34,7 @@ export default function Dropdown({
   disabled = false,
   onChange,
   onAddGoal,
+  error,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [inputGoalOpen, setInputGoalOpen] = useState(false);
@@ -105,7 +107,7 @@ export default function Dropdown({
               setInputGoalOpen(false);
             }
           }}
-          className="focus-visible:border-primary-600 flex min-h-50 w-full items-center justify-between rounded-xl border border-[#D9DEE6] bg-white p-8 transition-[border-color,box-shadow] duration-150 hover:border-[#B9C6BD] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          className={`flex min-h-50 w-full items-center justify-between rounded-xl border bg-white p-8 transition-[border-color,box-shadow] duration-150 hover:border-[#B9C6BD] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${error ? "border-error" : "border-input-border focus:border-primary-500"}`}
         >
           <span className="flex items-center justify-center gap-12">
             <span className="text-primary-600 grid size-36 shrink-0 place-items-center">
@@ -117,6 +119,7 @@ export default function Dropdown({
             <Under className="size-24" />
           </span>
         </button>
+        {error && <p className="text-body-md text-error">{error}</p>}
         {isOpen && (
           // border와 rounded를 담당하는 바깥 컨테이너
           <div
