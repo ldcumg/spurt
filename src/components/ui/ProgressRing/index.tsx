@@ -34,7 +34,7 @@ export default function ProgressRing({ doneCount, totalCount, className = "" }: 
             strokeWidth={strokeWidth}
             fill="none"
             stroke="currentColor"
-            className="text-neutral-200"
+            className="text-neutral-100"
           />
           <circle
             cx={size / 2}
