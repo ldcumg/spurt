@@ -45,7 +45,7 @@ const meta = {
   tags: ["autodocs"],
   args: {
     options: [],
-    value: {
+    selectedOption: {
       id: 3,
       title: "프론트엔드 포트폴리오 완성하기",
       teamId: "stringnumber",
@@ -65,7 +65,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function DropdownExample() {
-  const [value, setValue] = useState({
+  const [selectedOption, setSelectedOption] = useState({
     id: 3,
     title: "프론트엔드 포트폴리오 완성하기",
     teamId: "stringnumber",
@@ -80,9 +80,9 @@ function DropdownExample() {
     <Dropdown
       label="드롭다운"
       options={goals}
-      value={value}
+      selectedOption={selectedOption}
       onChange={(option) => {
-        setValue(option);
+        setSelectedOption(option);
       }}
       onAddGoal={(value) => {
         console.log(value);
@@ -92,15 +92,15 @@ function DropdownExample() {
 }
 
 function DropdownNoList() {
-  const [value, setValue] = useState<GoalItem | undefined>(undefined);
+  const [selectedOption, setSelectedOption] = useState<GoalItem | null>(null);
 
   return (
     <Dropdown
       label="빈 리스트"
       options={[]}
-      value={value}
+      selectedOption={selectedOption}
       onChange={(option) => {
-        setValue(option);
+        setSelectedOption(option);
       }}
       onAddGoal={(value) => {
         console.log(value);
@@ -109,25 +109,8 @@ function DropdownNoList() {
   );
 }
 
-// function DropdownInvalidValue() {
-//   const [value, setValue] = useState<GoalItem | undefined>("invalid");
-//   return (
-//     <Dropdown
-//       label="잘못된 값 입력"
-//       options={goals}
-//       value={value}
-//       onChange={(option) => {
-//         setValue(option);
-//       }}
-//       onAddGoal={(value) => {
-//         console.log(value);
-//       }}
-//     />
-//   );
-// }
-
 function DropdownOverflow() {
-  const [value, setValue] = useState<GoalItem | undefined>({
+  const [selectedOption, setSelectedOption] = useState<GoalItem | null>({
     id: 4,
     title: "컨텐츠 내용이 오버플로우가 되도록 아주 많이 텍스트를 입력해보자.",
     teamId: "string",
@@ -154,9 +137,9 @@ function DropdownOverflow() {
     <Dropdown
       label="텍스트 오버플로우"
       options={goalsWithOverflow}
-      value={value}
+      selectedOption={selectedOption}
       onChange={(option) => {
-        setValue(option);
+        setSelectedOption(option);
       }}
       onAddGoal={(value) => {
         console.log(value);
@@ -175,10 +158,6 @@ export const Default: Story = {
       <div className="min-h-100">
         <DropdownNoList />
       </div>
-
-      {/* <div className="min-h-100">
-        <DropdownInvalidValue />
-      </div> */}
 
       <div className="min-h-100">
         <DropdownOverflow />

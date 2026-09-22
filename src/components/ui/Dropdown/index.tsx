@@ -8,7 +8,7 @@ import { SubmitEventHandler, useEffect, useId, useRef, useState } from "react";
 
 interface DropdownProps {
   options: GoalItem[];
-  value?: GoalItem;
+  selectedOption: GoalItem | null;
   placeholder?: string;
   label?: string;
   disabled?: boolean;
@@ -19,15 +19,15 @@ interface DropdownProps {
 /**
  * 드롭다운 컴포넌트입니다.
  * @param options DropDownOption 타입을 담고있는 리스트입니다. 예: [{id: string, label: string}, ...]
- * @param value option 리스트 중에서 선택한 항목입니다.
- * @param placeholder value 가 없을 때 나오는 문구입니다.
+ * @param selectedOption option 리스트 중에서 선택한 항목입니다.
+ * @param placeholder selectedOption 이 없을 때 나오는 문구입니다.
  * @param disabled
  * @param onChange 드롭다운 메뉴중 하나를 클릭했을 때 발생하는 이벤트 (arg : DropDownOption) => void
  * @param onAddGoal 목표 생성 아이콘을 클릭했을 때 발생하는 이벤트, 매개변수는 목표 텍스트이다. (arg: string) => void
  */
 export default function Dropdown({
   options,
-  value,
+  selectedOption,
   placeholder = "목표를 선택해 주세요",
   label,
   disabled = false,
@@ -111,7 +111,7 @@ export default function Dropdown({
             <span className="text-primary-600 grid size-36 shrink-0 place-items-center">
               <FlagFilled className="size-24" />
             </span>
-            <span className="text-title-xs">{value ? value.title : placeholder}</span>
+            <span className="text-title-xs">{selectedOption ? selectedOption.title : placeholder}</span>
           </span>
           <span className={clsx("grid size-36 shrink-0 place-items-center", isOpen && "rotate-180")}>
             <Under className="size-24" />
@@ -128,7 +128,7 @@ export default function Dropdown({
               className="text-title-xs flex max-h-246 flex-col gap-12 overflow-y-auto p-12 font-bold"
             >
               {options.map((option) => {
-                const isSelected = option.id === value?.id;
+                const isSelected = option.id === selectedOption?.id;
 
                 return (
                   <li
