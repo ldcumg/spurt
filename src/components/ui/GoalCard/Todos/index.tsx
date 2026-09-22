@@ -14,12 +14,12 @@ export default function TodoListItem({ todo }: TodoListItemProps) {
       {isDone ? (
         <Done
           onClick={() => setIsDone((prev) => !prev)}
-          className="w-28 shrink-0 cursor-pointer"
+          className="text-primary-600 size-24 cursor-pointer"
         />
       ) : (
         <Todo
           onClick={() => setIsDone((prev) => !prev)}
-          className="w-28 shrink-0 cursor-pointer"
+          className="text-primary-600 size-24 shrink-0 cursor-pointer"
         />
       )}
       <p className="text-title-xs truncate pb-1 whitespace-nowrap text-neutral-700">{todo.title}</p>

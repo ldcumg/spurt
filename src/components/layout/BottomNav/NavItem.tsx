@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { twMerge } from "@/lib/twMerge";
 import clsx from "clsx";
@@ -24,12 +24,12 @@ export default function NavItem({ href, label, Icon, ActiveIcon, isActive }: Nav
       href={href}
       className={twMerge(
         clsx(
-          "text-body-md font-semibold flex h-44 w-full items-center gap-12 rounded-lg px-16 py-12",
-          active ? "bg-primary-100 text-primary-700" : "hover:bg-primary-50 text-neutral-700",
+          "text-caption flex flex-1 flex-col items-center gap-2 rounded-md px-8 py-4 font-semibold",
+          active ? "text-primary-500" : "text-neutral-600",
         ),
       )}
     >
-      <CurrentIcon className="size-24 shrink-0" />
+      <CurrentIcon className={"size-24 shrink-0"} />
       {label}
     </Link>
   );
