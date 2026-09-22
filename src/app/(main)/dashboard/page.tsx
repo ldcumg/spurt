@@ -1,3 +1,5 @@
+"use client";
+
 import { BarChart, Bar, ResponsiveContainer, LabelList, YAxis, CartesianGrid, XAxis } from "recharts";
 
 import { Right, Plus } from "@/assets/icons/index";
