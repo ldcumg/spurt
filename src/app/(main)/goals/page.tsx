@@ -4,6 +4,7 @@ import Button from "@/components/ui/Button";
 import GoalTodoItem from "@/components/ui/GoalPage/GoalTodoItem";
 import ProgressRing from "@/components/ui/ProgressRing";
 import { Goal, Todos } from "@/components/ui/GoalCard/mock";
+import TodoItem from "@/components/ui/TodoItem";
 export default function GoalPage() {
   return (
     <div className="bg-primary-50 flex h-screen flex-col gap-20 p-24 pt-32">
@@ -57,7 +58,7 @@ export default function GoalPage() {
                 .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
                 .slice(0, 3)
                 .map((item) => (
-                  <GoalTodoItem
+                  <TodoItem
                     key={item.id}
                     todo={item}
                   />
@@ -87,7 +88,7 @@ export default function GoalPage() {
                 .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
                 .slice(0, 3)
                 .map((item) => (
-                  <GoalTodoItem
+                  <TodoItem
                     key={item.id}
                     todo={item}
                   />
