@@ -14,7 +14,7 @@ export const handleAddTodo = (
   e.preventDefault();
 
   if (!selectedGoal) {
-    setGoalError("목표를 선택해주세요");
+    setGoalError("목표를 선택해 주세요");
     return;
   }
 
@@ -31,5 +31,6 @@ export const handleAddTodo = (
     linkUrl: formData.get("linkUrl"),
   };
 
+  //TODO - 할 일 추가 api
   console.log(newTodo);
 };

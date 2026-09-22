@@ -2,7 +2,7 @@
 
 import UploadInput from "../ui/UploadInput";
 import type { AddTodoErrorMassage } from "./types";
-import Dropdown from "@/components/ui/Dropdown";
+import SelectGoalDropdown from "@/components/AddTodoModal/SelectGoalDropdown";
 import Modal from "@/components/ui/Modal";
 import ModalActions from "@/components/ui/Modal/ModalActions";
 import TextInput from "@/components/ui/TextInput";
@@ -59,8 +59,6 @@ export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
     },
   ];
 
-  const addGoal = () => {};
-
   return (
     <Modal
       title="할 일 생성"
@@ -85,13 +83,12 @@ export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
           label="제목"
           placeholder="할 일의 제목을 적어 주세요"
         />
-        <Dropdown
+        <SelectGoalDropdown
           error={error.goal}
           label="목표"
-          options={goals}
-          selectedOption={selectedGoal}
-          onChange={setSelectedGoal}
-          onAddGoal={addGoal}
+          goalOptions={goals}
+          selectedGoal={selectedGoal}
+          setSelectedGoal={setSelectedGoal}
         />
         <UploadInput
           error={error.file}
