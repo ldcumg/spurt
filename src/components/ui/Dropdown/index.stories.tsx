@@ -1,9 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { userEvent, within } from "storybook/test";
-import { useState } from "react";
-
 import Dropdown, { type DropDownOption } from "./";
-import { Burger } from "@/assets/icons";
+import type { Meta, StoryObj } from "@storybook/nextjs";
+import { useState } from "react";
 
 const goals: DropDownOption[] = [
   {
@@ -130,19 +127,19 @@ function DropdownOverflow({ label }: { label: string }) {
 export const Default: Story = {
   render: () => (
     <div className="flex h-[120vh] flex-col gap-32">
-      <div className="min-h-[100px]">
+      <div className="min-h-100">
         <DropdownExample label="드롭다운" />
       </div>
 
-      <div className="min-h-[100px]">
+      <div className="min-h-100">
         <DropdownNoList label="빈 리스트" />
       </div>
 
-      <div className="min-h-[100px]">
+      <div className="min-h-100">
         <DropdownInvalidValue label="잘못된 값 입력" />
       </div>
 
-      <div className="min-h-[100px]">
+      <div className="min-h-100">
         <DropdownOverflow label="텍스트 오버플로우" />
       </div>
     </div>

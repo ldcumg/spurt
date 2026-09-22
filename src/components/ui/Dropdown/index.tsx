@@ -1,8 +1,9 @@
 "use client";
 
-import { Check, FlagFilled, Plus, Under } from "@/assets/icons";
-import { SubmitEventHandler, useEffect, useRef, useState } from "react";
 import TextInput from "../TextInput";
+import { Check, FlagFilled, Plus, Under } from "@/assets/icons";
+import clsx from "clsx";
+import { SubmitEventHandler, useEffect, useRef, useState } from "react";
 
 export type DropDownOption = {
   id: string;
@@ -18,11 +19,6 @@ interface DropdownProps {
   onAddGoal: (value: string) => void;
 }
 
-const goals: DropDownOption[] = [
-  { id: "javascript-service", label: "자바스크립트로 웹 서비스 만들기" },
-  { id: "design-system", label: "디자인 시스템 강의 듣기" },
-  { id: "portfolio", label: "프론트엔드 포트폴리오 완성하기" },
-];
 /**
  * 드롭다운 컴포넌트입니다.
  * @param options DropDownOption 타입을 담고있는 리스트입니다. 예: [{id: string, label: string}, ...]
@@ -44,6 +40,7 @@ export default function Dropdown({
   const [isOpen, setIsOpen] = useState(false);
   const [inputGoalOpen, setInputGoalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       const container = containerRef.current;
@@ -58,25 +55,30 @@ export default function Dropdown({
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
+
   const selectedOption = options.find((option) => option.id === value);
+
   const handleSelect = (option: DropDownOption) => {
     onChange(option);
     setIsOpen(false);
     setInputGoalOpen(false);
   };
+
   const handleAddGoalClick = () => {
     setInputGoalOpen(true);
   };
+
   const handleAddGoalSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const goal = formData.get("goal");
     onAddGoal(String(goal));
   };
+
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-[424px] font-sans"
+      className="relative w-full max-w-424"
     >
       <button
         type="button"
@@ -91,49 +93,27 @@ export default function Dropdown({
             setInputGoalOpen(false);
           }
         }}
-        className={[
-          "flex min-h-[50px] w-full items-center justify-between",
-          "rounded-xl border border-[#D9DEE6] bg-white",
-          "p-8",
-          "transition-[border-color,box-shadow] duration-150",
-          "hover:border-[#B9C6BD]",
-          "focus-visible:border-primary-600 focus-visible:outline-none",
-          "disabled:cursor-not-allowed disabled:opacity-50",
-        ].join(" ")}
+        className="focus-visible:border-primary-600 flex min-h-50 w-full items-center justify-between rounded-xl border border-[#D9DEE6] bg-white p-8 transition-[border-color,box-shadow] duration-150 hover:border-[#B9C6BD] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <span className="flex items-center justify-center gap-[12px]">
-          <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-            <FlagFilled className="size-[24px]" />
+        <span className="flex items-center justify-center gap-12">
+          <span className="text-primary-600 grid size-36 shrink-0 place-items-center">
+            <FlagFilled className="size-24" />
           </span>
           <span className="text-title-xs">{selectedOption?.label ?? placeholder}</span>
         </span>
-        <span className={["grid size-[36px] shrink-0 place-items-center", isOpen && "rotate-180"].join(" ")}>
-          <Under className="size-[24px]" />
+        <span className={clsx("grid size-36 shrink-0 place-items-center", isOpen && "rotate-180")}>
+          <Under className="size-24" />
         </span>
       </button>
       {isOpen && (
         // border와 rounded를 담당하는 바깥 컨테이너
         <div
-          className={[
-            "absolute top-[calc(100%+4px)] left-0 z-50 w-full",
-
-            // 스크롤바가 둥근 모서리 영역 밖으로 침범하지 않도록 잘라냄
-            "overflow-hidden rounded-xl border border-[#D9DEE6] bg-white",
-
-            // 열릴 때 애니메이션
-            "origin-top",
-            "transition-[opacity,transform] duration-200 ease-out",
-            "starting:-translate-y-1 starting:scale-[0.98] starting:opacity-0",
-          ].join(" ")}
+          // 스크롤바가 둥근 모서리 영역 밖으로 침범하지 않도록 잘라냄
+          className="absolute top-[calc(100%+4px)] left-0 z-50 w-full origin-top overflow-hidden rounded-xl border border-[#D9DEE6] bg-white transition-[opacity,transform] duration-200 ease-out starting:-translate-y-1 starting:scale-[0.98] starting:opacity-0"
         >
           <ul
-            className={[
-              // 실제 스크롤은 내부 ul에서 담당
-              "max-h-[246px] overflow-y-auto",
-
-              "flex flex-col gap-[12px] p-12",
-              "text-title-xs font-bold",
-            ].join(" ")}
+            // 실제 스크롤은 내부 ul에서 담당
+            className="text-title-xs flex max-h-[246px] flex-col gap-[12px] overflow-y-auto p-12 font-bold"
           >
             {options.map((option) => {
               const isSelected = option.id === value;
@@ -142,23 +122,17 @@ export default function Dropdown({
                 <li
                   key={option.id}
                   onClick={() => handleSelect(option)}
-                  className={[
-                    "text-title-xs cursor-pointer",
-                    isSelected ? "bg-primary-200" : "bg-transparent",
-                    "hover:bg-primary-200",
-                    "flex items-center justify-between gap-[12px]",
-                    "rounded-lg p-8",
-                  ].join(" ")}
+                  className={`text-title-xs hover:bg-primary-200 flex cursor-pointer items-center justify-between gap-12 rounded-lg p-8 ${isSelected ? "bg-primary-200" : "bg-transparent"}`}
                 >
-                  <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-                    <FlagFilled className="size-[24px]" />
+                  <span className="text-primary-600 grid size-36 shrink-0 place-items-center">
+                    <FlagFilled className="size-24" />
                   </span>
 
                   <span className="min-w-0 grow truncate">{option.label}</span>
 
                   {isSelected && (
-                    <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-                      <Check className="size-[24px]" />
+                    <span className="text-primary-600 grid size-36 shrink-0 place-items-center">
+                      <Check className="size-24" />
                     </span>
                   )}
                 </li>
@@ -167,14 +141,14 @@ export default function Dropdown({
 
             {!inputGoalOpen ? (
               <li
-                className="text-title-xs flex cursor-pointer justify-center gap-[12px] rounded-xl p-8"
+                className="text-title-xs flex cursor-pointer justify-center gap-12 rounded-xl p-8"
                 onClick={handleAddGoalClick}
               >
-                <Plus className="size-[24px]" />새 목표 추가
+                <Plus className="size-24" />새 목표 추가
               </li>
             ) : (
               <form
-                className="text-title-xs flex items-center justify-center gap-[12px] rounded-xl p-8"
+                className="text-title-xs flex items-center justify-center gap-12 rounded-xl p-8"
                 onSubmit={handleAddGoalSubmit}
               >
                 <TextInput
@@ -183,7 +157,7 @@ export default function Dropdown({
                 />
 
                 <button type="submit">
-                  <Plus className="size-[24px]" />
+                  <Plus className="size-24" />
                 </button>
               </form>
             )}

@@ -1,8 +1,9 @@
 "use client";
 
 import UploadInput from "../ui/UploadInput";
+import { goals } from "./mock";
 import type { AddTodoErrorMassage } from "./types";
-// import Dropdown from "@/components/ui/Dropdown";
+import Dropdown from "@/components/ui/Dropdown";
 import Modal from "@/components/ui/Modal";
 import ModalActions from "@/components/ui/Modal/ModalActions";
 import TextInput from "@/components/ui/TextInput";
@@ -40,7 +41,7 @@ export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
           label="제목"
           placeholder="할 일의 제목을 적어 주세요"
         />
-        {/* <Dropdown /> */}
+        {/* <Dropdown options={goals} /> */}
         <UploadInput
           error={error.file}
           label="파일"

@@ -11,7 +11,7 @@ export default function HomePage() {
     <>
       <Button onClick={open}>할 일 생성</Button>
       <AddTodoModal
-        isOpen={isOpen}
+        isOpen={true}
         onClose={close}
       />
     </>
