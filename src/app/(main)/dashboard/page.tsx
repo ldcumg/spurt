@@ -89,7 +89,7 @@ export default function DashboardPage() {
           {/** 최근 등록한 할 일을 3개까지 보여줌
            * - 최근 등록한 할 일이 없는 경우 방어
            */}
-          {Todos.todos ? (
+          {Todos.todos.length > 0 ? (
             [...Todos.todos]
               .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
               .slice(0, 3)
