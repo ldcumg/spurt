@@ -2,32 +2,27 @@
 
 import TextInput from "../TextInput";
 import { Check, FlagFilled, Plus, Under } from "@/assets/icons";
+import type { GoalItem } from "@/types/typeGoals";
 import clsx from "clsx";
 import { SubmitEventHandler, useEffect, useRef, useState } from "react";
 
-export type DropDownOption = {
-  id: string;
-  label: string;
-};
-
 interface DropdownProps {
-  options: DropDownOption[];
-  value: string;
+  options: GoalItem[];
+  value?: GoalItem;
   placeholder?: string;
   disabled?: boolean;
-  onChange: (option: DropDownOption) => void;
-  onAddGoal: (value: string) => void;
+  onChange: (option: GoalItem) => void;
+  onAddGoal: (title: string) => void;
 }
 
 /**
  * 드롭다운 컴포넌트입니다.
  * @param options DropDownOption 타입을 담고있는 리스트입니다. 예: [{id: string, label: string}, ...]
- * @param value option 리스트 중에서 선택한 항목의 id 입니다.
- * @param placeholder option 이 없을 때 나오는 문구입니다.
+ * @param value option 리스트 중에서 선택한 항목입니다.
+ * @param placeholder value 가 없을 때 나오는 문구입니다.
  * @param disabled
  * @param onChange 드롭다운 메뉴중 하나를 클릭했을 때 발생하는 이벤트 (arg : DropDownOption) => void
  * @param onAddGoal 목표 생성 아이콘을 클릭했을 때 발생하는 이벤트, 매개변수는 목표 텍스트이다. (arg: string) => void
- * @returns
  */
 export default function Dropdown({
   options,
@@ -44,21 +39,22 @@ export default function Dropdown({
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       const container = containerRef.current;
-      if (!container) return;
-      if (!container.contains(event.target as Node)) {
+      if (!container || !(event.target instanceof Node)) return;
+
+      if (!container.contains(event.target)) {
         setIsOpen(false);
         setInputGoalOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleOutsideClick);
+
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
-  const selectedOption = options.find((option) => option.id === value);
-
-  const handleSelect = (option: DropDownOption) => {
+  const handleSelect = (option: GoalItem) => {
     onChange(option);
     setIsOpen(false);
     setInputGoalOpen(false);
@@ -83,12 +79,14 @@ export default function Dropdown({
       <button
         type="button"
         disabled={disabled}
-        onClick={() => {
-          setIsOpen(!isOpen);
-          if (isOpen) setInputGoalOpen(false);
-        }}
+        onClick={() =>
+          setIsOpen((prev) => {
+            if (prev) setInputGoalOpen(false);
+            return !prev;
+          })
+        }
         onKeyDown={(e) => {
-          if (e.key == "Escape") {
+          if (e.key === "Escape") {
             setIsOpen(false);
             setInputGoalOpen(false);
           }
@@ -99,7 +97,7 @@ export default function Dropdown({
           <span className="text-primary-600 grid size-36 shrink-0 place-items-center">
             <FlagFilled className="size-24" />
           </span>
-          <span className="text-title-xs">{selectedOption?.label ?? placeholder}</span>
+          <span className="text-title-xs">{value ? value.title : placeholder}</span>
         </span>
         <span className={clsx("grid size-36 shrink-0 place-items-center", isOpen && "rotate-180")}>
           <Under className="size-24" />
@@ -113,10 +111,10 @@ export default function Dropdown({
         >
           <ul
             // 실제 스크롤은 내부 ul에서 담당
-            className="text-title-xs flex max-h-[246px] flex-col gap-[12px] overflow-y-auto p-12 font-bold"
+            className="text-title-xs flex max-h-246 flex-col gap-12 overflow-y-auto p-12 font-bold"
           >
             {options.map((option) => {
-              const isSelected = option.id === value;
+              const isSelected = option.id === value?.id;
 
               return (
                 <li
@@ -128,7 +126,7 @@ export default function Dropdown({
                     <FlagFilled className="size-24" />
                   </span>
 
-                  <span className="min-w-0 grow truncate">{option.label}</span>
+                  <span className="min-w-0 grow truncate">{option.title}</span>
 
                   {isSelected && (
                     <span className="text-primary-600 grid size-36 shrink-0 place-items-center">
@@ -139,14 +137,7 @@ export default function Dropdown({
               );
             })}
 
-            {!inputGoalOpen ? (
-              <li
-                className="text-title-xs flex cursor-pointer justify-center gap-12 rounded-xl p-8"
-                onClick={handleAddGoalClick}
-              >
-                <Plus className="size-24" />새 목표 추가
-              </li>
-            ) : (
+            {inputGoalOpen ? (
               <form
                 className="text-title-xs flex items-center justify-center gap-12 rounded-xl p-8"
                 onSubmit={handleAddGoalSubmit}
@@ -160,6 +151,13 @@ export default function Dropdown({
                   <Plus className="size-24" />
                 </button>
               </form>
+            ) : (
+              <li
+                className="text-title-xs flex cursor-pointer justify-center gap-12 rounded-xl p-8"
+                onClick={handleAddGoalClick}
+              >
+                <Plus className="size-24" />새 목표 추가
+              </li>
             )}
           </ul>
         </div>

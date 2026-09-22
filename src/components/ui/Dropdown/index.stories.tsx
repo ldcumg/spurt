@@ -1,19 +1,38 @@
-import Dropdown, { type DropDownOption } from "./";
+import Dropdown from "./";
+import type { GoalItem } from "@/types/typeGoals";
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { useState } from "react";
 
-const goals: DropDownOption[] = [
+const goals: GoalItem[] = [
   {
-    id: "javascript-service",
-    label: "자바스크립트로 웹 서비스 만들기",
+    id: 1,
+    title: "자바스크립트로 웹 서비스 만들기",
+    teamId: "stringnumber",
+    userId: 1,
+    todoCount: 1,
+    completedCount: 1,
+    createdAt: "",
+    updatedAt: "",
   },
   {
-    id: "design-system",
-    label: "디자인 시스템 강의 듣기",
+    id: 2,
+    title: "디자인 시스템 강의 듣기",
+    teamId: "stringnumber",
+    userId: 1,
+    todoCount: 1,
+    completedCount: 1,
+    createdAt: "",
+    updatedAt: "",
   },
   {
-    id: "portfolio",
-    label: "프론트엔드 포트폴리오 완성하기",
+    id: 3,
+    title: "프론트엔드 포트폴리오 완성하기",
+    teamId: "stringnumber",
+    userId: 1,
+    todoCount: 1,
+    completedCount: 1,
+    createdAt: "",
+    updatedAt: "",
   },
 ];
 
@@ -26,7 +45,16 @@ const meta = {
   tags: ["autodocs"],
   args: {
     options: [],
-    value: "",
+    value: {
+      id: 3,
+      title: "프론트엔드 포트폴리오 완성하기",
+      teamId: "stringnumber",
+      userId: 1,
+      todoCount: 1,
+      completedCount: 1,
+      createdAt: "",
+      updatedAt: "",
+    },
     onChange: () => {},
     onAddGoal: () => {},
   },
@@ -37,7 +65,16 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function DropdownExample({ label }: { label: string }) {
-  const [value, setValue] = useState("portfolio");
+  const [value, setValue] = useState({
+    id: 3,
+    title: "프론트엔드 포트폴리오 완성하기",
+    teamId: "stringnumber",
+    userId: 1,
+    todoCount: 1,
+    completedCount: 1,
+    createdAt: "",
+    updatedAt: "",
+  });
 
   return (
     <div>
@@ -47,7 +84,7 @@ function DropdownExample({ label }: { label: string }) {
         options={goals}
         value={value}
         onChange={(option) => {
-          setValue(option.id);
+          setValue(option);
         }}
         onAddGoal={(value) => {
           console.log(value);
@@ -58,7 +95,8 @@ function DropdownExample({ label }: { label: string }) {
 }
 
 function DropdownNoList({ label }: { label: string }) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<GoalItem | null>(null);
+
   return (
     <div>
       <p className="mb-12 text-sm font-bold">{label}</p>
@@ -67,7 +105,7 @@ function DropdownNoList({ label }: { label: string }) {
         options={[]}
         value={value}
         onChange={(option) => {
-          setValue(option.id);
+          setValue(option);
         }}
         onAddGoal={(value) => {
           console.log(value);
