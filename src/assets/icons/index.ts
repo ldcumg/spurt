@@ -25,6 +25,7 @@ export { default as Unhide } from "./Unhide.svg";
 export { default as Upload } from "./Upload.svg";
 
 export { default as Calendar } from "./Calendar.svg";
+export { default as CalendarFilled } from "./Calendar_filled.svg";
 export { default as Right } from "./Right.svg";
 export { default as Left } from "./Left.svg";
 export { default as Burger } from "./Burger.svg";
