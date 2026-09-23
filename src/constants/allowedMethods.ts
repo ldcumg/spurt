@@ -1,0 +1,17 @@
+export const ALLOWED_METHODS: Record<string, readonly string[]> = {
+  "todos": ["GET", "POST"],
+  "todos/favorites": ["GET"],
+  "todos/:id": ["GET", "PATCH", "DELETE"],
+  "todos/:id/favorites": ["POST", "DELETE"],
+  "goals": ["GET", "POST"],
+  "goals/:id": ["GET", "PATCH", "DELETE"],
+  "notes": ["GET", "POST"],
+  "notes/:id": ["GET", "PATCH", "DELETE"],
+  "notifications": ["GET", "PATCH", "DELETE"],
+  "notifications/:id": ["PATCH", "DELETE"],
+  "users/me": ["GET", "PATCH", "DELETE"],
+  "users/me/password": ["PATCH"],
+  "users/check-nickname": ["GET"],
+  "files": ["POST"],
+  "images": ["POST"],
+};
