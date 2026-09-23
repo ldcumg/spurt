@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Github Repository 불러오기
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: pnpm 설치 및 설정
         uses: pnpm/action-setup@v4
@@ -51,6 +53,8 @@ jobs:
     steps:
       - name: Github Repository 불러오기
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: pnpm 설치 및 설정
         uses: pnpm/action-setup@v4
