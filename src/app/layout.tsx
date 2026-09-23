@@ -1,5 +1,6 @@
 import "./globals.css";
 import { DISCLOSURE_ROOT_ID } from "@/constants/dom";
+import QueryProvider from "@/providers/QueryProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
@@ -23,7 +24,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       className={`${pretendard.className} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        {children}
+        <QueryProvider>{children}</QueryProvider>
         <div id={DISCLOSURE_ROOT_ID}></div>
       </body>
     </html>
