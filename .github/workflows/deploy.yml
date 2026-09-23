@@ -9,6 +9,9 @@ on:
     types: closed
     branches: [main, dev]
 
+permissions:
+  contents: read
+
 jobs:
   # dev 브랜치에 merge될 때 preview 배포
   deploy-preview:
