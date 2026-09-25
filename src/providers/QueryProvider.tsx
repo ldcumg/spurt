@@ -1,7 +1,7 @@
 "use client";
 
-import { ONE_HOUR_FOR_TANSTACK } from "@/constants/timeConstants";
-import { isServer, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ONE_MINUTE_FOR_TANSTACK } from "@/constants/timeConstants";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { ReactNode } from "react";
 
@@ -9,8 +9,8 @@ const makeQueryClient = () => {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        //NOTE - 임시 stale time 1시간
-        staleTime: ONE_HOUR_FOR_TANSTACK,
+        staleTime: ONE_MINUTE_FOR_TANSTACK,
+        retry: 1,
       },
     },
   });
@@ -19,12 +19,12 @@ const makeQueryClient = () => {
 let browserQueryClient: QueryClient | undefined = undefined;
 
 const getQueryClient = () => {
-  if (isServer) {
+  if (typeof window === "undefined") {
     return makeQueryClient();
-  } else {
-    if (!browserQueryClient) browserQueryClient = makeQueryClient();
-    return browserQueryClient;
   }
+
+  if (!browserQueryClient) browserQueryClient = makeQueryClient();
+  return browserQueryClient;
 };
 
 const QueryProvider = ({ children }: { children: ReactNode }) => {
@@ -33,7 +33,9 @@ const QueryProvider = ({ children }: { children: ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {process.env.NODE_ENV === "development" && (
+        <ReactQueryDevtools initialIsOpen={false} />
+      )}
     </QueryClientProvider>
   );
 };
