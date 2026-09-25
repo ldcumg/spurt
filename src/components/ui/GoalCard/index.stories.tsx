@@ -1,7 +1,7 @@
 import GoalCard from ".";
 
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { Goal, Todos } from "./mock";
+import { MockGoalList, Todos } from "./mock";
 
 const meta = {
   title: "components/GoalCard",
@@ -29,10 +29,10 @@ type Story = StoryObj<typeof GoalCard>;
 export const Default: Story = {
   args: {
     goal: {
-      ...Goal.goals[0],
-      title: Goal.goals[0].title,
-      todoCount: Goal.goals[0].todoCount,
-      completedCount: Goal.goals[0].completedCount,
+      ...MockGoalList.goals[0],
+      title: MockGoalList.goals[0].title,
+      todoCount: MockGoalList.goals[0].todoCount,
+      completedCount: MockGoalList.goals[0].completedCount,
     },
     todos: Todos.todos.map((todo) => ({ ...todo, done: todo.done })),
   },
@@ -47,8 +47,8 @@ export const Default: Story = {
 export const EmptyTodos: Story = {
   args: {
     goal: {
-      ...Goal.goals[0],
-      title: "목표를 추가하세요.",
+      ...MockGoalList.goals[0],
+      title: "할 일이 없는 경우 입니다.",
       todoCount: 0,
       completedCount: 0,
     },
