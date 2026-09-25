@@ -34,8 +34,11 @@ jobs:
           node-version-file: .nvmrc
           cache: "pnpm"
 
-      - name: Vercel CLI 설치
+      - name: 의존성 설치
         run: pnpm install --frozen-lockfile
+
+      - name: Vercel 프로젝트 연결
+        run: pnpm exec vercel link --yes --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Vercel Preview 환경 설정 가져오기
         run: pnpm exec vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
@@ -43,7 +46,7 @@ jobs:
       - name: 프로젝트 빌드
         run: pnpm exec vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Vercel preview 배포
+      - name: Vercel Preview 배포
         run: pnpm exec vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
 
   # dev 브랜치에서 main 브랜치로 merge될 때 production 배포
@@ -68,8 +71,11 @@ jobs:
           node-version-file: .nvmrc
           cache: "pnpm"
 
-      - name: Vercel CLI 설치
+      - name: 의존성 설치
         run: pnpm install --frozen-lockfile
+
+      - name: Vercel 프로젝트 연결
+        run: pnpm exec vercel link --yes --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Vercel Production 환경 설정 가져오기
         run: pnpm exec vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
@@ -77,5 +83,5 @@ jobs:
       - name: 프로젝트 빌드
         run: pnpm exec vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Vercel production 배포
+      - name: Vercel Production 배포
         run: pnpm exec vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
