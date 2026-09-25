@@ -1,0 +1,15 @@
+/* 스토리북에 폰트 적용하기 위해 */
+
+@font-face {
+  font-family: "NotePage2Pretendard";
+  src: url("../../assets/fonts/PretendardVariable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.page {
+  font-family: "NotePage2Pretendard", sans-serif;
+  /* 스토리북에 배경 적용 (지워도 됨) */
+  background-image: radial-gradient(circle at top right, var(--color-primary-50), var(--color-surface) 56%);
+}
