@@ -27,6 +27,8 @@ async function proxy(request: NextRequest, { params }: Params) {
       data: await request.text(),
     });
 
+    if (status === 204) return new NextResponse(null, { status });
+
     return NextResponse.json(data, { status });
   } catch (error) {
     if (isAxiosError(error) && error.response) {
