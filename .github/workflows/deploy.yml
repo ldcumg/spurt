@@ -15,8 +15,7 @@ permissions:
 jobs:
   # dev 브랜치에 merge될 때 preview 배포
   deploy-preview:
-    if: ${{ github.event.pull_request.merged == true &&
-      github.event.pull_request.base.ref == 'dev'}}
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'dev'}}
 
     runs-on: ubuntu-latest
     steps:
@@ -36,9 +35,6 @@ jobs:
 
       - name: 의존성 설치
         run: pnpm install --frozen-lockfile
-
-      - name: Vercel 프로젝트 연결
-        run: pnpm exec vercel link --yes --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Vercel Preview 환경 설정 가져오기
         run: pnpm exec vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
@@ -51,9 +47,7 @@ jobs:
 
   # dev 브랜치에서 main 브랜치로 merge될 때 production 배포
   deploy-production:
-    if: ${{github.event.pull_request.merged == true &&
-      github.event.pull_request.head.ref == 'dev' &&
-      github.event.pull_request.base.ref == 'main'}}
+    if: ${{github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'dev' && github.event.pull_request.base.ref == 'main'}}
 
     runs-on: ubuntu-latest
     steps:
@@ -73,9 +67,6 @@ jobs:
 
       - name: 의존성 설치
         run: pnpm install --frozen-lockfile
-
-      - name: Vercel 프로젝트 연결
-        run: pnpm exec vercel link --yes --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Vercel Production 환경 설정 가져오기
         run: pnpm exec vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
