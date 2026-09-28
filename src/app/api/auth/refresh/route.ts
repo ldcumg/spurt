@@ -32,9 +32,17 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      return NextResponse.json(error.response.data, {
+      const response = NextResponse.json(error.response.data, {
         status: error.response.status,
       });
+
+      // 토큰이 쿠키에 남아있지만 백엔드에서 만료된 상태 대응
+      if (error.response.status === 401) {
+        response.cookies.delete(ACCESS_TOKEN);
+        response.cookies.delete(REFRESH_TOKEN);
+      }
+
+      return response;
     }
 
     console.error("[auth/refresh]", error);
