@@ -1,0 +1,86 @@
+@font-face {
+  font-family: "NoteWritePretendard";
+  src: url("../../assets/fonts/PretendardVariable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.page {
+  font-family: "NoteWritePretendard", sans-serif;
+  background-image: radial-gradient(circle at top right, var(--color-primary-50), var(--color-surface) 56%);
+}
+
+.titleInput input {
+  font-size: var(--text-title-sm);
+  line-height: var(--text-title-sm--line-height);
+}
+
+.editorContent :global(.tiptap) {
+  min-height: 320px;
+  padding: 20px 16px;
+  color: var(--color-neutral-800);
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg--line-height);
+  outline: none;
+}
+
+.editorContent :global(.tiptap h2) {
+  margin-bottom: 12px;
+  font-size: var(--text-title-md);
+  font-weight: 700;
+  line-height: var(--text-title-md--line-height);
+}
+
+.editorContent :global(.tiptap h3) {
+  margin-bottom: 8px;
+  font-size: var(--text-title-sm);
+  font-weight: 600;
+  line-height: var(--text-title-sm--line-height);
+}
+
+.editorContent :global(.tiptap ul),
+.editorContent :global(.tiptap ol) {
+  padding-left: 24px;
+}
+
+.editorContent :global(.tiptap ul) {
+  list-style: disc;
+}
+
+.editorContent :global(.tiptap ol) {
+  list-style: decimal;
+}
+
+.editorContent :global(.tiptap blockquote) {
+  margin: 12px 0;
+  border-left: 3px solid var(--color-primary-300);
+  padding-left: 12px;
+  color: var(--color-neutral-600);
+}
+
+.editorContent :global(.tiptap a) {
+  color: var(--color-information);
+  text-decoration: underline;
+}
+
+.toolbarScroll {
+  scrollbar-width: none;
+}
+
+.toolbarScroll::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .editorContent :global(.tiptap) {
+    min-height: 420px;
+    padding: 24px 20px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .editorContent :global(.tiptap) {
+    min-height: 460px;
+  }
+}
