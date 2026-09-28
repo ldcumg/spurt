@@ -5,9 +5,8 @@ import axios, { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const { email, name, password } = await request.json();
-
   try {
+    const { email, name, password } = await request.json();
     const { data } = await axios.post(`${BASE_URL}/${TEAM_ID}${API_PATH.auth.signup}`, {
       email,
       name,
@@ -28,6 +27,11 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
+    // request body가 json 형식이 아닌 경우
+    if (error instanceof SyntaxError) {
+      return NextResponse.json({ message: "잘못된 요청입니다." }, { status: 400 });
+    }
+
     if (isAxiosError(error) && error.response) {
       return NextResponse.json(error.response.data, { status: error.response.status });
     }
