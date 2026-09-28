@@ -10,7 +10,7 @@ type Params = { params: Promise<{ path: string[] }> };
 async function proxy(request: NextRequest, { params }: Params) {
   const { path } = await params;
 
-  const key = path.map((s) => (/^\d+$/.test(s) ? ":id" : s)).join("/");
+  const key = "/" + path.map((s) => (/^\d+$/.test(s) ? ":id" : s)).join("/");
   const allowed = ALLOWED_METHODS[key];
 
   if (!allowed?.includes(request.method)) {
