@@ -3,7 +3,8 @@
 // import { ACCESS_TOKEN_MAX_AGE, API_PATH, REFRESH_TOKEN_MAX_AGE } from "@/constants";
 // import ROUTES from "@/constants/routes";
 // import axios, { isAxiosError } from "axios";
-// import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+
 // import type { NextRequest } from "next/server";
 
 // // 서버 컴포넌트의 토큰 재발급 로직
@@ -64,3 +65,7 @@
 // export const config = {
 //   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 // };
+
+export const proxy = async () => {
+  return NextResponse.next();
+};
