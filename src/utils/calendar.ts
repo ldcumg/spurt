@@ -1,0 +1,60 @@
+import type { CalendarWeeks, Week } from "@/components/Calendar/types";
+import type { Dispatch, SetStateAction } from "react";
+
+/** year, month을 통해 해당 월의 일들을 반환하는 유틸 */
+export function getMonthDates(year: number, month: number): (number | null)[] {
+  const firstDay = new Date(year, month, 1).getDay();
+  const lastDate = new Date(year, month + 1, 0).getDate();
+
+  return Array.from({ length: firstDay + lastDate }, (_, index) => {
+    return index < firstDay ? null : index - firstDay + 1;
+  });
+}
+
+/**
+ * sunday가 포함된 일요일 ~ 토요일 한 주를 반환하는 유틸
+ * @returns [일, 월, 화, 수, 목, 금, 토]
+ */
+export function getWeek(sunday: Date): Week {
+  return Array.from({ length: 7 }, (_, index) => {
+    const current = new Date(sunday);
+    current.setDate(sunday.getDate() + index);
+
+    return current;
+  }) as Week;
+}
+
+/**
+ * firstSunday부터 5주를 반환하는 유틸
+ * @returns [전전 주[], 전 주[], 이번 주[], 다음 주[], 다다음 주[]]
+ */
+export function getCalendarWeeks(firstSunday: Date): CalendarWeeks {
+  return Array.from({ length: 5 }, (_, index) => {
+    const weekStart = new Date(firstSunday);
+    weekStart.setDate(weekStart.getDate() + index * 7);
+
+    return getWeek(weekStart);
+  }) as CalendarWeeks;
+}
+
+export function setPreviousWeek(setCalendarWeeks: Dispatch<SetStateAction<CalendarWeeks>>) {
+  setCalendarWeeks((prev) => {
+    const firstWeek = prev[0];
+    const previousSunday = new Date(firstWeek[0]);
+    previousSunday.setDate(previousSunday.getDate() - 7);
+    const previousWeek = getWeek(previousSunday);
+
+    return [previousWeek, ...prev.slice(0, -1)] as CalendarWeeks;
+  });
+}
+
+export function setNextWeek(setCalendarWeeks: Dispatch<SetStateAction<CalendarWeeks>>) {
+  setCalendarWeeks((prev) => {
+    const lastWeek = prev[4];
+    const nextSunday = new Date(lastWeek[0]);
+    nextSunday.setDate(nextSunday.getDate() + 7);
+    const nextWeek = getWeek(nextSunday);
+
+    return [...prev.slice(1), nextWeek] as CalendarWeeks;
+  });
+}

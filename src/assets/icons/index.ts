@@ -32,5 +32,6 @@ export { default as Burger } from "./Burger.svg";
 
 export { default as Plus } from "./Plus.svg";
 export { default as X } from "./X.svg";
+export { default as Up } from "./Up.svg";
 export { default as Under } from "./Under.svg";
 export { default as Check } from "./Check.svg";
