@@ -79,7 +79,7 @@ export default function NoteWriteHeader({ onBack, onDraft, onSubmit, statusMessa
       <NoteActions
         onDraft={onDraft}
         onSubmit={onSubmit}
-        className="absolute right-0 bottom-0 hidden md:flex xl:right-360"
+        className="absolute right-0 bottom-0 hidden md:flex xl:hidden"
       />
     </section>
   );

@@ -1,8 +1,8 @@
 "use client";
 
-import styles from "../NoteWrite.module.css";
-import { Link as LinkIcon, More, NoteFilled, Question, Under, Upload } from "@/assets/icons";
+import { Link as LinkIcon, More, NoteFilled } from "@/assets/icons";
 import Button from "@/components/ui/Button";
+import Select, { type SelectOption } from "@/components/ui/Select";
 import TextInput from "@/components/ui/TextInput";
 import LinkExtension from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
@@ -18,6 +18,28 @@ interface ToolbarButtonProps {
   disabled?: boolean;
   desktopOnly?: boolean;
 }
+
+const FORMAT_OPTIONS: SelectOption[] = [
+  { value: "paragraph", label: "본문" },
+  { value: "heading2", label: "제목 2" },
+  { value: "heading3", label: "제목 3" },
+];
+
+const EMPTY_EDITOR_STATE = {
+  isBold: false,
+  isItalic: false,
+  isUnderline: false,
+  isStrike: false,
+  isCode: false,
+  isBulletList: false,
+  isOrderedList: false,
+  isBlockquote: false,
+  isHeading2: false,
+  isHeading3: false,
+  isLink: false,
+  text: "",
+  isEmpty: true,
+};
 
 function ToolbarButton({ label, children, onClick, active, disabled, desktopOnly }: ToolbarButtonProps) {
   return (
@@ -39,37 +61,14 @@ function ToolbarButton({ label, children, onClick, active, disabled, desktopOnly
   );
 }
 
-const EMPTY_EDITOR_STATE = {
-  isBold: false,
-  isItalic: false,
-  isUnderline: false,
-  isStrike: false,
-  isCode: false,
-  isBulletList: false,
-  isOrderedList: false,
-  isBlockquote: false,
-  isHeading2: false,
-  isHeading3: false,
-  isLink: false,
-  text: "",
-  isEmpty: true,
-};
-
 export default function NoteEditor() {
   const [title, setTitle] = useState("");
-  const [fileName, setFileName] = useState("");
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        link: false,
-        underline: false,
-      }),
+      StarterKit.configure({ link: false, underline: false }),
       Underline,
-      LinkExtension.configure({
-        openOnClick: false,
-        autolink: true,
-      }),
+      LinkExtension.configure({ openOnClick: false, autolink: true }),
     ],
     content: "",
     immediatelyRender: false,
@@ -106,7 +105,15 @@ export default function NoteEditor() {
   });
 
   const state = editorState ?? EMPTY_EDITOR_STATE;
+  const format = state.isHeading2 ? "heading2" : state.isHeading3 ? "heading3" : "paragraph";
   const textWithoutSpaces = state.text.replace(/\s/g, "");
+
+  const handleFormatChange = (value: string) => {
+    if (!editor) return;
+    if (value === "heading2") editor.chain().focus().setHeading({ level: 2 }).run();
+    else if (value === "heading3") editor.chain().focus().setHeading({ level: 3 }).run();
+    else editor.chain().focus().setParagraph().run();
+  };
 
   const handleLink = () => {
     if (!editor) return;
@@ -124,7 +131,7 @@ export default function NoteEditor() {
       aria-label="노트 편집기"
       className="border-border bg-surface-card rounded-xl border p-16 shadow-sm md:p-20"
     >
-      <div className={`relative mb-16 [&_input]:h-64 [&_input]:pr-64 [&_input]:pl-80 ${styles.titleInput}`}>
+      <div className="[&_input]:text-title-sm relative mb-16 [&_input]:h-64 [&_input]:pr-64 [&_input]:pl-80">
         <span className="bg-mint-light text-mint pointer-events-none absolute top-1/2 left-16 z-10 flex size-48 -translate-y-1/2 items-center justify-center rounded-lg">
           <NoteFilled className="size-24" />
         </span>
@@ -141,29 +148,15 @@ export default function NoteEditor() {
       </div>
 
       <div className="border-input-border overflow-hidden rounded-lg border bg-white">
-        <div
-          className={`${styles.toolbarScroll} border-border flex items-center gap-2 overflow-x-auto border-b px-8 py-8`}
-        >
-          <label className="text-body-md relative flex h-28 shrink-0 items-center gap-8 px-8 font-semibold text-neutral-800">
-            <span className="sr-only">본문 형식</span>
-            <select
-              aria-label="본문 형식"
-              value={state.isHeading2 ? "heading2" : state.isHeading3 ? "heading3" : "paragraph"}
-              disabled={!editor}
-              onChange={(event) => {
-                if (!editor) return;
-                if (event.target.value === "heading2") editor.chain().focus().toggleHeading({ level: 2 }).run();
-                else if (event.target.value === "heading3") editor.chain().focus().toggleHeading({ level: 3 }).run();
-                else editor.chain().focus().setParagraph().run();
-              }}
-              className="appearance-none bg-transparent pr-20 outline-none"
-            >
-              <option value="paragraph">본문</option>
-              <option value="heading2">제목 2</option>
-              <option value="heading3">제목 3</option>
-            </select>
-            <Under className="pointer-events-none absolute right-4 size-14" />
-          </label>
+        <div className="border-border flex [scrollbar-width:none] items-center gap-2 overflow-x-auto border-b px-8 py-8 [&::-webkit-scrollbar]:hidden">
+          <Select
+            label="서식"
+            options={FORMAT_OPTIONS}
+            value={format}
+            disabled={!editor}
+            onChange={handleFormatChange}
+            className="min-w-160 shrink-0 [&>button]:h-36 [&>button]:rounded-lg [&>button]:border-0 [&>button]:shadow-none"
+          />
 
           <span className="bg-border h-24 w-px shrink-0" />
 
@@ -253,7 +246,7 @@ export default function NoteEditor() {
           </ToolbarButton>
         </div>
 
-        <div className="relative">
+        <div className="relative min-h-320 md:min-h-420 xl:min-h-460">
           {state.isEmpty && (
             <p className="text-body-lg text-placeholder pointer-events-none absolute top-20 left-16 z-10 md:left-20">
               이곳에 노트 내용을 작성해주세요.
@@ -261,28 +254,11 @@ export default function NoteEditor() {
           )}
           <EditorContent
             editor={editor}
-            className={styles.editorContent}
+            className="[&_.tiptap]:text-body-lg [&_.tiptap_a]:text-information [&_.tiptap_blockquote]:border-primary-300 [&_.tiptap_h2]:text-title-md [&_.tiptap_h3]:text-title-sm [&_.tiptap]:min-h-320 [&_.tiptap]:px-16 [&_.tiptap]:py-20 [&_.tiptap]:text-neutral-800 [&_.tiptap]:outline-none md:[&_.tiptap]:min-h-420 md:[&_.tiptap]:px-20 md:[&_.tiptap]:py-24 xl:[&_.tiptap]:min-h-460 [&_.tiptap_a]:underline [&_.tiptap_blockquote]:my-12 [&_.tiptap_blockquote]:border-l-[3px] [&_.tiptap_blockquote]:pl-12 [&_.tiptap_blockquote]:text-neutral-600 [&_.tiptap_h2]:mb-12 [&_.tiptap_h3]:mb-8 [&_.tiptap_ol]:list-decimal [&_.tiptap_ol]:pl-24 [&_.tiptap_ul]:list-disc [&_.tiptap_ul]:pl-24"
           />
         </div>
 
-        <footer className="border-border flex flex-col gap-12 border-t bg-neutral-50 px-16 py-12 md:flex-row md:items-center md:justify-between md:px-20">
-          <div className="flex min-w-0 items-center gap-12">
-            <label className="text-body-md inline-flex shrink-0 cursor-pointer items-center gap-8 font-semibold text-neutral-800">
-              <Upload className="size-20" />
-              파일 첨부
-              <input
-                type="file"
-                className="sr-only"
-                onChange={(event) => setFileName(event.target.files?.[0]?.name ?? "")}
-              />
-            </label>
-            <span className="bg-border h-20 w-px" />
-            <span className="text-body-sm flex min-w-0 items-center gap-6 truncate text-neutral-500">
-              <Question className="size-18 shrink-0" />
-              {fileName || "Markdown 형식도 지원해요."}
-            </span>
-          </div>
-
+        <footer className="border-border flex justify-end border-t bg-neutral-50 px-16 py-12 md:px-20">
           <p className="text-caption shrink-0 text-right text-neutral-500">
             공백포함 {state.text.length}자 <span className="mx-6">|</span> 공백제외 {textWithoutSpaces.length}자
           </p>

@@ -1,10 +1,13 @@
 "use client";
 
 import { MobileNavigation, NotesHero, NotesList, NotesToolbar, type SortOrder } from "./components";
-import { INITIAL_NOTES, type NoteMock } from "./mock";
+import { INITIAL_NOTES } from "./mock";
+import ROUTES from "@/constants/routes";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 export default function NotePage() {
+  const router = useRouter();
   const [notes, setNotes] = useState(INITIAL_NOTES);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<SortOrder>("recent");
@@ -29,19 +32,7 @@ export default function NotePage() {
   };
 
   const handleNewNote = () => {
-    const newNote: NoteMock = {
-      id: Date.now(),
-      title: "새로 작성한 학습 노트",
-      description: "새 노트입니다. 입력 화면이나 API 요청은 연결하지 않았습니다.",
-      goal: "꾸준히 학습 기록 남기기",
-      task: "오늘 배운 내용 정리하기",
-      date: "2026. 09. 28",
-      tone: "yellow",
-      isFavorite: false,
-    };
-
-    setNotes((currentNotes) => [newNote, ...currentNotes]);
-    setSearchTerm("");
+    router.push(ROUTES.newNote);
   };
 
   return (

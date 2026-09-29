@@ -52,7 +52,7 @@ interface NotesHeroProps {
 /** 노트 페이지의 제목, 소개 이미지, 검색과 새 노트 동작을 보여 준다. */
 export default function NotesHero({ searchTerm, onSearchChange, onNewNote }: NotesHeroProps) {
   return (
-    <section className="relative mb-24 md:mb-32 md:min-h-248 xl:min-h-184">
+    <section className="relative mb-24 md:mb-32 md:min-h-248 xl:min-h-224">
       <div className="max-w-680 md:pr-280 xl:max-w-600 xl:pr-0">
         <p className="text-body-md mb-4 hidden font-semibold text-neutral-700 md:block">노트</p>
         <div className="flex items-start justify-between gap-16">
