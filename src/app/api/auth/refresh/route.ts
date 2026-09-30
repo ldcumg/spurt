@@ -1,4 +1,4 @@
-import { postRefresh } from "@/apis/auth";
+import { postRefresh } from "@/apis/auth/api";
 import { ACCESS_TOKEN, AUTH_COOKIE_OPTIONS, REFRESH_TOKEN } from "@/config/cookie";
 import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE } from "@/constants";
 import { isAxiosError } from "axios";
