@@ -1,11 +1,11 @@
 "use client";
 
-import { Under, Up } from "@/assets/icons";
 import { THIS_WEEK_INDEX, WEEKDAYS } from "@/components/Calendar/constants";
 import type { CalendarWeeks } from "@/components/Calendar/types";
+import Button from "@/components/ui/Button";
 import { getCalendarWeeks, setPreviousWeek, setNextWeek } from "@/utils/calendar";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function CalendarPage() {
   const today = new Date();
@@ -13,37 +13,61 @@ export default function CalendarPage() {
   firstSunday.setDate(today.getDate() - today.getDay() - 14);
   const currentWeekCalendar = getCalendarWeeks(firstSunday);
   const [calendarWeeks, setCalendarWeeks] = useState<CalendarWeeks>(currentWeekCalendar);
-
   const [isMonthView, setIsMonthView] = useState<boolean>(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isScrollingRef = useRef(false);
+
+  useEffect(() => {
+    const element = containerRef.current;
+    if (!element) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+
+      if (isScrollingRef.current || Math.abs(e.deltaY) < 30) return;
+
+      isScrollingRef.current = true;
+      (e.deltaY > 0 ? setNextWeek : setPreviousWeek)(setCalendarWeeks);
+
+      setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 600);
+    };
+
+    element.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      element.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-8 p-4 pb-100 md:pb-0">
-      <button
-        className="size-24"
-        onClick={() => setPreviousWeek(setCalendarWeeks)}
-      >
-        <Up className="text-neutral-300" />
-      </button>
-
+    <div
+      className="flex h-full w-full flex-col items-center justify-center gap-8 overscroll-contain p-4 pb-100 md:pb-0"
+      ref={containerRef}
+    >
+      <button className="">목표 필터</button>
       <div className="relative flex w-full flex-row items-center justify-between px-4">
-        <span className="flex flex-row gap-16">
+        <button onClick={() => setIsMonthView((prev) => !prev)}>
+          <span className={clsx("rounded-2xl px-6", isMonthView && "bg-primary-500 text-white")}>월간</span>
+          <span className={clsx("rounded-2xl px-6", isMonthView || "bg-primary-500 text-white")}>주간</span>
+        </button>
+
+        <span className="absolute left-1/2 flex -translate-x-1/2 flex-row">
           <h2 className="text-title-sm">
             {isMonthView
               ? `${calendarWeeks[0][0].getFullYear()}년 ${calendarWeeks[0][0].getMonth() + 1}월`
               : `${calendarWeeks[THIS_WEEK_INDEX][0].getFullYear()}년 ${calendarWeeks[THIS_WEEK_INDEX][0].getMonth() + 1}월`}
           </h2>
-          <button onClick={() => setCalendarWeeks(currentWeekCalendar)}>오늘</button>
         </span>
 
-        <button
-          className="absolute left-1/2 flex -translate-x-1/2 flex-row"
-          onClick={() => setIsMonthView((prev) => !prev)}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setCalendarWeeks(currentWeekCalendar)}
         >
-          <span className={clsx("rounded-2xl px-6", isMonthView && "bg-primary-500 text-white")}>월간</span>
-          <span className={clsx("rounded-2xl px-6", isMonthView || "bg-primary-500 text-white")}>주간</span>
-        </button>
-
-        <button className="">목표 필터</button>
+          오늘
+        </Button>
       </div>
 
       {/* 달력 */}
@@ -149,12 +173,6 @@ export default function CalendarPage() {
           })}
         </div>
       </div>
-      <button
-        className="size-24"
-        onClick={() => setNextWeek(setCalendarWeeks)}
-      >
-        <Under className="text-neutral-300" />
-      </button>
     </div>
   );
 }
