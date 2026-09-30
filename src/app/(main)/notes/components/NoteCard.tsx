@@ -23,17 +23,27 @@ function NoteInfoRow({ icon, label, value }: { icon: ReactNode; label: string; v
 interface NoteCardProps {
   note: NoteMock;
   onFavoriteToggle: (id: number) => void;
+  onSelect: (id: number) => void;
 }
 
 /** 한 건의 노트 내용과 중요 표시 동작을 보여 준다. */
-export default function NoteCard({ note, onFavoriteToggle }: NoteCardProps) {
+export default function NoteCard({ note, onFavoriteToggle, onSelect }: NoteCardProps) {
+  const titleId = `note-card-title-${note.id}`;
+
   return (
-    <article className="border-border bg-surface-card flex min-w-0 flex-col rounded-xl border p-16 shadow-sm md:p-20">
-      <div className="mb-12 flex items-start justify-between gap-12">
+    <article className="border-border bg-surface-card hover:border-primary-300 relative flex min-w-0 flex-col rounded-xl border p-16 shadow-sm transition-[border-color,box-shadow] hover:shadow-md md:p-20">
+      <button
+        type="button"
+        aria-labelledby={titleId}
+        className="focus-visible:ring-primary-300 absolute inset-0 z-10 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-inset"
+        onClick={() => onSelect(note.id)}
+      />
+
+      <div className="pointer-events-none relative z-20 mb-12 flex items-start justify-between gap-12">
         <div className={`flex size-48 shrink-0 items-center justify-center rounded-lg ${NOTE_TONE_CLASSES[note.tone]}`}>
           <NoteFilled className="size-24" />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="pointer-events-auto flex items-center gap-2">
           <Button
             type="button"
             variant="ghost"
@@ -62,7 +72,12 @@ export default function NoteCard({ note, onFavoriteToggle }: NoteCardProps) {
         </div>
       </div>
 
-      <h2 className="text-title-xs text-foreground-title md:text-title-sm line-clamp-1">{note.title}</h2>
+      <h2
+        id={titleId}
+        className="text-title-xs text-foreground-title md:text-title-sm line-clamp-1"
+      >
+        {note.title}
+      </h2>
       <p className="text-body-md mt-4 mb-12 line-clamp-2 text-neutral-600">{note.description}</p>
 
       <div className="mt-auto flex flex-col gap-6">

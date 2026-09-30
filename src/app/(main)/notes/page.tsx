@@ -1,8 +1,9 @@
 "use client";
 
-import { MobileNavigation, NotesHero, NotesList, NotesToolbar, type SortOrder } from "./components";
+import { MobileNavigation, NoteDetailPanel, NotesHero, NotesList, NotesToolbar, type SortOrder } from "./components";
 import { INITIAL_NOTES } from "./mock";
 import ROUTES from "@/constants/routes";
+import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
@@ -11,6 +12,10 @@ export default function NotePage() {
   const [notes, setNotes] = useState(INITIAL_NOTES);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<SortOrder>("recent");
+  const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
+  const { isOpen: isDetailOpen, open: openDetail, close: closeDetail } = useDisclosure();
+
+  const selectedNote = notes.find((note) => note.id === selectedNoteId) ?? null;
 
   const visibleNotes = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLocaleLowerCase("ko-KR");
@@ -35,6 +40,11 @@ export default function NotePage() {
     router.push(ROUTES.newNote);
   };
 
+  const handleNoteSelect = (id: number) => {
+    setSelectedNoteId(id);
+    openDetail();
+  };
+
   return (
     <div className="bg-surface text-foreground min-h-screen w-full">
       <MobileNavigation />
@@ -52,8 +62,17 @@ export default function NotePage() {
         <NotesList
           notes={visibleNotes}
           onFavoriteToggle={handleFavoriteToggle}
+          onNoteSelect={handleNoteSelect}
         />
       </div>
+
+      {selectedNote && (
+        <NoteDetailPanel
+          note={selectedNote}
+          isOpen={isDetailOpen}
+          onClose={closeDetail}
+        />
+      )}
     </div>
   );
 }
