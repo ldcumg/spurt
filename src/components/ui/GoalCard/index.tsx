@@ -4,8 +4,8 @@ import Button from "../Button";
 import Badge from "../Badge";
 import ProgressBar from "../ProgressBar";
 import TodoListItem from "./Todos";
-import { TodoItem } from "@/types/typeTodos";
-import { GoalItem } from "@/types/typeGoals";
+import { TodoItem } from "@/types/todos.types";
+import { GoalItem } from "@/types/goal.types";
 
 interface GoalCardProps {
   goal: GoalItem;

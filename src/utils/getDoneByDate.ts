@@ -1,4 +1,4 @@
-import type { TodoItem } from "@/types/typeTodos";
+import type { TodoItem } from "@/types/todos.types";
 
 export interface DailyDoneStat {
   date: string;
