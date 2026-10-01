@@ -1,5 +1,5 @@
-import type { CalendarWeeks, Week } from "@/components/Calendar/types";
-import type { Dispatch, SetStateAction } from "react";
+import { LAST_WEEK_INDEX } from "@/components/calendar/constants";
+import type { CalendarWeeks, Week } from "@/components/calendar/types";
 
 /** year, month을 통해 해당 월의 일들을 반환하는 유틸 */
 export function getMonthDates(year: number, month: number): (number | null)[] {
@@ -37,24 +37,29 @@ export function getCalendarWeeks(firstSunday: Date): CalendarWeeks {
   }) as CalendarWeeks;
 }
 
-export function setPreviousWeek(setCalendarWeeks: Dispatch<SetStateAction<CalendarWeeks>>) {
-  setCalendarWeeks((prev) => {
-    const firstWeek = prev[0];
-    const previousSunday = new Date(firstWeek[0]);
-    previousSunday.setDate(previousSunday.getDate() - 7);
-    const previousWeek = getWeek(previousSunday);
+export function previousWeek(curruntWeeks: CalendarWeeks) {
+  const firstWeek = curruntWeeks[0];
+  const previousSunday = new Date(firstWeek[0]);
+  previousSunday.setDate(previousSunday.getDate() - 7);
+  const previousWeek = getWeek(previousSunday);
 
-    return [previousWeek, ...prev.slice(0, -1)] as CalendarWeeks;
-  });
+  return [previousWeek, ...curruntWeeks.slice(0, -1)] as CalendarWeeks;
 }
 
-export function setNextWeek(setCalendarWeeks: Dispatch<SetStateAction<CalendarWeeks>>) {
-  setCalendarWeeks((prev) => {
-    const lastWeek = prev[4];
-    const nextSunday = new Date(lastWeek[0]);
-    nextSunday.setDate(nextSunday.getDate() + 7);
-    const nextWeek = getWeek(nextSunday);
+export function nextWeek(curruntWeeks: CalendarWeeks) {
+  const lastWeek = curruntWeeks[LAST_WEEK_INDEX];
+  const nextSunday = new Date(lastWeek[0]);
+  nextSunday.setDate(nextSunday.getDate() + 7);
+  const nextWeek = getWeek(nextSunday);
 
-    return [...prev.slice(1), nextWeek] as CalendarWeeks;
-  });
+  return [...curruntWeeks.slice(1), nextWeek] as CalendarWeeks;
+}
+
+export function moveMonth(curruntWeeks: CalendarWeeks, isNext: boolean) {
+  const currentFirstWeek = curruntWeeks[0];
+  const newSunday = new Date(currentFirstWeek[0]);
+  newSunday.setDate(newSunday.getDate() + (isNext ? 7 : -7) * 5);
+  const newWeeks = getCalendarWeeks(newSunday);
+
+  return newWeeks as CalendarWeeks;
 }

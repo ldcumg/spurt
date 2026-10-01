@@ -1,9 +1,10 @@
 "use client";
 
-import { THIS_WEEK_INDEX, WEEKDAYS } from "@/components/Calendar/constants";
-import type { CalendarWeeks } from "@/components/Calendar/types";
+import { Left, Right } from "@/assets/icons";
+import { THIS_WEEK_INDEX, WEEKDAYS } from "@/components/calendar/constants";
+import type { CalendarWeeks } from "@/components/calendar/types";
 import Button from "@/components/ui/Button";
-import { getCalendarWeeks, setPreviousWeek, setNextWeek } from "@/utils/calendar";
+import { getCalendarWeeks, previousWeek, nextWeek, moveMonth } from "@/utils/calendar";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 
@@ -16,6 +17,7 @@ export default function CalendarPage() {
   const [isMonthView, setIsMonthView] = useState<boolean>(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const isScrollingRef = useRef(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   useEffect(() => {
     const element = containerRef.current;
@@ -24,10 +26,10 @@ export default function CalendarPage() {
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
 
-      if (isScrollingRef.current || Math.abs(e.deltaY) < 30) return;
+      if (isScrollingRef.current || Math.abs(e.deltaY) < 25) return;
 
       isScrollingRef.current = true;
-      (e.deltaY > 0 ? setNextWeek : setPreviousWeek)(setCalendarWeeks);
+      setCalendarWeeks((prev) => (e.deltaY > 0 ? nextWeek : previousWeek)(prev));
 
       setTimeout(() => {
         isScrollingRef.current = false;
@@ -43,17 +45,14 @@ export default function CalendarPage() {
 
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-center gap-8 overscroll-contain p-4 pb-100 md:pb-0"
+      className="flex h-full w-full flex-col items-center gap-12 overscroll-contain p-4"
       ref={containerRef}
     >
-      <button className="">목표 필터</button>
+      <div className="flex h-50 items-center">
+        <button className="">목표 필터</button>
+      </div>
       <div className="relative flex w-full flex-row items-center justify-between px-4">
-        <button onClick={() => setIsMonthView((prev) => !prev)}>
-          <span className={clsx("rounded-2xl px-6", isMonthView && "bg-primary-500 text-white")}>월간</span>
-          <span className={clsx("rounded-2xl px-6", isMonthView || "bg-primary-500 text-white")}>주간</span>
-        </button>
-
-        <span className="absolute left-1/2 flex -translate-x-1/2 flex-row">
+        <span className="flex flex-row">
           <h2 className="text-title-sm">
             {isMonthView
               ? `${calendarWeeks[0][0].getFullYear()}년 ${calendarWeeks[0][0].getMonth() + 1}월`
@@ -61,13 +60,26 @@ export default function CalendarPage() {
           </h2>
         </span>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setCalendarWeeks(currentWeekCalendar)}
-        >
-          오늘
-        </Button>
+        <div className="absolute left-1/2 flex -translate-x-1/2 flex-row gap-8">
+          <button onClick={() => setCalendarWeeks((prev) => moveMonth(prev, false))}>
+            <Left className="size-20 text-neutral-400" />
+          </button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCalendarWeeks(currentWeekCalendar)}
+          >
+            오늘
+          </Button>
+          <button onClick={() => setCalendarWeeks((prev) => moveMonth(prev, true))}>
+            <Right className="size-20 text-neutral-400" />
+          </button>
+        </div>
+
+        <button onClick={() => setIsMonthView((prev) => !prev)}>
+          <span className={clsx("rounded-2xl px-6", isMonthView && "bg-primary-500 text-white")}>월간</span>
+          <span className={clsx("rounded-2xl px-6", isMonthView || "bg-primary-500 text-white")}>주간</span>
+        </button>
       </div>
 
       {/* 달력 */}
@@ -112,7 +124,7 @@ export default function CalendarPage() {
                       key={date.toDateString()}
                     >
                       {isNextMonthFirstWeek && (
-                        <div className="h-40">
+                        <div className="h-50">
                           {date.getDate() === 1 && (
                             <button
                               className="h-full w-full pl-8 text-start disabled:cursor-default"
@@ -139,17 +151,17 @@ export default function CalendarPage() {
                           const isNextWeek = weekIdx > THIS_WEEK_INDEX;
 
                           if (isMounthViewOrThisWeek) {
-                            console.log(date);
+                            setSelectedDate(date);
                             return;
                           }
 
                           if (isPreviousWeek) {
-                            setPreviousWeek(setCalendarWeeks);
+                            setCalendarWeeks((prev) => previousWeek(prev));
                             return;
                           }
 
                           if (isNextWeek) {
-                            setNextWeek(setCalendarWeeks);
+                            setCalendarWeeks((prev) => nextWeek(prev));
                             return;
                           }
                         }}
@@ -157,7 +169,12 @@ export default function CalendarPage() {
                         <h6
                           className={clsx(
                             `flex w-25 justify-center ${isMonthView ? "text-body-md" : isThisWeek ? "text-title-xs" : "text-body-sm"}`,
-                            isToday && "bg-primary-500 rounded-full text-white",
+                            isToday &&
+                              (selectedDate
+                                ? "rounded-full bg-neutral-500 text-white"
+                                : "bg-primary-500 rounded-full text-white"),
+                            selectedDate?.toDateString() === date.toDateString() &&
+                              "bg-primary-500 rounded-full text-white",
                             date.getDay() === 0 && "text-red-700",
                             date.getDay() === 6 && "text-blue-700",
                           )}
