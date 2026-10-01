@@ -1,9 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { userEvent, within } from "storybook/test";
-import { useState } from "react";
-
 import Dropdown, { type DropDownOption } from "./";
-import { Burger } from "@/assets/icons";
+import type { Meta, StoryObj } from "@storybook/nextjs";
+import { useState } from "react";
 
 const goals: DropDownOption[] = [
   {
@@ -20,6 +17,12 @@ const goals: DropDownOption[] = [
   },
 ];
 
+const todos: DropDownOption[] = [
+  { id: "programming-data", label: "프로그래밍과 데이터 in JavaScript" },
+  { id: "javascript-basics", label: "자바스크립트 기초 챕터1 듣기" },
+  { id: "data-types", label: "자바스크립트 데이터 타입 정리하기" },
+];
+
 const meta = {
   title: "Components/Dropdown",
   component: Dropdown,
@@ -31,7 +34,7 @@ const meta = {
     options: [],
     value: "",
     onChange: () => {},
-    onAddGoal: () => {},
+    onAddOption: () => {},
   },
 } satisfies Meta<typeof Dropdown>;
 
@@ -52,7 +55,7 @@ function DropdownExample({ label }: { label: string }) {
         onChange={(option) => {
           setValue(option.id);
         }}
-        onAddGoal={(value) => {
+        onAddOption={(value) => {
           console.log(value);
         }}
       />
@@ -72,7 +75,7 @@ function DropdownNoList({ label }: { label: string }) {
         onChange={(option) => {
           setValue(option.id);
         }}
-        onAddGoal={(value) => {
+        onAddOption={(value) => {
           console.log(value);
         }}
       />
@@ -92,7 +95,7 @@ function DropdownInvalidValue({ label }: { label: string }) {
         onChange={(option) => {
           setValue(option.id);
         }}
-        onAddGoal={(value) => {
+        onAddOption={(value) => {
           console.log(value);
         }}
       />
@@ -119,7 +122,7 @@ function DropdownOverflow({ label }: { label: string }) {
         onChange={(option) => {
           setValue(option.id);
         }}
-        onAddGoal={(value) => {
+        onAddOption={(value) => {
           console.log(value);
         }}
       />
@@ -147,4 +150,27 @@ export const Default: Story = {
       </div>
     </div>
   ),
+};
+
+function TodoDropdownExample() {
+  const [options, setOptions] = useState(todos);
+  const [value, setValue] = useState("programming-data");
+
+  return (
+    <Dropdown
+      variant="todo"
+      options={options}
+      value={value}
+      onChange={(option) => setValue(option.id)}
+      onAddOption={(label) => {
+        const nextOption = { id: `todo-${Date.now()}`, label };
+        setOptions((currentOptions) => [...currentOptions, nextOption]);
+        setValue(nextOption.id);
+      }}
+    />
+  );
+}
+
+export const Todo: Story = {
+  render: () => <TodoDropdownExample />,
 };

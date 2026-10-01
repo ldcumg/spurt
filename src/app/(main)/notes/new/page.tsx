@@ -13,11 +13,11 @@ export default function NewNotePage() {
   const [statusMessage, setStatusMessage] = useState("");
 
   const handleDraft = () => {
-    setStatusMessage("임시저장 UI를 확인했습니다. 서버 요청은 아직 연결되지 않았습니다.");
+    setStatusMessage("임시저장 UI를 확인");
   };
 
   const handleSubmit = () => {
-    setStatusMessage("등록하기 UI를 확인했습니다. 서버 요청은 아직 연결되지 않았습니다.");
+    setStatusMessage("등록하기 UI를 확인");
   };
 
   return (

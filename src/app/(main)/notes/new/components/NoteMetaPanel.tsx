@@ -1,8 +1,7 @@
 "use client";
 
 import { MOCK_NOTE_CONTEXT } from "../mock";
-import { Calendar, FlagFilled, Link as LinkIcon, Right, Todos, Under } from "@/assets/icons";
-import Button from "@/components/ui/Button";
+import { Calendar, FlagFilled, Link as LinkIcon, Todos, Under } from "@/assets/icons";
 import Dropdown, { type DropDownOption } from "@/components/ui/Dropdown";
 import { useState, type ReactNode } from "react";
 
@@ -31,29 +30,11 @@ function MetaSection({ icon, title, description, children }: MetaSectionProps) {
   );
 }
 
-function TodoConnection() {
-  return (
-    <div className="bg-blue-light rounded-lg p-12">
-      <div className="mb-8 flex items-center gap-8">
-        <Todos className="text-information size-20" />
-        <strong className="text-title-xs">할 일</strong>
-      </div>
-      <Button
-        type="button"
-        variant="ghost"
-        size="wide"
-        className="text-title-xs border-border flex items-center justify-between border bg-white px-12 text-left text-neutral-800 shadow-sm"
-      >
-        <span className="truncate">{MOCK_NOTE_CONTEXT.todo}</span>
-        <Right className="size-16 shrink-0" />
-      </Button>
-    </div>
-  );
-}
-
 export default function NoteMetaPanel() {
   const [goals, setGoals] = useState<DropDownOption[]>([...MOCK_NOTE_CONTEXT.goals]);
   const [selectedGoalId, setSelectedGoalId] = useState<string>(MOCK_NOTE_CONTEXT.selectedGoalId);
+  const [todos, setTodos] = useState<DropDownOption[]>([...MOCK_NOTE_CONTEXT.todos]);
+  const [selectedTodoId, setSelectedTodoId] = useState<string>(MOCK_NOTE_CONTEXT.selectedTodoId);
 
   const handleAddGoal = (label: string) => {
     const trimmedLabel = label.trim();
@@ -62,6 +43,12 @@ export default function NoteMetaPanel() {
     const nextGoal = { id: `goal-${Date.now()}`, label: trimmedLabel };
     setGoals((currentGoals) => [...currentGoals, nextGoal]);
     setSelectedGoalId(nextGoal.id);
+  };
+
+  const handleAddTodo = (label: string) => {
+    const nextTodo = { id: `todo-${Date.now()}`, label };
+    setTodos((currentTodos) => [...currentTodos, nextTodo]);
+    setSelectedTodoId(nextTodo.id);
   };
 
   return (
@@ -84,10 +71,22 @@ export default function NoteMetaPanel() {
               options={goals}
               value={selectedGoalId}
               onChange={(option) => setSelectedGoalId(option.id)}
-              onAddGoal={handleAddGoal}
+              onAddOption={handleAddGoal}
             />
           </div>
-          <TodoConnection />
+          <div className="bg-blue-light rounded-lg p-12">
+            <div className="mb-8 flex items-center gap-8">
+              <Todos className="text-information size-20" />
+              <strong className="text-title-xs">할 일</strong>
+            </div>
+            <Dropdown
+              variant="todo"
+              options={todos}
+              value={selectedTodoId}
+              onChange={(option) => setSelectedTodoId(option.id)}
+              onAddOption={handleAddTodo}
+            />
+          </div>
         </div>
       </MetaSection>
 
