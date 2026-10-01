@@ -1,4 +1,4 @@
-import { TodoItem } from "./typeTodos";
+import { TodoItem } from "./todos.types";
 
 // 1. 목록 조회 (GET /{teamId}/goals) 응답 아이템 (API 명세 준수: todos 없음)
 export type GoalItem = {
