@@ -3,6 +3,7 @@ export const AUTH_API_PATH = {
   login: "/auth/login",
   refresh: "/auth/refresh",
   logout: "/auth/logout",
+  oauth: (provider: string) => `/oauth/${provider}`,
 } as const;
 
 export const GOALS_API_PATH = {
