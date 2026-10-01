@@ -1,9 +1,6 @@
 import { AUTH_API_PATH } from "@/constants";
 import { serverFetcher } from "@/lib/axios/serverFetcher";
-import { UserAuthItem } from "@/types/typeUsers";
-
-type AuthResponse = { accessToken: string; refreshToken: string; user: UserAuthItem };
-type AuthRefreshResponse = { accessToken: string; refreshToken?: string };
+import { AuthRefreshResponse, AuthResponse } from "@/types/api/auth.types";
 
 export const postSignup = (body: { email: string; name: string; password: string }) =>
   serverFetcher<AuthResponse>(AUTH_API_PATH.signup, { method: "POST", data: body });
