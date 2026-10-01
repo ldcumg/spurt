@@ -9,7 +9,7 @@ import {
   PostTodoRequest,
   TodoResponse,
   TodoListResponse,
-} from "@/types/typeTodos";
+} from "@/types/todos.types";
 
 export const getTodoList = (params?: GetTodoListParams) =>
   serverFetcher<TodoListResponse>(TODOS_API_PATH.base, { params });

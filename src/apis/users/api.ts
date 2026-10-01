@@ -1,6 +1,6 @@
 import { USERS_API_PATH } from "@/constants";
 import { serverFetcher } from "@/lib/axios/serverFetcher";
-import { GetCheckNicknameParams, PatchMeRequest, PatchPasswordRequest, UserResponse } from "@/types/typeUsers";
+import { GetCheckNicknameParams, PatchMeRequest, PatchPasswordRequest, UserResponse } from "@/types/users.types";
 
 export const getMe = () => serverFetcher<UserResponse>(USERS_API_PATH.me);
 
