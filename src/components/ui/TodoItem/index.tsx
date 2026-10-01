@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Done, FlagFilled, Link, More, Note, Todo, Upload } from "@/assets/icons/index";
-import { TodoItem as td } from "@/types/typeTodos";
+import { Done, FlagFilled, More, Note, Todo } from "@/assets/icons/index";
+import { TodoItem as td } from "@/types/todos.types";
 
 type TodoType = "default" | "goal";
 

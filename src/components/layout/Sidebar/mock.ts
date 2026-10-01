@@ -1,5 +1,5 @@
-import type { GoalItem } from "@/types/typeGoals";
-import type { UserItem } from "@/types/typeUsers";
+import type { GoalItem } from "@/types/goals.types";
+import type { UserItem } from "@/types/users.types";
 
 export const MOCK_GOALS: GoalItem[] = [
   {
