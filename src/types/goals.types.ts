@@ -23,3 +23,31 @@ export type GoalListResponse = {
 export type GoalWithTodos = GoalItem & {
   todos: TodoItem[];
 };
+
+export type GoalResponse = {
+  id: number;
+  teamId: string;
+  userId: number;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type GoalDetailResponse = {
+  id: number;
+  teamId: string;
+  userId: number;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  todos: GoalTodoItem[];
+};
+
+export type GoalTodoItem = {
+  id: number;
+  title: string;
+  done: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
