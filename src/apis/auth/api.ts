@@ -1,4 +1,4 @@
-import { AUTH_API_PATH } from "./path";
+import { AUTH_API_PATH } from "@/constants";
 import { serverFetcher } from "@/lib/axios/serverFetcher";
 import { UserAuthItem } from "@/types/typeUsers";
 
