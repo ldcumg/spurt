@@ -7,7 +7,7 @@ import {
   GoalListResponse,
   PatchGoalRequest,
   PostGoalRequest,
-} from "@/types/typeGoals";
+} from "@/types/goals.types";
 
 export const getGoalList = (params?: GetGoalListParams) =>
   serverFetcher<GoalListResponse>(GOALS_API_PATH.base, { params });

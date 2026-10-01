@@ -1,4 +1,4 @@
-import { TodoGoalSummary, TodoTag } from "./typeTodos";
+import { TodoGoalSummary, TodoTag } from "./todos.types";
 
 // api request
 
