@@ -1,4 +1,4 @@
-import { API_PATH, BASE_URL } from "@/constants";
+import { AUTH_API_PATH, BASE_URL } from "@/constants";
 import ROUTES from "@/constants/routes";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
@@ -19,12 +19,12 @@ clientFetcher.interceptors.response.use(
     }
 
     // 재요청 불가 처리 (토큰 재발급 요청의 401 + 토큰 재발급 후 다시 보낸 원래 요청의 401)
-    if (original.url?.includes(API_PATH.auth.refresh) || original._retry) {
+    if (original.url?.includes(AUTH_API_PATH.refresh) || original._retry) {
       return Promise.reject(error);
     }
     original._retry = true;
 
-    refreshPromise ??= clientFetcher.post(API_PATH.auth.refresh).finally(() => {
+    refreshPromise ??= clientFetcher.post(AUTH_API_PATH.refresh).finally(() => {
       refreshPromise = null;
     });
 
