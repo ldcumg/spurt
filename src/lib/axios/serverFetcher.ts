@@ -1,6 +1,6 @@
 import { ACCESS_TOKEN } from "@/config/cookie";
-import { BASE_URL, TEAM_ID } from "@/config/env";
 import { HTTP_HEADERS } from "@/config/httpRequestHeaders";
+import { BASE_URL } from "@/constants";
 import axios, { AxiosRequestConfig, isAxiosError } from "axios";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -11,7 +11,7 @@ export async function serverFetcher<T>(path: string, config?: AxiosRequestConfig
 
   try {
     const { data } = await axios<T>({
-      url: `${BASE_URL}/${TEAM_ID}${path}`,
+      url: `${BASE_URL.server}${path}`,
       ...config,
       headers: {
         ...HTTP_HEADERS(accessToken),

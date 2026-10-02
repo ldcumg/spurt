@@ -24,8 +24,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
       className={`${pretendard.className} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <QueryProvider>{children}</QueryProvider>
-        <div id={DISCLOSURE_ROOT_ID}></div>
+        <QueryProvider>
+          {children}
+          <div id={DISCLOSURE_ROOT_ID}></div>
+        </QueryProvider>
       </body>
     </html>
   );

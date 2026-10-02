@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN, AUTH_COOKIE_OPTIONS, REFRESH_TOKEN } from "@/config/cookie";
-import { BASE_URL, TEAM_ID } from "@/config/env";
+import { BACKEND_BASE_URL, TEAM_ID } from "@/config/env";
 import { ACCESS_TOKEN_MAX_AGE, API_PATH, REFRESH_TOKEN_MAX_AGE } from "@/constants";
 import axios, { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { data } = await axios.post(`${BASE_URL}/${TEAM_ID}${API_PATH.auth.refresh}`, { refreshToken });
+    const { data } = await axios.post(`${BACKEND_BASE_URL}/${TEAM_ID}${API_PATH.auth.refresh}`, { refreshToken });
     const { accessToken, refreshToken: newRefreshToken, ...rest } = data;
 
     const response = NextResponse.json(rest);

@@ -249,7 +249,7 @@ importers:
         specifier: ^17.5.0
         version: 17.5.0
       msw:
-        specifier: 2.15.0
+        specifier: ^2.15.0
         version: 2.15.0(@types/node@26.5.0)(typescript@6.0.3)
       playwright:
         specifier: latest

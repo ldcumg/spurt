@@ -1,3 +1,10 @@
+import { BACKEND_BASE_URL, TEAM_ID } from "@/config/env";
+
+export const BASE_URL = {
+  browser: "/api",
+  server: `${BACKEND_BASE_URL}/${TEAM_ID}`,
+} as const;
+
 export const API_PATH = {
   auth: {
     signup: "/auth/signup",
