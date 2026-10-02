@@ -1,9 +1,9 @@
 "use client";
 
-import CalendarBody from "@/components/calendarTemp/CalendarBody";
-import CalendarHeader from "@/components/calendarTemp/CalendarHeader";
-import DayHeader from "@/components/calendarTemp/DayHeader";
-import type { CalendarWeeks } from "@/components/calendarTemp/types";
+import CalendarBody from "@/components/calendar/CalendarBody";
+import CalendarHeader from "@/components/calendar/CalendarHeader";
+import DayHeader from "@/components/calendar/DayHeader";
+import type { CalendarWeeks } from "@/components/calendar/types";
 import { useCalendarWheel } from "@/hooks/calendar/useCalendarWheel";
 import { getCalendarWeeks } from "@/utils/calendar";
 import { useState } from "react";

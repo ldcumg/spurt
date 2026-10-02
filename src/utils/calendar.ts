@@ -1,5 +1,5 @@
-import { LAST_WEEK_INDEX } from "@/components/calendarTemp/constants";
-import type { CalendarWeeks, Week } from "@/components/calendarTemp/types";
+import { LAST_WEEK_INDEX } from "@/components/calendar/constants";
+import type { CalendarWeeks, Week } from "@/components/calendar/types";
 
 /** year, month을 통해 해당 월의 일들을 반환하는 유틸 */
 export function getMonthDates(year: number, month: number): (number | null)[] {
