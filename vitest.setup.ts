@@ -1,9 +1,9 @@
-import { vitestMockServer } from "@/mocks";
+import { mockServer } from "@/mocks";
 import "@testing-library/jest-dom/vitest";
 import { afterAll, afterEach, beforeAll } from "vitest";
 
-beforeAll(() => vitestMockServer.listen());
+beforeAll(() => mockServer.listen());
 
-afterEach(() => vitestMockServer.resetHandlers());
+afterEach(() => mockServer.resetHandlers());
 
-afterAll(() => vitestMockServer.close());
+afterAll(() => mockServer.close());

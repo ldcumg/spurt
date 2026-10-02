@@ -1,4 +1,4 @@
-import type { CalendarWeeks } from "@/components/calendar/types";
+import type { CalendarWeeks } from "@/components/calendarTemp/types";
 import { nextWeek, previousWeek } from "@/utils/calendar";
 import { useEffect, useRef } from "react";
 
