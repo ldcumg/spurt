@@ -4,12 +4,12 @@ import Button from "../Button";
 import Badge from "../Badge";
 import ProgressBar from "../ProgressBar";
 import TodoListItem from "./Todos";
-import { TodoItem } from "@/types/todos.types";
-import { GoalItem } from "@/types/goals.types";
+import { TodoResponse } from "@/types/todos.types";
+import { GoalListItem } from "@/types/goals.types";
 
 interface GoalCardProps {
-  goal: GoalItem;
-  todos?: TodoItem[];
+  goal: GoalListItem;
+  todos?: TodoResponse[];
 }
 
 export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
