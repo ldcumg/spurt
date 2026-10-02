@@ -1,14 +1,13 @@
+import { postLogin } from "@/apis/auth/api";
 import { ACCESS_TOKEN, AUTH_COOKIE_OPTIONS, REFRESH_TOKEN } from "@/config/cookie";
-import { BASE_URL, TEAM_ID } from "@/config/env";
-import { ACCESS_TOKEN_MAX_AGE, API_PATH, REFRESH_TOKEN_MAX_AGE } from "@/constants";
-import axios, { isAxiosError } from "axios";
+import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE } from "@/constants";
+import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
-    const { data } = await axios.post(`${BASE_URL}/${TEAM_ID}${API_PATH.auth.login}`, { email, password });
-    const { accessToken, refreshToken, user } = data;
+    const { accessToken, refreshToken, user } = await postLogin({ email, password });
 
     const response = NextResponse.json({ user });
 

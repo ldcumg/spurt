@@ -1,7 +1,7 @@
-import type { GoalItem } from "@/types/typeGoals";
-import type { UserItem } from "@/types/typeUsers";
+import type { GoalListItem } from "@/types/goals.types";
+import type { UserResponse } from "@/types/users.types";
 
-export const MOCK_GOALS: GoalItem[] = [
+export const MOCK_GOALS: GoalListItem[] = [
   {
     id: 1,
     teamId: "team-abc",
@@ -44,7 +44,7 @@ export const MOCK_GOALS: GoalItem[] = [
   },
 ];
 
-export const MOCK_USER: UserItem = {
+export const MOCK_USER: UserResponse = {
   id: 1,
   teamId: "team-abc",
   email: "cheddacheese@spurt.com",
