@@ -1,4 +1,4 @@
-import { MOCK_USER } from "./mock";
+import { MOCK_USER } from "../../../mocks/sidebar.mock";
 
 export default function ProfileSection() {
   return (
