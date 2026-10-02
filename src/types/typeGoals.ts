@@ -14,9 +14,13 @@ export type GoalItem = {
 
 // 2. 상세 조회 (GET /{teamId}/goals/{goalId}) 응답 (todos 포함)
 export type GoalListResponse = {
-  goals: GoalItem[];
-  nextCursor: number | null;
-  totalCount: number;
+  id: number;
+  teamId: string;
+  userId: number;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  todos: TodoItem[];
 };
 
 // 3. 컴포넌트 편의상 둘을 합친 형태가 필요할 때 쓰는 확장 타입
