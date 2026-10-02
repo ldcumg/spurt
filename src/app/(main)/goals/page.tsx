@@ -1,19 +1,50 @@
 "use client";
+
+import { GOALS_API_PATH } from "@/constants";
+import { clientFetcher } from "@/lib/axios/clientFetcher";
+import { GetGoalListParams, GoalListResponse } from "@/types/goals.types";
 import { FlagFilled, More, Plus, Right } from "@/assets/icons/index";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import ProgressRing from "@/components/ui/ProgressRing";
-import { Todos, MockGoalList } from "@/components/ui/GoalCard/mock";
+import { Todos } from "@/components/ui/GoalCard/mock";
 import TodoItem from "@/components/ui/TodoItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GoalListItem } from "@/types/goals.types";
 import calcPercentage from "@/utils/calcPercentage";
+//import { getGoalList } from "@/apis/goals/api";
 
 export default function GoalPage() {
-  const thisGoal: GoalListItem = MockGoalList.goals[0];
-
+  const [thisGoal, setThisGoal] = useState<GoalListItem | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   // 할 일 목록을 부모 state로 관리
   const [todoList, setTodoList] = useState(Todos.todos);
+  useEffect(() => {
+    async function fetchGoalList() {
+      try {
+        setIsLoading(true);
+        const params: GetGoalListParams = { limit: 10 };
+        const { data } = await clientFetcher.get<GoalListResponse>(GOALS_API_PATH.base, { params });
+        if (data.goals && data.goals.length > 0) setThisGoal(data.goals[0]);
+      } catch (error) {
+        console.error("목표 목록 API호출 실패", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchGoalList();
+  }, []);
+
+  // 데이터 로딩 중 처리 (화면 깨짐 방지)
+  if (isLoading) {
+    return <div className="p-24">목표를 불러오는 중입니다...</div>;
+  }
+  // 목표가 아예 없을 때의 빈 상태 처리
+  if (!thisGoal) {
+    return <div className="p-24">등록된 목표가 없습니다.</div>;
+  }
+
   const handleToggleTodo = (id: number) => {
     setTodoList((prevList) => prevList.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
   };
