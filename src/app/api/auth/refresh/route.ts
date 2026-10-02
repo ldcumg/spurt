@@ -1,7 +1,7 @@
+import { postRefresh } from "@/apis/auth/api";
 import { ACCESS_TOKEN, AUTH_COOKIE_OPTIONS, REFRESH_TOKEN } from "@/config/cookie";
-import { BASE_URL, TEAM_ID } from "@/config/env";
-import { ACCESS_TOKEN_MAX_AGE, API_PATH, REFRESH_TOKEN_MAX_AGE } from "@/constants";
-import axios, { isAxiosError } from "axios";
+import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE } from "@/constants";
+import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -11,10 +11,9 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { data } = await axios.post(`${BASE_URL}/${TEAM_ID}${API_PATH.auth.refresh}`, { refreshToken });
-    const { accessToken, refreshToken: newRefreshToken, ...rest } = data;
+    const { accessToken, refreshToken: newRefreshToken } = await postRefresh({ refreshToken });
 
-    const response = NextResponse.json(rest);
+    const response = NextResponse.json({ message: "토큰이 재발급되었습니다." });
 
     response.cookies.set(ACCESS_TOKEN, accessToken, {
       ...AUTH_COOKIE_OPTIONS,
