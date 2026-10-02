@@ -12,6 +12,7 @@ import TodoItem from "@/components/ui/TodoItem";
 import { useEffect, useState } from "react";
 import { GoalListItem } from "@/types/goals.types";
 import calcPercentage from "@/utils/calcPercentage";
+import { useUserQuery } from "@/hooks/queries/useUserQuery";
 //import { getGoalList } from "@/apis/goals/api";
 
 export default function GoalPage() {
@@ -19,6 +20,9 @@ export default function GoalPage() {
   const [isLoading, setIsLoading] = useState(true);
   // 할 일 목록을 부모 state로 관리
   const [todoList, setTodoList] = useState(Todos.todos);
+
+  const { data: user } = useUserQuery();
+
   useEffect(() => {
     async function fetchGoalList() {
       try {
@@ -58,7 +62,7 @@ export default function GoalPage() {
   return (
     <div className="bg-primary-50 flex h-screen flex-col gap-20 p-24 pt-32">
       <header>
-        <p className="text-display">체다치즈님의 목표</p>
+        <p className="text-display">{user?.name}님의 목표</p>
       </header>
       <section>
         <div className="grid h-auto grid-cols-2 gap-12 lg:flex lg:flex-row">
