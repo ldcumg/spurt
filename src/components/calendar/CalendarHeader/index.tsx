@@ -31,7 +31,9 @@ export default function CalendarHeader({
 
       <span className="absolute left-1/2 flex -translate-x-1/2 flex-row gap-8">
         {/* 이전 달로 이동 */}
-        <button onClick={() => setCalendarWeeks((prev) => moveMonth(prev, false))}>
+        <button
+          onClick={() => setCalendarWeeks((prev) => moveMonth(prev, false))}
+        >
           <Left className="size-20 text-neutral-400" />
         </button>
 
@@ -45,15 +47,31 @@ export default function CalendarHeader({
         </Button>
 
         {/* 다음 달로 이동 */}
-        <button onClick={() => setCalendarWeeks((prev) => moveMonth(prev, true))}>
+        <button
+          onClick={() => setCalendarWeeks((prev) => moveMonth(prev, true))}
+        >
           <Right className="size-20 text-neutral-400" />
         </button>
       </span>
 
       {/* 뷰 전환 */}
       <button onClick={() => setIsMonthView((prev) => !prev)}>
-        <span className={clsx("rounded-2xl px-6", isMonthView && "bg-primary-500 text-white")}>월간</span>
-        <span className={clsx("rounded-2xl px-6", isMonthView || "bg-primary-500 text-white")}>주간</span>
+        <span
+          className={clsx(
+            "rounded-2xl px-6",
+            isMonthView && "bg-primary-500 text-white",
+          )}
+        >
+          월간
+        </span>
+        <span
+          className={clsx(
+            "rounded-2xl px-6",
+            isMonthView || "bg-primary-500 text-white",
+          )}
+        >
+          주간
+        </span>
       </button>
     </div>
   );
