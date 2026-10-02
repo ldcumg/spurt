@@ -284,11 +284,11 @@ export const Todos = {
       isFavorite: false,
     },
     {
-      id: 105,
+      id: 108,
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
-      title: "팀 스크럼 회의록 정리 및 공유",
+      title: "팀 스크럼 회의록 정리 및 공유 (2)",
       done: true,
       fileUrl: null,
       linkUrl: null,
@@ -303,7 +303,7 @@ export const Todos = {
 
     // 9월 15일 완료 - 1개
     {
-      id: 106,
+      id: 109,
       teamId: "team-abc",
       userId: 1,
       goalId: 4,
@@ -322,7 +322,7 @@ export const Todos = {
 
     // 9월 14일 완료 - 3개
     {
-      id: 107,
+      id: 110,
       teamId: "team-abc",
       userId: 3,
       goalId: 3,
@@ -339,7 +339,7 @@ export const Todos = {
       isFavorite: false,
     },
     {
-      id: 108,
+      id: 111,
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
@@ -356,7 +356,7 @@ export const Todos = {
       isFavorite: false,
     },
     {
-      id: 109,
+      id: 112,
       teamId: "team-abc",
       userId: 2,
       goalId: 3,
@@ -375,7 +375,7 @@ export const Todos = {
 
     // 9월 13일 완료 - 1개
     {
-      id: 110,
+      id: 113,
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
@@ -394,7 +394,7 @@ export const Todos = {
 
     // 9월 12일 완료 - 2개
     {
-      id: 111,
+      id: 114,
       teamId: "team-abc",
       userId: 1,
       goalId: 4,
@@ -411,7 +411,7 @@ export const Todos = {
       isFavorite: true,
     },
     {
-      id: 112,
+      id: 115,
       teamId: "team-abc",
       userId: 3,
       goalId: 3,
@@ -430,7 +430,7 @@ export const Todos = {
 
     // 9월 11일 완료 - 1개
     {
-      id: 113,
+      id: 116,
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
@@ -449,7 +449,7 @@ export const Todos = {
 
     // 미완료 항목 (done: false - 카운트 제외 대상)
     {
-      id: 114,
+      id: 117,
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
@@ -466,7 +466,7 @@ export const Todos = {
       isFavorite: true,
     },
     {
-      id: 115,
+      id: 118,
       teamId: "team-abc",
       userId: 2,
       goalId: 3,
@@ -483,6 +483,6 @@ export const Todos = {
       isFavorite: false,
     },
   ],
-  nextCursor: 116,
+  nextCursor: 119,
   totalCount: 30,
 };
