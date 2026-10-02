@@ -15,24 +15,24 @@ export const AUTH_API_PATH = {
 
 export const GOALS_API_PATH = {
   base: "/goals",
-  detail: (goalId: number) => `/goals/${goalId}`,
+  detail: (goalId: string | number) => `/goals/${goalId}`,
 } as const;
 
 export const TODOS_API_PATH = {
   base: "/todos",
   favorites: "/todos/favorites",
-  detail: (todoId: number) => `/todos/${todoId}`,
-  favorite: (todoId: number) => `/todos/${todoId}/favorites`,
+  detail: (todoId: string | number) => `/todos/${todoId}`,
+  favorite: (todoId: string | number) => `/todos/${todoId}/favorites`,
 } as const;
 
 export const NOTES_API_PATH = {
   base: "/notes",
-  detail: (noteId: number) => `/notes/${noteId}`,
+  detail: (noteId: string | number) => `/notes/${noteId}`,
 } as const;
 
 export const NOTIFICATIONS_API_PATH = {
   base: "/notifications",
-  detail: (notificationId: number) => `/notifications/${notificationId}`,
+  detail: (notificationId: string | number) => `/notifications/${notificationId}`,
 } as const;
 
 export const USERS_API_PATH = {

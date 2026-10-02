@@ -18,7 +18,7 @@ export const todoHandlers = [
 
     return HttpResponse.json(body, { status: 201 });
   }),
-  // http.delete(buildBackendApiUrl(`${TODOS_API_PATH.base}/:id`), ({ params }) => {
+  // http.delete(buildBackendApiUrl(TODOS_API_PATH.detail("/:id")), ({ params }) => {
   //   const id = Number(params.id);
 
   //   const index = todoMock.todos.findIndex((todo) => todo.id === id);
