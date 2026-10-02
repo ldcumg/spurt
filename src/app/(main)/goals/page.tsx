@@ -2,7 +2,7 @@ import { FlagFilled, More, Plus, Right } from "@/assets/icons/index";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import ProgressRing from "@/components/ui/ProgressRing";
-import { Todos } from "@/components/ui/GoalCard/mock";
+import { Todos, MockGoalDetail } from "@/components/ui/GoalCard/mock";
 import TodoItem from "@/components/ui/TodoItem";
 
 export default function GoalPage() {
@@ -18,7 +18,7 @@ export default function GoalPage() {
               <div className="bg-primary-100 flex size-64 shrink-0 items-center justify-center rounded-full">
                 <FlagFilled className="text-primary-600 size-32" />
               </div>
-              <p className="text-title-md">자바스크립트로 웹 서비스 만들기</p>
+              <p className="text-title-md">{MockGoalDetail.title}</p>
             </div>
             <More className="size-32" />
           </div>
@@ -59,10 +59,9 @@ export default function GoalPage() {
             </Button>
           </div>
           <div>
-            {Todos.todos ? (
-              [...Todos.todos]
-                .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
-                .slice(0, 3)
+            {MockGoalDetail.todos.length > 0 ? (
+              [...MockGoalDetail.todos]
+                .filter((item) => !item.done)
                 .map((item) => (
                   <TodoItem
                     key={item.id}
