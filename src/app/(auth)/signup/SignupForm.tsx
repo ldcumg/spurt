@@ -6,7 +6,7 @@ import { EMAIL_PATTERN } from "@/constants/regex";
 import ROUTES from "@/constants/routes";
 import { useSignupMutation } from "@/hooks/mutations/useSignupMutation";
 import { isAxiosError } from "axios";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type SignupValues = {
