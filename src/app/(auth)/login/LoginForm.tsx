@@ -7,13 +7,12 @@ import { useLoginMutation } from "@/hooks/mutations/useLoginMutation";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { EMAIL_PATTERN } from "@/constants/regex";
 
 type LoginErrors = {
   email?: string;
   password?: string;
 };
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const validate = (email: string, password: string) => {
   const errors: LoginErrors = {};
