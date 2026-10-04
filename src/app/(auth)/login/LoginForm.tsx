@@ -2,11 +2,8 @@
 
 import Button from "@/components/ui/Button";
 import TextInput from "@/components/ui/TextInput";
-import { AUTH_API_PATH } from "@/constants";
 import ROUTES from "@/constants/routes";
-import { clientFetcher } from "@/lib/axios/clientFetcher";
-import { PostLoginRequest } from "@/types/auth.types";
-import { useMutation } from "@tanstack/react-query";
+import { useLoginMutation } from "@/hooks/mutations/useLoginMutation";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -43,14 +40,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<LoginErrors>({});
 
-  const {
-    mutate: login,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: (body: PostLoginRequest) => clientFetcher.post(AUTH_API_PATH.login, body),
-    onSuccess: () => router.replace(ROUTES.dashboard),
-  });
+  const { mutate: login, isPending, error } = useLoginMutation();
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,7 +48,7 @@ export default function LoginForm() {
     const nextErrors = validate(email, password);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
-    login({ email, password });
+    login({ email, password }, { onSuccess: () => router.replace(ROUTES.dashboard) });
   };
 
   return (
