@@ -5,6 +5,7 @@ import TextInput from "@/components/ui/TextInput";
 import { EMAIL_PATTERN } from "@/constants/regex";
 import ROUTES from "@/constants/routes";
 import { useSignupMutation } from "@/hooks/mutations/useSignupMutation";
+import { isAxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -43,6 +44,8 @@ const validate = ({ name, email, password, passwordConfirm }: SignupValues) => {
   return errors;
 };
 
+const isEmailDuplicated = (error: Error) => isAxiosError(error) && error.response?.status === 409;
+
 export default function SignupForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -51,7 +54,7 @@ export default function SignupForm() {
   const [errors, setErrors] = useState<SignupErrors>({});
 
   const router = useRouter();
-  const { mutate: signup, isPending } = useSignupMutation();
+  const { mutate: signup, isPending, error } = useSignupMutation();
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,7 +63,15 @@ export default function SignupForm() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    signup({ email, name, password }, { onSuccess: () => router.replace(ROUTES.dashboard) });
+    signup(
+      { email, name, password },
+      {
+        onSuccess: () => router.replace(ROUTES.dashboard),
+        onError: (err) => {
+          if (isEmailDuplicated(err)) setErrors({ email: "이미 사용중인 이메일입니다." });
+        },
+      },
+    );
   };
 
   return (
@@ -103,6 +114,9 @@ export default function SignupForm() {
         onChange={(e) => setPasswordConfirm(e.target.value)}
         error={errors.passwordConfirm}
       />
+      <p className="text-body-md text-error">
+        {error && !isEmailDuplicated(error) && "회원가입 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."}
+      </p>
       <Button
         type="submit"
         size="lg"
