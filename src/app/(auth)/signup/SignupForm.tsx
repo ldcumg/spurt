@@ -2,8 +2,14 @@
 
 import Button from "@/components/ui/Button";
 import TextInput from "@/components/ui/TextInput";
-import { EMAIL_PATTERN } from "@/constants/regex";
 import ROUTES from "@/constants/routes";
+import {
+  EMAIL_PATTERN,
+  NAME_MAX_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  VALIDATION_MESSAGES,
+} from "@/constants/validation";
 import { useSignupMutation } from "@/hooks/mutations/useSignupMutation";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -23,23 +29,18 @@ type SignupErrors = {
   passwordConfirm?: string;
 };
 
-const NAME_MAX_LENGTH = 20;
-const PASSWORD_MIN_LENGTH = 8;
-const PASSWORD_MAX_LENGTH = 72;
-
 const validate = ({ name, email, password, passwordConfirm }: SignupValues) => {
   const errors: SignupErrors = {};
 
-  if (!name) errors.name = "닉네임을 입력해주세요.";
+  if (!name) errors.name = VALIDATION_MESSAGES.nameRequired;
 
-  if (!email) errors.email = "이메일을 입력해주세요.";
-  else if (!EMAIL_PATTERN.test(email)) errors.email = "이메일 형식이 올바르지 않습니다.";
+  if (!email) errors.email = VALIDATION_MESSAGES.emailRequired;
+  else if (!EMAIL_PATTERN.test(email)) errors.email = VALIDATION_MESSAGES.emailInvalid;
 
-  if (!password) errors.password = "비밀번호를 입력해주세요.";
-  else if (password.length < PASSWORD_MIN_LENGTH)
-    errors.password = `비밀번호는 ${PASSWORD_MIN_LENGTH}자 이상이어야 합니다.`;
+  if (!password) errors.password = VALIDATION_MESSAGES.passwordRequired;
+  else if (password.length < PASSWORD_MIN_LENGTH) errors.password = VALIDATION_MESSAGES.passwordTooShort;
 
-  if (passwordConfirm !== password) errors.passwordConfirm = "비밀번호가 일치하지 않습니다.";
+  if (passwordConfirm !== password) errors.passwordConfirm = VALIDATION_MESSAGES.passwordMismatch;
 
   return errors;
 };

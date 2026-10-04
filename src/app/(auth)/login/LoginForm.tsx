@@ -2,8 +2,8 @@
 
 import Button from "@/components/ui/Button";
 import TextInput from "@/components/ui/TextInput";
-import { EMAIL_PATTERN } from "@/constants/regex";
 import ROUTES from "@/constants/routes";
+import { EMAIL_PATTERN, VALIDATION_MESSAGES } from "@/constants/validation";
 import { useLoginMutation } from "@/hooks/mutations/useLoginMutation";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -17,10 +17,10 @@ type LoginErrors = {
 const validate = (email: string, password: string) => {
   const errors: LoginErrors = {};
 
-  if (!email) errors.email = "이메일을 입력해주세요.";
-  else if (!EMAIL_PATTERN.test(email)) errors.email = "이메일 형식이 올바르지 않습니다.";
+  if (!email) errors.email = VALIDATION_MESSAGES.emailRequired;
+  else if (!EMAIL_PATTERN.test(email)) errors.email = VALIDATION_MESSAGES.emailInvalid;
 
-  if (!password) errors.password = "비밀번호를 입력해주세요.";
+  if (!password) errors.password = VALIDATION_MESSAGES.passwordRequired;
 
   return errors;
 };
