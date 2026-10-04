@@ -1,4 +1,4 @@
-import { AUTH_API_PATH } from "@/constants";
+import { AUTH_API_PATH } from "@/constants/apiEndpoints";
 import { serverFetcher } from "@/lib/axios/serverFetcher";
 import {
   AuthResponse,

@@ -1,8 +1,9 @@
 import { todoQueryOptions } from ".";
-import { useQuery, type QueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 /** 전체 todo 요청 쿼리 */
-export const useAllTodoQuery = (queryClient: QueryClient) => {
+export const useAllTodoQuery = () => {
+  const queryClient = useQueryClient();
   return useQuery(todoQueryOptions.all(queryClient));
 };
 

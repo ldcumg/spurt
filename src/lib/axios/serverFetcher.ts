@@ -1,6 +1,6 @@
 import { ACCESS_TOKEN } from "@/config/cookie";
 import { HTTP_HEADERS } from "@/config/httpRequestHeaders";
-import { BASE_URL } from "@/constants";
+import { BASE_URL } from "@/constants/apiEndpoints";
 import axios, { AxiosRequestConfig, isAxiosError } from "axios";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

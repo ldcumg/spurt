@@ -15,9 +15,7 @@ export function MockProvider({ children }: MockProviderProps) {
       return;
     }
 
-    import("@/mocks/browser")
-      .then(({ mockWorker }) => mockWorker.start())
-      .then(() => setIsReady(true));
+    import("@/mocks/browser").then(({ mockWorker }) => mockWorker.start()).then(() => setIsReady(true));
   }, []);
 
   if (!isReady) {

@@ -5,6 +5,7 @@ import CalendarHeader from "@/components/calendar/CalendarHeader";
 import DayHeader from "@/components/calendar/DayHeader";
 import type { CalendarWeeks } from "@/components/calendar/types";
 import { useCalendarWheel } from "@/hooks/calendar/useCalendarWheel";
+import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
 import { getCalendarWeeks } from "@/utils/calendar";
 import { useState } from "react";
 
@@ -17,6 +18,11 @@ export default function CalendarPage() {
   const [isMonthView, setIsMonthView] = useState<boolean>(true);
   const containerRef = useCalendarWheel(setCalendarWeeks);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  const { data: { todos } = {}, isPending, isError, error } = useAllTodoQuery();
+  if (isPending) <div>Loading...</div>;
+  if (isError) <div>Error: {error.message}</div>;
+  console.log("[ ㏒ ] todos =>", todos);
 
   return (
     <div

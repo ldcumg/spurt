@@ -1,7 +1,7 @@
 import { BACKEND_BASE_URL, TEAM_ID } from "@/config/env";
 
 export const BASE_URL = {
-  browser: "/api",
+  client: "/api",
   server: `${BACKEND_BASE_URL}/${TEAM_ID}`,
 } as const;
 
