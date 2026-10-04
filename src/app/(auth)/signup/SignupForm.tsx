@@ -100,6 +100,7 @@ export default function SignupForm() {
         onChange={(e) => setName(e.target.value)}
         onBlur={() => handleBlur("name")}
         error={errors.name}
+        placeholder="닉네임을 입력해주세요"
       />
       <TextInput
         label="이메일"
@@ -110,6 +111,7 @@ export default function SignupForm() {
         onChange={(e) => setEmail(e.target.value)}
         onBlur={() => handleBlur("email")}
         error={errors.email}
+        placeholder="이메일을 입력해주세요"
       />
       <TextInput
         label="비밀번호"
@@ -121,6 +123,7 @@ export default function SignupForm() {
         onChange={(e) => setPassword(e.target.value)}
         onBlur={() => handleBlur("password")}
         error={errors.password}
+        placeholder="비밀번호를 입력해주세요"
       />
       <TextInput
         label="비밀번호 확인"
@@ -132,13 +135,15 @@ export default function SignupForm() {
         onChange={(e) => setPasswordConfirm(e.target.value)}
         onBlur={() => handleBlur("passwordConfirm")}
         error={errors.passwordConfirm}
+        placeholder="비밀번호를 한번 더 입력해주세요"
       />
       <p className="text-body-md text-error">
         {error && !isEmailDuplicated(error) && "회원가입 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."}
       </p>
       <Button
         type="submit"
-        size="lg"
+        size="wide"
+        className="text-title-xs"
         disabled={isPending}
       >
         회원가입

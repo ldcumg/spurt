@@ -57,7 +57,7 @@ export default function LoginForm() {
       if (firstErrorInput instanceof HTMLInputElement) firstErrorInput.focus();
       return;
     }
-    
+
     login({ email, password }, { onSuccess: () => router.replace(ROUTES.dashboard) });
   };
 
@@ -76,6 +76,7 @@ export default function LoginForm() {
         error={errors.email}
         type="email"
         autoComplete="username"
+        placeholder="이메일을 입력해주세요"
       />
       <TextInput
         label="비밀번호"
@@ -86,11 +87,13 @@ export default function LoginForm() {
         error={errors.password}
         type="password"
         autoComplete="current-password"
+        placeholder="비밀번호를 입력해주세요"
       />
       <p className="text-body-md text-error">{error && getLoginErrorMessage(error)}</p>
       <Button
         type="submit"
-        size="lg"
+        size="wide"
+        className="text-title-xs"
         disabled={isPending}
       >
         로그인
