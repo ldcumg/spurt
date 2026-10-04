@@ -67,7 +67,12 @@ export default function SignupForm() {
 
     const nextErrors = validate({ name, email, password, passwordConfirm });
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
+    const [firstErrorField] = Object.keys(nextErrors);
+    if (firstErrorField) {
+      const firstErrorInput = e.currentTarget.elements.namedItem(firstErrorField);
+      if (firstErrorInput instanceof HTMLInputElement) firstErrorInput.focus();
+      return;
+    }
 
     signup(
       { email, name, password },
@@ -88,6 +93,7 @@ export default function SignupForm() {
     >
       <TextInput
         label="닉네임"
+        name="name"
         autoComplete="nickname"
         maxLength={NAME_MAX_LENGTH}
         value={name}
@@ -97,6 +103,7 @@ export default function SignupForm() {
       />
       <TextInput
         label="이메일"
+        name="email"
         type="email"
         autoComplete="username"
         value={email}
@@ -106,6 +113,7 @@ export default function SignupForm() {
       />
       <TextInput
         label="비밀번호"
+        name="password"
         type="password"
         autoComplete="new-password"
         maxLength={PASSWORD_MAX_LENGTH}
@@ -116,6 +124,7 @@ export default function SignupForm() {
       />
       <TextInput
         label="비밀번호 확인"
+        name="passwordConfirm"
         type="password"
         autoComplete="new-password"
         maxLength={PASSWORD_MAX_LENGTH}

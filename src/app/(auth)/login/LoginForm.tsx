@@ -51,7 +51,13 @@ export default function LoginForm() {
 
     const nextErrors = validate(email, password);
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
+    const [firstErrorField] = Object.keys(nextErrors);
+    if (firstErrorField) {
+      const firstErrorInput = e.currentTarget.elements.namedItem(firstErrorField);
+      if (firstErrorInput instanceof HTMLInputElement) firstErrorInput.focus();
+      return;
+    }
+    
     login({ email, password }, { onSuccess: () => router.replace(ROUTES.dashboard) });
   };
 
@@ -63,6 +69,7 @@ export default function LoginForm() {
     >
       <TextInput
         label="이메일"
+        name="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         onBlur={() => handleBlur("email")}
@@ -72,6 +79,7 @@ export default function LoginForm() {
       />
       <TextInput
         label="비밀번호"
+        name="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         onBlur={() => handleBlur("password")}
