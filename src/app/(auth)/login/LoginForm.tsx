@@ -2,12 +2,12 @@
 
 import Button from "@/components/ui/Button";
 import TextInput from "@/components/ui/TextInput";
+import { EMAIL_PATTERN } from "@/constants/regex";
 import ROUTES from "@/constants/routes";
 import { useLoginMutation } from "@/hooks/mutations/useLoginMutation";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { EMAIL_PATTERN } from "@/constants/regex";
 
 type LoginErrors = {
   email?: string;
@@ -41,6 +41,11 @@ export default function LoginForm() {
 
   const { mutate: login, isPending, error } = useLoginMutation();
 
+  const handleBlur = (field: keyof LoginErrors) => {
+    const fieldError = validate(email, password)[field];
+    setErrors((prev) => ({ ...prev, [field]: fieldError }));
+  };
+
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -60,6 +65,7 @@ export default function LoginForm() {
         label="이메일"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        onBlur={() => handleBlur("email")}
         error={errors.email}
         type="email"
         autoComplete="username"
@@ -68,6 +74,7 @@ export default function LoginForm() {
         label="비밀번호"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        onBlur={() => handleBlur("password")}
         error={errors.password}
         type="password"
         autoComplete="current-password"

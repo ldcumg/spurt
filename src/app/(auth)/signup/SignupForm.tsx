@@ -56,6 +56,11 @@ export default function SignupForm() {
   const router = useRouter();
   const { mutate: signup, isPending, error } = useSignupMutation();
 
+  const handleBlur = (field: keyof SignupErrors) => {
+    const fieldError = validate({ name, email, password, passwordConfirm })[field];
+    setErrors((prev) => ({ ...prev, [field]: fieldError }));
+  };
+
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -86,6 +91,7 @@ export default function SignupForm() {
         maxLength={NAME_MAX_LENGTH}
         value={name}
         onChange={(e) => setName(e.target.value)}
+        onBlur={() => handleBlur("name")}
         error={errors.name}
       />
       <TextInput
@@ -94,6 +100,7 @@ export default function SignupForm() {
         autoComplete="username"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        onBlur={() => handleBlur("email")}
         error={errors.email}
       />
       <TextInput
@@ -103,6 +110,7 @@ export default function SignupForm() {
         maxLength={PASSWORD_MAX_LENGTH}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        onBlur={() => handleBlur("password")}
         error={errors.password}
       />
       <TextInput
@@ -112,6 +120,7 @@ export default function SignupForm() {
         maxLength={PASSWORD_MAX_LENGTH}
         value={passwordConfirm}
         onChange={(e) => setPasswordConfirm(e.target.value)}
+        onBlur={() => handleBlur("passwordConfirm")}
         error={errors.passwordConfirm}
       />
       <p className="text-body-md text-error">
