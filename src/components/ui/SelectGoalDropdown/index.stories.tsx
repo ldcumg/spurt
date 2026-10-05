@@ -57,6 +57,7 @@ function AddTodoDropdownExample() {
   return (
     <SelectGoalDropdown
       error=""
+      setError={() => {}}
       label="드롭다운"
       goalOptions={goals}
       selectedGoal={selectedOption}
@@ -72,6 +73,7 @@ function AddTodoDropdownNoList() {
   return (
     <SelectGoalDropdown
       error=""
+      setError={() => {}}
       label="빈 리스트"
       goalOptions={[]}
       selectedGoal={selectedOption}
@@ -87,6 +89,7 @@ function AddTodoDropdownNoSelect() {
   return (
     <SelectGoalDropdown
       error={selectedOption ? "" : "목표를 선택해 주세요"}
+      setError={() => {}}
       label="목표 미선택"
       goalOptions={goals}
       selectedGoal={selectedOption}
@@ -119,6 +122,7 @@ function AddTodoDropdownOverflow() {
   return (
     <SelectGoalDropdown
       error=""
+      setError={() => {}}
       label="텍스트 오버플로우"
       goalOptions={goalsWithOverflow}
       selectedGoal={selectedOption}
@@ -134,6 +138,7 @@ export const Default: Story = {
     selectedGoal: null,
     setSelectedGoal: () => {},
     error: "",
+    setError: () => {},
   },
 
   render: () => (
