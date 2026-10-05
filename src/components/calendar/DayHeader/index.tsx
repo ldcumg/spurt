@@ -1,9 +1,14 @@
 import { WEEKDAYS } from "../constants";
+import { twMerge } from "@/lib/twMerge";
 import clsx from "clsx";
 
-export default function DayHeader() {
+interface DayHeaderProps {
+  className?: string;
+}
+
+export default function DayHeader({ className }: DayHeaderProps) {
   return (
-    <div className="flex border">
+    <div className={twMerge("flex", className)}>
       {WEEKDAYS.map((day) => (
         <span
           className={clsx(

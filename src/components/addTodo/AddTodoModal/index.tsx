@@ -1,6 +1,7 @@
 "use client";
 
 import UploadInput from "../../ui/UploadInput";
+import DateInput from "../DateInput";
 import type { AddTodoErrorMassage } from "../types";
 import Modal from "@/components/ui/Modal";
 import ModalActions from "@/components/ui/Modal/ModalActions";
@@ -15,13 +16,14 @@ import { useState, useRef } from "react";
 interface AddTodoModalProps {
   isOpen: boolean;
   onClose: () => void;
+  aleadySelectedDate?: Date;
 }
 
-/** 할 일 정보를 입력하고 제출하는 모달을 렌더링합니다. */
-export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
+export default function AddTodoModal({ isOpen, onClose, aleadySelectedDate }: AddTodoModalProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [selectedGoal, setSelectedGoal] = useState<GoalResponse | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(aleadySelectedDate ?? null);
   const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goal: "", file: "", linkUrl: "" });
   const setErrorByKey = createStateKeySetter(setError);
   const isDisabled = !!(!selectedGoal || error.title || error.file || error.linkUrl);
@@ -69,7 +71,7 @@ export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
           })
         }
         ref={formRef}
-        className="flex h-full flex-col"
+        className="flex h-full flex-col gap-16"
       >
         <TextInput
           onBlur={(e) => validateTitle(e, setErrorByKey("title"))}
@@ -84,6 +86,10 @@ export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
           goalOptions={goals}
           selectedGoal={selectedGoal}
           setSelectedGoal={setSelectedGoal}
+        />
+        <DateInput
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
         />
         <UploadInput
           error={error.file}

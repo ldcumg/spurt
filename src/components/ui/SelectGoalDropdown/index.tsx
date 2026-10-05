@@ -3,8 +3,9 @@
 import AddGoalInput from "./AddGoalInput";
 import GoalDropdownButton from "./GoalDropdownButton";
 import GoalOptionItem from "./GoalOptionItem";
+import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
 import type { GoalResponse } from "@/types/goals.types";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 interface SelectGoalDropdownProps {
   label?: string;
@@ -24,32 +25,16 @@ export default function SelectGoalDropdown({
 }: SelectGoalDropdownProps) {
   const [isOptionOpen, setIsOptionOpen] = useState(false);
   const [isGoalInputOpen, setIsGoalInputOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    /** 컨테이너 바깥 클릭 시 드랍다운 닫기 */
-    const outsideClickEvent = (event: MouseEvent) => {
-      const container = containerRef.current;
-      if (!container || !(event.target instanceof Node)) return;
-
-      if (!container.contains(event.target)) {
-        setIsOptionOpen(false);
-        setIsGoalInputOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", outsideClickEvent);
-
-    return () => {
-      document.removeEventListener("mousedown", outsideClickEvent);
-    };
-  }, []);
+  const containerRef = useClickOutside(() => {
+    setIsOptionOpen(false);
+    setIsGoalInputOpen(false);
+  });
 
   return (
-    <>
+    <div className="flex w-full flex-col gap-8">
       {label && (
         <label
-          className="mb-12 text-sm font-bold"
+          className="text-title-xs"
           htmlFor="option-button"
         >
           {label}
@@ -101,6 +86,6 @@ export default function SelectGoalDropdown({
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

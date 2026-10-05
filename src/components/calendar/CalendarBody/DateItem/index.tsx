@@ -86,7 +86,7 @@ export default function DateItem({
       >
         <h4
           className={clsx(
-            `flex w-25 justify-center ${isMonthView ? "text-body-md" : isThisWeek ? "text-title-xs" : "text-body-sm"}`,
+            `flex aspect-square w-25 justify-center ${isMonthView ? "text-body-md" : isThisWeek ? "text-title-xs" : "text-body-sm"}`,
             isToday &&
               (selectedDate ? "rounded-full bg-neutral-500 text-white" : "bg-primary-500 rounded-full text-white"),
             selectedDate?.toDateString() === date.toDateString() && "bg-primary-500 rounded-full text-white",

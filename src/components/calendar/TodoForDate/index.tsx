@@ -1,6 +1,10 @@
+"use client";
+
 import TodoItem from "./TodoItem";
 import { Plus } from "@/assets/icons";
+import AddTodoModal from "@/components/addTodo/AddTodoModal";
 import { formatDate } from "@/components/calendar/utils";
+import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 import type { TodoResponse } from "@/types/todos.types";
 
 interface SelectedDateProps {
@@ -10,6 +14,7 @@ interface SelectedDateProps {
 
 export default function TodoForDate({ selectedDate, todoGroupedByDate }: SelectedDateProps) {
   const formattedDate = formatDate(selectedDate);
+  const { isOpen: isAddTodoOpen, open: openAddTodo, close: closeAddTodo } = useDisclosure();
 
   return (
     <div className="h-full w-full p-16">
@@ -18,10 +23,18 @@ export default function TodoForDate({ selectedDate, todoGroupedByDate }: Selecte
           {selectedDate.getFullYear()}.{selectedDate.getMonth() + 1}.{selectedDate.getDate()}
         </h5>
 
-        <button className="text-primary-500 text-title-sm flex flex-row items-center gap-4">
+        <button
+          className="text-primary-500 text-title-sm flex flex-row items-center gap-4"
+          onClick={openAddTodo}
+        >
           <Plus className="size-20" />
           <span>할 일 추가</span>
         </button>
+        <AddTodoModal
+          isOpen={isAddTodoOpen}
+          onClose={closeAddTodo}
+          aleadySelectedDate={selectedDate}
+        />
       </div>
 
       <div>
