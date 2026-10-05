@@ -1,6 +1,6 @@
 import { LAST_WEEK_INDEX } from "./constants";
 import type { CalendarWeeks, Week } from "./types";
-import type { Todo } from "@/types/todos.types";
+import type { TodoResponse } from "@/types/todos.types";
 
 /**
  * sunday가 포함된 일요일 ~ 토요일 한 주를 반환
@@ -59,8 +59,10 @@ export function formatDate(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
-export function groupTodosByDate(todos: Todo[]): Record<string, Todo[]> {
-  const grouped = todos.reduce<Record<string, Todo[]>>((acc, todo) => {
+export function groupTodosByDate(todos: TodoResponse[]): Record<string, TodoResponse[]> {
+  const grouped = todos.reduce<Record<string, TodoResponse[]>>((acc, todo) => {
+    if (!todo.dueDate) return acc;
+
     const date = todo.dueDate.slice(0, 10);
 
     (acc[date] ??= []).push(todo);

@@ -3,7 +3,7 @@ import type { CalendarWeeks } from "../../types";
 import { CalendarDot } from "@/assets/icons";
 import { getCalendarWeeks, nextWeek, previousWeek } from "@/components/calendar/utils";
 import { useViewport } from "@/hooks/viewport/useViewport";
-import type { Todo } from "@/types/todos.types";
+import type { TodoResponse } from "@/types/todos.types";
 import clsx from "clsx";
 
 interface DateItemProps {
@@ -17,7 +17,7 @@ interface DateItemProps {
   setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
   setCalendarWeeks: React.Dispatch<React.SetStateAction<CalendarWeeks>>;
   weekIdx: number;
-  todoForDate?: Todo[];
+  todoForDate?: TodoResponse[];
 }
 
 export default function DateItem({
@@ -33,7 +33,6 @@ export default function DateItem({
   weekIdx,
   todoForDate,
 }: DateItemProps) {
-  console.log("[ ㏒ ] todoForDate =>", todoForDate);
   const month = date.getMonth() + 1;
   const isToday = date.toDateString() === today.toDateString();
   const { isDesktop } = useViewport();

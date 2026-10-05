@@ -1,8 +1,8 @@
 import { Check } from "@/assets/icons";
-import type { Todo } from "@/types/todos.types";
+import type { TodoResponse } from "@/types/todos.types";
 
 interface TodoItemProps {
-  todo: Todo;
+  todo: TodoResponse;
 }
 
 export default function TodoItem({ todo }: TodoItemProps) {

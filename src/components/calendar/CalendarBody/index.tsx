@@ -3,7 +3,7 @@ import type { CalendarWeeks } from "../types";
 import DateItem from "./DateItem";
 import { formatDate } from "@/components/calendar/utils";
 import { useCalendarWheel } from "@/hooks/calendar/useCalendarWheel";
-import type { Todo } from "@/types/todos.types";
+import type { TodoResponse } from "@/types/todos.types";
 
 interface CalendarBodyProps {
   calendarWeeks: CalendarWeeks;
@@ -12,7 +12,7 @@ interface CalendarBodyProps {
   setCalendarWeeks: React.Dispatch<React.SetStateAction<CalendarWeeks>>;
   selectedDate: Date;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
-  todoGroupedByDate: Record<string, Todo[]>;
+  todoGroupedByDate: Record<string, TodoResponse[]>;
 }
 
 export default function CalendarBody({

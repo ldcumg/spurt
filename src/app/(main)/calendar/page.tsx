@@ -15,15 +15,18 @@ export default function CalendarPage() {
   firstSunday.setDate(today.getDate() - today.getDay() - 14);
   const currentWeekCalendar = getCalendarWeeks(firstSunday);
   const [calendarWeeks, setCalendarWeeks] = useState<CalendarWeeks>(currentWeekCalendar);
+
   const [isMonthView, setIsMonthView] = useState<boolean>(true);
-
   const [selectedDate, setSelectedDate] = useState<Date>(today);
+  // FIXME -  임시
+  const [selectedGoalId, _setSelectedGoalId] = useState<number | null>(null);
 
-  const { data: { todos } = {}, isPending, isError, error } = useAllTodoQuery();
-  if (isPending) <div>Loading...</div>;
-  if (isError) <div>Error: {error.message}</div>;
-  const todoGroupedByDate = todos ? groupTodosByDate(todos) : {};
-  console.log("[ ㏒ ] todoGroupedByDate =>", todoGroupedByDate);
+  const { data, isPending, isError, error } = useAllTodoQuery();
+  if (isPending) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
+  const { todos } = data;
+  const filteredTodoByGoal = selectedGoalId ? todos.filter((todo) => todo.goalId === selectedGoalId) : todos;
+  const todoGroupedByDate = groupTodosByDate(filteredTodoByGoal);
 
   return (
     <div className="flex h-full w-full flex-col items-center gap-12 overflow-hidden overscroll-contain p-4 pb-100">

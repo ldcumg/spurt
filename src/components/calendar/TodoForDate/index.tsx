@@ -1,11 +1,11 @@
 import TodoItem from "./TodoItem";
 import { Plus } from "@/assets/icons";
 import { formatDate } from "@/components/calendar/utils";
-import type { Todo } from "@/types/todos.types";
+import type { TodoResponse } from "@/types/todos.types";
 
 interface SelectedDateProps {
   selectedDate: Date;
-  todoGroupedByDate: Record<string, Todo[]>;
+  todoGroupedByDate: Record<string, TodoResponse[]>;
 }
 
 export default function TodoForDate({ selectedDate, todoGroupedByDate }: SelectedDateProps) {

@@ -4,7 +4,7 @@ export const todoMock = {
       id: 12,
       teamId: "team-abc",
       userId: 1,
-      goalId: 3,
+      goalId: 2,
       title: "API 문서 작성",
       done: true,
       fileUrl: null,
