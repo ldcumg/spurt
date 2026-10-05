@@ -1,13 +1,13 @@
 "use client";
 
 import { FlagFilled, Under } from "@/assets/icons";
-import type { GoalItem } from "@/types/typeGoals";
+import type { GoalResponse } from "@/types/goals.types";
 import clsx from "clsx";
 
 interface GoalDropdownButtonProps {
   isOptionOpen: boolean;
   setIsOptionOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedGoal: GoalItem | null;
+  selectedGoal: GoalResponse | null;
   setIsGoalInputOpen: React.Dispatch<React.SetStateAction<boolean>>;
   error?: string;
 }

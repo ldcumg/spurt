@@ -1,12 +1,12 @@
 "use client";
 
 import { Check, FlagFilled } from "@/assets/icons";
-import type { GoalItem } from "@/types/typeGoals";
+import type { GoalResponse } from "@/types/goals.types";
 
 interface GoalOptionItemProps {
-  option: GoalItem;
+  option: GoalResponse;
   isSelected: boolean;
-  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalItem | null>>;
+  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalResponse | null>>;
   setIsOptionOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsGoalInputOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -20,7 +20,7 @@ export default function GoalOptionItem({
   setIsGoalInputOpen,
 }: GoalOptionItemProps) {
   /** 옵션 선택 */
-  const handleSelect = (option: GoalItem) => {
+  const handleSelect = (option: GoalResponse) => {
     setSelectedGoal(option);
     setIsOptionOpen(false);
     setIsGoalInputOpen(false);

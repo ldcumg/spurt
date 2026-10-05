@@ -1,16 +1,14 @@
 import SelectGoalDropdown from ".";
-import type { GoalItem } from "@/types/typeGoals";
+import type { GoalResponse } from "@/types/goals.types";
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { useState } from "react";
 
-const goals: GoalItem[] = [
+const goals: GoalResponse[] = [
   {
     id: 1,
     title: "자바스크립트로 웹 서비스 만들기",
     teamId: "string",
     userId: 1,
-    todoCount: 1,
-    completedCount: 1,
     createdAt: "",
     updatedAt: "",
   },
@@ -19,8 +17,6 @@ const goals: GoalItem[] = [
     title: "디자인 시스템 강의 듣기",
     teamId: "string",
     userId: 1,
-    todoCount: 1,
-    completedCount: 1,
     createdAt: "",
     updatedAt: "",
   },
@@ -29,8 +25,6 @@ const goals: GoalItem[] = [
     title: "프론트엔드 포트폴리오 완성하기",
     teamId: "string",
     userId: 1,
-    todoCount: 1,
-    completedCount: 1,
     createdAt: "",
     updatedAt: "",
   },
@@ -51,13 +45,11 @@ type Story = StoryObj<typeof meta>;
 
 /** 선택된 목표가 있는 기본 드롭다운 예시를 렌더링합니다. */
 function AddTodoDropdownExample() {
-  const [selectedOption, setSelectedOption] = useState<GoalItem | null>({
+  const [selectedOption, setSelectedOption] = useState<GoalResponse | null>({
     id: 3,
     title: "프론트엔드 포트폴리오 완성하기",
     teamId: "stringnumber",
     userId: 1,
-    todoCount: 1,
-    completedCount: 1,
     createdAt: "",
     updatedAt: "",
   });
@@ -75,7 +67,7 @@ function AddTodoDropdownExample() {
 
 /** 선택할 목표가 없는 드롭다운 예시를 렌더링합니다. */
 function AddTodoDropdownNoList() {
-  const [selectedOption, setSelectedOption] = useState<GoalItem | null>(null);
+  const [selectedOption, setSelectedOption] = useState<GoalResponse | null>(null);
 
   return (
     <SelectGoalDropdown
@@ -90,7 +82,7 @@ function AddTodoDropdownNoList() {
 
 /** 목표를 선택하지 않아 오류가 표시되는 예시를 렌더링합니다. */
 function AddTodoDropdownNoSelect() {
-  const [selectedOption, setSelectedOption] = useState<GoalItem | null>(null);
+  const [selectedOption, setSelectedOption] = useState<GoalResponse | null>(null);
 
   return (
     <SelectGoalDropdown
@@ -105,13 +97,11 @@ function AddTodoDropdownNoSelect() {
 
 /** 긴 목표명이 말줄임 처리되는 드롭다운 예시를 렌더링합니다. */
 function AddTodoDropdownOverflow() {
-  const [selectedOption, setSelectedOption] = useState<GoalItem | null>({
+  const [selectedOption, setSelectedOption] = useState<GoalResponse | null>({
     id: 4,
     title: "컨텐츠 내용이 오버플로우가 되도록 아주 많이 텍스트를 입력해보자.",
     teamId: "string",
     userId: 1,
-    todoCount: 1,
-    completedCount: 1,
     createdAt: "",
     updatedAt: "",
   });
@@ -122,8 +112,6 @@ function AddTodoDropdownOverflow() {
       title: "컨텐츠 내용이 오버플로우가 되도록 아주 많이 텍스트를 입력해보자.",
       teamId: "string",
       userId: 1,
-      todoCount: 1,
-      completedCount: 1,
       createdAt: "",
       updatedAt: "",
     },

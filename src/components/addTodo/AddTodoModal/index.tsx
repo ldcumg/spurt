@@ -1,14 +1,14 @@
 "use client";
 
-import UploadInput from "../ui/UploadInput";
-import type { AddTodoErrorMassage } from "./types";
-import SelectGoalDropdown from "@/components/AddTodoModal/SelectGoalDropdown";
+import UploadInput from "../../ui/UploadInput";
+import type { AddTodoErrorMassage } from "../types";
 import Modal from "@/components/ui/Modal";
 import ModalActions from "@/components/ui/Modal/ModalActions";
+import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
 import TextInput from "@/components/ui/TextInput";
 import { handleAddTodo } from "@/services/todo/addTodo";
 import { validateLinkUrl, validateTitle } from "@/services/todo/addTodoValidate";
-import type { GoalItem } from "@/types/typeGoals";
+import type { GoalResponse } from "@/types/goals.types";
 import { createStateKeySetter } from "@/utils/stateUtills";
 import { useState, useRef } from "react";
 
@@ -21,20 +21,18 @@ interface AddTodoModalProps {
 export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [selectedGoal, setSelectedGoal] = useState<GoalItem | null>(null);
+  const [selectedGoal, setSelectedGoal] = useState<GoalResponse | null>(null);
   const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goal: "", file: "", linkUrl: "" });
   const setErrorByKey = createStateKeySetter(setError);
   const isDisabled = !!(!selectedGoal || error.title || error.file || error.linkUrl);
 
   //NOTE - 임시 데이터
-  const goals: GoalItem[] = [
+  const goals: GoalResponse[] = [
     {
       id: 1,
       title: "자바스크립트로 웹 서비스 만들기",
       teamId: "string",
       userId: 1,
-      todoCount: 1,
-      completedCount: 1,
       createdAt: "",
       updatedAt: "",
     },
@@ -43,8 +41,6 @@ export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
       title: "디자인 시스템 강의 듣기",
       teamId: "string",
       userId: 1,
-      todoCount: 1,
-      completedCount: 1,
       createdAt: "",
       updatedAt: "",
     },
@@ -53,8 +49,6 @@ export default function AddTodoModal({ isOpen, onClose }: AddTodoModalProps) {
       title: "프론트엔드 포트폴리오 완성하기",
       teamId: "string",
       userId: 1,
-      todoCount: 1,
-      completedCount: 1,
       createdAt: "",
       updatedAt: "",
     },

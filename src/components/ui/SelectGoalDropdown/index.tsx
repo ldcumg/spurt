@@ -3,15 +3,15 @@
 import AddGoalInput from "./AddGoalInput";
 import GoalDropdownButton from "./GoalDropdownButton";
 import GoalOptionItem from "./GoalOptionItem";
-import type { GoalItem } from "@/types/typeGoals";
+import type { GoalResponse } from "@/types/goals.types";
 import { useEffect, useRef, useState } from "react";
 
 interface SelectGoalDropdownProps {
-  label: string;
-  goalOptions: GoalItem[];
-  selectedGoal: GoalItem | null;
-  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalItem | null>>;
-  error: string;
+  label?: string;
+  goalOptions: GoalResponse[];
+  selectedGoal: GoalResponse | null;
+  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalResponse | null>>;
+  error?: string;
 }
 
 /** 할 일에 연결할 목표를 선택하거나 새 목표 입력을 여는 드롭다운입니다. */
@@ -47,12 +47,14 @@ export default function SelectGoalDropdown({
 
   return (
     <>
-      <label
-        className="mb-12 text-sm font-bold"
-        htmlFor="option-button"
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          className="mb-12 text-sm font-bold"
+          htmlFor="option-button"
+        >
+          {label}
+        </label>
+      )}
 
       <div
         ref={containerRef}
