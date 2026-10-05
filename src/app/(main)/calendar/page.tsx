@@ -44,7 +44,7 @@ export default function CalendarPage() {
 
       {/* 달력 */}
       <div className="flex min-h-480 w-full flex-col md:h-600 xl:h-700">
-        <DayHeader />
+        <DayHeader className="border" />
 
         <CalendarBody
           calendarWeeks={calendarWeeks}
