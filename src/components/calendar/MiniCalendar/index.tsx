@@ -5,12 +5,11 @@ import clsx from "clsx";
 import { useState } from "react";
 
 interface MiniCalendarProps {
-  close: () => void;
   selectedDate: Date | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  handleDateSelect: (date: Date | null) => void;
 }
 
-export default function MiniCalendar({ close, selectedDate, setSelectedDate }: MiniCalendarProps) {
+export default function MiniCalendar({ selectedDate, handleDateSelect }: MiniCalendarProps) {
   const [referenceDate, setReferenceDate] = useState(selectedDate ?? new Date());
   const calendar = getMonthDates(referenceDate);
 
@@ -22,14 +21,6 @@ export default function MiniCalendar({ close, selectedDate, setSelectedDate }: M
   /** 다음 달로 이동 */
   const handleNextMonth = () => {
     setReferenceDate((date) => new Date(date.getFullYear(), date.getMonth() + 1, 1));
-  };
-
-  /** 날짜 선택 */
-  const handleDateSelect = (date: Date | null) => {
-    if (!date) return;
-
-    setSelectedDate(date);
-    close();
   };
 
   return (

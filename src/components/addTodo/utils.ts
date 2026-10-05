@@ -1,48 +1,57 @@
-// NOTE - 임시 에러 메세지
-/** title 입력 유효성 검사 */
+// TODO - 정규식
+import type { GoalResponse } from "@/types/goals.types";
+
+/** title 유효성 검사 */
 export const validateTitle = (
   event: React.FocusEvent<HTMLInputElement, Element>,
   setError: (errorMassage: string) => void,
 ) => {
   const title = event.target.value.trim();
 
-  if (!title) return setError("제목을 입력해주세요");
-  if (title.length < 10) return "제목은 최소 10자 이상이어야 합니다";
-  return "";
+  if (!title) {
+    setError("제목을 입력해 주세요");
+    return;
+  }
 };
 
-/** goalId 입력 유효성 검사 */
-export const validateGoalId = (
-  event: React.FocusEvent<HTMLInputElement, Element>,
-  setError: (errorMassage: string) => void,
-) => {
-  const goalId = event.target.value.trim();
-
-  if (!goalId) return setError("목표 아이디를 입력해주세요");
-  if (goalId.length < 10) return "목표 아이디는 최소 10자 이상이어야 합니다";
-  return "";
+/** 목표 선택 유효성 검사 */
+export const validateGoal = (selectedGoal: GoalResponse | null, setError: (errorMassage: string) => void) => {
+  if (!selectedGoal) {
+    setError("목표를 선택해 주세요");
+    return;
+  }
 };
 
-/** file 입력 유효성 검사 */
+/** 마감기한 유효성 검사 */
+export const validateDueDate = (selectedDate: Date | null, setError: (errorMassage: string) => void) => {
+  if (!selectedDate) {
+    setError("마감 기한을 선택해 주세요");
+    return;
+  }
+};
+
+/** 파일 선택 유효성 검사 */
 export const validateFile = (
   event: React.FocusEvent<HTMLInputElement, Element>,
   setError: (errorMassage: string) => void,
 ) => {
-  const file = event.target.value.trim();
+  const file = event.target.value;
 
-  if (!file) return setError("파일을 선택해주세요");
-  if (file.length < 10) return "파일 이름은 최소 10자 이상이어야 합니다";
-  return "";
+  if (!file) {
+    setError("파일을 선택해 주세요");
+    return;
+  }
 };
 
-/** linkUrl 입력 유효성 검사 */
+/** linkUrl 유효성 검사 */
 export const validateLinkUrl = (
   event: React.FocusEvent<HTMLInputElement, Element>,
   setError: (errorMassage: string) => void,
 ) => {
   const linkUrl = event.target.value.trim();
 
-  if (!linkUrl) return setError("링크를 입력해주세요");
-  if (linkUrl.length < 10) return "링크 주소는 최소 10자 이상이어야 합니다";
-  return "";
+  if (!linkUrl) {
+    setError("링크를 입력해 주세요");
+    return;
+  }
 };

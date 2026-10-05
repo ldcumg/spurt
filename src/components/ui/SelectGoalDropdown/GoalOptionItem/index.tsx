@@ -6,26 +6,11 @@ import type { GoalResponse } from "@/types/goals.types";
 interface GoalOptionItemProps {
   option: GoalResponse;
   isSelected: boolean;
-  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalResponse | null>>;
-  setIsOptionOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsGoalInputOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleSelect: (option: GoalResponse) => void;
 }
 
 /** 선택 상태를 표시하고 선택 이벤트를 처리하는 목표 옵션입니다. */
-export default function GoalOptionItem({
-  option,
-  isSelected,
-  setSelectedGoal,
-  setIsOptionOpen,
-  setIsGoalInputOpen,
-}: GoalOptionItemProps) {
-  /** 옵션 선택 */
-  const handleSelect = (option: GoalResponse) => {
-    setSelectedGoal(option);
-    setIsOptionOpen(false);
-    setIsGoalInputOpen(false);
-  };
-
+export default function GoalOptionItem({ option, isSelected, handleSelect }: GoalOptionItemProps) {
   return (
     <li
       onClick={() => handleSelect(option)}

@@ -1,14 +1,14 @@
 "use client";
 
-import UploadInput from "../../ui/UploadInput";
-import DateInput from "../DateInput";
 import type { AddTodoErrorMassage } from "../types";
+import DateInput from "./DateInput";
 import { handleAddTodo } from "@/components/addTodo/services";
 import { validateLinkUrl, validateTitle } from "@/components/addTodo/utils";
 import Modal from "@/components/ui/Modal";
 import ModalActions from "@/components/ui/Modal/ModalActions";
 import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
 import TextInput from "@/components/ui/TextInput";
+import UploadInput from "@/components/ui/UploadInput";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 import type { GoalResponse } from "@/types/goals.types";
 import { createStateKeySetter } from "@/utils/stateUtills";
@@ -26,7 +26,7 @@ export default function AddTodoTrigger({ children, aleadySelectedDate }: AddTodo
   const [file, setFile] = useState<File | null>(null);
   const [selectedGoal, setSelectedGoal] = useState<GoalResponse | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(aleadySelectedDate ?? null);
-  const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goal: "", file: "", linkUrl: "" });
+  const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goal: "", dueDate: "", file: "", linkUrl: "" });
   const setErrorByKey = createStateKeySetter(setError);
   const isDisabled = !!(!selectedGoal || error.title || error.file || error.linkUrl);
   const { isOpen: addTodoIsOpen, open: addTodoOpen, close: addTodoClose } = useDisclosure();
@@ -76,7 +76,7 @@ export default function AddTodoTrigger({ children, aleadySelectedDate }: AddTodo
           onSubmit={(e) =>
             handleAddTodo(e, {
               selectedGoal,
-              setGoalError: setErrorByKey("goal"),
+              selectedDate,
               isDisabled,
             })
           }
@@ -92,6 +92,7 @@ export default function AddTodoTrigger({ children, aleadySelectedDate }: AddTodo
           />
           <SelectGoalDropdown
             error={error.goal}
+            setError={setErrorByKey("goal")}
             label="목표"
             goalOptions={goals}
             selectedGoal={selectedGoal}
@@ -100,6 +101,8 @@ export default function AddTodoTrigger({ children, aleadySelectedDate }: AddTodo
           <DateInput
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
+            error={error.dueDate}
+            setError={setErrorByKey("dueDate")}
           />
           <UploadInput
             error={error.file}

@@ -3,6 +3,7 @@
 import AddGoalInput from "./AddGoalInput";
 import GoalDropdownButton from "./GoalDropdownButton";
 import GoalOptionItem from "./GoalOptionItem";
+import { validateGoal } from "@/components/addTodo/utils";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
 import type { GoalResponse } from "@/types/goals.types";
 import { useState } from "react";
@@ -13,6 +14,7 @@ interface SelectGoalDropdownProps {
   selectedGoal: GoalResponse | null;
   setSelectedGoal: React.Dispatch<React.SetStateAction<GoalResponse | null>>;
   error?: string;
+  setError: (errorMassage: string) => void;
 }
 
 /** 할 일에 연결할 목표를 선택하거나 새 목표 입력을 여는 드롭다운입니다. */
@@ -22,13 +24,23 @@ export default function SelectGoalDropdown({
   selectedGoal,
   setSelectedGoal,
   error,
+  setError,
 }: SelectGoalDropdownProps) {
   const [isOptionOpen, setIsOptionOpen] = useState(false);
   const [isGoalInputOpen, setIsGoalInputOpen] = useState(false);
   const containerRef = useClickOutside(() => {
+    validateGoal(selectedGoal, setError);
     setIsOptionOpen(false);
     setIsGoalInputOpen(false);
   });
+
+  /** 옵션 선택 */
+  const handleSelect = (option: GoalResponse) => {
+    validateGoal(option, setError);
+    setSelectedGoal(option);
+    setIsOptionOpen(false);
+    setIsGoalInputOpen(false);
+  };
 
   return (
     <div className="flex w-full flex-col gap-8">
@@ -72,9 +84,7 @@ export default function SelectGoalDropdown({
                     key={option.id}
                     option={option}
                     isSelected={isSelected}
-                    setSelectedGoal={setSelectedGoal}
-                    setIsOptionOpen={setIsOptionOpen}
-                    setIsGoalInputOpen={setIsGoalInputOpen}
+                    handleSelect={handleSelect}
                   />
                 );
               })}

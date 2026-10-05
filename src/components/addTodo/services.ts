@@ -2,23 +2,18 @@ import type { GoalResponse } from "@/types/goals.types";
 
 export type HandleAddTodoPrams = {
   selectedGoal: GoalResponse | null;
-  setGoalError: (errorMassage: string) => void;
+  selectedDate: Date | null;
   isDisabled: boolean;
 };
 
 /** todo 추가 서비스 로직 */
 export const handleAddTodo = (
   e: React.SubmitEvent<HTMLFormElement>,
-  { selectedGoal, setGoalError, isDisabled }: HandleAddTodoPrams,
+  { selectedGoal, selectedDate, isDisabled }: HandleAddTodoPrams,
 ) => {
   e.preventDefault();
 
-  if (!selectedGoal) {
-    setGoalError("목표를 선택해 주세요");
-    return;
-  }
-
-  if (isDisabled) return;
+  if (!selectedGoal || !selectedDate || isDisabled) return;
 
   //TODO - 파일 url 발금 로직
 
@@ -27,6 +22,7 @@ export const handleAddTodo = (
   const newTodo = {
     title: formData.get("title"),
     goalId: selectedGoal.id,
+    dueDate: "",
     fileUrl: "",
     linkUrl: formData.get("linkUrl"),
   };
