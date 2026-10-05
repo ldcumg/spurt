@@ -66,6 +66,6 @@ export type GoalTodoSummary = {
 // client type
 
 // 3. 컴포넌트 편의상 둘을 합친 형태가 필요할 때 쓰는 확장 타입
-export type GoalWithTodos = GoalListItem & {
+export type GoalWithTodos = GoalTodoSummary & {
   todos: TodoResponse[];
 };
