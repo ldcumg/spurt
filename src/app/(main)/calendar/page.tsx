@@ -38,7 +38,7 @@ export default function CalendarPage() {
 
   return (
     <div className="flex h-full w-full flex-col items-center gap-12 overflow-hidden overscroll-contain p-4 pb-100">
-      <div className="h-50 w-full px-60">
+      <div className="h-50 w-full px-56">
         <SelectGoalDropdown
           goalOptions={goals}
           selectedGoal={selectedGoal}

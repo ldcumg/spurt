@@ -55,8 +55,11 @@ export function moveMonth(curruntWeeks: CalendarWeeks, isNext: boolean) {
   return newWeeks as CalendarWeeks;
 }
 
-export function formatDate(date: Date): string {
-  return date.toISOString().slice(0, 10);
+/**
+ * @returns YYYY-MM-DD
+ */
+export function formatDate(date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
 export function groupTodosByDate(todos: TodoResponse[]): Record<string, TodoResponse[]> {
