@@ -1,4 +1,4 @@
-import { USERS_API_PATH } from "@/constants";
+import { USERS_API_PATH } from "@/constants/apiEndpoints";
 import { serverFetcher } from "@/lib/axios/serverFetcher";
 import { GetCheckNicknameParams, PatchMeRequest, PatchPasswordRequest, UserResponse } from "@/types/users.types";
 

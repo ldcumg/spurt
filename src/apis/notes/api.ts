@@ -1,4 +1,4 @@
-import { NOTES_API_PATH } from "@/constants";
+import { NOTES_API_PATH } from "@/constants/apiEndpoints";
 import { serverFetcher } from "@/lib/axios/serverFetcher";
 import {
   GetNoteListParams,

@@ -1,4 +1,4 @@
-import { TODOS_API_PATH } from "@/constants";
+import { TODOS_API_PATH } from "@/constants/apiEndpoints";
 import { serverFetcher } from "@/lib/axios/serverFetcher";
 import {
   FavoriteTodoResponse,
