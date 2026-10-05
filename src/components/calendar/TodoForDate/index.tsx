@@ -31,7 +31,7 @@ export default function TodoForDate({ selectedDate, todoGroupedByDate }: Selecte
 
       <div>
         {todoGroupedByDate[formattedDate] ? (
-          <div className="flex h-200 flex-col gap-6 overflow-y-auto">
+          <div className="flex h-160 flex-col gap-6 overflow-y-auto">
             {todoGroupedByDate[formattedDate].map((todo) => (
               <TodoItem
                 key={todo.id}

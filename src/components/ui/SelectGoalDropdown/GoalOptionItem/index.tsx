@@ -1,12 +1,12 @@
 "use client";
 
 import { Check, FlagFilled } from "@/assets/icons";
-import type { GoalResponse } from "@/types/goals.types";
+import type { GoalListItem } from "@/types/goals.types";
 
 interface GoalOptionItemProps {
-  option: GoalResponse;
+  option: GoalListItem;
   isSelected: boolean;
-  handleSelect: (option: GoalResponse) => void;
+  handleSelect: (option: GoalListItem) => void;
 }
 
 /** 선택 상태를 표시하고 선택 이벤트를 처리하는 목표 옵션입니다. */

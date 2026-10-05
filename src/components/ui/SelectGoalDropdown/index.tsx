@@ -5,14 +5,14 @@ import GoalDropdownButton from "./GoalDropdownButton";
 import GoalOptionItem from "./GoalOptionItem";
 import { validateGoal } from "@/components/addTodo/utils";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
-import type { GoalResponse } from "@/types/goals.types";
+import type { GoalListItem } from "@/types/goals.types";
 import { useState } from "react";
 
 interface SelectGoalDropdownProps {
   label?: string;
-  goalOptions: GoalResponse[];
-  selectedGoal: GoalResponse | null;
-  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalResponse | null>>;
+  goalOptions: GoalListItem[];
+  selectedGoal: GoalListItem | null;
+  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalListItem | null>>;
   error?: string;
   setError?: (errorMassage: string) => void;
 }
@@ -34,7 +34,7 @@ export default function SelectGoalDropdown({
   });
 
   /** 옵션 선택 */
-  const handleSelect = (option: GoalResponse) => {
+  const handleSelect = (option: GoalListItem) => {
     if (setError) validateGoal(option, setError);
     setSelectedGoal(option);
     setIsOptionOpen(false);
