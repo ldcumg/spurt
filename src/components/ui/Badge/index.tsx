@@ -1,4 +1,3 @@
-import { Goal } from "./mock";
 export type BadgeType = "todo" | "done" | "goal" | "category";
 
 const BADGE_CONFIG: Record<BadgeType, { label: string; style: string }> = {
