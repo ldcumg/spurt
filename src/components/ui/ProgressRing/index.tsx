@@ -1,4 +1,4 @@
-import calc from "../../../utils/calcPercentage";
+import calc from "@/utils/calcPercentage";
 interface ProgressProps {
   doneCount: number;
   totalCount: number;
