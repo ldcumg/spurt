@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN } from "@/config/cookie";
-import { BASE_URL, TEAM_ID } from "@/config/env";
+import { BACKEND_BASE_URL, TEAM_ID } from "@/config/env";
 import { HTTP_HEADERS } from "@/config/httpRequestHeaders";
 import { ALLOWED_METHODS } from "@/constants/allowedMethods";
 import axios, { isAxiosError } from "axios";
@@ -21,7 +21,7 @@ async function proxy(request: NextRequest, { params }: Params) {
 
   try {
     const { data, status } = await axios({
-      url: `${BASE_URL}/${TEAM_ID}/${path.join("/")}${request.nextUrl.search}`,
+      url: `${BACKEND_BASE_URL}/${TEAM_ID}/${path.join("/")}${request.nextUrl.search}`,
       method: request.method,
       headers: HTTP_HEADERS(accessToken),
       data: await request.text(),
