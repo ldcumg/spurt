@@ -33,6 +33,12 @@ jobs:
           node-version-file: .nvmrc
           cache: "pnpm"
 
+      # 임시
+      - name: Check Vercel project access
+        run: |
+          pnpm exec vercel whoami --token=${{ secrets.VERCEL_TOKEN }}
+          pnpm exec vercel project ls --token=${{ secrets.VERCEL_TOKEN }}
+
       - name: 의존성 설치
         run: pnpm install --frozen-lockfile
 
