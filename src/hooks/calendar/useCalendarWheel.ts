@@ -1,5 +1,5 @@
 import type { CalendarWeeks } from "@/components/calendar/types";
-import { nextWeek, previousWeek } from "@/utils/calendar";
+import { nextWeek, previousWeek } from "@/components/calendar/utils";
 import { useEffect, useRef } from "react";
 
 /** 달력 휠 주 이동 훅 */

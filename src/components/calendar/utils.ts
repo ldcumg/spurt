@@ -1,18 +1,9 @@
-import { LAST_WEEK_INDEX } from "@/components/calendar/constants";
-import type { CalendarWeeks, Week } from "@/components/calendar/types";
-
-/** year, month을 통해 해당 월의 일들을 반환하는 유틸 */
-export function getMonthDates(year: number, month: number): (number | null)[] {
-  const firstDay = new Date(year, month, 1).getDay();
-  const lastDate = new Date(year, month + 1, 0).getDate();
-
-  return Array.from({ length: firstDay + lastDate }, (_, index) => {
-    return index < firstDay ? null : index - firstDay + 1;
-  });
-}
+import { LAST_WEEK_INDEX } from "./constants";
+import type { CalendarWeeks, Week } from "./types";
+import type { Todo } from "@/types/todos.types";
 
 /**
- * sunday가 포함된 일요일 ~ 토요일 한 주를 반환하는 유틸
+ * sunday가 포함된 일요일 ~ 토요일 한 주를 반환
  * @returns [일, 월, 화, 수, 목, 금, 토]
  */
 export function getWeek(sunday: Date): Week {
@@ -25,7 +16,7 @@ export function getWeek(sunday: Date): Week {
 }
 
 /**
- * firstSunday부터 5주를 반환하는 유틸
+ * firstSunday부터 5주를 반환
  * @returns [전전 주[], 전 주[], 이번 주[], 다음 주[], 다다음 주[]]
  */
 export function getCalendarWeeks(firstSunday: Date): CalendarWeeks {
@@ -62,4 +53,24 @@ export function moveMonth(curruntWeeks: CalendarWeeks, isNext: boolean) {
   const newWeeks = getCalendarWeeks(newSunday);
 
   return newWeeks as CalendarWeeks;
+}
+
+export function formatDate(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
+export function groupTodosByDate(todos: Todo[]): Record<string, Todo[]> {
+  const grouped = todos.reduce<Record<string, Todo[]>>((acc, todo) => {
+    const date = todo.dueDate.slice(0, 10);
+
+    (acc[date] ??= []).push(todo);
+
+    return acc;
+  }, {});
+
+  Object.values(grouped).forEach((todosForDate) => {
+    todosForDate.sort((a, b) => Number(a.done) - Number(b.done));
+  });
+
+  return grouped;
 }

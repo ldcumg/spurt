@@ -1,14 +1,18 @@
 import { THIS_WEEK_INDEX } from "../constants";
 import type { CalendarWeeks } from "../types";
 import DateItem from "./DateItem";
+import { formatDate } from "@/components/calendar/utils";
+import { useCalendarWheel } from "@/hooks/calendar/useCalendarWheel";
+import type { Todo } from "@/types/todos.types";
 
 interface CalendarBodyProps {
   calendarWeeks: CalendarWeeks;
   isMonthView: boolean;
   today: Date;
   setCalendarWeeks: React.Dispatch<React.SetStateAction<CalendarWeeks>>;
-  selectedDate: Date | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  selectedDate: Date;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
+  todoGroupedByDate: Record<string, Todo[]>;
 }
 
 export default function CalendarBody({
@@ -18,9 +22,14 @@ export default function CalendarBody({
   setCalendarWeeks,
   selectedDate,
   setSelectedDate,
+  todoGroupedByDate,
 }: CalendarBodyProps) {
+  const containerRef = useCalendarWheel(setCalendarWeeks);
   return (
-    <div className="flex flex-col">
+    <div
+      className="flex flex-col"
+      ref={containerRef}
+    >
       {calendarWeeks.map((week, weekIdx) => {
         const isThisWeek = weekIdx === THIS_WEEK_INDEX;
         const isMounthViewOrThisWeek = isMonthView || isThisWeek;
@@ -48,6 +57,7 @@ export default function CalendarBody({
                   setSelectedDate={setSelectedDate}
                   setCalendarWeeks={setCalendarWeeks}
                   weekIdx={weekIdx}
+                  todoForDate={todoGroupedByDate[formatDate(date)]}
                 />
               );
             })}

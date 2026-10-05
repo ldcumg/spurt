@@ -87,3 +87,27 @@ export type TodoTag = {
   id: number;
   name: string;
 };
+
+export type Todo = {
+  id: number;
+  teamId: string;
+  userId: number;
+  goalId: number;
+  title: string;
+  done: boolean;
+  fileUrl: string | null;
+  linkUrl: string | null;
+  dueDate: string;
+  createdAt: string;
+  updatedAt: string;
+  goal: {
+    id: number;
+    title: string;
+  };
+  noteIds: number[];
+  tags: {
+    id: number;
+    name: string;
+  }[];
+  isFavorite: boolean;
+};

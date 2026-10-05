@@ -1,6 +1,9 @@
 import { THIS_WEEK_INDEX } from "../../constants";
 import type { CalendarWeeks } from "../../types";
-import { getCalendarWeeks, nextWeek, previousWeek } from "@/utils/calendar";
+import { CalendarDot } from "@/assets/icons";
+import { getCalendarWeeks, nextWeek, previousWeek } from "@/components/calendar/utils";
+import { useViewport } from "@/hooks/viewport/useViewport";
+import type { Todo } from "@/types/todos.types";
 import clsx from "clsx";
 
 interface DateItemProps {
@@ -10,10 +13,11 @@ interface DateItemProps {
   isThisWeek: boolean;
   isMounthViewOrThisWeek: boolean;
   isNextMonthFirstWeek: boolean;
-  selectedDate: Date | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  selectedDate: Date;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
   setCalendarWeeks: React.Dispatch<React.SetStateAction<CalendarWeeks>>;
   weekIdx: number;
+  todoForDate?: Todo[];
 }
 
 export default function DateItem({
@@ -27,12 +31,14 @@ export default function DateItem({
   setSelectedDate,
   setCalendarWeeks,
   weekIdx,
+  todoForDate,
 }: DateItemProps) {
+  console.log("[ ㏒ ] todoForDate =>", todoForDate);
   const month = date.getMonth() + 1;
   const isToday = date.toDateString() === today.toDateString();
+  const { isDesktop } = useViewport();
 
-  // TODO - service 로직 연결 후 모듈화
-  const handleClick = () => {
+  const handleDateClick = () => {
     const isPreviousWeek = weekIdx < THIS_WEEK_INDEX;
     const isNextWeek = weekIdx > THIS_WEEK_INDEX;
 
@@ -76,10 +82,10 @@ export default function DateItem({
 
       {/* 일 */}
       <div
-        className={`flex w-full flex-col border p-4 hover:cursor-pointer ${isMonthView ? "h-80 md:h-100 xl:h-120" : isThisWeek ? "h-200 md:h-300 xl:h-400" : "h-40 md:h-60"}`}
-        onClick={handleClick}
+        className={`flex w-full flex-col border p-4 hover:cursor-pointer ${isMonthView ? "h-70 md:h-100 xl:h-120" : isThisWeek ? "h-200 md:h-300 xl:h-400" : "h-40 md:h-60"}`}
+        onClick={handleDateClick}
       >
-        <h6
+        <h4
           className={clsx(
             `flex w-25 justify-center ${isMonthView ? "text-body-md" : isThisWeek ? "text-title-xs" : "text-body-sm"}`,
             isToday &&
@@ -90,8 +96,37 @@ export default function DateItem({
           )}
         >
           {date.getDate()}
-        </h6>
-        {/* TODO - 할 일 간소화 표시 */}
+        </h4>
+
+        <div className="flex h-full flex-col px-4 py-8">
+          {todoForDate && (
+            <>
+              <div className="flex flex-row">
+                {todoForDate.slice(0, 3).map((todo) => {
+                  const isDone = todo.done;
+                  return (
+                    <span
+                      className="h-full w-full"
+                      key={todo.id}
+                    >
+                      {isDesktop ? (
+                        todo.title
+                      ) : (
+                        <CalendarDot className={`size-8 ${isDone ? "text-neutral-500" : "text-primary-500"}`} />
+                      )}
+                    </span>
+                  );
+                })}
+              </div>
+
+              <div>
+                {todoForDate.length > 3 && (
+                  <span className="text-body-md text-neutral-400">+ {todoForDate.length - 3}</span>
+                )}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
