@@ -19,6 +19,12 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+      # 임시
+      - name: Check Vercel project access
+        run: |
+          pnpm exec vercel whoami --token=${{ secrets.VERCEL_TOKEN }}
+          pnpm exec vercel project ls --token=${{ secrets.VERCEL_TOKEN }}
+
       - name: Github Repository 불러오기
         uses: actions/checkout@v7
         with:
