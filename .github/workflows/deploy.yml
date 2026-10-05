@@ -19,12 +19,6 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      # 임시
-      - name: Check Vercel project access
-        run: |
-          pnpm exec vercel whoami --token=${{ secrets.VERCEL_TOKEN }}
-          pnpm exec vercel project ls --token=${{ secrets.VERCEL_TOKEN }}
-
       - name: Github Repository 불러오기
         uses: actions/checkout@v7
         with:
@@ -38,6 +32,12 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: "pnpm"
+
+      # 임시
+      - name: Check Vercel project access
+        run: |
+          pnpm exec vercel whoami --token=${{ secrets.VERCEL_TOKEN }}
+          pnpm exec vercel project ls --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: 의존성 설치
         run: pnpm install --frozen-lockfile
