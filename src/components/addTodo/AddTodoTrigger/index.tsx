@@ -10,7 +10,8 @@ import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
 import TextInput from "@/components/ui/TextInput";
 import UploadInput from "@/components/ui/UploadInput";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
-import type { GoalResponse } from "@/types/goals.types";
+import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
+import type { GoalListItem } from "@/types/goals.types";
 import { createStateKeySetter } from "@/utils/stateUtills";
 import { useState, useRef, cloneElement } from "react";
 
@@ -24,40 +25,18 @@ interface AddTodoTriggerProps {
 export default function AddTodoTrigger({ children, aleadySelectedDate }: AddTodoTriggerProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [selectedGoal, setSelectedGoal] = useState<GoalResponse | null>(null);
+  const [selectedGoal, setSelectedGoal] = useState<GoalListItem | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(aleadySelectedDate ?? null);
   const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goal: "", dueDate: "", file: "", linkUrl: "" });
   const setErrorByKey = createStateKeySetter(setError);
   const isDisabled = !!(!selectedGoal || error.title || error.file || error.linkUrl);
   const { isOpen: addTodoIsOpen, open: addTodoOpen, close: addTodoClose } = useDisclosure();
-
-  //NOTE - 임시 데이터
-  const goals: GoalResponse[] = [
-    {
-      id: 1,
-      title: "자바스크립트로 웹 서비스 만들기",
-      teamId: "string",
-      userId: 1,
-      createdAt: "",
-      updatedAt: "",
-    },
-    {
-      id: 2,
-      title: "디자인 시스템 강의 듣기",
-      teamId: "string",
-      userId: 1,
-      createdAt: "",
-      updatedAt: "",
-    },
-    {
-      id: 3,
-      title: "프론트엔드 포트폴리오 완성하기",
-      teamId: "string",
-      userId: 1,
-      createdAt: "",
-      updatedAt: "",
-    },
-  ];
+  const { data: goalData, isPending: isGoalPending, isError: isGoalError, error: goalError } = useAllGoalQuery();
+  if (isGoalPending) return <div>Loading...</div>;
+  if (isGoalError) return <div>Error: {goalError.message}</div>;
+  const {
+    data: { goals },
+  } = goalData;
 
   return (
     <>

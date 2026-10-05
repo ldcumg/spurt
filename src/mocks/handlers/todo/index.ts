@@ -1,4 +1,4 @@
-import { todoMock } from "./mocks";
+import { todoMocks } from "./mocks";
 import { TODOS_API_PATH } from "@/constants/apiEndpoints";
 import { http, HttpResponse } from "msw";
 
@@ -8,7 +8,7 @@ export const todoHandlers = (buildApiUrl: (path: string) => string) => [
 
     // const goalId = searchParams.get("goalId");
 
-    return HttpResponse.json(todoMock);
+    return HttpResponse.json(todoMocks);
   }),
   http.post(buildApiUrl(TODOS_API_PATH.base), async ({ request }) => {
     const body = await request.json();

@@ -1,15 +1,15 @@
-export const todoMock = {
+export const todoMocks = {
   todos: [
     {
       id: 12,
       teamId: "team-abc",
       userId: 1,
-      goalId: 2,
+      goalId: 1,
       title: "API 문서 작성",
       done: true,
       fileUrl: null,
       linkUrl: "https://docs.example.com",
-      dueDate: "2026-10-05T00:00:00.000Z",
+      dueDate: "2026-10-05",
       createdAt: "2026-02-16T09:00:00.000Z",
       updatedAt: "2026-02-16T09:00:00.000Z",
       goal: {
@@ -34,7 +34,7 @@ export const todoMock = {
       done: false,
       fileUrl: null,
       linkUrl: "https://docs.example.com",
-      dueDate: "2026-10-05T00:00:00.000Z",
+      dueDate: "2026-10-05",
       createdAt: "2026-02-16T09:00:00.000Z",
       updatedAt: "2026-02-16T09:00:00.000Z",
       goal: {
@@ -59,7 +59,7 @@ export const todoMock = {
       done: false,
       fileUrl: null,
       linkUrl: "https://docs.example.com",
-      dueDate: "2026-10-05T00:00:00.000Z",
+      dueDate: "2026-10-05",
       createdAt: "2026-02-16T09:00:00.000Z",
       updatedAt: "2026-02-16T09:00:00.000Z",
       goal: {
@@ -84,7 +84,7 @@ export const todoMock = {
       done: false,
       fileUrl: null,
       linkUrl: "https://docs.example.com",
-      dueDate: "2026-10-05T00:00:00.000Z",
+      dueDate: "2026-10-05",
       createdAt: "2026-02-16T09:00:00.000Z",
       updatedAt: "2026-02-16T09:00:00.000Z",
       goal: {
@@ -109,7 +109,7 @@ export const todoMock = {
       done: true,
       fileUrl: null,
       linkUrl: "https://docs.example.com",
-      dueDate: "2026-10-05T00:00:00.000Z",
+      dueDate: "2026-10-05",
       createdAt: "2026-02-16T09:00:00.000Z",
       updatedAt: "2026-02-16T09:00:00.000Z",
       goal: {
@@ -134,7 +134,7 @@ export const todoMock = {
       done: false,
       fileUrl: null,
       linkUrl: "https://docs.example.com",
-      dueDate: "2026-10-05T00:00:00.000Z",
+      dueDate: "2026-10-05",
       createdAt: "2026-02-16T09:00:00.000Z",
       updatedAt: "2026-02-16T09:00:00.000Z",
       goal: {
@@ -159,7 +159,7 @@ export const todoMock = {
       done: false,
       fileUrl: null,
       linkUrl: "https://docs.example.com",
-      dueDate: "2026-10-05T00:00:00.000Z",
+      dueDate: "2026-10-05",
       createdAt: "2026-02-16T09:00:00.000Z",
       updatedAt: "2026-02-16T09:00:00.000Z",
       goal: {
@@ -184,7 +184,7 @@ export const todoMock = {
       done: false,
       fileUrl: null,
       linkUrl: "https://docs.example.com",
-      dueDate: "2026-10-05T00:00:00.000Z",
+      dueDate: "2026-10-05",
       createdAt: "2026-02-16T09:00:00.000Z",
       updatedAt: "2026-02-16T09:00:00.000Z",
       goal: {
