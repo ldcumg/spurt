@@ -14,10 +14,9 @@ interface SelectGoalDropdownProps {
   selectedGoal: GoalResponse | null;
   setSelectedGoal: React.Dispatch<React.SetStateAction<GoalResponse | null>>;
   error?: string;
-  setError: (errorMassage: string) => void;
+  setError?: (errorMassage: string) => void;
 }
 
-/** 할 일에 연결할 목표를 선택하거나 새 목표 입력을 여는 드롭다운입니다. */
 export default function SelectGoalDropdown({
   label,
   goalOptions,
@@ -29,14 +28,14 @@ export default function SelectGoalDropdown({
   const [isOptionOpen, setIsOptionOpen] = useState(false);
   const [isGoalInputOpen, setIsGoalInputOpen] = useState(false);
   const containerRef = useClickOutside(() => {
-    validateGoal(selectedGoal, setError);
+    if (setError) validateGoal(selectedGoal, setError);
     setIsOptionOpen(false);
     setIsGoalInputOpen(false);
   });
 
   /** 옵션 선택 */
   const handleSelect = (option: GoalResponse) => {
-    validateGoal(option, setError);
+    if (setError) validateGoal(option, setError);
     setSelectedGoal(option);
     setIsOptionOpen(false);
     setIsGoalInputOpen(false);
