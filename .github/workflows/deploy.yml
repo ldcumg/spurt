@@ -16,6 +16,8 @@ permissions:
 jobs:
   # dev 브랜치에 merge될 때 preview 배포
   deploy-preview:
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'dev'}}
+
     runs-on: ubuntu-latest
     steps:
       - name: Github Repository 불러오기
@@ -31,12 +33,6 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: "pnpm"
-
-      # 임시
-      - name: Check Vercel project access
-        run: |
-          pnpm exec vercel whoami --token=${{ secrets.VERCEL_TOKEN }}
-          pnpm exec vercel project ls --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: 의존성 설치
         run: pnpm install --frozen-lockfile
