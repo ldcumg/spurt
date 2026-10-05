@@ -6,9 +6,9 @@ import type { Dispatch, SetStateAction } from "react";
  * @returns 전달받은 key에 해당하는 값을 변경하는 setState 핸들러를 반환합니다.
  * @example
  * // user 상태가 { name: string; age: number } 라고 가정할 때:
- * const setUserKey = createStateKeySetter(setUser);
- * setUserKey('name')('이원빈');// setUser(prev => ({ ...prev, name: '이원빈' }))
- * setUserKey('age')(25);// setUser(prev => ({ ...prev, age: 25 }))
+ * const setUserByKey = createStateKeySetter(setUser);
+ * setUserByKey('name')('이원빈');// setUser(prev => ({ ...prev, name: '이원빈' }))
+ * setUserByKey('age')(25);// setUser(prev => ({ ...prev, age: 25 }))
  */
 export function createStateKeySetter<T>(setState: Dispatch<SetStateAction<T>>) {
   return <K extends keyof T>(key: K) =>

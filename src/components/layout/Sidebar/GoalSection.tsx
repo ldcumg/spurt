@@ -1,4 +1,4 @@
-import { MOCK_GOALS } from "./mock";
+import { MOCK_GOALS } from "../../../mocks/sidebar.mock";
 
 // TODO: 목표 상세 페이지 추가 시 usePathname으로 대체
 const ACTIVE_GOAL_ID = 1;
