@@ -1,28 +1,31 @@
 "use client";
 
-import { GOALS_API_PATH } from "@/constants";
-import { clientFetcher } from "@/lib/axios/clientFetcher";
-import { GetGoalListParams, GoalListResponse } from "@/types/goals.types";
+//import { GOALS_API_PATH } from "@/constants";
+//import { clientFetcher } from "@/lib/axios/clientFetcher";
+//import { GetGoalListParams, GoalListResponse } from "@/types/goals.types";
 import { FlagFilled, More, Plus, Right } from "@/assets/icons/index";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import ProgressRing from "@/components/ui/ProgressRing";
 import { Todos } from "@/components/ui/GoalCard/mock";
 import TodoItem from "@/components/ui/TodoItem";
-import { useEffect, useState } from "react";
-import { GoalListItem } from "@/types/goals.types";
+import { useState } from "react";
+//import { GoalListItem } from "@/types/goals.types";
 import calcPercentage from "@/utils/calcPercentage";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import { MockGoalList } from "@/mocks/goalCard.mock";
 //import { getGoalList } from "@/apis/goals/api";
 
 export default function GoalPage() {
-  const [thisGoal, setThisGoal] = useState<GoalListItem | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  //const [thisGoal, setThisGoal] = useState<GoalListItem | null>(null);
+  const thisGoal = MockGoalList.goals[0];
+  //const [isLoading, setIsLoading] = useState(true);
   // 할 일 목록을 부모 state로 관리
   const [todoList, setTodoList] = useState(Todos.todos);
 
   const { data: user } = useUserQuery();
-
+  {
+    /*
   useEffect(() => {
     async function fetchGoalList() {
       try {
@@ -48,11 +51,11 @@ export default function GoalPage() {
   if (!thisGoal) {
     return <div className="p-24">등록된 목표가 없습니다.</div>;
   }
-
+*/
+  }
   const handleToggleTodo = (id: number) => {
     setTodoList((prevList) => prevList.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
   };
-
   const currentGoalTodos = todoList.filter((item) => item.goalId === thisGoal.id);
   const todosList = currentGoalTodos.filter((item) => !item.done);
   const donesList = currentGoalTodos.filter((item) => item.done);
@@ -121,13 +124,16 @@ export default function GoalPage() {
             {todosList.length > 0 ? (
               [...todosList]
                 .filter((item) => item.goalId === thisGoal.id)
-                .map((item) => (
-                  <TodoItem
-                    key={item.id}
-                    todo={item}
-                    onToggle={handleToggleTodo}
-                  />
-                ))
+                .map((item) => {
+                  //thisGoal.completedCount++;
+                  return (
+                    <TodoItem
+                      key={item.id}
+                      todo={item}
+                      onToggle={handleToggleTodo}
+                    />
+                  );
+                })
             ) : (
               <p>
                 최근 등록한 할 일이 없어요
@@ -147,13 +153,16 @@ export default function GoalPage() {
             {donesList.length > 0 ? (
               [...donesList]
                 .filter((item) => item.goalId === thisGoal.id)
-                .map((item) => (
-                  <TodoItem
-                    key={item.id}
-                    todo={item}
-                    onToggle={handleToggleTodo}
-                  />
-                ))
+                .map((item) => {
+                  //thisGoal.completedCount--;
+                  return (
+                    <TodoItem
+                      key={item.id}
+                      todo={item}
+                      onToggle={handleToggleTodo}
+                    />
+                  );
+                })
             ) : (
               <p>
                 완료한 할 일이 없어요
