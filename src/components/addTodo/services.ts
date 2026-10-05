@@ -1,7 +1,7 @@
-import type { GoalItem } from "@/types/typeGoals";
+import type { GoalResponse } from "@/types/goals.types";
 
 export type HandleAddTodoPrams = {
-  selectedGoal: GoalItem | null;
+  selectedGoal: GoalResponse | null;
   setGoalError: (errorMassage: string) => void;
   isDisabled: boolean;
 };

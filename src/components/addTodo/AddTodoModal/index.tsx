@@ -3,12 +3,12 @@
 import UploadInput from "../../ui/UploadInput";
 import DateInput from "../DateInput";
 import type { AddTodoErrorMassage } from "../types";
+import { handleAddTodo } from "@/components/addTodo/services";
+import { validateLinkUrl, validateTitle } from "@/components/addTodo/utils";
 import Modal from "@/components/ui/Modal";
 import ModalActions from "@/components/ui/Modal/ModalActions";
 import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
 import TextInput from "@/components/ui/TextInput";
-import { handleAddTodo } from "@/services/todo/addTodo";
-import { validateLinkUrl, validateTitle } from "@/services/todo/addTodoValidate";
 import type { GoalResponse } from "@/types/goals.types";
 import { createStateKeySetter } from "@/utils/stateUtills";
 import { useState, useRef } from "react";
