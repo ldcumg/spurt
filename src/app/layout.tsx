@@ -1,4 +1,7 @@
 import "./globals.css";
+import { DISCLOSURE_ROOT_ID } from "@/constants/dom";
+import { MockProvider } from "@/providers/MockProvider";
+import QueryProvider from "@/providers/QueryProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
@@ -21,7 +24,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
       lang="ko"
       className={`${pretendard.className} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <MockProvider>
+          <QueryProvider>
+            {children}
+            <div id={DISCLOSURE_ROOT_ID}></div>
+          </QueryProvider>
+        </MockProvider>
+      </body>
     </html>
   );
 }

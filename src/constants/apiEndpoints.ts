@@ -1,8 +1,47 @@
-import { BASE_URL } from "@/config/env";
+import { BACKEND_BASE_URL, TEAM_ID } from "@/config/env";
 
-const BASE_URL_V1 = `${BASE_URL}/api/v1` as const;
+export const BASE_URL = {
+  client: "/api",
+  server: `${BACKEND_BASE_URL}/${TEAM_ID}`,
+} as const;
 
-export const $_API_URL = Object.freeze({
-  $: `${BASE_URL_V1}/`,
-  postDetail: (id) => `${BASE_URL_V1}/postDetail/${id}`,
-} as const);
+export const AUTH_API_PATH = {
+  signup: "/auth/signup",
+  login: "/auth/login",
+  refresh: "/auth/refresh",
+  logout: "/auth/logout",
+  oauth: (provider: string) => `/oauth/${provider}`,
+} as const;
+
+export const GOALS_API_PATH = {
+  base: "/goals",
+  detail: (goalId: string | number) => `/goals/${goalId}`,
+} as const;
+
+export const TODOS_API_PATH = {
+  base: "/todos",
+  favorites: "/todos/favorites",
+  detail: (todoId: string | number) => `/todos/${todoId}`,
+  favorite: (todoId: string | number) => `/todos/${todoId}/favorites`,
+} as const;
+
+export const NOTES_API_PATH = {
+  base: "/notes",
+  detail: (noteId: string | number) => `/notes/${noteId}`,
+} as const;
+
+export const NOTIFICATIONS_API_PATH = {
+  base: "/notifications",
+  detail: (notificationId: string | number) => `/notifications/${notificationId}`,
+} as const;
+
+export const USERS_API_PATH = {
+  me: "/users/me",
+  password: "/users/me/password",
+  checkNickname: "/users/check-nickname",
+} as const;
+
+export const UPLOADS_API_PATH = {
+  images: "/images",
+  files: "/files",
+} as const;
