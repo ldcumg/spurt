@@ -1,15 +1,19 @@
 "use client";
 
 import { DISCLOSURE_ROOT_ID } from "@/constants/dom";
+import { twMerge } from "@/lib/twMerge";
+import clsx from "clsx";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 interface DisclosureProps {
   children: React.ReactNode;
   isOpen: boolean;
+  onOverlayClick?: () => void;
+  className?: string;
 }
 
-export default function Disclosure({ children, isOpen }: DisclosureProps) {
+export default function Disclosure({ children, isOpen, onOverlayClick, className }: DisclosureProps) {
   useEffect(() => {
     if (!isOpen) return;
 
@@ -22,8 +26,15 @@ export default function Disclosure({ children, isOpen }: DisclosureProps) {
 
   if (!isOpen) return null;
 
+  const overlayClasses = twMerge(clsx("z-1000", className));
+
   return createPortal(
-    <div className="fixed inset-0 z-1000 flex flex-col items-center justify-center bg-black/60">{children}</div>,
+    <div
+      className={overlayClasses}
+      onClick={onOverlayClick}
+    >
+      {children}
+    </div>,
     document.getElementById(DISCLOSURE_ROOT_ID)!,
   );
 }

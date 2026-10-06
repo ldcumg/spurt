@@ -1,4 +1,4 @@
-import { NOTIFICATIONS_API_PATH } from "@/constants";
+import { NOTIFICATIONS_API_PATH } from "@/constants/apiEndpoints";
 import { serverFetcher } from "@/lib/axios/serverFetcher";
 import {
   GetNotificationListParams,

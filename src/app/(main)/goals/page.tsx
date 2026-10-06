@@ -6,14 +6,22 @@
 import { FlagFilled, More, Plus, Right } from "@/assets/icons/index";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import ProgressRing from "@/components/ui/ProgressRing";
 import { Todos } from "@/components/ui/GoalCard/mock";
+import ProgressRing from "@/components/ui/ProgressRing";
 import TodoItem from "@/components/ui/TodoItem";
 import { useState } from "react";
 //import { GoalListItem } from "@/types/goals.types";
 import calcPercentage from "@/utils/calcPercentage";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import { MockGoalList } from "@/mocks/goalCard.mock";
+import { GOALS_API_PATH } from "@/constants/apiEndpoints";
+import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import { clientFetcher } from "@/lib/axios/clientFetcher";
+import { GetGoalListParams, GoalListResponse } from "@/types/goals.types";
+import { GoalListItem } from "@/types/goals.types";
+import calcPercentage from "@/utils/calcPercentage";
+import { useEffect, useState } from "react";
+
 //import { getGoalList } from "@/apis/goals/api";
 
 export default function GoalPage() {
