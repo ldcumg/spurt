@@ -18,8 +18,12 @@ clientFetcher.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // 재요청 불가 처리 (토큰 재발급 요청의 401 + 토큰 재발급 후 다시 보낸 원래 요청의 401)
-    if (original.url?.includes(AUTH_API_PATH.refresh) || original._retry) {
+    // 재요청 불가 처리 (토큰 재발급 요청의 401 + 토큰 재발급 후 다시 보낸 원래 요청의 401 + (임시) 로그인 요청의 401)
+    if (
+      original.url?.includes(AUTH_API_PATH.login) ||
+      original.url?.includes(AUTH_API_PATH.refresh) ||
+      original._retry
+    ) {
       return Promise.reject(error);
     }
     original._retry = true;
