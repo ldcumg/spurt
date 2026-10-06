@@ -16,7 +16,6 @@ interface TodoDetailTriggerProps {
 }
 
 export default function TodoDetailTrigger({ children, todo }: TodoDetailTriggerProps) {
-  console.log("[ ㏒ ] todo =>", todo);
   const { isOpen: todoDetailIsOpen, open: todoDetailOpen, close: todoDetailClose } = useDisclosure();
 
   return (
