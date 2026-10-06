@@ -43,5 +43,8 @@ export { default as X } from "./X.svg";
 
 export { default as Up } from "./Up.svg";
 export { default as Under } from "./Under.svg";
+
+export { default as Search } from "./Search_Icon.svg";
+
 export { default as Right } from "./Right.svg";
 export { default as Left } from "./Left.svg";
