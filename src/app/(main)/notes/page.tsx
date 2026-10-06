@@ -1,7 +1,7 @@
 "use client";
 
 import { MobileNavigation, NoteDetailPanel, NotesHero, NotesList, NotesToolbar, type SortOrder } from "./components";
-import { INITIAL_NOTES } from "./mock";
+import { toggleNoteFavorite, useNotesStore } from "./noteStore";
 import ROUTES from "@/constants/routes";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 import { useRouter } from "next/navigation";
@@ -9,7 +9,7 @@ import { useMemo, useState } from "react";
 
 export default function NotePage() {
   const router = useRouter();
-  const [notes, setNotes] = useState(INITIAL_NOTES);
+  const notes = useNotesStore();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<SortOrder>("recent");
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
@@ -31,9 +31,7 @@ export default function NotePage() {
   }, [notes, searchTerm, sortOrder]);
 
   const handleFavoriteToggle = (id: number) => {
-    setNotes((currentNotes) =>
-      currentNotes.map((note) => (note.id === id ? { ...note, isFavorite: !note.isFavorite } : note)),
-    );
+    toggleNoteFavorite(id);
   };
 
   const handleNewNote = () => {

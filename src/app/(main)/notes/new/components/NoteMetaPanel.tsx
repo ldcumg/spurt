@@ -1,9 +1,8 @@
 "use client";
 
-import { MOCK_NOTE_CONTEXT } from "../mock";
 import { Calendar, FlagFilled, Link as LinkIcon, Todos, Under } from "@/assets/icons";
 import Dropdown, { type DropDownOption } from "@/components/ui/Dropdown";
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface MetaSectionProps {
   icon: ReactNode;
@@ -30,27 +29,29 @@ function MetaSection({ icon, title, description, children }: MetaSectionProps) {
   );
 }
 
-export default function NoteMetaPanel() {
-  const [goals, setGoals] = useState<DropDownOption[]>([...MOCK_NOTE_CONTEXT.goals]);
-  const [selectedGoalId, setSelectedGoalId] = useState<string>(MOCK_NOTE_CONTEXT.selectedGoalId);
-  const [todos, setTodos] = useState<DropDownOption[]>([...MOCK_NOTE_CONTEXT.todos]);
-  const [selectedTodoId, setSelectedTodoId] = useState<string>(MOCK_NOTE_CONTEXT.selectedTodoId);
+interface NoteMetaPanelProps {
+  goals: DropDownOption[];
+  todos: DropDownOption[];
+  selectedGoalId: string;
+  selectedTodoId: string;
+  createdAt: string;
+  onGoalChange: (option: DropDownOption) => void;
+  onTodoChange: (option: DropDownOption) => void;
+  onAddGoal: (label: string) => void;
+  onAddTodo: (label: string) => void;
+}
 
-  const handleAddGoal = (label: string) => {
-    const trimmedLabel = label.trim();
-    if (!trimmedLabel) return;
-
-    const nextGoal = { id: `goal-${Date.now()}`, label: trimmedLabel };
-    setGoals((currentGoals) => [...currentGoals, nextGoal]);
-    setSelectedGoalId(nextGoal.id);
-  };
-
-  const handleAddTodo = (label: string) => {
-    const nextTodo = { id: `todo-${Date.now()}`, label };
-    setTodos((currentTodos) => [...currentTodos, nextTodo]);
-    setSelectedTodoId(nextTodo.id);
-  };
-
+export default function NoteMetaPanel({
+  goals,
+  todos,
+  selectedGoalId,
+  selectedTodoId,
+  createdAt,
+  onGoalChange,
+  onTodoChange,
+  onAddGoal,
+  onAddTodo,
+}: NoteMetaPanelProps) {
   return (
     <aside
       aria-label="노트 부가 정보"
@@ -70,8 +71,8 @@ export default function NoteMetaPanel() {
             <Dropdown
               options={goals}
               value={selectedGoalId}
-              onChange={(option) => setSelectedGoalId(option.id)}
-              onAddOption={handleAddGoal}
+              onChange={onGoalChange}
+              onAddOption={onAddGoal}
             />
           </div>
           <div className="bg-blue-light rounded-lg p-12">
@@ -83,8 +84,8 @@ export default function NoteMetaPanel() {
               variant="todo"
               options={todos}
               value={selectedTodoId}
-              onChange={(option) => setSelectedTodoId(option.id)}
-              onAddOption={handleAddTodo}
+              onChange={onTodoChange}
+              onAddOption={onAddTodo}
             />
           </div>
         </div>
@@ -94,9 +95,7 @@ export default function NoteMetaPanel() {
         icon={<Calendar className="size-20" />}
         title="작성일"
       >
-        <time className="text-body-md block rounded-lg bg-neutral-50 px-16 py-12 text-neutral-600">
-          {MOCK_NOTE_CONTEXT.createdAt}
-        </time>
+        <time className="text-body-md block rounded-lg bg-neutral-50 px-16 py-12 text-neutral-600">{createdAt}</time>
       </MetaSection>
     </aside>
   );

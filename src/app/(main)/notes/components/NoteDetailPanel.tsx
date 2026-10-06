@@ -6,6 +6,7 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
+import NoteContent from "./NoteContent";
 
 const Disclosure = dynamic(() => import("@/components/layout/Disclosure"), {
   ssr: false,
@@ -139,30 +140,37 @@ export default function NoteDetailPanel({ note, isOpen, onClose }: NoteDetailPan
           </a>
         )}
 
-        <article className={`text-body-lg text-neutral-800 ${note.detail?.source ? "mt-32" : ""}`}>
-          <div className="flex flex-col gap-16">
-            {paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
+        {note.content ? (
+          <NoteContent
+            content={note.content}
+            className={note.detail?.source ? "mt-32" : ""}
+          />
+        ) : (
+          <article className={`text-body-lg text-neutral-800 ${note.detail?.source ? "mt-32" : ""}`}>
+            <div className="flex flex-col gap-16">
+              {paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
 
-          {sections.map((section) => (
-            <section
-              key={section.title}
-              className="mt-28"
-            >
-              <h3 className="text-title-sm flex items-start gap-8">
-                <span aria-hidden>{section.emoji}</span>
-                <span>{section.title}</span>
-              </h3>
-              <ul className="mt-12 list-disc space-y-6 pl-24">
-                {section.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </section>
-          ))}
-        </article>
+            {sections.map((section) => (
+              <section
+                key={section.title}
+                className="mt-28"
+              >
+                <h3 className="text-title-sm flex items-start gap-8">
+                  <span aria-hidden>{section.emoji}</span>
+                  <span>{section.title}</span>
+                </h3>
+                <ul className="mt-12 list-disc space-y-6 pl-24">
+                  {section.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </article>
+        )}
       </aside>
     </Disclosure>
   );
