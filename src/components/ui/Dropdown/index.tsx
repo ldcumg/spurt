@@ -1,78 +1,94 @@
 "use client";
 
-import { Check, FlagFilled, Plus, Under } from "@/assets/icons";
-import { SubmitEventHandler, useEffect, useRef, useState } from "react";
 import TextInput from "../TextInput";
+import { Check, FlagFilled, Plus, Todos, Under } from "@/assets/icons";
+import { useEffect, useId, useRef, useState, type SubmitEventHandler } from "react";
 
 export type DropDownOption = {
   id: string;
   label: string;
 };
 
+export type DropdownVariant = "goal" | "todo";
+
 interface DropdownProps {
   options: DropDownOption[];
   value: string;
+  variant?: DropdownVariant;
   placeholder?: string;
   disabled?: boolean;
   onChange: (option: DropDownOption) => void;
-  onAddGoal: (value: string) => void;
+  onAddOption: (value: string) => void;
 }
 
-const goals: DropDownOption[] = [
-  { id: "javascript-service", label: "자바스크립트로 웹 서비스 만들기" },
-  { id: "design-system", label: "디자인 시스템 강의 듣기" },
-  { id: "portfolio", label: "프론트엔드 포트폴리오 완성하기" },
-];
-/**
- * 드롭다운 컴포넌트입니다.
- * @param options DropDownOption 타입을 담고있는 리스트입니다. 예: [{id: string, label: string}, ...]
- * @param value option 리스트 중에서 선택한 항목의 id 입니다.
- * @param placeholder option 이 없을 때 나오는 문구입니다.
- * @param disabled
- * @param onChange 드롭다운 메뉴중 하나를 클릭했을 때 발생하는 이벤트 (arg : DropDownOption) => void
- * @param onAddGoal 목표 생성 아이콘을 클릭했을 때 발생하는 이벤트, 매개변수는 목표 텍스트이다. (arg: string) => void
- * @returns
- */
+const DROPDOWN_CONFIG = {
+  goal: {
+    Icon: FlagFilled,
+    placeholder: "목표를 선택해 주세요",
+    addLabel: "새 목표 추가",
+    inputPlaceholder: "목표를 입력해주세요",
+    iconClassName: "text-primary-600",
+    selectedClassName: "bg-primary-200",
+    hoverClassName: "hover:bg-primary-200",
+  },
+  todo: {
+    Icon: Todos,
+    placeholder: "할 일을 선택해 주세요",
+    addLabel: "새 할 일 추가",
+    inputPlaceholder: "할 일을 입력해주세요",
+    iconClassName: "text-information",
+    selectedClassName: "bg-blue-light",
+    hoverClassName: "hover:bg-blue-light",
+  },
+} as const;
+
+/** 목표와 할 일을 선택하거나 새 항목을 추가하는 연결 정보용 드롭다운이다. */
 export default function Dropdown({
   options,
   value,
-  placeholder = "목표를 선택해 주세요",
+  variant = "goal",
+  placeholder,
   disabled = false,
   onChange,
-  onAddGoal,
+  onAddOption,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [inputGoalOpen, setInputGoalOpen] = useState(false);
+  const [isInputOpen, setIsInputOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      const container = containerRef.current;
-      if (!container) return;
-      if (!container.contains(event.target as Node)) {
-        setIsOpen(false);
-        setInputGoalOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, []);
+  const optionsId = `${useId()}-options`;
+  const config = DROPDOWN_CONFIG[variant];
+  const LeadingIcon = config.Icon;
   const selectedOption = options.find((option) => option.id === value);
+
+  useEffect(() => {
+    const handleOutsidePointerDown = (event: PointerEvent) => {
+      if (containerRef.current?.contains(event.target as Node)) return;
+
+      setIsOpen(false);
+      setIsInputOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handleOutsidePointerDown);
+    return () => document.removeEventListener("pointerdown", handleOutsidePointerDown);
+  }, []);
+
   const handleSelect = (option: DropDownOption) => {
     onChange(option);
     setIsOpen(false);
-    setInputGoalOpen(false);
+    setIsInputOpen(false);
   };
-  const handleAddGoalClick = () => {
-    setInputGoalOpen(true);
+
+  const handleAddSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const nextValue = String(formData.get("option") ?? "").trim();
+    if (!nextValue) return;
+
+    onAddOption(nextValue);
+    setIsOpen(false);
+    setIsInputOpen(false);
   };
-  const handleAddGoalSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const goal = formData.get("goal");
-    onAddGoal(String(goal));
-  };
+
   return (
     <div
       ref={containerRef}
@@ -80,113 +96,96 @@ export default function Dropdown({
     >
       <button
         type="button"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-controls={optionsId}
         disabled={disabled}
         onClick={() => {
-          setIsOpen(!isOpen);
-          if (isOpen) setInputGoalOpen(false);
+          setIsOpen((open) => !open);
+          if (isOpen) setIsInputOpen(false);
         }}
-        onKeyDown={(e) => {
-          if (e.key == "Escape") {
-            setIsOpen(false);
-            setInputGoalOpen(false);
-          }
+        onKeyDown={(event) => {
+          if (event.key !== "Escape") return;
+          setIsOpen(false);
+          setIsInputOpen(false);
         }}
-        className={[
-          "flex min-h-[50px] w-full items-center justify-between",
-          "rounded-xl border border-[#D9DEE6] bg-white",
-          "p-8",
-          "transition-[border-color,box-shadow] duration-150",
-          "hover:border-[#B9C6BD]",
-          "focus-visible:border-primary-600 focus-visible:outline-none",
-          "disabled:cursor-not-allowed disabled:opacity-50",
-        ].join(" ")}
+        className="border-input-border bg-surface-card hover:border-primary-300 focus-visible:border-primary-600 flex min-h-50 w-full items-center justify-between rounded-xl border p-8 transition-[border-color,box-shadow] duration-150 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <span className="flex items-center justify-center gap-[12px]">
-          <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-            <FlagFilled className="size-[24px]" />
+        <span className="flex min-w-0 items-center gap-12">
+          <span className={`${config.iconClassName} grid size-36 shrink-0 place-items-center`}>
+            <LeadingIcon className="size-24" />
           </span>
-          <span className="text-title-xs">{selectedOption?.label ?? placeholder}</span>
+          <span className="text-title-xs truncate">{selectedOption?.label ?? placeholder ?? config.placeholder}</span>
         </span>
-        <span className={["grid size-[36px] shrink-0 place-items-center", isOpen && "rotate-180"].join(" ")}>
-          <Under className="size-[24px]" />
+        <span className={`grid size-36 shrink-0 place-items-center ${isOpen ? "rotate-180" : ""}`}>
+          <Under className="size-24" />
         </span>
       </button>
+
       {isOpen && (
-        // border와 rounded를 담당하는 바깥 컨테이너
-        <div
-          className={[
-            "absolute top-[calc(100%+4px)] left-0 z-50 w-full",
-
-            // 스크롤바가 둥근 모서리 영역 밖으로 침범하지 않도록 잘라냄
-            "overflow-hidden rounded-xl border border-[#D9DEE6] bg-white",
-
-            // 열릴 때 애니메이션
-            "origin-top",
-            "transition-[opacity,transform] duration-200 ease-out",
-            "starting:-translate-y-1 starting:scale-[0.98] starting:opacity-0",
-          ].join(" ")}
-        >
+        <div className="border-input-border bg-surface-card absolute top-[calc(100%+4px)] left-0 z-50 w-full origin-top overflow-hidden rounded-xl border transition-[opacity,transform] duration-200 ease-out starting:-translate-y-1 starting:scale-[0.98] starting:opacity-0">
           <ul
-            className={[
-              // 실제 스크롤은 내부 ul에서 담당
-              "max-h-[246px] overflow-y-auto",
-
-              "flex flex-col gap-[12px] p-12",
-              "text-title-xs font-bold",
-            ].join(" ")}
+            id={optionsId}
+            role="listbox"
+            className="text-title-xs flex max-h-246 flex-col gap-12 overflow-y-auto p-12"
           >
             {options.map((option) => {
               const isSelected = option.id === value;
 
               return (
-                <li
-                  key={option.id}
-                  onClick={() => handleSelect(option)}
-                  className={[
-                    "text-title-xs cursor-pointer",
-                    isSelected ? "bg-primary-200" : "bg-transparent",
-                    "hover:bg-primary-200",
-                    "flex items-center justify-between gap-[12px]",
-                    "rounded-lg p-8",
-                  ].join(" ")}
-                >
-                  <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-                    <FlagFilled className="size-[24px]" />
-                  </span>
-
-                  <span className="min-w-0 grow truncate">{option.label}</span>
-
-                  {isSelected && (
-                    <span className="text-primary-600 grid size-[36px] shrink-0 place-items-center">
-                      <Check className="size-[24px]" />
+                <li key={option.id}>
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={isSelected}
+                    onClick={() => handleSelect(option)}
+                    className={`flex w-full items-center justify-between gap-12 rounded-lg p-8 text-left ${
+                      isSelected ? config.selectedClassName : "bg-transparent"
+                    } ${config.hoverClassName}`}
+                  >
+                    <span className={`${config.iconClassName} grid size-36 shrink-0 place-items-center`}>
+                      <LeadingIcon className="size-24" />
                     </span>
-                  )}
+                    <span className="min-w-0 grow truncate">{option.label}</span>
+                    <span className={`${config.iconClassName} grid size-36 shrink-0 place-items-center`}>
+                      {isSelected && <Check className="size-24" />}
+                    </span>
+                  </button>
                 </li>
               );
             })}
 
-            {!inputGoalOpen ? (
-              <li
-                className="text-title-xs flex cursor-pointer justify-center gap-[12px] rounded-xl p-8"
-                onClick={handleAddGoalClick}
-              >
-                <Plus className="size-[24px]" />새 목표 추가
-              </li>
-            ) : (
-              <form
-                className="text-title-xs flex items-center justify-center gap-[12px] rounded-xl p-8"
-                onSubmit={handleAddGoalSubmit}
-              >
-                <TextInput
-                  name="goal"
-                  placeholder="목표를 입력해주세요"
-                />
-
-                <button type="submit">
-                  <Plus className="size-[24px]" />
+            <li>
+              {!isInputOpen ? (
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-center gap-12 rounded-xl p-8 hover:bg-neutral-50"
+                  onClick={() => setIsInputOpen(true)}
+                >
+                  <Plus className="size-24" />
+                  {config.addLabel}
                 </button>
-              </form>
-            )}
+              ) : (
+                <form
+                  className="flex items-center justify-center gap-12 rounded-xl p-8"
+                  onSubmit={handleAddSubmit}
+                >
+                  <TextInput
+                    name="option"
+                    aria-label={config.inputPlaceholder}
+                    placeholder={config.inputPlaceholder}
+                    autoFocus
+                  />
+                  <button
+                    type="submit"
+                    aria-label={`${config.addLabel} 확인`}
+                    className="grid size-36 shrink-0 place-items-center rounded-lg hover:bg-neutral-50"
+                  >
+                    <Plus className="size-24" />
+                  </button>
+                </form>
+              )}
+            </li>
           </ul>
         </div>
       )}

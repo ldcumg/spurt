@@ -1,4 +1,4 @@
-import { GOALS_API_PATH } from "@/constants";
+import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import { serverFetcher } from "@/lib/axios/serverFetcher";
 import {
   GetGoalListParams,

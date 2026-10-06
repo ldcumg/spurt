@@ -4,7 +4,9 @@ const ROUTES = {
   calendar: "/calendar",
   goals: "/goals",
   notes: "/notes",
-  login: "/login"
+  newNote: "/notes/new",
+  login: "/login",
+  signup: "/signup",
 } as const;
 
 export default ROUTES;

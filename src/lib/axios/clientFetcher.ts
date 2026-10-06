@@ -1,8 +1,8 @@
-import { AUTH_API_PATH } from "@/constants";
+import { AUTH_API_PATH, BASE_URL } from "@/constants/apiEndpoints";
 import ROUTES from "@/constants/routes";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
-export const clientFetcher = axios.create({ baseURL: "/api" });
+export const clientFetcher = axios.create({ baseURL: BASE_URL.client });
 
 // promise를 락처럼 사용
 // 여러 요청이 동시에 401 받아도 토큰 재발급은 한번만 요청하도록
@@ -18,8 +18,12 @@ clientFetcher.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // 재요청 불가 처리 (토큰 재발급 요청의 401 + 토큰 재발급 후 다시 보낸 원래 요청의 401)
-    if (original.url?.includes(AUTH_API_PATH.refresh) || original._retry) {
+    // 재요청 불가 처리 (토큰 재발급 요청의 401 + 토큰 재발급 후 다시 보낸 원래 요청의 401 + (임시) 로그인 요청의 401)
+    if (
+      original.url?.includes(AUTH_API_PATH.login) ||
+      original.url?.includes(AUTH_API_PATH.refresh) ||
+      original._retry
+    ) {
       return Promise.reject(error);
     }
     original._retry = true;

@@ -21,6 +21,11 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@tiptap/extension-image": "3.31.3",
+    "@tiptap/extension-link": "^3.31.3",
+    "@tiptap/extension-underline": "^3.31.3",
+    "@tiptap/react": "^3.31.3",
+    "@tiptap/starter-kit": "^3.31.3",
     "@tanstack/react-query": "^5.104.0",
     "axios": "^1.20.0",
     "class-variance-authority": "^0.7.1",
@@ -66,7 +71,7 @@
     "husky": "^9.1.7",
     "jsdom": "^30.0.1",
     "lint-staged": "^17.5.0",
-    "msw": "2.15.0",
+    "msw": "^2.15.0",
     "playwright": "latest",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
@@ -80,7 +85,7 @@
     "vite-plugin-svgr": "^5.2.0",
     "vitest": "latest"
   },
-  "packageManager": "pnpm@12.3.4+sha512.961aa41fb077da3a04a441d9f8e15ebc0c96da8ef710b2eb67bf9ee7cb0610eabd48f1fd85f51cffe73846785fa0f87c56a3a872a1d893f8446741b5cce45457",
+  "packageManager": "pnpm@12.4.2+sha512.08adc6613180275c7c9edada39dcf08c9c61ad4e7eaf330a4f3461f102b0f907423454d117f98e72d47fef0616070644d7bffc973a6a57f5090a6d7c368b07c9",
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"
@@ -88,5 +93,10 @@
   },
   "engines": {
     "node": "24"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

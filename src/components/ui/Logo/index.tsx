@@ -14,7 +14,7 @@ export type LogoVariant =
   | "horizontalWithTagline"
   | "verticalWithTagline"
   | "symbol"
-  | "horizontalInverse"
+  | "horizontalWhite"
   | "horizontalMonochrome"
   | "appIcon";
 
@@ -51,7 +51,7 @@ const LOGO_MAP: Record<
     alt: "Spurt",
   },
 
-  horizontalInverse: {
+  horizontalWhite: {
     src: LogoHorizontalWhite,
     alt: "Spurt - 오늘도, 한 걸음 더",
   },

@@ -7,11 +7,11 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="flex flex-1">
+    <div className="flex h-dvh flex-col md:flex-row">
       <div className="hidden md:block">
         <Sidebar />
       </div>
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 overflow-y-auto">{children}</main>
       <div className="md:hidden">
         <BottomNav />
       </div>

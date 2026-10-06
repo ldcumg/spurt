@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 export const AllStates: Story = {
   decorators: [
     (Story) => (
-      <div className="flex w-390 flex-col gap-32 [&_nav]:static">
+      <div className="flex w-390 flex-col gap-32">
         <Story />
       </div>
     ),

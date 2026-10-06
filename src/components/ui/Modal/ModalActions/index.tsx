@@ -8,6 +8,7 @@ interface ModalActionsProps {
   closeButtonLabel?: string;
   confirmButtonLabel?: string;
   isConfirmDisabled?: boolean;
+  confirmButtonType?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
 }
 
 /**
@@ -23,6 +24,7 @@ export default function ModalActions({
   closeButtonLabel = "취소",
   confirmButtonLabel = "확인",
   isConfirmDisabled,
+  confirmButtonType = "submit",
 }: ModalActionsProps) {
   return (
     <div className="mt-auto flex w-full gap-10 pt-15 md:gap-12 md:pt-24">
@@ -32,19 +34,19 @@ export default function ModalActions({
           className="border-neutral-400 text-neutral-400"
           size="wide"
           variant="outline"
+          type="button"
         >
           {closeButtonLabel}
         </Button>
       )}
-      {onConfirm && (
-        <Button
-          onClick={onConfirm}
-          disabled={isConfirmDisabled}
-          size="wide"
-        >
-          {confirmButtonLabel}
-        </Button>
-      )}
+      <Button
+        onClick={onConfirm}
+        disabled={isConfirmDisabled}
+        size="wide"
+        type={confirmButtonType}
+      >
+        {confirmButtonLabel}
+      </Button>
     </div>
   );
 }
