@@ -1,37 +1,50 @@
-export { default as Delete } from "./Delete.svg";
-export { default as Done } from "./Done.svg";
+export { default as Question } from "./Question.svg";
+export { default as Logout } from "./Logout.svg";
+
 export { default as Edit } from "./Edit.svg";
-export { default as File } from "./File.svg";
+export { default as Delete } from "./Delete.svg";
+
+export { default as Burger } from "./Burger.svg";
+export { default as More } from "./More.svg";
+
 export { default as Flag } from "./Flag.svg";
 export { default as FlagFilled } from "./Flag_filled.svg";
-export { default as Hide } from "./Hide.svg";
+
 export { default as Home } from "./Home.svg";
 export { default as HomeFilled } from "./Home_filled.svg";
-export { default as Link } from "./Link.svg";
-export { default as Logout } from "./Logout.svg";
-export { default as More } from "./More.svg";
+
 export { default as Note } from "./Note.svg";
 export { default as NoteFilled } from "./Note_filled.svg";
 
-export { default as Question } from "./Question.svg";
 export { default as Star } from "./Star.svg";
 export { default as StarFilled } from "./Star_filled.svg";
-export { default as Tag } from "./Tag.svg";
-export { default as Temporary } from "./Temporary.svg";
+
 export { default as Todo } from "./Todo.svg";
+export { default as Done } from "./Done.svg";
 export { default as Todos } from "./Todos.svg";
 export { default as TodosFilled } from "./Todos_filled.svg";
+export { default as Check } from "./Check.svg";
+
 export { default as Unhide } from "./Unhide.svg";
+export { default as Hide } from "./Hide.svg";
+
+export { default as Temporary } from "./Temporary.svg";
 export { default as Upload } from "./Upload.svg";
+export { default as Link } from "./Link.svg";
+export { default as File } from "./File.svg";
+export { default as Tag } from "./Tag.svg";
 
 export { default as Calendar } from "./Calendar.svg";
 export { default as CalendarFilled } from "./Calendar_filled.svg";
-export { default as Right } from "./Right.svg";
-export { default as Left } from "./Left.svg";
-export { default as Burger } from "./Burger.svg";
+export { default as CalendarDot } from "./Calendar_dot.svg";
 
 export { default as Plus } from "./Plus.svg";
 export { default as X } from "./X.svg";
+
+export { default as Up } from "./Up.svg";
 export { default as Under } from "./Under.svg";
-export { default as Check } from "./Check.svg";
+
 export { default as Search } from "./Search_Icon.svg";
+
+export { default as Right } from "./Right.svg";
+export { default as Left } from "./Left.svg";

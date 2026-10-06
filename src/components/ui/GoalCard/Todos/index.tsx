@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 import { Done, Todo } from "@/assets/icons/index";
-import { TodoItem } from "@/types/typeTodos";
+import { TodoResponse } from "@/types/todos.types";
 
 interface TodoListItemProps {
-  todo: TodoItem;
+  todo: TodoResponse;
 }
 
 export default function TodoListItem({ todo }: TodoListItemProps) {
@@ -14,12 +14,12 @@ export default function TodoListItem({ todo }: TodoListItemProps) {
       {isDone ? (
         <Done
           onClick={() => setIsDone((prev) => !prev)}
-          className="text-primary-600 size-24 cursor-pointer"
+          className="text-primary-600 size-24 shrink-0 cursor-pointer"
         />
       ) : (
         <Todo
           onClick={() => setIsDone((prev) => !prev)}
-          className="text-primary-600 size-24 shrink-0 cursor-pointer"
+          className="size-24 shrink-0 cursor-pointer text-neutral-600"
         />
       )}
       <p className="text-title-xs truncate pb-1 whitespace-nowrap text-neutral-700">{todo.title}</p>

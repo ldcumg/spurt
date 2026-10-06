@@ -1,4 +1,3 @@
-import { Goal } from "./mock";
 export type BadgeType = "todo" | "done" | "goal" | "category";
 
 const BADGE_CONFIG: Record<BadgeType, { label: string; style: string }> = {
@@ -49,7 +48,7 @@ export default function Badge({ type, todoCount, doneCount, totalCount, classNam
     <div
       className={`text-caption inline-flex w-fit items-center justify-center gap-8 rounded-sm px-10 py-5 font-semibold whitespace-nowrap ${currentBadge.style} ${className}`}
     >
-      <p className="hidden sm:block">{currentBadge.label}</p>
+      <p>{currentBadge.label}</p>
       {displayCount !== undefined ? <p>{displayCount}</p> : ""}
     </div>
   );

@@ -1,5 +1,6 @@
-export const Goal = {
+export const MockGoalList = {
   goals: [
+    // 1. 진행 중인 목표 (일부 달성)
     {
       id: 3,
       teamId: "team-abc",
@@ -10,9 +11,147 @@ export const Goal = {
       createdAt: "2026-02-15T09:00:00.000Z",
       updatedAt: "2026-02-15T09:00:00.000Z",
     },
+    // 2. 100% 달성 완료된 목표
+    {
+      id: 4,
+      teamId: "team-abc",
+      userId: 1,
+      title: "정보처리기사 실기 자격증 취득",
+      todoCount: 6,
+      completedCount: 6,
+      createdAt: "2026-02-10T10:00:00.000Z",
+      updatedAt: "2026-02-18T18:30:00.000Z",
+    },
+    // 3. 아직 시작 안 한 목표 (0% 달성)
+    {
+      id: 5,
+      teamId: "team-abc",
+      userId: 1,
+      title: "디자인 시스템 라이브러리 배포",
+      todoCount: 4,
+      completedCount: 0,
+      createdAt: "2026-02-16T14:20:00.000Z",
+      updatedAt: "2026-02-16T14:20:00.000Z",
+    },
+    // 4. 할 일이 없는 신규 목표 (Empty state 테스트용)
+    {
+      id: 6,
+      teamId: "team-abc",
+      userId: 1,
+      title: "상반기 개인 포트폴리오 사이트 리뉴얼",
+      todoCount: 0,
+      completedCount: 0,
+      createdAt: "2026-02-18T09:00:00.000Z",
+      updatedAt: "2026-02-18T09:00:00.000Z",
+    },
+    // 5. 달성률이 높은 목표
+    {
+      id: 7,
+      teamId: "team-abc",
+      userId: 2,
+      title: "백엔드 API 최적화 및 문서 자동화",
+      todoCount: 8,
+      completedCount: 6,
+      createdAt: "2026-02-12T11:00:00.000Z",
+      updatedAt: "2026-02-17T16:45:00.000Z",
+    },
+    // 6. 긴 타이틀 (말줄임 truncate 테스트용)
+    {
+      id: 8,
+      teamId: "team-abc",
+      userId: 1,
+      title: "Next.js App Router 기반 대규모 애플리케이션 성능 프로파일링 및 번들 사이즈 최적화",
+      todoCount: 12,
+      completedCount: 5,
+      createdAt: "2026-02-14T08:30:00.000Z",
+      updatedAt: "2026-02-18T13:00:00.000Z",
+    },
   ],
-  nextCursor: 2,
-  totalCount: 8,
+  nextCursor: null,
+  totalCount: 6,
+};
+// 단일 목표 상세 테스트용 (id: 3)
+export const MockGoalDetail = {
+  id: 3,
+  teamId: "team-abc",
+  userId: 1,
+  title: "프로젝트 완성",
+  createdAt: "2026-02-15T09:00:00.000Z",
+  updatedAt: "2026-02-15T09:00:00.000Z",
+  todos: [
+    {
+      id: 12,
+      title: "API 문서 작성",
+      done: false,
+      createdAt: "2026-02-16T09:00:00.000Z",
+      updatedAt: "2026-02-16T09:00:00.000Z",
+    },
+    {
+      id: 13,
+      title: "Storybook 컴포넌트 인터랙션 테스트 작성",
+      done: true,
+      createdAt: "2026-02-16T10:30:00.000Z",
+      updatedAt: "2026-02-18T14:20:00.000Z",
+    },
+    {
+      id: 14,
+      title: "데이터베이스 마이그레이션 스크립트 작성",
+      done: true,
+      createdAt: "2026-02-15T11:00:00.000Z",
+      updatedAt: "2026-02-17T17:45:00.000Z",
+    },
+    {
+      id: 15,
+      title: "배포 CI/CD 파이프라인 캐시 구성",
+      done: false,
+      createdAt: "2026-02-17T09:00:00.000Z",
+      updatedAt: "2026-02-17T09:00:00.000Z",
+    },
+    {
+      id: 16,
+      title: "모바일 화면 반응형 여백 보정",
+      done: false,
+      createdAt: "2026-02-17T15:40:00.000Z",
+      updatedAt: "2026-02-17T15:40:00.000Z",
+    },
+  ],
+};
+// 각 goalId별 상세 mock 조회가 필요할 때 사용하는 맵 객체
+export const MockGoalDetailMap: Record<number, typeof MockGoalDetail> = {
+  3: MockGoalDetail,
+  4: {
+    id: 4,
+    teamId: "team-abc",
+    userId: 1,
+    title: "정보처리기사 실기 자격증 취득",
+    createdAt: "2026-02-10T10:00:00.000Z",
+    updatedAt: "2026-02-18T18:30:00.000Z",
+    todos: [
+      {
+        id: 21,
+        title: "기출문제 1과목 요구사항 확인",
+        done: true,
+        createdAt: "2026-02-11T09:00:00.000Z",
+        updatedAt: "2026-02-13T18:00:00.000Z",
+      },
+      {
+        id: 22,
+        title: "기출문제 2과목 화면 설계 및 구현",
+        done: true,
+        createdAt: "2026-02-12T10:00:00.000Z",
+        updatedAt: "2026-02-14T20:00:00.000Z",
+      },
+    ],
+  },
+  6: {
+    id: 6,
+    teamId: "team-abc",
+    userId: 1,
+    title: "상반기 개인 포트폴리오 사이트 리뉴얼",
+    createdAt: "2026-02-18T09:00:00.000Z",
+    updatedAt: "2026-02-18T09:00:00.000Z",
+    todos: [], // 빈 상태
+  },
 };
 
 export const Todos = {
@@ -145,11 +284,11 @@ export const Todos = {
       isFavorite: false,
     },
     {
-      id: 105,
+      id: 108,
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
-      title: "팀 스크럼 회의록 정리 및 공유",
+      title: "팀 스크럼 회의록 정리 및 공유 (2)",
       done: true,
       fileUrl: null,
       linkUrl: null,
@@ -164,7 +303,7 @@ export const Todos = {
 
     // 9월 15일 완료 - 1개
     {
-      id: 106,
+      id: 109,
       teamId: "team-abc",
       userId: 1,
       goalId: 4,
@@ -183,7 +322,7 @@ export const Todos = {
 
     // 9월 14일 완료 - 3개
     {
-      id: 107,
+      id: 110,
       teamId: "team-abc",
       userId: 3,
       goalId: 3,
@@ -200,7 +339,7 @@ export const Todos = {
       isFavorite: false,
     },
     {
-      id: 108,
+      id: 111,
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
@@ -217,7 +356,7 @@ export const Todos = {
       isFavorite: false,
     },
     {
-      id: 109,
+      id: 112,
       teamId: "team-abc",
       userId: 2,
       goalId: 3,
@@ -236,7 +375,7 @@ export const Todos = {
 
     // 9월 13일 완료 - 1개
     {
-      id: 110,
+      id: 113,
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
@@ -255,7 +394,7 @@ export const Todos = {
 
     // 9월 12일 완료 - 2개
     {
-      id: 111,
+      id: 114,
       teamId: "team-abc",
       userId: 1,
       goalId: 4,
@@ -272,7 +411,7 @@ export const Todos = {
       isFavorite: true,
     },
     {
-      id: 112,
+      id: 115,
       teamId: "team-abc",
       userId: 3,
       goalId: 3,
@@ -291,7 +430,7 @@ export const Todos = {
 
     // 9월 11일 완료 - 1개
     {
-      id: 113,
+      id: 116,
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
@@ -310,7 +449,7 @@ export const Todos = {
 
     // 미완료 항목 (done: false - 카운트 제외 대상)
     {
-      id: 114,
+      id: 117,
       teamId: "team-abc",
       userId: 1,
       goalId: 3,
@@ -327,7 +466,7 @@ export const Todos = {
       isFavorite: true,
     },
     {
-      id: 115,
+      id: 118,
       teamId: "team-abc",
       userId: 2,
       goalId: 3,
@@ -344,6 +483,6 @@ export const Todos = {
       isFavorite: false,
     },
   ],
-  nextCursor: 116,
+  nextCursor: 119,
   totalCount: 30,
 };
