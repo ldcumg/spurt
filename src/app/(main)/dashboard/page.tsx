@@ -29,7 +29,7 @@ export default function DashboardPage() {
   const weeklyTotal = dataSet.reduce((total, item) => total + item.count, 0);
 
   return (
-    <div className="mx-auto flex w-screen flex-col gap-20 px-30 py-40">
+    <div className="flex flex-col gap-20 px-30 py-40">
       <header className="p-20">
         <p className="text-display">
           좋은 하루에요,
@@ -188,7 +188,7 @@ export default function DashboardPage() {
               .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
               .slice(0, 3)
               .map((item) => {
-                const matchedTodos = Todos.todos.filter((todo) => todo.goalId === item.id);
+                // const matchedTodos = Todos.todos.filter((todo) => todo.goalId === item.id);
                 return (
                   <GoalCard
                     key={item.id}

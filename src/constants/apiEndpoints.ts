@@ -5,6 +5,8 @@ export const BASE_URL = {
   server: `${BACKEND_BASE_URL}/${TEAM_ID}`,
 } as const;
 
+export const SENTRY_API_URL = `${BASE_URL.client}/sentry` as const;
+
 export const AUTH_API_PATH = {
   signup: "/auth/signup",
   login: "/auth/login",

@@ -37,7 +37,7 @@ export default function CalendarPage() {
   const todoGroupedByDate = groupTodosByDate(filteredTodoByGoal);
 
   return (
-    <div className="flex h-full w-full flex-col items-center gap-12 overflow-hidden overscroll-contain p-4 pb-100">
+    <div className="flex min-h-full w-full flex-col items-center gap-12 p-4">
       <div className="h-50 w-full px-56">
         <SelectGoalDropdown
           goalOptions={goals}

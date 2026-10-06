@@ -26,7 +26,7 @@ export default function Disclosure({ children, isOpen, onOverlayClick, className
 
   if (!isOpen) return null;
 
-  const overlayClasses = twMerge(clsx("z-1000", className));
+  const overlayClasses = twMerge(clsx("fixed inset-0 z-1000", className));
 
   return createPortal(
     <div

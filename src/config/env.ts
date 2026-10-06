@@ -9,3 +9,7 @@ export const environment = {
 // api base url
 export const BACKEND_BASE_URL: string = process.env.API_BASE_URL!;
 export const TEAM_ID: string = process.env.TEAM_ID!;
+
+// sentry
+export const SENTRY_CLIENT_SECRET = process.env.SENTRY_CLIENT_SECRET;
+export const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
