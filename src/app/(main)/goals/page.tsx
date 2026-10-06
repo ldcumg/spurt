@@ -14,13 +14,7 @@ import { useState } from "react";
 import calcPercentage from "@/utils/calcPercentage";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import { MockGoalList } from "@/mocks/goalCard.mock";
-import { GOALS_API_PATH } from "@/constants/apiEndpoints";
-import { useUserQuery } from "@/hooks/queries/useUserQuery";
-import { clientFetcher } from "@/lib/axios/clientFetcher";
-import { GetGoalListParams, GoalListResponse } from "@/types/goals.types";
-import { GoalListItem } from "@/types/goals.types";
-import calcPercentage from "@/utils/calcPercentage";
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 
 //import { getGoalList } from "@/apis/goals/api";
 
