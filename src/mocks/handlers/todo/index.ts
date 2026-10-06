@@ -10,12 +10,12 @@ export const todoHandlers = (buildApiUrl: (path: string) => string) => [
 
     return HttpResponse.json(todoMocks);
   }),
-  http.post(buildApiUrl(TODOS_API_PATH.base), async ({ request }) => {
-    const body = await request.json();
-    console.log("request body =>", body);
+  // http.post(buildApiUrl(TODOS_API_PATH.base), async ({ request }) => {
+  //   const body = await request.json();
+  //   console.log("request body =>", body);
 
-    return HttpResponse.json(body, { status: 201 });
-  }),
+  //   return HttpResponse.json(body, { status: 201 });
+  // }),
   // http.delete(urlBuilder(TODOS_API_PATH.detail("/:id")), ({ params }) => {
   //   const id = Number(params.id);
 
