@@ -6,26 +6,18 @@ import TodoInfo from "./TodoInfo";
 import Badge from "@/components/ui/Badge";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 import type { TodoResponse } from "@/types/todos.types";
-import { cloneElement } from "react";
 
 interface TodoDetailTriggerProps {
-  children: React.ReactElement<{
-    onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
-  }>;
   todo: TodoResponse;
+  renderItem: (todoDetailOpen: () => void) => React.ReactNode;
 }
 
-export default function TodoDetailTrigger({ children, todo }: TodoDetailTriggerProps) {
+export default function TodoDetailTrigger({ todo, renderItem }: TodoDetailTriggerProps) {
   const { isOpen: todoDetailIsOpen, open: todoDetailOpen, close: todoDetailClose } = useDisclosure();
 
   return (
     <>
-      {cloneElement(children, {
-        onClick: (event) => {
-          children.props.onClick?.(event);
-          todoDetailOpen();
-        },
-      })}
+      {renderItem(todoDetailOpen)}
       <Modal
         title={
           <span className="flex w-full flex-row gap-12">
