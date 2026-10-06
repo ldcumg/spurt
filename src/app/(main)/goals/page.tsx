@@ -65,7 +65,7 @@ export default function GoalPage() {
   const percentage = calcPercentage(thisGoal.completedCount, thisGoal.todoCount);
 
   return (
-    <div className="bg-primary-50 flex h-screen flex-col gap-20 p-24 pt-32">
+    <div className="bg-primary-50 flex min-h-full flex-col gap-20 p-24 pt-32">
       <header>
         <p className="text-display">{user?.name}님의 목표</p>
       </header>
@@ -101,7 +101,7 @@ export default function GoalPage() {
           </div>
         </div>
       </section>
-      <section className="flex h-full flex-col gap-24 lg:flex-row">
+      <section className="flex flex-1 flex-col gap-24 lg:flex-row">
         <div className="flex-1 rounded-md bg-white p-12 shadow-sm">
           <div className="flex h-60 flex-row items-center justify-between p-8">
             <Badge
