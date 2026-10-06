@@ -1,8 +1,8 @@
 "use client";
 
+import { createNoteExtensions, NOTE_CONTENT_CLASS_NAME } from "../../components/NoteContent";
 import { Link as LinkIcon, More, NoteFilled, Upload } from "@/assets/icons";
 import Button from "@/components/ui/Button";
-import { createNoteExtensions, NOTE_CONTENT_CLASS_NAME } from "../../components/NoteContent";
 import Select, { type SelectOption } from "@/components/ui/Select";
 import TextInput from "@/components/ui/TextInput";
 import { EditorContent, useEditor, useEditorState, type JSONContent } from "@tiptap/react";
@@ -16,9 +16,9 @@ interface ToolbarButtonProps {
   label: string;
   children: ReactNode;
   onClick: () => void;
-  active?: boolean;
-  disabled?: boolean;
-  desktopOnly?: boolean;
+  isActive?: boolean;
+  isDisabled?: boolean;
+  isDesktopOnly?: boolean;
 }
 
 const FORMAT_OPTIONS: SelectOption[] = [
@@ -53,20 +53,20 @@ const getEmbeddedImageSize = (node: JSONContent): number => {
   return ownSize + (node.content?.reduce((total, child) => total + getEmbeddedImageSize(child), 0) ?? 0);
 };
 
-function ToolbarButton({ label, children, onClick, active, disabled, desktopOnly }: ToolbarButtonProps) {
+function ToolbarButton({ label, children, onClick, isActive, isDisabled, isDesktopOnly }: ToolbarButtonProps) {
   return (
     <Button
       type="button"
       variant="ghost"
       size="sm"
       aria-label={label}
-      aria-pressed={active}
+      aria-pressed={isActive}
       title={label}
-      disabled={disabled}
+      disabled={isDisabled}
       onClick={onClick}
       className={`text-title-xs inline-flex shrink-0 items-center justify-center px-8 ${
-        active ? "bg-primary-50 text-primary-600" : "text-neutral-800"
-      } ${desktopOnly ? "hidden md:inline-flex" : ""}`}
+        isActive ? "bg-primary-50 text-primary-600" : "text-neutral-800"
+      } ${isDesktopOnly ? "hidden md:inline-flex" : ""}`}
     >
       {children}
     </Button>
@@ -287,43 +287,43 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
 
           <ToolbarButton
             label="굵게"
-            active={state.isBold}
-            disabled={!editor}
+            isActive={state.isBold}
+            isDisabled={!editor}
             onClick={() => editor?.chain().focus().toggleBold().run()}
           >
             <strong>B</strong>
           </ToolbarButton>
           <ToolbarButton
             label="기울임"
-            active={state.isItalic}
-            disabled={!editor}
+            isActive={state.isItalic}
+            isDisabled={!editor}
             onClick={() => editor?.chain().focus().toggleItalic().run()}
           >
             <em>I</em>
           </ToolbarButton>
           <ToolbarButton
             label="밑줄"
-            active={state.isUnderline}
-            disabled={!editor}
-            desktopOnly
+            isActive={state.isUnderline}
+            isDisabled={!editor}
+            isDesktopOnly
             onClick={() => editor?.chain().focus().toggleUnderline().run()}
           >
             <span className="underline">U</span>
           </ToolbarButton>
           <ToolbarButton
             label="취소선"
-            active={state.isStrike}
-            disabled={!editor}
-            desktopOnly
+            isActive={state.isStrike}
+            isDisabled={!editor}
+            isDesktopOnly
             onClick={() => editor?.chain().focus().toggleStrike().run()}
           >
             <span className="line-through">S</span>
           </ToolbarButton>
           <ToolbarButton
             label="인라인 코드"
-            active={state.isCode}
-            disabled={!editor}
-            desktopOnly
+            isActive={state.isCode}
+            isDisabled={!editor}
+            isDesktopOnly
             onClick={() => editor?.chain().focus().toggleCode().run()}
           >
             <span aria-hidden>&lt;&gt;</span>
@@ -333,17 +333,17 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
 
           <ToolbarButton
             label="링크"
-            active={state.isLink}
-            disabled={!editor}
-            desktopOnly
+            isActive={state.isLink}
+            isDisabled={!editor}
+            isDesktopOnly
             onClick={handleLink}
           >
             <LinkIcon className="size-18" />
           </ToolbarButton>
           <ToolbarButton
             label="이미지 삽입"
-            disabled={!editor}
-            desktopOnly
+            isDisabled={!editor}
+            isDesktopOnly
             onClick={() => imageInputRef.current?.click()}
           >
             <Upload className="size-18" />
@@ -357,27 +357,27 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
           />
           <ToolbarButton
             label="글머리 기호 목록"
-            active={state.isBulletList}
-            disabled={!editor}
-            desktopOnly
+            isActive={state.isBulletList}
+            isDisabled={!editor}
+            isDesktopOnly
             onClick={() => editor?.chain().focus().toggleBulletList().run()}
           >
             <span aria-hidden>☷</span>
           </ToolbarButton>
           <ToolbarButton
             label="번호 목록"
-            active={state.isOrderedList}
-            disabled={!editor}
-            desktopOnly
+            isActive={state.isOrderedList}
+            isDisabled={!editor}
+            isDesktopOnly
             onClick={() => editor?.chain().focus().toggleOrderedList().run()}
           >
             <span aria-hidden>☰</span>
           </ToolbarButton>
           <ToolbarButton
             label="인용문"
-            active={state.isBlockquote}
-            disabled={!editor}
-            desktopOnly
+            isActive={state.isBlockquote}
+            isDisabled={!editor}
+            isDesktopOnly
             onClick={() => editor?.chain().focus().toggleBlockquote().run()}
           >
             <span aria-hidden>❝</span>

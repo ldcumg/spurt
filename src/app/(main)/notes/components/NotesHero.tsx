@@ -7,15 +7,15 @@ import Image from "next/image";
 
 interface NewNoteButtonProps {
   onClick: () => void;
-  compact?: boolean;
+  isCompact?: boolean;
   className?: string;
 }
 
-function NewNoteButton({ onClick, compact = false, className }: NewNoteButtonProps) {
+function NewNoteButton({ onClick, isCompact = false, className }: NewNoteButtonProps) {
   return (
     <Button
       type="button"
-      size={compact ? "lg" : "xl"}
+      size={isCompact ? "lg" : "xl"}
       onClick={onClick}
       className={twMerge("text-title-xs inline-flex shrink-0 items-center justify-center gap-8", className)}
     >
@@ -63,7 +63,7 @@ export default function NotesHero({ searchTerm, onSearchChange, onNewNote }: Not
             </p>
           </div>
           <NewNoteButton
-            compact
+            isCompact
             onClick={onNewNote}
             className="md:hidden"
           />
