@@ -13,16 +13,14 @@ import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
 import type { GoalListItem } from "@/types/goals.types";
 import { createStateKeySetter } from "@/utils/stateUtills";
-import { useState, useRef, cloneElement } from "react";
+import { useState, useRef } from "react";
 
 interface AddTodoTriggerProps {
-  children: React.ReactElement<{
-    onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  }>;
   aleadySelectedDate?: Date;
+  renderItem: (todoDetailOpen: () => void) => React.ReactNode;
 }
 
-export default function AddTodoTrigger({ children, aleadySelectedDate }: AddTodoTriggerProps) {
+export default function AddTodoTrigger({ aleadySelectedDate, renderItem }: AddTodoTriggerProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [selectedGoal, setSelectedGoal] = useState<GoalListItem | null>(null);
@@ -40,12 +38,7 @@ export default function AddTodoTrigger({ children, aleadySelectedDate }: AddTodo
 
   return (
     <>
-      {cloneElement(children, {
-        onClick: (event) => {
-          children.props.onClick?.(event);
-          addTodoOpen();
-        },
-      })}
+      {renderItem(addTodoOpen)}
       <Modal
         title="할 일 생성"
         isOpen={addTodoIsOpen}
