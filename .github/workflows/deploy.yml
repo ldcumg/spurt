@@ -43,7 +43,13 @@ jobs:
         run: pnpm exec vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Vercel Preview 배포
-        run: pnpm exec vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          DEPLOYMENT_URL=$(pnpm exec vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+
+          pnpm exec vercel alias set \
+            "$DEPLOYMENT_URL" \
+            spurt-sprint-projects-dev.vercel.app \
+            --token=${{ secrets.VERCEL_TOKEN }}
 
   # dev 브랜치에서 main 브랜치로 merge될 때 production 배포
   deploy-production:
