@@ -30,6 +30,7 @@ export { default as Hide } from "./Hide.svg";
 
 export { default as Temporary } from "./Temporary.svg";
 export { default as Upload } from "./Upload.svg";
+export { default as Download } from "./Download.svg";
 export { default as Link } from "./Link.svg";
 export { default as File } from "./File.svg";
 export { default as Tag } from "./Tag.svg";
