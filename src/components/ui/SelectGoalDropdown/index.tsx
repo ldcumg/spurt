@@ -5,12 +5,12 @@ import GoalDropdownButton from "./GoalDropdownButton";
 import GoalOptionItem from "./GoalOptionItem";
 import { validateGoal } from "@/components/addTodo/utils";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
+import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
 import type { GoalListItem } from "@/types/goals.types";
 import { useState } from "react";
 
 interface SelectGoalDropdownProps {
   label?: string;
-  goalOptions: GoalListItem[];
   selectedGoal: GoalListItem | null;
   setSelectedGoal: React.Dispatch<React.SetStateAction<GoalListItem | null>>;
   error?: string;
@@ -19,7 +19,6 @@ interface SelectGoalDropdownProps {
 
 export default function SelectGoalDropdown({
   label,
-  goalOptions,
   selectedGoal,
   setSelectedGoal,
   error,
@@ -32,6 +31,13 @@ export default function SelectGoalDropdown({
     setIsOptionOpen(false);
     setIsGoalInputOpen(false);
   });
+
+  const { data: goalData, isPending: isGoalPending, isError: isGoalError, error: goalError } = useAllGoalQuery();
+  if (isGoalPending) return <div>Loading...</div>;
+  if (isGoalError) return <div>Error: {goalError.message}</div>;
+  const {
+    data: { goals: goalOptions },
+  } = goalData;
 
   /** 옵션 선택 */
   const handleSelect = (option: GoalListItem) => {
