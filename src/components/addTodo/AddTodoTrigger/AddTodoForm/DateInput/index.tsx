@@ -15,6 +15,7 @@ interface DateInputProps {
 
 export default function DateInput({ selectedDate, setSelectedDate, error, setError }: DateInputProps) {
   const { isOpen: isCalendarOpen, close: calendarClose, toggle: calendarToggle } = useDisclosure();
+  /** 바깥 컨테이너 클릭 시 달력 닫기 */
   const containerRef = useClickOutside(() => {
     validateDueDate(selectedDate, setError);
     calendarClose();

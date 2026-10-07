@@ -1,11 +1,11 @@
 "use client";
 
-import AddGoalInput from "./AddGoalInput";
 import GoalDropdownButton from "./GoalDropdownButton";
-import GoalOptionItem from "./GoalOptionItem";
+import GoalOptions from "./GoalOptions";
+import { INITAIL_OPEN_STATE } from "./constants";
+import type { OpenState } from "./types";
 import { validateGoal } from "@/components/addTodo/utils";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
-import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
 import type { GoalListItem } from "@/types/goals.types";
 import { useState } from "react";
 
@@ -24,27 +24,21 @@ export default function SelectGoalDropdown({
   error,
   setError,
 }: SelectGoalDropdownProps) {
-  const [isOptionOpen, setIsOptionOpen] = useState(false);
-  const [isGoalInputOpen, setIsGoalInputOpen] = useState(false);
+  const [isOen, setIsOpen] = useState<OpenState>(INITAIL_OPEN_STATE);
+  /** 드랍다운 닫기 */
+  const closeDropdown = () => setIsOpen(INITAIL_OPEN_STATE);
+
+  /** 드랍다운 밖 클릭 시 드랍다운 닫기 */
   const containerRef = useClickOutside(() => {
     if (setError) validateGoal(selectedGoal, setError);
-    setIsOptionOpen(false);
-    setIsGoalInputOpen(false);
+    closeDropdown();
   });
 
-  const { data: goalData, isPending: isGoalPending, isError: isGoalError, error: goalError } = useAllGoalQuery();
-  if (isGoalPending) return <div>Loading...</div>;
-  if (isGoalError) return <div>Error: {goalError.message}</div>;
-  const {
-    data: { goals },
-  } = goalData;
-
-  /** 옵션 선택 */
+  /** 목표 선택 */
   const handleSelect = (option: GoalListItem) => {
     if (setError) validateGoal(option, setError);
     setSelectedGoal(option);
-    setIsOptionOpen(false);
-    setIsGoalInputOpen(false);
+    closeDropdown();
   };
 
   return (
@@ -63,42 +57,21 @@ export default function SelectGoalDropdown({
         className="relative w-full max-w-424"
       >
         <GoalDropdownButton
-          isOptionOpen={isOptionOpen}
-          setIsOptionOpen={setIsOptionOpen}
+          isOptionOpen={isOen.option}
+          closeDropdown={closeDropdown}
           selectedGoal={selectedGoal}
-          setIsGoalInputOpen={setIsGoalInputOpen}
           error={error}
         />
 
         {error && <p className="text-body-md text-error">{error}</p>}
 
-        {isOptionOpen && (
-          // border와 rounded를 담당하는 바깥 컨테이너
-          <div
-            // 스크롤바가 둥근 모서리 영역 밖으로 침범하지 않도록 잘라냄
-            className="absolute top-[calc(100%+4px)] left-0 z-50 w-full origin-top overflow-hidden rounded-xl border border-[#D9DEE6] bg-white transition-[opacity,transform] duration-200 ease-out starting:-translate-y-1 starting:scale-[0.98] starting:opacity-0"
-          >
-            <ul
-              // 실제 스크롤은 내부 ul에서 담당
-              className="text-title-xs flex max-h-246 flex-col gap-12 overflow-y-auto p-12 font-bold"
-            >
-              {goals.map((option) => {
-                const isSelected = option.id === selectedGoal?.id;
-                return (
-                  <GoalOptionItem
-                    key={option.id}
-                    option={option}
-                    isSelected={isSelected}
-                    handleSelect={handleSelect}
-                  />
-                );
-              })}
-              <AddGoalInput
-                isGoalInputOpen={isGoalInputOpen}
-                setIsGoalInputOpen={setIsGoalInputOpen}
-              />
-            </ul>
-          </div>
+        {isOen.option && (
+          <GoalOptions
+            isGoalInputOpen={isOen.goalInput}
+            handleSelect={handleSelect}
+            selectedGoal={selectedGoal}
+            setIsOpen={setIsOpen}
+          />
         )}
       </div>
     </div>
