@@ -7,7 +7,9 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     const { email, name, password } = await request.json();
-    const { accessToken, refreshToken, user } = await postSignup({ email, name, password });
+    const {
+      data: { accessToken, refreshToken, user },
+    } = await postSignup({ email, name, password });
 
     const response = NextResponse.json({ user }, { status: 201 });
 
