@@ -18,9 +18,6 @@ interface AddTodoFormProps {
 
 export default function AddTodoForm({ addTodoClose, aleadySelectedDate }: AddTodoFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
-  // const [file, setFile] = useState<File | null>(null);
-  // const [selectedGoal, setSelectedGoal] = useState<GoalListItem | null>(null);
-  // const [selectedDate, setSelectedDate] = useState<Date | null>(aleadySelectedDate ?? null);
   const [formState, setFormState] = useState<FormState>({
     file: null,
     selectedGoal: null,

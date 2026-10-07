@@ -14,7 +14,7 @@ interface SelectGoalDropdownProps {
   selectedGoal: GoalListItem | null;
   setSelectedGoal: React.Dispatch<React.SetStateAction<GoalListItem | null>>;
   error?: string;
-  setError?: (errorMassage: string) => void;
+  setError?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function SelectGoalDropdown({
@@ -36,7 +36,7 @@ export default function SelectGoalDropdown({
   if (isGoalPending) return <div>Loading...</div>;
   if (isGoalError) return <div>Error: {goalError.message}</div>;
   const {
-    data: { goals: goalOptions },
+    data: { goals },
   } = goalData;
 
   /** 옵션 선택 */
@@ -82,7 +82,7 @@ export default function SelectGoalDropdown({
               // 실제 스크롤은 내부 ul에서 담당
               className="text-title-xs flex max-h-246 flex-col gap-12 overflow-y-auto p-12 font-bold"
             >
-              {goalOptions.map((option) => {
+              {goals.map((option) => {
                 const isSelected = option.id === selectedGoal?.id;
                 return (
                   <GoalOptionItem

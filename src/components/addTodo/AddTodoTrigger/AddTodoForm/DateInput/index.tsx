@@ -10,7 +10,7 @@ interface DateInputProps {
   selectedDate: Date | null;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
   error?: string;
-  setError: (errorMassage: string) => void;
+  setError: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function DateInput({ selectedDate, setSelectedDate, error, setError }: DateInputProps) {
