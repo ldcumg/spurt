@@ -8,6 +8,7 @@ import ModalActions from "@/components/ui/Modal/ModalActions";
 import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
 import TextInput from "@/components/ui/TextInput";
 import UploadInput from "@/components/ui/UploadInput";
+import { useAddTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import { createStateKeySetter } from "@/utils/stateUtills";
 import { useRef, useState } from "react";
 
@@ -26,17 +27,13 @@ export default function AddTodoForm({ addTodoClose, aleadySelectedDate }: AddTod
   const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goal: "", dueDate: "", file: "", linkUrl: "" });
   const setFormStateByKey = createStateKeySetter(setFormState);
   const setErrorByKey = createStateKeySetter(setError);
+  const hasError = !!(error.title || error.goal || error.dueDate || error.file || error.linkUrl);
 
-  const isDisabled = !!(!formState.selectedGoal || error.title || error.file || error.linkUrl);
+  const { mutate: addTodoMutate } = useAddTodoMutation();
 
   return (
     <form
-      onSubmit={(e) =>
-        handleAddTodo(e, {
-          formState,
-          isDisabled,
-        })
-      }
+      onSubmit={(event) => handleAddTodo({ event, formState, addTodoMutate, hasError, addTodoClose })}
       ref={formRef}
       className="flex h-full flex-col gap-16"
     >
@@ -75,7 +72,7 @@ export default function AddTodoForm({ addTodoClose, aleadySelectedDate }: AddTod
       />
       <ModalActions
         onClose={addTodoClose}
-        isConfirmDisabled={isDisabled}
+        // isConfirmDisabled={hasError}
       />
     </form>
   );

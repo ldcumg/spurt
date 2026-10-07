@@ -1,9 +1,9 @@
 import type { GoalListItem } from "@/types/goals.types";
 
 export type FormState = {
-  file: File | null;
   selectedGoal: GoalListItem | null;
   selectedDate: Date | null;
+  file: File | null;
 };
 
 export type AddTodoErrorMassage = {

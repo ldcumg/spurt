@@ -1,32 +1,71 @@
-import type { GoalResponse } from "@/types/goals.types";
+import { formatDate } from "../calendar/utils";
+import type { FormState } from "./types";
+import { postFileUploadUrl } from "@/apis/uploads";
+import type { PostTodoRequest } from "@/types/todos.types";
+import type { UseMutateFunction } from "@tanstack/react-query";
 
-export type HandleAddTodoPrams = {
-  selectedGoal: GoalResponse | null;
-  selectedDate: Date | null;
-  isDisabled: boolean;
+export type HandleAddTodoParams<TData, TError> = {
+  event: React.SubmitEvent<HTMLFormElement>;
+  formState: FormState;
+  addTodoMutate: UseMutateFunction<TData, TError, PostTodoRequest>;
+  hasError: boolean;
+  addTodoClose: () => void;
 };
 
-/** todo 추가 서비스 로직 */
-export const handleAddTodo = (
-  e: React.SubmitEvent<HTMLFormElement>,
-  { selectedGoal, selectedDate, isDisabled }: HandleAddTodoPrams,
-) => {
-  e.preventDefault();
+export const handleAddTodo = async <TData, TError>({
+  event,
+  formState,
+  addTodoMutate,
+  hasError,
+  addTodoClose,
+}: HandleAddTodoParams<TData, TError>) => {
+  event.preventDefault();
 
-  if (!selectedGoal || !selectedDate || isDisabled) return;
+  console.log("[ ㏒ ] hasError =>", hasError);
+  // if (hasError) return;
 
-  //TODO - 파일 url 발금 로직
+  const formData = new FormData(event.currentTarget);
+  const selectedGoal = formState.selectedGoal;
+  const selectedDate = formState.selectedDate;
+  const file = formState.file;
+  const linkUrl = formData.get("linkUrl");
 
-  const formData = new FormData(e.currentTarget);
-
-  const newTodo = {
-    title: formData.get("title"),
-    goalId: selectedGoal.id,
-    dueDate: "",
-    fileUrl: "",
-    linkUrl: formData.get("linkUrl"),
+  const newTodo: PostTodoRequest = {
+    title: formData.get("title") as string,
   };
 
-  //TODO - 할 일 추가 api
-  console.log(newTodo);
+  // 목표 선택 시 목표 id 추가
+  if (selectedGoal) {
+    newTodo.goalId = selectedGoal.id;
+  }
+
+  // 마감 날짜 선택 시 마감 날짜 추가
+  if (selectedDate) {
+    newTodo.dueDate = formatDate(selectedDate);
+  }
+
+  // 파일 선택 시 파일 url 추가
+  if (file) {
+    const {
+      data: { url },
+    } = await postFileUploadUrl({
+      fileName: file.name,
+    });
+    newTodo.fileUrl = url;
+  }
+
+  if (linkUrl) {
+    newTodo.linkUrl = linkUrl as string;
+  }
+
+  addTodoMutate(newTodo, {
+    onSuccess: (data) => {
+      console.log(data);
+      addTodoClose();
+    },
+    onError: (error) => {
+      console.error(error);
+      alert("오류가 발생했습니다.");
+    },
+  });
 };

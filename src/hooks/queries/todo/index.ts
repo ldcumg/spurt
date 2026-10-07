@@ -9,7 +9,7 @@ export const todoQueryOptions = {
     queryOptions({
       queryKey: TODO_QUERY_KEYS.all,
       queryFn: async () => {
-        const response = await clientFetcher<TodoListResponse>(TODOS_API_PATH.base);
+        const response = await clientFetcher.get<TodoListResponse>(TODOS_API_PATH.base);
         const {
           data: { todos },
         } = response;
@@ -25,6 +25,6 @@ export const todoQueryOptions = {
   detail: (todoId: string) =>
     queryOptions({
       queryKey: TODO_QUERY_KEYS.detail(todoId),
-      queryFn: () => clientFetcher<TodoResponse>(TODOS_API_PATH.detail(todoId)),
+      queryFn: () => clientFetcher.get<TodoResponse>(TODOS_API_PATH.detail(todoId)),
     }),
 };
