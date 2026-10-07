@@ -34,13 +34,6 @@ export default function SelectGoalDropdown({
     closeDropdown();
   });
 
-  /** 목표 선택 */
-  const handleSelect = (option: GoalListItem) => {
-    if (setError) validateGoal(option, setError);
-    setSelectedGoal(option);
-    closeDropdown();
-  };
-
   return (
     <div className="flex w-full flex-col gap-8">
       {label && (
@@ -53,11 +46,12 @@ export default function SelectGoalDropdown({
       )}
 
       <div
-        ref={containerRef}
         className="relative w-full max-w-424"
+        ref={containerRef}
       >
         <GoalDropdownButton
           isOptionOpen={isOen.option}
+          setIsOpen={setIsOpen}
           closeDropdown={closeDropdown}
           selectedGoal={selectedGoal}
           error={error}
@@ -68,8 +62,10 @@ export default function SelectGoalDropdown({
         {isOen.option && (
           <GoalOptions
             isGoalInputOpen={isOen.goalInput}
-            handleSelect={handleSelect}
             selectedGoal={selectedGoal}
+            setSelectedGoal={setSelectedGoal}
+            closeDropdown={closeDropdown}
+            setError={setError}
             setIsOpen={setIsOpen}
           />
         )}

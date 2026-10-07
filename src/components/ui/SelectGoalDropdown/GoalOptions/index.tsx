@@ -3,6 +3,7 @@
 import type { OpenState } from "../types";
 import AddGoalInput from "./AddGoalInput";
 import GoalOptionItem from "./GoalOptionItem";
+import { validateGoal } from "@/components/addTodo/utils";
 import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
 import type { GoalListItem } from "@/types/goals.types";
 
@@ -10,10 +11,26 @@ interface GoalOptionsProps {
   isGoalInputOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<OpenState>>;
   selectedGoal: GoalListItem | null;
-  handleSelect: (option: GoalListItem) => void;
+  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalListItem | null>>;
+  closeDropdown: () => void;
+  setError: React.Dispatch<React.SetStateAction<string>> | undefined;
 }
 
-export default function GoalOptions({ isGoalInputOpen, selectedGoal, handleSelect, setIsOpen }: GoalOptionsProps) {
+export default function GoalOptions({
+  isGoalInputOpen,
+  selectedGoal,
+  setSelectedGoal,
+  setIsOpen,
+  closeDropdown,
+  setError,
+}: GoalOptionsProps) {
+  /** 목표 선택 */
+  const handleSelect = (option: GoalListItem) => {
+    if (setError) validateGoal(option, setError);
+    setSelectedGoal(option);
+    closeDropdown();
+  };
+
   const { data: goalData, isPending: isGoalPending, isError: isGoalError, error: goalError } = useAllGoalQuery();
   if (isGoalPending) return <div>Loading...</div>;
   if (isGoalError) return <div>Error: {goalError.message}</div>;
