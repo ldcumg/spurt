@@ -1,7 +1,7 @@
 "use client";
 
-import { validateDueDate } from "../../../utils";
 import { Calendar } from "@/assets/icons";
+import { validateDueDate } from "@/components/addTodo/utils";
 import MiniCalendar from "@/components/calendar/MiniCalendar";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";

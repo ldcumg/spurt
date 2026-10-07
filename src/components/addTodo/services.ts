@@ -61,6 +61,7 @@ export const handleAddTodo = async <TData, TError>({
   addTodoMutate(newTodo, {
     onSuccess: (data) => {
       console.log(data);
+      alert("할 일이 추가되었습니다.");
       addTodoClose();
     },
     onError: (error) => {
