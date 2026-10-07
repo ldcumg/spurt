@@ -3,38 +3,38 @@ import type { GoalListItem } from "@/types/goals.types";
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { useState } from "react";
 
-const goals: GoalListItem[] = [
-  {
-    id: 1,
-    title: "자바스크립트로 웹 서비스 만들기",
-    teamId: "string",
-    userId: 1,
-    createdAt: "",
-    updatedAt: "",
-    todoCount: 0,
-    completedCount: 0,
-  },
-  {
-    id: 2,
-    title: "디자인 시스템 강의 듣기",
-    teamId: "string",
-    userId: 1,
-    createdAt: "",
-    updatedAt: "",
-    todoCount: 0,
-    completedCount: 0,
-  },
-  {
-    id: 3,
-    title: "프론트엔드 포트폴리오 완성하기",
-    teamId: "string",
-    userId: 1,
-    createdAt: "",
-    updatedAt: "",
-    todoCount: 0,
-    completedCount: 0,
-  },
-];
+// const goals: GoalListItem[] = [
+//   {
+//     id: 1,
+//     title: "자바스크립트로 웹 서비스 만들기",
+//     teamId: "string",
+//     userId: 1,
+//     createdAt: "",
+//     updatedAt: "",
+//     todoCount: 0,
+//     completedCount: 0,
+//   },
+//   {
+//     id: 2,
+//     title: "디자인 시스템 강의 듣기",
+//     teamId: "string",
+//     userId: 1,
+//     createdAt: "",
+//     updatedAt: "",
+//     todoCount: 0,
+//     completedCount: 0,
+//   },
+//   {
+//     id: 3,
+//     title: "프론트엔드 포트폴리오 완성하기",
+//     teamId: "string",
+//     userId: 1,
+//     createdAt: "",
+//     updatedAt: "",
+//     todoCount: 0,
+//     completedCount: 0,
+//   },
+// ];
 
 const meta = {
   title: "components/AddTodoDropdown",
@@ -67,7 +67,6 @@ function AddTodoDropdownExample() {
       error=""
       setError={() => {}}
       label="드롭다운"
-      goalOptions={goals}
       selectedGoal={selectedOption}
       setSelectedGoal={setSelectedOption}
     />
@@ -83,7 +82,6 @@ function AddTodoDropdownNoList() {
       error=""
       setError={() => {}}
       label="빈 리스트"
-      goalOptions={[]}
       selectedGoal={selectedOption}
       setSelectedGoal={setSelectedOption}
     />
@@ -99,7 +97,6 @@ function AddTodoDropdownNoSelect() {
       error={selectedOption ? "" : "목표를 선택해 주세요"}
       setError={() => {}}
       label="목표 미선택"
-      goalOptions={goals}
       selectedGoal={selectedOption}
       setSelectedGoal={setSelectedOption}
     />
@@ -118,25 +115,24 @@ function AddTodoDropdownOverflow() {
     todoCount: 0,
     completedCount: 0,
   });
-  const goalsWithOverflow = [
-    ...goals,
-    {
-      id: 4,
-      title: "컨텐츠 내용이 오버플로우가 되도록 아주 많이 텍스트를 입력해보자.",
-      teamId: "string",
-      userId: 1,
-      createdAt: "",
-      updatedAt: "",
-      todoCount: 0,
-      completedCount: 0,
-    },
-  ];
+  // const goalsWithOverflow = [
+  //   ...goals,
+  //   {
+  //     id: 4,
+  //     title: "컨텐츠 내용이 오버플로우가 되도록 아주 많이 텍스트를 입력해보자.",
+  //     teamId: "string",
+  //     userId: 1,
+  //     createdAt: "",
+  //     updatedAt: "",
+  //     todoCount: 0,
+  //     completedCount: 0,
+  //   },
+  // ];
   return (
     <SelectGoalDropdown
       error=""
       setError={() => {}}
       label="텍스트 오버플로우"
-      goalOptions={goalsWithOverflow}
       selectedGoal={selectedOption}
       setSelectedGoal={setSelectedOption}
     />
@@ -146,7 +142,6 @@ function AddTodoDropdownOverflow() {
 export const Default: Story = {
   args: {
     label: "목표",
-    goalOptions: [],
     selectedGoal: null,
     setSelectedGoal: () => {},
     error: "",
