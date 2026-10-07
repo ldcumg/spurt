@@ -27,8 +27,6 @@ async function handler(request: NextRequest, { params }: Params) {
 
     return NextResponse.json(data, { status });
   } catch (error) {
-    //NOTE - 임시
-    console.error("[route handler]", error);
     if (isAxiosError(error) && error.response) {
       return NextResponse.json(error.response.data, { status: error.response.status });
     }
