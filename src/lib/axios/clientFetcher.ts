@@ -3,6 +3,15 @@ import axios from "axios";
 
 export const clientFetcher = axios.create({ baseURL: BASE_URL.client });
 
+// clientFetcher 에러처리
+clientFetcher.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error(error);
+    return Promise.reject(error);
+  },
+);
+
 // promise를 락처럼 사용
 // 여러 요청이 동시에 401 받아도 토큰 재발급은 한번만 요청하도록
 // let refreshPromise: Promise<unknown> | null = null;
