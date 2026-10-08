@@ -1,11 +1,12 @@
 "use client";
 
-import { INITIAL_NOTES, type NoteMock } from "./mock";
+import { INITIAL_NOTES } from "./mock";
+import type { NoteViewModel } from "./noteViewModel";
 import { useSyncExternalStore } from "react";
 
 const STORAGE_KEY = "spurt:notes";
 
-let notes: NoteMock[] = INITIAL_NOTES;
+let notes: NoteViewModel[] = INITIAL_NOTES;
 let isHydrated = false;
 const listeners = new Set<() => void>();
 
@@ -19,7 +20,7 @@ const hydrateFromStorage = () => {
     if (!storedNotes) return;
 
     const parsedNotes: unknown = JSON.parse(storedNotes);
-    if (Array.isArray(parsedNotes)) notes = parsedNotes as NoteMock[];
+    if (Array.isArray(parsedNotes)) notes = parsedNotes as NoteViewModel[];
   } catch {
     notes = INITIAL_NOTES;
   }

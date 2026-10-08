@@ -1,39 +1,5 @@
+import type { NoteViewModel } from "./noteViewModel";
 import type { JSONContent } from "@tiptap/react";
-
-// export type NoteFilter = (typeof NOTE_FILTERS)[number]["id"];
-export type NoteTone = "mint" | "coral" | "blue" | "yellow";
-
-export interface NoteDetailSection {
-  title: string;
-  emoji: string;
-  items: string[];
-}
-
-export interface NoteDetail {
-  paragraphs: string[];
-  sections: NoteDetailSection[];
-  source?: {
-    title: string;
-    url: string;
-  };
-}
-
-export interface NoteMock {
-  id: number;
-  title: string;
-  description: string;
-  goal: string;
-  task: string;
-  // 태그 데이터베이스 도입 전까지 사용하지 않는다.
-  // tags: string[];
-  date: string;
-  tone: NoteTone;
-  content?: JSONContent;
-  detail?: NoteDetail;
-  // 필터 UI 제거에 따라 사용하지 않는다.
-  // isArchived: boolean;
-  // isMine: boolean;
-}
 
 const INITIAL_NOTE_CONTENT: JSONContent = {
   type: "doc",
@@ -105,7 +71,7 @@ const INITIAL_NOTE_CONTENT: JSONContent = {
   ],
 };
 
-export const INITIAL_NOTES: NoteMock[] = [
+export const INITIAL_NOTES: NoteViewModel[] = [
   {
     id: 1,
     title: "프로그래밍과 데이터 in JavaScript",
@@ -117,45 +83,7 @@ export const INITIAL_NOTES: NoteMock[] = [
     date: "2024. 04. 29",
     tone: "mint",
     content: INITIAL_NOTE_CONTENT,
-    detail: {
-      source: {
-        title: "자바스크립트 기초 챕터1 | 코드잇",
-        url: "https://www.codeit.kr/topics/getting-started-with-javascript/lessons/3480",
-      },
-      paragraphs: [
-        "자바스크립트는 웹 페이지에 생동감을 더하는 언어에서 출발해, 지금은 프론트엔드와 백엔드를 아우르는 대표적인 프로그래밍 언어로 성장했습니다.",
-        "이번 노트에서는 자바스크립트의 기본 데이터 타입과 값이 저장되는 방식을 살펴봅니다. 특히 원시형과 참조형 데이터의 차이를 이해하고, 객체와 배열을 다룰 때 예상하지 못한 값의 변경을 방지하는 방법을 정리했습니다.",
-      ],
-      sections: [
-        {
-          emoji: "🌱",
-          title: "자바스크립트의 데이터 타입",
-          items: [
-            "문자열, 숫자, 불린처럼 하나의 값을 표현하는 데이터는 원시형으로 분류합니다.",
-            "객체와 배열, 함수는 여러 값을 연결해 관리하는 참조형 데이터입니다.",
-            "값의 종류를 정확히 알면 비교와 복사 과정에서 생기는 오류를 줄일 수 있습니다.",
-          ],
-        },
-        {
-          emoji: "🌐",
-          title: "참조형 데이터 이해하기",
-          items: [
-            "객체를 다른 변수에 할당하면 값 전체가 아니라 같은 메모리 주소를 공유합니다.",
-            "한쪽에서 속성을 변경하면 같은 객체를 참조하는 다른 변수에도 변화가 나타납니다.",
-          ],
-        },
-        {
-          emoji: "🔄",
-          title: "안전하게 복사하고 다루기",
-          items: [
-            "전개 구문을 사용하면 객체와 배열의 얕은 복사본을 간결하게 만들 수 있습니다.",
-            "중첩된 데이터는 필요한 깊이에 맞춰 복사하는 방법을 선택해야 합니다.",
-          ],
-        },
-      ],
-    },
-    // isArchived: false,
-    // isMine: true,
+    linkUrl: "https://www.codeit.kr/topics/getting-started-with-javascript/lessons/3480",
   },
   {
     id: 2,
@@ -167,8 +95,8 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["프로젝트", "폴더구조"],
     date: "2024. 04. 28",
     tone: "coral",
-    // isArchived: false,
-    // isMine: true,
+    content: null,
+    linkUrl: null,
   },
   {
     id: 3,
@@ -179,8 +107,8 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["API", "JavaScript"],
     date: "2024. 04. 27",
     tone: "blue",
-    // isArchived: false,
-    // isMine: true,
+    content: null,
+    linkUrl: null,
   },
   {
     id: 4,
@@ -191,8 +119,8 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["에러처리", "비동기"],
     date: "2024. 04. 26",
     tone: "coral",
-    // isArchived: false,
-    // isMine: true,
+    content: null,
+    linkUrl: null,
   },
   {
     id: 5,
@@ -203,8 +131,8 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["기초지식", "개발상식"],
     date: "2024. 04. 25",
     tone: "yellow",
-    // isArchived: false,
-    // isMine: true,
+    content: null,
+    linkUrl: null,
   },
   {
     id: 6,
@@ -215,8 +143,8 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["UI/UX", "디자인"],
     date: "2024. 04. 22",
     tone: "mint",
-    // isArchived: false,
-    // isMine: true,
+    content: null,
+    linkUrl: null,
   },
   {
     id: 7,
@@ -227,8 +155,8 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["인터뷰", "기획"],
     date: "2024. 04. 20",
     tone: "blue",
-    // isArchived: false,
-    // isMine: true,
+    content: null,
+    linkUrl: null,
   },
   {
     id: 8,
@@ -239,7 +167,7 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["회고", "성장"],
     date: "2024. 04. 18",
     tone: "yellow",
-    // isArchived: true,
-    // isMine: false,
+    content: null,
+    linkUrl: null,
   },
 ];

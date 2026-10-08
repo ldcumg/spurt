@@ -1,9 +1,9 @@
-import type { NoteMock } from "../mock";
+import type { NoteViewModel } from "../noteViewModel";
 import NoteCard from "./NoteCard";
 import { NoteFilled } from "@/assets/icons";
 
 interface NotesListProps {
-  notes: NoteMock[];
+  notes: NoteViewModel[];
   onNoteSelect: (id: number) => void;
 }
 

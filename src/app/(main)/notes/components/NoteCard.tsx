@@ -1,4 +1,4 @@
-import type { NoteMock, NoteTone } from "../mock";
+import type { NoteTone, NoteViewModel } from "../noteViewModel";
 import { FlagFilled, More, NoteFilled, Todos } from "@/assets/icons";
 import Button from "@/components/ui/Button";
 import type { ReactNode } from "react";
@@ -10,7 +10,7 @@ const NOTE_TONE_CLASSES: Record<NoteTone, string> = {
   yellow: "bg-yellow-light text-warning",
 };
 
-function NoteInfoRow({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
+function NoteInfoRow({ icon, label, value }: { icon: ReactNode; label: string; value: string | null }) {
   return (
     <div className="flex min-w-0 items-center gap-8 rounded-md bg-neutral-50 px-12 py-4">
       <span className="shrink-0">{icon}</span>
@@ -21,7 +21,7 @@ function NoteInfoRow({ icon, label, value }: { icon: ReactNode; label: string; v
 }
 
 interface NoteCardProps {
-  note: NoteMock;
+  note: NoteViewModel;
   onSelect: (id: number) => void;
 }
 

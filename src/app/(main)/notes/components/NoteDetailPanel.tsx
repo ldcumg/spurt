@@ -1,6 +1,6 @@
 "use client";
 
-import type { NoteMock, NoteTone } from "../mock";
+import type { NoteTone, NoteViewModel } from "../noteViewModel";
 import { Calendar, Flag, Link, NoteFilled, Todos, X } from "@/assets/icons";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
@@ -20,7 +20,7 @@ const NOTE_TONE_CLASSES: Record<NoteTone, string> = {
 };
 
 interface NoteDetailPanelProps {
-  note: NoteMock;
+  note: NoteViewModel;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -48,9 +48,6 @@ export default function NoteDetailPanel({ note, isOpen, onClose }: NoteDetailPan
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
-
-  const paragraphs = note.detail?.paragraphs ?? [note.description];
-  const sections = note.detail?.sections ?? [];
 
   return (
     <Disclosure isOpen={isOpen}>
@@ -123,9 +120,9 @@ export default function NoteDetailPanel({ note, isOpen, onClose }: NoteDetailPan
 
         <div className="border-border my-32 border-t" />
 
-        {note.detail?.source && (
+        {note.linkUrl && (
           <a
-            href={note.detail.source.url}
+            href={note.linkUrl}
             target="_blank"
             rel="noreferrer"
             className="hover:border-primary-300 flex min-w-0 items-center gap-12 rounded-xl border border-transparent bg-neutral-50 p-16 transition-colors"
@@ -134,8 +131,8 @@ export default function NoteDetailPanel({ note, isOpen, onClose }: NoteDetailPan
               <Link className="size-22" />
             </span>
             <span className="min-w-0">
-              <strong className="text-title-xs text-foreground-title block truncate">{note.detail.source.title}</strong>
-              <span className="text-body-sm mt-2 block truncate text-neutral-500">{note.detail.source.url}</span>
+              <strong className="text-title-xs text-foreground-title block truncate">참고 링크</strong>
+              <span className="text-body-sm mt-2 block truncate text-neutral-500">{note.linkUrl}</span>
             </span>
           </a>
         )}
@@ -143,32 +140,11 @@ export default function NoteDetailPanel({ note, isOpen, onClose }: NoteDetailPan
         {note.content ? (
           <NoteContent
             content={note.content}
-            className={note.detail?.source ? "mt-32" : ""}
+            className={note.linkUrl ? "mt-32" : ""}
           />
         ) : (
-          <article className={`text-body-lg text-neutral-800 ${note.detail?.source ? "mt-32" : ""}`}>
-            <div className="flex flex-col gap-16">
-              {paragraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </div>
-
-            {sections.map((section) => (
-              <section
-                key={section.title}
-                className="mt-28"
-              >
-                <h3 className="text-title-sm flex items-start gap-8">
-                  <span aria-hidden>{section.emoji}</span>
-                  <span>{section.title}</span>
-                </h3>
-                <ul className="mt-12 list-disc space-y-6 pl-24">
-                  {section.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </section>
-            ))}
+          <article className={`text-body-lg text-neutral-800 ${note.linkUrl ? "mt-32" : ""}`}>
+            <p>{note.description}</p>
           </article>
         )}
       </aside>
