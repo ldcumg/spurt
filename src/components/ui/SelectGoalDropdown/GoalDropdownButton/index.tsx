@@ -33,7 +33,7 @@ export default function GoalDropdownButton({
       type="button"
       onClick={() => setIsOpen(({ option, goalInput }) => ({ option: !option, goalInput }))}
       onKeyDown={handleEscKey}
-      className={`flex min-h-50 w-full items-center justify-between rounded-xl border bg-white p-8 transition-[border-color,box-shadow] duration-150 hover:border-[#B9C6BD] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${error ? "border-error" : "border-input-border focus:border-primary-500"}`}
+      className={`focus:border-primary-500 flex min-h-50 w-full items-center justify-between rounded-xl border bg-white p-8 transition-[border-color,box-shadow] duration-150 hover:border-[#B9C6BD] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${error ? "border-error" : "border-input-border"}`}
     >
       <span className="flex items-center justify-center gap-12">
         <span className="text-primary-600 grid size-36 shrink-0 place-items-center">
