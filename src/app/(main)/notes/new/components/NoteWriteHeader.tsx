@@ -6,10 +6,11 @@ import Image from "next/image";
 interface NoteActionsProps {
   onDraft: () => void;
   onSubmit: () => void;
+  isSubmitDisabled?: boolean;
   className?: string;
 }
 
-export function NoteActions({ onDraft, onSubmit, className }: NoteActionsProps) {
+export function NoteActions({ onDraft, onSubmit, isSubmitDisabled = false, className }: NoteActionsProps) {
   return (
     <div className={`flex items-center gap-12 ${className ?? ""}`}>
       <Button
@@ -27,6 +28,7 @@ export function NoteActions({ onDraft, onSubmit, className }: NoteActionsProps) 
         size="xl"
         className="text-title-xs inline-flex flex-1 items-center justify-center gap-8 md:flex-none"
         onClick={onSubmit}
+        disabled={isSubmitDisabled}
       >
         <Check className="size-20" />
         등록하기
@@ -40,7 +42,13 @@ interface NoteWriteHeaderProps extends NoteActionsProps {
   statusMessage: string;
 }
 
-export default function NoteWriteHeader({ onBack, onDraft, onSubmit, statusMessage }: NoteWriteHeaderProps) {
+export default function NoteWriteHeader({
+  onBack,
+  onDraft,
+  onSubmit,
+  isSubmitDisabled,
+  statusMessage,
+}: NoteWriteHeaderProps) {
   return (
     <section className="relative mb-24 min-h-232 md:mb-32 md:min-h-208 xl:min-h-176">
       <Button
@@ -79,6 +87,7 @@ export default function NoteWriteHeader({ onBack, onDraft, onSubmit, statusMessa
       <NoteActions
         onDraft={onDraft}
         onSubmit={onSubmit}
+        isSubmitDisabled={isSubmitDisabled}
         className="absolute right-0 bottom-0 hidden md:flex xl:hidden"
       />
     </section>

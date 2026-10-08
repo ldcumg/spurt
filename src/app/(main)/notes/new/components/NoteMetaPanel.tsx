@@ -84,6 +84,8 @@ export default function NoteMetaPanel({
               variant="todo"
               options={todos}
               value={selectedTodoId}
+              placeholder={selectedGoalId ? undefined : "먼저 목표를 추가해 주세요"}
+              disabled={!selectedGoalId}
               onChange={onTodoChange}
               onAddOption={onAddTodo}
             />

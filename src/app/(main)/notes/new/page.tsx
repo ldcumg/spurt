@@ -4,17 +4,27 @@ import MobileNavigation from "../components/MobileNavigation";
 import NoteEditor from "./components/NoteEditor";
 import NoteMetaPanel from "./components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
-import { MOCK_NOTE_CONTEXT } from "./mock";
+import { MOCK_NOTE_CONTEXT, type NoteTodoOption } from "./mock";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
 import type { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const EMPTY_NOTE_CONTENT: JSONContent = {
   type: "doc",
   content: [{ type: "paragraph" }],
 };
+
+const INITIAL_SELECTED_GOAL_ID = MOCK_NOTE_CONTEXT.goals.some((goal) => goal.id === MOCK_NOTE_CONTEXT.selectedGoalId)
+  ? MOCK_NOTE_CONTEXT.selectedGoalId
+  : (MOCK_NOTE_CONTEXT.goals[0]?.id ?? "");
+
+const INITIAL_SELECTED_TODO_ID = MOCK_NOTE_CONTEXT.todos.some(
+  (todo) => todo.id === MOCK_NOTE_CONTEXT.selectedTodoId && todo.goalId === INITIAL_SELECTED_GOAL_ID,
+)
+  ? MOCK_NOTE_CONTEXT.selectedTodoId
+  : "";
 
 const formatNoteDate = (date: Date) =>
   `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, "0")}. ${String(date.getDate()).padStart(2, "0")}`;
@@ -31,23 +41,57 @@ export default function NewNotePage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState<JSONContent>(EMPTY_NOTE_CONTENT);
   const [goals, setGoals] = useState<DropDownOption[]>([...MOCK_NOTE_CONTEXT.goals]);
-  const [todos, setTodos] = useState<DropDownOption[]>([...MOCK_NOTE_CONTEXT.todos]);
-  const [selectedGoalId, setSelectedGoalId] = useState<string>(MOCK_NOTE_CONTEXT.selectedGoalId);
-  const [selectedTodoId, setSelectedTodoId] = useState<string>(MOCK_NOTE_CONTEXT.selectedTodoId);
+  const [todos, setTodos] = useState<NoteTodoOption[]>([...MOCK_NOTE_CONTEXT.todos]);
+  const [selectedGoalId, setSelectedGoalId] = useState(INITIAL_SELECTED_GOAL_ID);
+  const [selectedTodoId, setSelectedTodoId] = useState(INITIAL_SELECTED_TODO_ID);
   const [createdAt] = useState(() => new Date());
+  const todoOptions = useMemo<DropDownOption[]>(() => {
+    const visibleTodos = todos.filter((todo) => todo.goalId === selectedGoalId);
+
+    return visibleTodos.map(({ id, label }) => ({ id, label }));
+  }, [selectedGoalId, todos]);
+  const canSubmit = Boolean(selectedGoalId && selectedTodoId);
+  const submitRequirementMessage = !selectedGoalId
+    ? "목표를 추가하고 선택해야 노트를 등록할 수 있어요."
+    : !selectedTodoId
+      ? "선택한 목표의 할 일을 선택해야 노트를 등록할 수 있어요."
+      : "";
 
   const handleDraft = () => {};
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    if (!canSubmit) return;
+  };
+
+  const handleGoalChange = (option: DropDownOption) => {
+    const selectedTodo = todos.find((todo) => todo.id === selectedTodoId);
+
+    setSelectedGoalId(option.id);
+    if (selectedTodo?.goalId !== option.id) setSelectedTodoId("");
+  };
+
+  const handleTodoChange = (option: DropDownOption) => {
+    const selectedTodo = todos.find((todo) => todo.id === option.id);
+    if (selectedTodo?.goalId !== selectedGoalId) return;
+
+    setSelectedTodoId(option.id);
+  };
 
   const handleAddGoal = (label: string) => {
-    const nextGoal = { id: `goal-${Date.now()}`, label };
+    const nextGoal = { id: `goal-${crypto.randomUUID()}`, label };
     setGoals((currentGoals) => [...currentGoals, nextGoal]);
     setSelectedGoalId(nextGoal.id);
+    setSelectedTodoId("");
   };
 
   const handleAddTodo = (label: string) => {
-    const nextTodo = { id: `todo-${Date.now()}`, label };
+    if (!selectedGoalId) return;
+
+    const nextTodo = {
+      id: `todo-${crypto.randomUUID()}`,
+      label,
+      goalId: selectedGoalId,
+    };
     setTodos((currentTodos) => [...currentTodos, nextTodo]);
     setSelectedTodoId(nextTodo.id);
   };
@@ -61,13 +105,15 @@ export default function NewNotePage() {
           onBack={() => router.push(ROUTES.notes)}
           onDraft={handleDraft}
           onSubmit={handleSubmit}
-          statusMessage=""
+          isSubmitDisabled={!canSubmit}
+          statusMessage={submitRequirementMessage}
         />
 
         <div className="mb-16 hidden grid-cols-3 gap-20 xl:grid">
           <NoteActions
             onDraft={handleDraft}
             onSubmit={handleSubmit}
+            isSubmitDisabled={!canSubmit}
             className="col-span-2 justify-end"
           />
         </div>
@@ -83,12 +129,12 @@ export default function NewNotePage() {
           </div>
           <NoteMetaPanel
             goals={goals}
-            todos={todos}
+            todos={todoOptions}
             selectedGoalId={selectedGoalId}
             selectedTodoId={selectedTodoId}
             createdAt={formatCreatedAt(createdAt)}
-            onGoalChange={(option) => setSelectedGoalId(option.id)}
-            onTodoChange={(option) => setSelectedTodoId(option.id)}
+            onGoalChange={handleGoalChange}
+            onTodoChange={handleTodoChange}
             onAddGoal={handleAddGoal}
             onAddTodo={handleAddTodo}
           />
@@ -98,6 +144,7 @@ export default function NewNotePage() {
           <NoteActions
             onDraft={handleDraft}
             onSubmit={handleSubmit}
+            isSubmitDisabled={!canSubmit}
           />
         </div>
       </div>
