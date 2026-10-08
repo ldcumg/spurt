@@ -10,6 +10,7 @@ import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from "r
 
 const MAX_IMAGE_SIZE_BYTES = 1024 * 1024;
 const MAX_TOTAL_IMAGE_SIZE_BYTES = 3 * 1024 * 1024;
+const MAX_NOTE_TITLE_LENGTH = 100;
 const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 
 interface ToolbarButtonProps {
@@ -263,12 +264,12 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
         <TextInput
           aria-label="노트 제목"
           value={title}
-          maxLength={50}
+          maxLength={MAX_NOTE_TITLE_LENGTH}
           placeholder="노트의 제목을 입력해주세요."
           onChange={(event) => onTitleChange(event.target.value)}
         />
         <span className="text-caption pointer-events-none absolute top-1/2 right-16 -translate-y-1/2 text-neutral-500">
-          {title.length}/50
+          {title.length}/{MAX_NOTE_TITLE_LENGTH}
         </span>
       </div>
 
