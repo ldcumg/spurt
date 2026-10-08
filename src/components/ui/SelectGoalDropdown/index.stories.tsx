@@ -23,18 +23,20 @@ type Story = StoryObj<typeof meta>;
 
 const goalMocks = mocks.goals;
 
-const mswHandler = (goals?: GoalListItem[]) => ({
-  msw: {
-    handlers: [
-      http.get("/api/goals", () => {
-        return HttpResponse.json({
-          ...mocks,
-          goals,
-        });
-      }),
-    ],
-  },
-});
+function mswHandler(goals?: GoalListItem[]) {
+  return {
+    msw: {
+      handlers: [
+        http.get("/api/goals", () => {
+          return HttpResponse.json({
+            ...mocks,
+            goals,
+          });
+        }),
+      ],
+    },
+  };
+}
 
 /** 선택된 목표가 있는 기본 드롭다운 예시를 렌더링합니다. */
 export const SelectedGoal: Story = {
