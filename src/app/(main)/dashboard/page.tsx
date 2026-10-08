@@ -1,13 +1,12 @@
 "use client";
 
-import { BarChart, Bar, ResponsiveContainer, LabelList, YAxis, CartesianGrid, XAxis } from "recharts";
-
 import { Right, Plus } from "@/assets/icons/index";
+import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
 import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
+import { MockGoalList, Todos } from "@/components/ui/GoalCard/mock";
 import ProgressRing from "@/components/ui/ProgressRing";
 import TodoItem from "@/components/ui/TodoItem";
-
 import getDoneByDate from "@/utils/getDoneByDate";
 import { useEffect, useState } from "react";
 import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals.types";
@@ -15,6 +14,7 @@ import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
 import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import { TodoResponse } from "@/types/todos.types";
+import { BarChart, Bar, ResponsiveContainer, LabelList, YAxis, CartesianGrid, XAxis } from "recharts";
 
 type dataSet = {
   date: string;
@@ -79,13 +79,18 @@ export default function DashboardPage() {
         <div className="bg-primary-100 flex flex-col gap-10 rounded-md p-20 shadow-sm">
           <p className="text-title-md leading-none">지금까지 정말 잘하고 있어요!</p>
           <p className="text-body-lg text-neutral-500">작은 반복이 큰 변화를 만들어요.</p>
-          <Button
-            variant={"outline"}
-            className="flex max-w-150 items-center justify-center gap-10 rounded-full bg-white py-20 shadow-sm"
-          >
-            <Plus className="size-16 shrink-0" />
-            <p className="text-title-xs leading-none">새 할 일 추가</p>
-          </Button>
+          <AddTodoTrigger
+            renderItem={(addTodoOpen) => (
+              <Button
+                onClick={addTodoOpen}
+                variant={"outline"}
+                className="flex max-w-150 items-center justify-center gap-10 rounded-full bg-white py-20 shadow-sm"
+              >
+                <Plus className="size-16 shrink-0" />
+                <p className="text-title-xs leading-none">새 할 일 추가</p>
+              </Button>
+            )}
+          />
         </div>
         <div className="flex flex-col gap-10 rounded-md bg-white p-20 shadow-sm">
           <p className="text-title-md">전체 진행 상황</p>

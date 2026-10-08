@@ -7,7 +7,6 @@ import TodoForDate from "@/components/calendar/TodoForDate";
 import type { CalendarWeeks } from "@/components/calendar/types";
 import { getCalendarWeeks, groupTodosByDate } from "@/components/calendar/utils";
 import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
-import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
 import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
 import type { GoalListItem } from "@/types/goals.types";
 import { useState } from "react";
@@ -24,15 +23,11 @@ export default function CalendarPage() {
   const [selectedGoal, setSelectedGoal] = useState<GoalListItem | null>(null);
 
   const { data: todoData, isPending: isTodoPending, isError: isTodoError, error: Todoerror } = useAllTodoQuery();
-  const { data: goalData, isPending: isGoalPending, isError: isGoalError, error: goalError } = useAllGoalQuery();
-  if (isTodoPending || isGoalPending) return <div>Loading...</div>;
-  if (isTodoError || isGoalError) return <div>Error: {Todoerror?.message || goalError?.message}</div>;
+  if (isTodoPending) return <div>Loading...</div>;
+  if (isTodoError) return <div>Error: {Todoerror.message}</div>;
   const {
     data: { todos },
   } = todoData;
-  const {
-    data: { goals },
-  } = goalData;
   const filteredTodoByGoal = selectedGoal ? todos.filter((todo) => todo.goalId === selectedGoal.id) : todos;
   const todoGroupedByDate = groupTodosByDate(filteredTodoByGoal);
 
@@ -40,7 +35,6 @@ export default function CalendarPage() {
     <div className="flex min-h-full w-full flex-col items-center gap-12 p-4">
       <div className="h-50 w-full px-56">
         <SelectGoalDropdown
-          goalOptions={goals}
           selectedGoal={selectedGoal}
           setSelectedGoal={setSelectedGoal}
         />

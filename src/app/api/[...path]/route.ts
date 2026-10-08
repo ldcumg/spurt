@@ -1,13 +1,11 @@
-import { ACCESS_TOKEN } from "@/config/cookie";
-import { BACKEND_BASE_URL, TEAM_ID } from "@/config/env";
-import { HTTP_HEADERS } from "@/config/httpRequestHeaders";
 import { ALLOWED_METHODS } from "@/constants/allowedMethods";
-import axios, { isAxiosError } from "axios";
+import { serverFetcher } from "@/lib/axios/serverFetcher";
+import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 type Params = { params: Promise<{ path: string[] }> };
 
-async function proxy(request: NextRequest, { params }: Params) {
+async function handler(request: NextRequest, { params }: Params) {
   const { path } = await params;
 
   const key = "/" + path.map((s) => (/^\d+$/.test(s) ? ":id" : s)).join("/");
@@ -17,15 +15,13 @@ async function proxy(request: NextRequest, { params }: Params) {
     return NextResponse.json({ message: "접근이 제한되었습니다." }, { status: 403 });
   }
 
-  const accessToken = request.cookies.get(ACCESS_TOKEN)?.value;
-
   try {
-    const { data, status } = await axios({
-      url: `${BACKEND_BASE_URL}/${TEAM_ID}/${path.join("/")}${request.nextUrl.search}`,
-      method: request.method,
-      headers: HTTP_HEADERS(accessToken),
-      data: await request.text(),
-    });
+    const pathname = `/${path.join("/")}`;
+    const method = request.method;
+    const body = request.body ? await request.json() : undefined;
+    const searchParams = Object.fromEntries(request.nextUrl.searchParams);
+
+    const { data, status } = await serverFetcher(pathname, { method, data: body, params: searchParams });
 
     if (status === 204) return new NextResponse(null, { status });
 
@@ -38,7 +34,7 @@ async function proxy(request: NextRequest, { params }: Params) {
   }
 }
 
-export const GET = proxy;
-export const POST = proxy;
-export const PATCH = proxy;
-export const DELETE = proxy;
+export const GET = handler;
+export const POST = handler;
+export const PATCH = handler;
+export const DELETE = handler;

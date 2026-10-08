@@ -21,12 +21,18 @@ export default function TodoForDate({ selectedDate, todoGroupedByDate }: Selecte
           {selectedDate.getFullYear()}.{selectedDate.getMonth() + 1}.{selectedDate.getDate()}
         </h5>
 
-        <AddTodoTrigger aleadySelectedDate={selectedDate}>
-          <button className="text-primary-500 text-title-sm flex flex-row items-center gap-4">
-            <Plus className="size-20" />
-            <span>할 일 추가</span>
-          </button>
-        </AddTodoTrigger>
+        <AddTodoTrigger
+          aleadySelectedDate={selectedDate}
+          renderItem={(addTodoOpen) => (
+            <button
+              className="text-primary-500 text-title-sm flex flex-row items-center gap-4"
+              onClick={addTodoOpen}
+            >
+              <Plus className="size-20" />
+              <span>할 일 추가</span>
+            </button>
+          )}
+        />
       </div>
 
       <div>
