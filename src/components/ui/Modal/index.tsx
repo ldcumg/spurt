@@ -10,7 +10,7 @@ const Disclosure = dynamic(() => import("@/components/layout/Disclosure"), {
 interface ModalProps {
   children: React.ReactNode;
   isOpen: boolean;
-  title: string;
+  title: React.ReactNode;
   onClose: () => void;
 }
 
