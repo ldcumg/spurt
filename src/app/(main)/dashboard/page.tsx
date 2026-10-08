@@ -70,7 +70,7 @@ export default function DashboardPage() {
         <p className="text-display">
           좋은 하루에요,
           <br />
-          {user.name} 님!👋
+          {user && user.name} 님!👋
         </p>
         <p className="text-title-xs text-neutral-500">오늘도 당신의 목표를 향해 한 걸음 더 나아가요.</p>
       </header>
