@@ -4,7 +4,6 @@ import { Right, Plus } from "@/assets/icons/index";
 import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
 import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
-import { MockGoalList, Todos } from "@/components/ui/GoalCard/mock";
 import ProgressRing from "@/components/ui/ProgressRing";
 import TodoItem from "@/components/ui/TodoItem";
 import getDoneByDate from "@/utils/getDoneByDate";
