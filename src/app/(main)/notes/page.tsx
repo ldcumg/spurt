@@ -19,11 +19,9 @@ export default function NotePage() {
 
   const visibleNotes = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLocaleLowerCase("ko-KR");
-    const filteredNotes = notes.filter((note) => {
-      const searchableText = [note.title, note.description, note.goal, note.task].join(" ").toLocaleLowerCase("ko-KR");
-
-      return searchableText.includes(normalizedSearch);
-    });
+    const filteredNotes = notes.filter((note) =>
+      note.title.toLocaleLowerCase("ko-KR").includes(normalizedSearch),
+    );
 
     return [...filteredNotes].sort((a, b) =>
       sortOrder === "recent" ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date),
