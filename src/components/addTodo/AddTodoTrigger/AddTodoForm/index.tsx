@@ -9,19 +9,21 @@ import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
 import TextInput from "@/components/ui/TextInput";
 import UploadInput from "@/components/ui/UploadInput";
 import { useAddTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
+import type { GoalListItem } from "@/types/goals.types";
 import { createStateKeySetter } from "@/utils/stateUtills";
 import { useRef, useState } from "react";
 
 interface AddTodoFormProps {
   addTodoClose: () => void;
+  aleadySelectedGoal?: GoalListItem;
   aleadySelectedDate?: Date;
 }
 
-export default function AddTodoForm({ addTodoClose, aleadySelectedDate }: AddTodoFormProps) {
+export default function AddTodoForm({ addTodoClose, aleadySelectedGoal, aleadySelectedDate }: AddTodoFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [formState, setFormState] = useState<FormState>({
     file: null,
-    selectedGoal: null,
+    selectedGoal: aleadySelectedGoal ?? null,
     selectedDate: aleadySelectedDate ?? null,
   });
   const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goal: "", dueDate: "", file: "", linkUrl: "" });
