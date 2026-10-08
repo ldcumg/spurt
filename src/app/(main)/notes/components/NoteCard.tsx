@@ -1,5 +1,5 @@
 import type { NoteMock, NoteTone } from "../mock";
-import { FlagFilled, More, NoteFilled, Star, StarFilled, Todos } from "@/assets/icons";
+import { FlagFilled, More, NoteFilled, Todos } from "@/assets/icons";
 import Button from "@/components/ui/Button";
 import type { ReactNode } from "react";
 
@@ -22,12 +22,11 @@ function NoteInfoRow({ icon, label, value }: { icon: ReactNode; label: string; v
 
 interface NoteCardProps {
   note: NoteMock;
-  onFavoriteToggle: (id: number) => void;
   onSelect: (id: number) => void;
 }
 
-/** 한 건의 노트 내용과 중요 표시 동작을 보여 준다. */
-export default function NoteCard({ note, onFavoriteToggle, onSelect }: NoteCardProps) {
+/** 한 건의 노트 내용과 상세 보기 동작을 보여 준다. */
+export default function NoteCard({ note, onSelect }: NoteCardProps) {
   const titleId = `note-card-title-${note.id}`;
 
   return (
@@ -44,21 +43,6 @@ export default function NoteCard({ note, onFavoriteToggle, onSelect }: NoteCardP
           <NoteFilled className="size-24" />
         </div>
         <div className="pointer-events-auto flex items-center gap-2">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            aria-label={note.isFavorite ? `${note.title} 중요 해제` : `${note.title} 중요 표시`}
-            aria-pressed={note.isFavorite}
-            onClick={() => onFavoriteToggle(note.id)}
-            className="px-8"
-          >
-            {note.isFavorite ? (
-              <StarFilled className="text-warning size-32" />
-            ) : (
-              <Star className="size-32 text-neutral-500" />
-            )}
-          </Button>
           <Button
             type="button"
             variant="ghost"

@@ -4,12 +4,11 @@ import { NoteFilled } from "@/assets/icons";
 
 interface NotesListProps {
   notes: NoteMock[];
-  onFavoriteToggle: (id: number) => void;
   onNoteSelect: (id: number) => void;
 }
 
 /** 검색·정렬된 노트 목록 또는 검색 결과가 없을 때의 빈 상태를 보여 준다. */
-export default function NotesList({ notes, onFavoriteToggle, onNoteSelect }: NotesListProps) {
+export default function NotesList({ notes, onNoteSelect }: NotesListProps) {
   if (notes.length === 0) {
     return (
       <section className="border-border flex min-h-240 flex-col items-center justify-center rounded-xl border bg-white px-24 text-center shadow-sm">
@@ -29,7 +28,6 @@ export default function NotesList({ notes, onFavoriteToggle, onNoteSelect }: Not
         <NoteCard
           key={note.id}
           note={note}
-          onFavoriteToggle={onFavoriteToggle}
           onSelect={onNoteSelect}
         />
       ))}

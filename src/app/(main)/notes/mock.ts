@@ -28,7 +28,6 @@ export interface NoteMock {
   // tags: string[];
   date: string;
   tone: NoteTone;
-  isFavorite: boolean;
   content?: JSONContent;
   detail?: NoteDetail;
   // 필터 UI 제거에 따라 사용하지 않는다.
@@ -117,7 +116,6 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["JavaScript", "개념정리"],
     date: "2024. 04. 29",
     tone: "mint",
-    isFavorite: true,
     content: INITIAL_NOTE_CONTENT,
     detail: {
       source: {
@@ -169,7 +167,6 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["프로젝트", "폴더구조"],
     date: "2024. 04. 28",
     tone: "coral",
-    isFavorite: false,
     // isArchived: false,
     // isMine: true,
   },
@@ -182,7 +179,6 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["API", "JavaScript"],
     date: "2024. 04. 27",
     tone: "blue",
-    isFavorite: false,
     // isArchived: false,
     // isMine: true,
   },
@@ -195,7 +191,6 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["에러처리", "비동기"],
     date: "2024. 04. 26",
     tone: "coral",
-    isFavorite: false,
     // isArchived: false,
     // isMine: true,
   },
@@ -208,7 +203,6 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["기초지식", "개발상식"],
     date: "2024. 04. 25",
     tone: "yellow",
-    isFavorite: true,
     // isArchived: false,
     // isMine: true,
   },
@@ -221,7 +215,6 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["UI/UX", "디자인"],
     date: "2024. 04. 22",
     tone: "mint",
-    isFavorite: false,
     // isArchived: false,
     // isMine: true,
   },
@@ -234,7 +227,6 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["인터뷰", "기획"],
     date: "2024. 04. 20",
     tone: "blue",
-    isFavorite: false,
     // isArchived: false,
     // isMine: true,
   },
@@ -247,7 +239,6 @@ export const INITIAL_NOTES: NoteMock[] = [
     // tags: ["회고", "성장"],
     date: "2024. 04. 18",
     tone: "yellow",
-    isFavorite: false,
     // isArchived: true,
     // isMine: false,
   },

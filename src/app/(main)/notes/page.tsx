@@ -1,7 +1,7 @@
 "use client";
 
 import { MobileNavigation, NoteDetailPanel, NotesHero, NotesList, NotesToolbar, type SortOrder } from "./components";
-import { toggleNoteFavorite, useNotesStore } from "./noteStore";
+import { useNotesStore } from "./noteStore";
 import ROUTES from "@/constants/routes";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 import { useRouter } from "next/navigation";
@@ -30,10 +30,6 @@ export default function NotePage() {
     );
   }, [notes, searchTerm, sortOrder]);
 
-  const handleFavoriteToggle = (id: number) => {
-    toggleNoteFavorite(id);
-  };
-
   const handleNewNote = () => {
     router.push(ROUTES.newNote);
   };
@@ -59,7 +55,6 @@ export default function NotePage() {
         />
         <NotesList
           notes={visibleNotes}
-          onFavoriteToggle={handleFavoriteToggle}
           onNoteSelect={handleNoteSelect}
         />
       </div>
