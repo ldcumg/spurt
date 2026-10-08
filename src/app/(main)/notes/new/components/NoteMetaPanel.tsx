@@ -2,6 +2,7 @@
 
 import { Calendar, FlagFilled, Link as LinkIcon, Todos, Under } from "@/assets/icons";
 import Dropdown, { type DropDownOption } from "@/components/ui/Dropdown";
+import TextInput from "@/components/ui/TextInput";
 import type { ReactNode } from "react";
 
 interface MetaSectionProps {
@@ -34,11 +35,15 @@ interface NoteMetaPanelProps {
   todos: DropDownOption[];
   selectedGoalId: string;
   selectedTodoId: string;
+  linkUrl: string;
+  linkUrlError: string;
   createdAt: string;
   onGoalChange: (option: DropDownOption) => void;
   onTodoChange: (option: DropDownOption) => void;
   onAddGoal: (label: string) => void;
   onAddTodo: (label: string) => void;
+  onLinkUrlChange: (value: string) => void;
+  onLinkUrlBlur: () => void;
 }
 
 export default function NoteMetaPanel({
@@ -46,11 +51,15 @@ export default function NoteMetaPanel({
   todos,
   selectedGoalId,
   selectedTodoId,
+  linkUrl,
+  linkUrlError,
   createdAt,
   onGoalChange,
   onTodoChange,
   onAddGoal,
   onAddTodo,
+  onLinkUrlChange,
+  onLinkUrlBlur,
 }: NoteMetaPanelProps) {
   return (
     <aside
@@ -91,6 +100,23 @@ export default function NoteMetaPanel({
             />
           </div>
         </div>
+      </MetaSection>
+
+      <MetaSection
+        icon={<LinkIcon className="size-20" />}
+        title="참고 링크"
+        description="노트와 함께 저장할 웹페이지 주소를 입력해 주세요."
+      >
+        <TextInput
+          type="url"
+          inputMode="url"
+          autoComplete="url"
+          placeholder="https://example.com"
+          value={linkUrl}
+          error={linkUrlError}
+          onChange={(event) => onLinkUrlChange(event.target.value)}
+          onBlur={onLinkUrlBlur}
+        />
       </MetaSection>
 
       <MetaSection

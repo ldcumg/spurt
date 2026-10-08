@@ -26,6 +26,20 @@ const INITIAL_SELECTED_TODO_ID = MOCK_NOTE_CONTEXT.todos.some(
   ? MOCK_NOTE_CONTEXT.selectedTodoId
   : "";
 
+const getLinkUrlError = (value: string) => {
+  const trimmedValue = value.trim();
+  if (!trimmedValue) return "";
+
+  try {
+    const url = new URL(trimmedValue);
+    if (url.protocol === "http:" || url.protocol === "https:") return "";
+  } catch {
+    // URL 생성에 실패하면 아래의 공통 오류 메시지를 반환한다.
+  }
+
+  return "http:// 또는 https://로 시작하는 올바른 링크를 입력해 주세요.";
+};
+
 const formatNoteDate = (date: Date) =>
   `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, "0")}. ${String(date.getDate()).padStart(2, "0")}`;
 
@@ -44,18 +58,23 @@ export default function NewNotePage() {
   const [todos, setTodos] = useState<NoteTodoOption[]>([...MOCK_NOTE_CONTEXT.todos]);
   const [selectedGoalId, setSelectedGoalId] = useState(INITIAL_SELECTED_GOAL_ID);
   const [selectedTodoId, setSelectedTodoId] = useState(INITIAL_SELECTED_TODO_ID);
+  const [linkUrl, setLinkUrl] = useState("");
+  const [isLinkUrlTouched, setIsLinkUrlTouched] = useState(false);
   const [createdAt] = useState(() => new Date());
   const todoOptions = useMemo<DropDownOption[]>(() => {
     const visibleTodos = todos.filter((todo) => todo.goalId === selectedGoalId);
 
     return visibleTodos.map(({ id, label }) => ({ id, label }));
   }, [selectedGoalId, todos]);
-  const canSubmit = Boolean(selectedGoalId && selectedTodoId);
+  const linkUrlError = getLinkUrlError(linkUrl);
+  const canSubmit = Boolean(selectedGoalId && selectedTodoId && !linkUrlError);
   const submitRequirementMessage = !selectedGoalId
     ? "목표를 추가하고 선택해야 노트를 등록할 수 있어요."
     : !selectedTodoId
       ? "선택한 목표의 할 일을 선택해야 노트를 등록할 수 있어요."
-      : "";
+      : linkUrlError
+        ? "참고 링크 형식을 확인해 주세요."
+        : "";
 
   const handleDraft = () => {};
 
@@ -96,6 +115,11 @@ export default function NewNotePage() {
     setSelectedTodoId(nextTodo.id);
   };
 
+  const handleLinkUrlBlur = () => {
+    setLinkUrl((currentLinkUrl) => currentLinkUrl.trim());
+    setIsLinkUrlTouched(true);
+  };
+
   return (
     <div className="bg-surface text-foreground min-h-screen w-full min-w-0 bg-[radial-gradient(circle_at_top_right,var(--color-primary-50),var(--color-surface)_56%)]">
       <MobileNavigation />
@@ -132,11 +156,15 @@ export default function NewNotePage() {
             todos={todoOptions}
             selectedGoalId={selectedGoalId}
             selectedTodoId={selectedTodoId}
+            linkUrl={linkUrl}
+            linkUrlError={isLinkUrlTouched ? linkUrlError : ""}
             createdAt={formatCreatedAt(createdAt)}
             onGoalChange={handleGoalChange}
             onTodoChange={handleTodoChange}
             onAddGoal={handleAddGoal}
             onAddTodo={handleAddTodo}
+            onLinkUrlChange={setLinkUrl}
+            onLinkUrlBlur={handleLinkUrlBlur}
           />
         </div>
 
