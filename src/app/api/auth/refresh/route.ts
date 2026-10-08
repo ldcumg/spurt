@@ -11,7 +11,9 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { accessToken, refreshToken: newRefreshToken } = await postRefresh({ refreshToken });
+    const {
+      data: { accessToken, refreshToken: newRefreshToken },
+    } = await postRefresh({ refreshToken });
 
     const response = NextResponse.json({ message: "토큰이 재발급되었습니다." });
 
