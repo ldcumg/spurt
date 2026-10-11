@@ -4,10 +4,15 @@ import { Right, Plus } from "@/assets/icons/index";
 import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
 import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
-import { MockGoalList, Todos } from "@/components/ui/GoalCard/mock";
 import ProgressRing from "@/components/ui/ProgressRing";
 import TodoItem from "@/components/ui/TodoItem";
 import getDoneByDate from "@/utils/getDoneByDate";
+import { useEffect, useState } from "react";
+import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals.types";
+import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import { clientFetcher } from "@/lib/axios/clientFetcher";
+import { GOALS_API_PATH } from "@/constants/apiEndpoints";
+import { TodoResponse } from "@/types/todos.types";
 import { BarChart, Bar, ResponsiveContainer, LabelList, YAxis, CartesianGrid, XAxis } from "recharts";
 
 type dataSet = {
@@ -16,16 +21,47 @@ type dataSet = {
 };
 
 export default function DashboardPage() {
-  const data = getDoneByDate(Todos.todos);
-  const dataSet: dataSet[] = data.map((item) => ({ date: item.date, count: item.count }));
+  const { data: user } = useUserQuery();
+  const [goalList, setGoalList] = useState<GoalListItem[] | null>(null);
+  const [todoList, setTodoList] = useState<TodoResponse[]>([]);
 
-  const doneCount = Todos.todos.filter((todo) => todo.done).length;
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const params: GetGoalListParams = { limit: 10 };
+        const goalRes = await clientFetcher.get<GoalListResponse>(GOALS_API_PATH.base, { params });
+
+        let firstGoal: GoalListItem[] | null = null;
+        if (goalRes.data.goals && goalRes.data.goals.length > 0) {
+          firstGoal = goalRes.data.goals;
+          setGoalList(firstGoal);
+        }
+
+        const todoRes = await clientFetcher.get<{ todos: TodoResponse[] }>("/todos");
+        if (todoRes.data.todos) {
+          setTodoList(todoRes.data.todos);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  const handleToggleTodo = (id: number) => {
+    setTodoList((prevList) => prevList.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
+  };
+
+  const doneCount = todoList.filter((todo) => todo.done).length;
   /**
    * array.reduce((누적값, 현재요소) => {
         return 다음누적값;
       }, 초기값);
    */
-  const weeklyTotal = dataSet.reduce((total, item) => total + item.count, 0);
+  const data = getDoneByDate(todoList);
+  const dataSet: dataSet[] = data.map((item) => ({ date: item.date, count: item.count }));
+  const weeklyTotalCount = dataSet.reduce((total, item) => total + item.count, 0);
 
   return (
     <div className="flex flex-col gap-20 px-30 py-40">
@@ -33,7 +69,7 @@ export default function DashboardPage() {
         <p className="text-display">
           좋은 하루에요,
           <br />
-          체다치즈님!👋
+          {user && user.name} 님!👋
         </p>
         <p className="text-title-xs text-neutral-500">오늘도 당신의 목표를 향해 한 걸음 더 나아가요.</p>
       </header>
@@ -60,22 +96,22 @@ export default function DashboardPage() {
           <div className="flex flex-col gap-16 md:flex-row">
             <ProgressRing
               doneCount={doneCount}
-              totalCount={Todos.totalCount}
+              totalCount={todoList.length}
               className="flex-1"
             />
             <div className="flex flex-1 justify-between gap-15">
               <div className="bg-primary-50 flex w-full flex-row gap-10 rounded-md p-16">
-                <div className="bg-primary-600 h-16 w-16 rounded-full"></div>
+                <div className="bg-primary-600 h-16 w-16 rounded-full" />
                 <div className="flex flex-col justify-between">
                   <p className="text-title-xs leading-none text-neutral-500">완료한 할 일</p>
                   <p className="text-title-md md:text-display">{doneCount}</p>
                 </div>
               </div>
               <div className="flex w-full flex-row gap-10 rounded-md bg-neutral-100 p-16">
-                <div className="h-16 w-16 rounded-full bg-neutral-600"></div>
+                <div className="h-16 w-16 rounded-full bg-neutral-600" />
                 <div className="flex flex-col justify-between">
                   <p className="text-title-xs leading-none text-neutral-500">전체 할 일</p>
-                  <p className="text-title-md md:text-display">{Todos.totalCount}</p>
+                  <p className="text-title-md md:text-display">{todoList.length}</p>
                 </div>
               </div>
             </div>
@@ -95,8 +131,8 @@ export default function DashboardPage() {
           {/** 최근 등록한 할 일을 3개까지 보여줌
            * - 최근 등록한 할 일이 없는 경우 방어
            */}
-          {Todos.todos.length > 0 ? (
-            [...Todos.todos]
+          {todoList.length > 0 ? (
+            [...todoList]
               .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
               .slice(0, 3)
               .map((item) => (
@@ -104,6 +140,7 @@ export default function DashboardPage() {
                   key={item.id}
                   todo={item}
                   type="goal"
+                  onToggle={handleToggleTodo}
                 />
               ))
           ) : (
@@ -162,7 +199,7 @@ export default function DashboardPage() {
           </div>
           <div className="bg-primary-50 text-body-md flex h-40 w-full flex-row items-center justify-center rounded-full">
             <p>
-              이번 주 총 <span className="text-title-sm text-primary-700">{weeklyTotal} </span>
+              이번 주 총 <span className="text-title-sm text-primary-700">{weeklyTotalCount} </span>
               완료
             </p>
           </div>
@@ -187,8 +224,8 @@ export default function DashboardPage() {
           </div>
         </div>
         <div className="flex flex-col gap-10 md:grid md:grid-cols-2 lg:grid-cols-3">
-          {MockGoalList.goals.length > 0 ? (
-            [...MockGoalList.goals]
+          {goalList && goalList.length > 0 ? (
+            [...goalList]
               .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
               .slice(0, 3)
               .map((item) => {
@@ -197,7 +234,7 @@ export default function DashboardPage() {
                   <GoalCard
                     key={item.id}
                     goal={item}
-                    todos={Todos.todos.filter((todo) => todo.goalId === item.id)}
+                    todos={todoList.filter((todo) => todo.goalId === item.id)}
                   />
                 );
               })
