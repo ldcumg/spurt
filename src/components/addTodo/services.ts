@@ -1,8 +1,10 @@
 import { formatDate } from "../calendar/utils";
 import type { FormState } from "./types";
 import { postFileUploadUrl } from "@/apis/uploads";
+import { clientFetcher } from "@/lib/axios/clientFetcher";
 import type { PostTodoRequest } from "@/types/todos.types";
 import type { UseMutateFunction } from "@tanstack/react-query";
+import axios from "axios";
 
 export type HandleAddTodoParams<TData, TError> = {
   event: React.SubmitEvent<HTMLFormElement>;
@@ -21,8 +23,7 @@ export const handleAddTodo = async <TData, TError>({
 }: HandleAddTodoParams<TData, TError>) => {
   event.preventDefault();
 
-  console.log("[ ㏒ ] hasError =>", hasError);
-  // if (hasError) return;
+  if (hasError) return;
 
   const formData = new FormData(event.currentTarget);
   const selectedGoal = formState.selectedGoal;
@@ -46,12 +47,53 @@ export const handleAddTodo = async <TData, TError>({
 
   // 파일 선택 시 파일 url 추가
   if (file) {
-    const {
-      data: { url },
-    } = await postFileUploadUrl({
-      fileName: file.name,
-    });
-    newTodo.fileUrl = url;
+    try {
+      const {
+        data: { uploadUrl, url },
+      } = await postFileUploadUrl({
+        fileName: file.name,
+      });
+
+      await clientFetcher.put(uploadUrl, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      newTodo.fileUrl = url;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        console.error(status, error);
+
+        switch (status) {
+          case 400:
+            console.error("잘못된 요청");
+            alert("잘못된 요청입니다.");
+            break;
+
+          case 403:
+            console.error("업로드 권한이 없거나 URL이 만료됨");
+            alert("업로드 권한이 없거나 URL이 만료되었습니다.");
+            break;
+
+          case 413:
+            console.error("파일 크기 초과");
+            alert("파일 크기가 초과되었습니다.");
+            break;
+
+          case 500:
+            console.error("서버 오류");
+            alert("서버 오류가 발생했습니다.");
+            break;
+
+          default:
+            console.error("파일 업로드 실패");
+        }
+      } else {
+        console.error("알 수 없는 오류", error);
+      }
+    }
   }
 
   if (linkUrl) {
