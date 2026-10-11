@@ -34,7 +34,7 @@ export function validateGoal(selectedGoal: GoalResponse | null, setError: (error
 }
 
 /** 마감기한 유효성 검사 */
-export function validateDate(selectedDate: Date | null, setError: (errorMassage: string) => void) {
+export function validateDueDate(selectedDate: Date | null, setError: (errorMassage: string) => void) {
   if (!selectedDate) {
     setError("마감 기한을 선택해 주세요");
     return;
