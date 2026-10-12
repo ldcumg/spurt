@@ -9,6 +9,7 @@ interface CalendarHeaderProps {
   calendarWeeks: CalendarWeeks;
   isMonthView: boolean;
   setCalendarWeeks: React.Dispatch<React.SetStateAction<CalendarWeeks>>;
+  selectToday: () => void;
   setIsMonthView: React.Dispatch<React.SetStateAction<boolean>>;
   currentWeekCalendar: CalendarWeeks;
 }
@@ -17,9 +18,16 @@ export default function CalendarHeader({
   calendarWeeks,
   isMonthView,
   setCalendarWeeks,
+  selectToday,
   setIsMonthView,
   currentWeekCalendar,
 }: CalendarHeaderProps) {
+  /** 오늘 버튼 클릭 이벤트 */
+  const handlerClickToday = () => {
+    setCalendarWeeks(currentWeekCalendar);
+    selectToday();
+  };
+
   return (
     <div className="relative flex w-full flex-row items-center justify-between px-4">
       {/* 연도, 월 표시 */}
@@ -39,7 +47,7 @@ export default function CalendarHeader({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setCalendarWeeks(currentWeekCalendar)}
+          onClick={handlerClickToday}
         >
           오늘
         </Button>

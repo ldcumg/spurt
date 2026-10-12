@@ -37,6 +37,7 @@ export default function DateItem({
   const isToday = date.toDateString() === today.toDateString();
   const { isDesktop } = useViewport();
 
+  /** 날짜 클릭 이벤트 */
   const handleDateClick = () => {
     const isPreviousWeek = weekIdx < THIS_WEEK_INDEX;
     const isNextWeek = weekIdx > THIS_WEEK_INDEX;

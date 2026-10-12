@@ -44,6 +44,7 @@ export default function CalendarPage() {
         calendarWeeks={calendarWeeks}
         isMonthView={isMonthView}
         setCalendarWeeks={setCalendarWeeks}
+        selectToday={() => setSelectedDate(today)}
         setIsMonthView={setIsMonthView}
         currentWeekCalendar={currentWeekCalendar}
       />
