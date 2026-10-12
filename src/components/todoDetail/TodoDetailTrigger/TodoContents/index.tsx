@@ -1,3 +1,4 @@
+import { getFileName } from "../../utils";
 import { Download, Link, Temporary } from "@/assets/icons";
 import type { TodoResponse } from "@/types/todos.types";
 
@@ -12,10 +13,17 @@ export default function TodoContents({ todo: { fileUrl, linkUrl, noteIds } }: To
         <div className="flex flex-col gap-12">
           <h3 className="text-title-xs">첨부자료</h3>
           {fileUrl && (
-            <div className="flex flex-row items-center gap-8">
-              <Temporary className="size-24" />
-              <span>{fileUrl}</span>
-              <Download className="size-24" />
+            <div className="flex flex-row items-center justify-between">
+              <span className="flex flex-row gap-8">
+                <Temporary className="size-24" />
+                <span>{getFileName(fileUrl)}</span>
+              </span>
+              <a
+                href={fileUrl}
+                download
+              >
+                <Download className="size-24" />
+              </a>
             </div>
           )}
           {linkUrl && (
