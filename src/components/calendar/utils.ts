@@ -28,6 +28,7 @@ export function getCalendarWeeks(firstSunday: Date): CalendarWeeks {
   }) as CalendarWeeks;
 }
 
+/** 이전 주 반환 */
 export function previousWeek(curruntWeeks: CalendarWeeks) {
   const firstWeek = curruntWeeks[0];
   const previousSunday = new Date(firstWeek[0]);
@@ -37,6 +38,7 @@ export function previousWeek(curruntWeeks: CalendarWeeks) {
   return [previousWeek, ...curruntWeeks.slice(0, -1)] as CalendarWeeks;
 }
 
+/** 다음 주 반환 */
 export function nextWeek(curruntWeeks: CalendarWeeks) {
   const lastWeek = curruntWeeks[LAST_WEEK_INDEX];
   const nextSunday = new Date(lastWeek[0]);
@@ -46,6 +48,7 @@ export function nextWeek(curruntWeeks: CalendarWeeks) {
   return [...curruntWeeks.slice(1), nextWeek] as CalendarWeeks;
 }
 
+/** 5주 이동 */
 export function moveMonth(curruntWeeks: CalendarWeeks, isNext: boolean) {
   const currentFirstWeek = curruntWeeks[0];
   const newSunday = new Date(currentFirstWeek[0]);
@@ -62,17 +65,21 @@ export function formatDate(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
+/**
+ * 할 일 목록을 날짜별로 그룹하여 반환
+ * @param todos
+ * @returns YYYY-MM-DD : todos
+ */
 export function groupTodosByDate(todos: TodoResponse[]): Record<string, TodoResponse[]> {
   const grouped = todos.reduce<Record<string, TodoResponse[]>>((acc, todo) => {
     if (!todo.dueDate) return acc;
 
-    const date = todo.dueDate.slice(0, 10);
-
-    (acc[date] ??= []).push(todo);
+    (acc[todo.dueDate] ??= []).push(todo);
 
     return acc;
   }, {});
 
+  // 완료된 할 일이 뒤로 가게 정렬
   Object.values(grouped).forEach((todosForDate) => {
     todosForDate.sort((a, b) => Number(a.done) - Number(b.done));
   });
@@ -80,7 +87,7 @@ export function groupTodosByDate(todos: TodoResponse[]): Record<string, TodoResp
   return grouped;
 }
 
-/** 작은 달력 - 기준 날짜가 해단하는 월의 일들을 반환 */
+/** 작은 달력 - 기준 날짜가 해당하는 월의 일들을 반환 */
 export function getMonthDates(referenceDate: Date): (Date | null)[] {
   const referenceYear = referenceDate.getFullYear();
   const referenceMonth = referenceDate.getMonth();
