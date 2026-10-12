@@ -8,7 +8,7 @@ interface TodoInfoProps {
 export default function TodoInfo({ todo }: TodoInfoProps) {
   const goalInfo = todo.goal;
   return (
-    <div className="flex flex-col gap-16">
+    <div className="text-body-md md:text-body-lg flex flex-col gap-16">
       {goalInfo && (
         <div className="flex flex-row gap-8">
           <span className="flex items-center gap-4 text-neutral-400">

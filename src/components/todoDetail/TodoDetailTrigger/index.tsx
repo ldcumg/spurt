@@ -20,7 +20,7 @@ export default function TodoDetailTrigger({ todo, renderItem }: TodoDetailTrigge
       {renderItem(todoDetailOpen)}
       <Modal
         title={
-          <span className="flex w-full flex-row gap-12">
+          <span className="flex w-full flex-row gap-12 md:gap-16">
             <span>{todo.title}</span>
             <Badge type={todo.done ? "done" : "todo"} />
           </span>
@@ -28,7 +28,7 @@ export default function TodoDetailTrigger({ todo, renderItem }: TodoDetailTrigge
         isOpen={todoDetailIsOpen}
         onClose={todoDetailClose}
       >
-        <div className="flex h-full w-full flex-col gap-24 px-40 py-24">
+        <div className="flex h-full w-full flex-col gap-24 pt-24">
           <TodoInfo todo={todo} />
           <TodoContents todo={todo} />
         </div>
