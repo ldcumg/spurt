@@ -1,11 +1,21 @@
 "use client";
 
-import { MobileNavigation, NoteDetailPanel, NotesHero, NotesList, NotesToolbar, type SortOrder } from "./components";
+import {
+  MobileNavigation,
+  NoteDeleteDialog,
+  NoteDetailPanel,
+  NotesHero,
+  NotesList,
+  NotesToolbar,
+  type SortOrder,
+} from "./components";
 import { toNoteViewModel } from "./noteViewModel";
+import type { NoteViewModel } from "./noteViewModel";
 import Button from "@/components/ui/Button";
 import NOTE_QUERY_KEYS from "@/constants/queryKeys/note";
 import ROUTES from "@/constants/routes";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
+import { useDeleteNoteMutation } from "@/hooks/mutations/note/useNoteMutations";
 import { useNoteDetailQuery, useNoteListQuery } from "@/hooks/queries/note/useNoteQueries";
 import { useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
@@ -17,10 +27,13 @@ const NOTES_PAGE_SIZE = 6;
 export default function NotePage() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const deleteNoteMutation = useDeleteNoteMutation();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<SortOrder>("recent");
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
+  const [deleteCandidate, setDeleteCandidate] = useState<NoteViewModel | null>(null);
   const { isOpen: isDetailOpen, open: openDetail, close: closeDetail } = useDisclosure();
+  const { isOpen: isDeleteOpen, open: openDelete, close: closeDelete } = useDisclosure();
   const normalizedSearchTerm = searchTerm.trim();
   const noteListParams = useMemo(
     () => ({
@@ -67,6 +80,36 @@ export default function NotePage() {
     void fetchNextPage();
   };
 
+  const handleDeleteRequest = (note: NoteViewModel) => {
+    deleteNoteMutation.reset();
+    setDeleteCandidate(note);
+    openDelete();
+  };
+
+  const handleDeleteClose = () => {
+    if (deleteNoteMutation.isPending) return;
+
+    closeDelete();
+    setDeleteCandidate(null);
+    deleteNoteMutation.reset();
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteCandidate || deleteNoteMutation.isPending) return;
+
+    try {
+      await deleteNoteMutation.mutateAsync(deleteCandidate.id);
+      if (selectedNoteId === deleteCandidate.id) {
+        closeDetail();
+        setSelectedNoteId(null);
+      }
+      closeDelete();
+      setDeleteCandidate(null);
+    } catch {
+      // mutation 상태를 통해 삭제 실패 안내를 표시한다.
+    }
+  };
+
   const handleNotFoundClose = () => {
     closeDetail();
     setSelectedNoteId(null);
@@ -90,6 +133,7 @@ export default function NotePage() {
         <NotesList
           notes={notes}
           onNoteSelect={handleNoteSelect}
+          onNoteDelete={handleDeleteRequest}
           isLoading={isPending}
           isError={hasInitialLoadError}
           hasSearchTerm={Boolean(normalizedSearchTerm)}
@@ -121,8 +165,20 @@ export default function NotePage() {
           isError={hasDetailLoadError && !isDetailNotFound && !isDetailFetching}
           isNotFound={isDetailNotFound && !isDetailFetching}
           onClose={closeDetail}
+          onEdit={selectedNote ? () => router.push(ROUTES.editNote(selectedNote.id)) : undefined}
           onNotFoundClose={handleNotFoundClose}
           onRetry={() => void refetchNoteDetail()}
+        />
+      )}
+
+      {deleteCandidate && (
+        <NoteDeleteDialog
+          noteTitle={deleteCandidate.title}
+          isOpen={isDeleteOpen}
+          isDeleting={deleteNoteMutation.isPending}
+          errorMessage={deleteNoteMutation.isError ? "노트를 삭제하지 못했어요. 잠시 후 다시 시도해 주세요." : ""}
+          onClose={handleDeleteClose}
+          onConfirm={handleDeleteConfirm}
         />
       )}
     </div>

@@ -1,5 +1,5 @@
 import type { NoteTone, NoteViewModel } from "../noteViewModel";
-import { FlagFilled, More, NoteFilled, Todos } from "@/assets/icons";
+import { Delete, FlagFilled, NoteFilled, Todos } from "@/assets/icons";
 import Button from "@/components/ui/Button";
 import type { ReactNode } from "react";
 
@@ -23,10 +23,11 @@ function NoteInfoRow({ icon, label, value }: { icon: ReactNode; label: string; v
 interface NoteCardProps {
   note: NoteViewModel;
   onSelect: (id: number) => void;
+  onDelete: (note: NoteViewModel) => void;
 }
 
 /** 한 건의 노트 내용과 상세 보기 동작을 보여 준다. */
-export default function NoteCard({ note, onSelect }: NoteCardProps) {
+export default function NoteCard({ note, onSelect, onDelete }: NoteCardProps) {
   const titleId = `note-card-title-${note.id}`;
 
   return (
@@ -47,11 +48,14 @@ export default function NoteCard({ note, onSelect }: NoteCardProps) {
             type="button"
             variant="ghost"
             size="sm"
-            aria-label={`${note.title} 더보기`}
-            className="px-8"
-            onClick={() => {}}
+            aria-label={`${note.title} 삭제`}
+            className="text-error hover:bg-coral-light px-8"
+            onClick={(event) => {
+              event.stopPropagation();
+              onDelete(note);
+            }}
           >
-            <More className="size-20 text-neutral-500" />
+            <Delete className="size-20" />
           </Button>
         </div>
       </div>

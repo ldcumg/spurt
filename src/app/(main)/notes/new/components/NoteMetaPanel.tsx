@@ -38,6 +38,9 @@ interface NoteMetaPanelProps {
   linkUrl: string;
   linkUrlError: string;
   createdAt: string;
+  connectionDescription?: string;
+  isGoalDisabled?: boolean;
+  isTodoDisabled?: boolean;
   onGoalChange: (option: DropDownOption) => void;
   onTodoChange: (option: DropDownOption) => void;
   onAddGoal: (label: string) => void;
@@ -54,6 +57,9 @@ export default function NoteMetaPanel({
   linkUrl,
   linkUrlError,
   createdAt,
+  connectionDescription = "이 노트는 다음 목표와 할 일에 속합니다.",
+  isGoalDisabled = false,
+  isTodoDisabled = false,
   onGoalChange,
   onTodoChange,
   onAddGoal,
@@ -69,7 +75,7 @@ export default function NoteMetaPanel({
       <MetaSection
         icon={<LinkIcon className="size-20" />}
         title="연결 정보"
-        description="이 노트는 다음 목표와 할 일에 속합니다."
+        description={connectionDescription}
       >
         <div className="flex flex-col gap-8">
           <div className="bg-primary-50 rounded-lg p-12">
@@ -80,6 +86,7 @@ export default function NoteMetaPanel({
             <Dropdown
               options={goals}
               value={selectedGoalId}
+              disabled={isGoalDisabled}
               onChange={onGoalChange}
               onAddOption={onAddGoal}
             />
@@ -94,7 +101,7 @@ export default function NoteMetaPanel({
               options={todos}
               value={selectedTodoId}
               placeholder={selectedGoalId ? undefined : "먼저 목표를 추가해 주세요"}
-              disabled={!selectedGoalId}
+              disabled={!selectedGoalId || isTodoDisabled}
               onChange={onTodoChange}
               onAddOption={onAddTodo}
             />

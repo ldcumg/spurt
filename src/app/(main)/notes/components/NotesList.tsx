@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 interface NotesListProps {
   notes: NoteViewModel[];
   onNoteSelect: (id: number) => void;
+  onNoteDelete: (note: NoteViewModel) => void;
   isLoading?: boolean;
   isError?: boolean;
   hasSearchTerm?: boolean;
@@ -16,6 +17,7 @@ interface NotesListProps {
 export default function NotesList({
   notes,
   onNoteSelect,
+  onNoteDelete,
   isLoading = false,
   isError = false,
   hasSearchTerm = false,
@@ -78,6 +80,7 @@ export default function NotesList({
           key={note.id}
           note={note}
           onSelect={onNoteSelect}
+          onDelete={onNoteDelete}
         />
       ))}
     </section>

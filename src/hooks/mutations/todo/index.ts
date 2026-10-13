@@ -6,9 +6,14 @@ import { mutationOptions, type QueryClient } from "@tanstack/react-query";
 export const todoMutationOptions = {
   detail: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: (newTodo: PostTodoRequest) => postTodo(newTodo),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: TODO_QUERY_KEYS.all });
+      mutationFn: async (newTodo: PostTodoRequest) => {
+        const response = await postTodo(newTodo);
+
+        return response.data;
+      },
+      onSuccess: (todo) => {
+        queryClient.setQueryData(TODO_QUERY_KEYS.detail(todo.id), todo);
+        void queryClient.invalidateQueries({ queryKey: TODO_QUERY_KEYS.all });
       },
     }),
 };

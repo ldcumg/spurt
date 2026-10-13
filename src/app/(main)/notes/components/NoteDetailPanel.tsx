@@ -2,7 +2,7 @@
 
 import type { NoteTone, NoteViewModel } from "../noteViewModel";
 import NoteContent from "./NoteContent";
-import { Calendar, Flag, Link, NoteFilled, Todos, X } from "@/assets/icons";
+import { Calendar, Edit, Flag, Link, NoteFilled, Todos, X } from "@/assets/icons";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import dynamic from "next/dynamic";
@@ -28,6 +28,7 @@ interface NoteDetailPanelProps {
   onClose: () => void;
   onNotFoundClose?: () => void;
   onRetry?: () => void;
+  onEdit?: () => void;
 }
 
 const DETAIL_TITLE_ID = "note-detail-title";
@@ -53,6 +54,7 @@ export default function NoteDetailPanel({
   onClose,
   onNotFoundClose,
   onRetry,
+  onEdit,
 }: NoteDetailPanelProps) {
   useEffect(() => {
     if (!isOpen) return;
@@ -101,17 +103,31 @@ export default function NoteDetailPanel({
                   ? "노트를 불러오지 못했어요"
                   : "노트를 불러오는 중이에요")}
           </h2>
-          <Button
-            type="button"
-            variant="ghost"
-            size="md"
-            autoFocus
-            aria-label="노트 상세 닫기"
-            className="ml-auto flex size-36 shrink-0 items-center justify-center p-0 text-neutral-500"
-            onClick={onClose}
-          >
-            <X className="size-24" />
-          </Button>
+          <div className="ml-auto flex shrink-0 items-center gap-8">
+            {note && onEdit && !isLoading && !isError && !isNotFound && (
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                className="inline-flex items-center gap-6"
+                onClick={onEdit}
+              >
+                <Edit className="size-18" />
+                수정
+              </Button>
+            )}
+            <Button
+              type="button"
+              variant="ghost"
+              size="md"
+              autoFocus
+              aria-label="노트 상세 닫기"
+              className="flex size-36 shrink-0 items-center justify-center p-0 text-neutral-500"
+              onClick={onClose}
+            >
+              <X className="size-24" />
+            </Button>
+          </div>
         </header>
 
         {isLoading && (

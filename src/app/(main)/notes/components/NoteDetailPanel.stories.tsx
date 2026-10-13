@@ -34,6 +34,30 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+const editableNote = {
+  id: 1,
+  title: "프로젝트 회고 정리",
+  description: "이번 프로젝트에서 배운 내용을 정리합니다.",
+  goal: "프론트엔드 포트폴리오 완성하기",
+  task: "회고 작성하기",
+  date: "2026. 10. 13",
+  tone: "mint" as const,
+  content: {
+    type: "doc",
+    content: [{ type: "paragraph", content: [{ type: "text", text: "이번 프로젝트에서 배운 내용" }] }],
+  },
+  linkUrl: "https://example.com",
+};
+
+export const Editable: Story = {
+  args: {
+    note: editableNote,
+    isOpen: true,
+    onClose: () => {},
+    onEdit: () => {},
+  },
+};
+
 export const Loading: Story = {
   args: {
     note: null,
