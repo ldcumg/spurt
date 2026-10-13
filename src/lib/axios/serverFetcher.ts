@@ -45,28 +45,22 @@ export async function serverFetcher<T>(
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(ACCESS_TOKEN)?.value;
 
-  try {
-    return await axios<T>({
+  const request = (token?: string) =>
+    axios<T>({
       url: `${BASE_URL.server}${path}`,
       ...config,
       headers: {
-        ...HTTP_HEADERS(accessToken),
+        ...HTTP_HEADERS(token),
         ...config?.headers,
       },
     });
+
+  try {
+    return await request(accessToken);
   } catch (error) {
     if (canRefresh && isAxiosError(error) && error.response?.status === 401) {
       const newAccessToken = await refreshTokens();
-      if (newAccessToken) {
-        return axios<T>({
-          url: `${BASE_URL.server}${path}`,
-          ...config,
-          headers: {
-            ...HTTP_HEADERS(newAccessToken),
-            ...config?.headers,
-          },
-        });
-      }
+      if (newAccessToken) return request(newAccessToken);
     }
     throw error;
   }
