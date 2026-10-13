@@ -1,6 +1,7 @@
 "use client";
 
 import { createNoteExtensions, NOTE_CONTENT_CLASS_NAME } from "../../components/NoteContent";
+import { createImageInsertionContent } from "./noteEditorImage";
 import { Link as LinkIcon, More, NoteFilled, Upload } from "@/assets/icons";
 import Button from "@/components/ui/Button";
 import Select, { type SelectOption } from "@/components/ui/Select";
@@ -224,7 +225,7 @@ export default function NoteEditor({
       editor
         .chain()
         .focus()
-        .insertContent({ type: "image", attrs: { src: reader.result, alt: file.name, title: file.name } })
+        .insertContent(createImageInsertionContent(reader.result, file.name))
         .run();
       setImageError("");
     };
