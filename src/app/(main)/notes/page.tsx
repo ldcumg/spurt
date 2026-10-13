@@ -9,6 +9,7 @@ import {
   NotesToolbar,
   type SortOrder,
 } from "./components";
+import { getNoteApiError, isNoteApiErrorStatus } from "./noteApiError";
 import { toNoteViewModel } from "./noteViewModel";
 import type { NoteViewModel } from "./noteViewModel";
 import Button from "@/components/ui/Button";
@@ -18,7 +19,6 @@ import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 import { useDeleteNoteMutation } from "@/hooks/mutations/note/useNoteMutations";
 import { useNoteDetailQuery, useNoteListQuery } from "@/hooks/queries/note/useNoteQueries";
 import { useQueryClient } from "@tanstack/react-query";
-import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
@@ -43,10 +43,20 @@ export default function NotePage() {
     }),
     [normalizedSearchTerm, sortOrder],
   );
-  const { data, isPending, isError, refetch, fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError } =
-    useNoteListQuery(noteListParams);
+  const {
+    data,
+    isPending,
+    isError,
+    error: listError,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetchNextPageError,
+  } = useNoteListQuery(noteListParams);
   const notes = useMemo(() => data?.pages.flatMap((page) => page.notes.map(toNoteViewModel)) ?? [], [data]);
   const hasInitialLoadError = isError && !data;
+  const listErrorInfo = getNoteApiError(listError, "list");
   const {
     data: selectedNoteData,
     isPending: isDetailPending,
@@ -57,7 +67,9 @@ export default function NotePage() {
   } = useNoteDetailQuery(selectedNoteId ?? 0, selectedNoteId !== null && isDetailOpen);
   const selectedNote = useMemo(() => (selectedNoteData ? toNoteViewModel(selectedNoteData) : null), [selectedNoteData]);
   const hasDetailLoadError = isDetailError && !selectedNoteData;
-  const isDetailNotFound = hasDetailLoadError && isAxiosError(detailError) && detailError.response?.status === 404;
+  const isDetailNotFound = hasDetailLoadError && isNoteApiErrorStatus(detailError, 404);
+  const detailErrorInfo = getNoteApiError(detailError, "detail");
+  const deleteErrorInfo = getNoteApiError(deleteNoteMutation.error, "delete");
 
   const handleNewNote = () => {
     router.push(ROUTES.newNote);
@@ -105,8 +117,18 @@ export default function NotePage() {
       }
       closeDelete();
       setDeleteCandidate(null);
-    } catch {
-      // mutation 상태를 통해 삭제 실패 안내를 표시한다.
+    } catch (error) {
+      if (!isNoteApiErrorStatus(error, 404)) return;
+
+      queryClient.removeQueries({ queryKey: NOTE_QUERY_KEYS.detail(deleteCandidate.id), exact: true });
+      await queryClient.invalidateQueries({ queryKey: NOTE_QUERY_KEYS.lists() });
+      if (selectedNoteId === deleteCandidate.id) {
+        closeDetail();
+        setSelectedNoteId(null);
+      }
+      deleteNoteMutation.reset();
+      closeDelete();
+      setDeleteCandidate(null);
     }
   };
 
@@ -136,13 +158,16 @@ export default function NotePage() {
           onNoteDelete={handleDeleteRequest}
           isLoading={isPending}
           isError={hasInitialLoadError}
+          errorTitle={listErrorInfo.title}
+          errorMessage={listErrorInfo.message}
+          canRetry={listErrorInfo.canRetry}
           hasSearchTerm={Boolean(normalizedSearchTerm)}
           onRetry={() => void refetch()}
         />
         {hasNextPage && !isPending && !hasInitialLoadError && (
           <div className="mt-24 flex justify-center md:mt-32">
             <div className="text-center">
-              {isFetchNextPageError && <p className="text-body-sm text-error mb-8">추가 노트를 불러오지 못했어요.</p>}
+              {isFetchNextPageError && <p className="text-body-sm text-error mb-8">{listErrorInfo.message}</p>}
               <Button
                 type="button"
                 variant="outline"
@@ -164,6 +189,9 @@ export default function NotePage() {
           isLoading={isDetailPending || (hasDetailLoadError && isDetailFetching)}
           isError={hasDetailLoadError && !isDetailNotFound && !isDetailFetching}
           isNotFound={isDetailNotFound && !isDetailFetching}
+          errorTitle={detailErrorInfo.title}
+          errorMessage={detailErrorInfo.message}
+          canRetry={detailErrorInfo.canRetry}
           onClose={closeDetail}
           onEdit={selectedNote ? () => router.push(ROUTES.editNote(selectedNote.id)) : undefined}
           onNotFoundClose={handleNotFoundClose}
@@ -176,7 +204,8 @@ export default function NotePage() {
           noteTitle={deleteCandidate.title}
           isOpen={isDeleteOpen}
           isDeleting={deleteNoteMutation.isPending}
-          errorMessage={deleteNoteMutation.isError ? "노트를 삭제하지 못했어요. 잠시 후 다시 시도해 주세요." : ""}
+          errorTitle={deleteNoteMutation.isError ? deleteErrorInfo.title : ""}
+          errorMessage={deleteNoteMutation.isError ? deleteErrorInfo.message : ""}
           onClose={handleDeleteClose}
           onConfirm={handleDeleteConfirm}
         />

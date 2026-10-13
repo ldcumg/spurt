@@ -36,6 +36,7 @@ export const Default: Story = {
 
 export const Error: Story = {
   args: {
-    errorMessage: "노트를 삭제하지 못했어요. 잠시 후 다시 시도해 주세요.",
+    errorTitle: "이 노트를 삭제할 권한이 없어요.",
+    errorMessage: "로그인한 계정과 데이터의 소유권을 확인해 주세요.",
   },
 };

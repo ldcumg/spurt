@@ -9,6 +9,9 @@ interface NotesListProps {
   onNoteDelete: (note: NoteViewModel) => void;
   isLoading?: boolean;
   isError?: boolean;
+  errorTitle?: string;
+  errorMessage?: string;
+  canRetry?: boolean;
   hasSearchTerm?: boolean;
   onRetry?: () => void;
 }
@@ -20,6 +23,9 @@ export default function NotesList({
   onNoteDelete,
   isLoading = false,
   isError = false,
+  errorTitle = "노트 목록을 불러오지 못했어요.",
+  errorMessage = "잠시 후 다시 시도해 주세요.",
+  canRetry = true,
   hasSearchTerm = false,
   onRetry,
 }: NotesListProps) {
@@ -41,9 +47,9 @@ export default function NotesList({
         className="border-border flex min-h-240 flex-col items-center justify-center rounded-xl border bg-white px-24 text-center shadow-sm"
       >
         <NoteFilled className="mb-12 size-40 text-neutral-400" />
-        <h2 className="text-title-xs">노트를 불러오지 못했어요.</h2>
-        <p className="text-body-md mt-4 text-neutral-600">잠시 후 다시 시도해 주세요.</p>
-        {onRetry && (
+        <h2 className="text-title-xs">{errorTitle}</h2>
+        <p className="text-body-md mt-4 text-neutral-600">{errorMessage}</p>
+        {onRetry && canRetry && (
           <Button
             type="button"
             variant="outline"

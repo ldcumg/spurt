@@ -72,6 +72,8 @@ export const ErrorWithRetry: Story = {
     note: null,
     isOpen: true,
     isError: true,
+    errorTitle: "노트를 불러오지 못했어요.",
+    errorMessage: "서버에 일시적인 문제가 생겼어요. 잠시 후 다시 시도해 주세요.",
     onClose: () => {},
     onRetry: () => {},
   },
@@ -86,6 +88,18 @@ export const ErrorWithRetry: Story = {
         onRetry={() => updateArgs({ isLoading: true, isError: false })}
       />
     );
+  },
+};
+
+export const Forbidden: Story = {
+  args: {
+    note: null,
+    isOpen: true,
+    isError: true,
+    errorTitle: "이 노트를 볼 권한이 없어요.",
+    errorMessage: "로그인한 계정과 데이터의 소유권을 확인해 주세요.",
+    canRetry: false,
+    onClose: () => {},
   },
 };
 

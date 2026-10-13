@@ -53,6 +53,7 @@ export function NoteActions({
 interface NoteWriteHeaderProps extends NoteActionsProps {
   onBack: () => void;
   statusMessage: string;
+  statusTone?: "default" | "error";
   backLabel?: string;
   heading?: string;
   description?: string;
@@ -67,6 +68,7 @@ export default function NoteWriteHeader({
   submitLabel,
   pendingLabel,
   statusMessage,
+  statusTone = "default",
   backLabel = "노트로 돌아가기",
   heading = "노트 작성하기",
   description = "오늘의 생각을 정리하고, 나만의 지식을 쌓아보세요.",
@@ -89,8 +91,8 @@ export default function NoteWriteHeader({
         <p className="text-body-md md:text-body-lg mt-4 text-neutral-600">{description}</p>
         {statusMessage && (
           <p
-            role="status"
-            className="text-body-sm text-primary-600 mt-8"
+            role={statusTone === "error" ? "alert" : "status"}
+            className={`text-body-sm mt-8 ${statusTone === "error" ? "text-error" : "text-primary-600"}`}
           >
             {statusMessage}
           </p>

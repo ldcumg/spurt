@@ -4,15 +4,17 @@ import MobileNavigation from "../../components/MobileNavigation";
 import NoteEditor from "../../new/components/NoteEditor";
 import NoteMetaPanel from "../../new/components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "../../new/components/NoteWriteHeader";
+import { getNoteApiError, isNoteApiErrorStatus } from "../../noteApiError";
 import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError, hasEmbeddedDataImage } from "../../noteFormUtils";
 import { Left, NoteFilled } from "@/assets/icons";
 import Button from "@/components/ui/Button";
+import NOTE_QUERY_KEYS from "@/constants/queryKeys/note";
 import ROUTES from "@/constants/routes";
 import { useUpdateNoteMutation } from "@/hooks/mutations/note/useNoteMutations";
 import { useNoteDetailQuery } from "@/hooks/queries/note/useNoteQueries";
 import type { NoteResponse } from "@/types/notes.types";
+import { useQueryClient } from "@tanstack/react-query";
 import type { JSONContent } from "@tiptap/react";
-import { isAxiosError } from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
@@ -24,6 +26,7 @@ const ignoreImmutableConnectionChange = () => undefined;
 
 function EditNoteForm({ note }: EditNoteFormProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const updateNoteMutation = useUpdateNoteMutation();
   const initialContent = note.content ? (note.content as JSONContent) : createEmptyNoteContent();
   const [title, setTitle] = useState(note.title);
@@ -37,9 +40,10 @@ function EditNoteForm({ note }: EditNoteFormProps) {
   const todoOptions = useMemo(() => [{ id: String(note.todo.id), label: note.todo.title }], [note.todo]);
   const linkUrlError = getLinkUrlError(linkUrl);
   const hasPendingImageUpload = hasEmbeddedDataImage(content);
+  const updateErrorInfo = getNoteApiError(updateNoteMutation.error, "update");
   const canSubmit = Boolean(title.trim() && !linkUrlError && !hasPendingImageUpload && !updateNoteMutation.isPending);
   const statusMessage = updateNoteMutation.isError
-    ? "노트를 수정하지 못했어요. 입력 내용을 확인한 뒤 다시 시도해 주세요."
+    ? updateErrorInfo.message
     : !title.trim()
       ? "노트 제목을 입력해 주세요."
       : linkUrlError
@@ -64,8 +68,11 @@ function EditNoteForm({ note }: EditNoteFormProps) {
         },
       });
       router.push(ROUTES.notes);
-    } catch {
-      // mutation 상태를 통해 수정 실패 안내를 표시한다.
+    } catch (error) {
+      if (isNoteApiErrorStatus(error, 404)) {
+        queryClient.removeQueries({ queryKey: NOTE_QUERY_KEYS.detail(note.id), exact: true });
+        void queryClient.invalidateQueries({ queryKey: NOTE_QUERY_KEYS.lists() });
+      }
     }
   };
 
@@ -73,6 +80,19 @@ function EditNoteForm({ note }: EditNoteFormProps) {
     setLinkUrl((currentLinkUrl) => currentLinkUrl.trim());
     setIsLinkUrlTouched(true);
   };
+
+  const clearMutationError = () => {
+    if (updateNoteMutation.isError) updateNoteMutation.reset();
+  };
+
+  if (updateNoteMutation.isError && isNoteApiErrorStatus(updateNoteMutation.error, 404)) {
+    return (
+      <EditPageState
+        title={updateErrorInfo.title}
+        description={updateErrorInfo.message}
+      />
+    );
+  }
 
   return (
     <div className="mx-auto w-full max-w-screen-xl px-16 pt-24 pb-100 md:px-32 md:pt-40 md:pb-40 xl:px-40">
@@ -86,6 +106,7 @@ function EditNoteForm({ note }: EditNoteFormProps) {
         heading="노트 수정하기"
         description="기록한 내용을 더 정확하게 다듬어보세요."
         statusMessage={statusMessage}
+        statusTone={updateNoteMutation.isError ? "error" : "default"}
       />
 
       <div className="mb-16 hidden grid-cols-3 gap-20 xl:grid">
@@ -104,8 +125,14 @@ function EditNoteForm({ note }: EditNoteFormProps) {
           <NoteEditor
             title={title}
             content={content}
-            onTitleChange={setTitle}
-            onContentChange={(nextContent) => setContent(nextContent)}
+            onTitleChange={(nextTitle) => {
+              setTitle(nextTitle);
+              clearMutationError();
+            }}
+            onContentChange={(nextContent) => {
+              setContent(nextContent);
+              clearMutationError();
+            }}
           />
         </div>
         <NoteMetaPanel
@@ -123,7 +150,10 @@ function EditNoteForm({ note }: EditNoteFormProps) {
           onTodoChange={ignoreImmutableConnectionChange}
           onAddGoal={ignoreImmutableConnectionChange}
           onAddTodo={ignoreImmutableConnectionChange}
-          onLinkUrlChange={setLinkUrl}
+          onLinkUrlChange={(nextLinkUrl) => {
+            setLinkUrl(nextLinkUrl);
+            clearMutationError();
+          }}
           onLinkUrlBlur={handleLinkUrlBlur}
         />
       </div>
@@ -163,7 +193,10 @@ function EditPageState({ title, description, isLoading = false, onRetry }: EditP
         <Left className="size-18" />
         노트로 돌아가기
       </Button>
-      <section className="border-border bg-surface-card flex min-h-320 flex-col items-center justify-center rounded-xl border px-24 text-center shadow-sm">
+      <section
+        role={isLoading ? "status" : "alert"}
+        className="border-border bg-surface-card flex min-h-320 flex-col items-center justify-center rounded-xl border px-24 text-center shadow-sm"
+      >
         <NoteFilled className="mb-12 size-44 text-neutral-400" />
         <h1 className="text-title-md text-foreground-title">{title}</h1>
         <p className="text-body-md mt-8 text-neutral-600">{description}</p>
@@ -188,8 +221,8 @@ export default function EditNotePage() {
   const noteId = Number(params.noteId);
   const isValidNoteId = Number.isInteger(noteId) && noteId > 0;
   const noteQuery = useNoteDetailQuery(isValidNoteId ? noteId : 0, isValidNoteId);
-  const isNotFound =
-    !isValidNoteId || (noteQuery.isError && isAxiosError(noteQuery.error) && noteQuery.error.response?.status === 404);
+  const isNotFound = !isValidNoteId || (noteQuery.isError && isNoteApiErrorStatus(noteQuery.error, 404));
+  const queryErrorInfo = getNoteApiError(noteQuery.error, "detail");
 
   return (
     <div className="bg-surface text-foreground min-h-screen w-full min-w-0 bg-[radial-gradient(circle_at_top_right,var(--color-primary-50),var(--color-surface)_56%)]">
@@ -208,9 +241,9 @@ export default function EditNotePage() {
         />
       ) : noteQuery.isError || !noteQuery.data ? (
         <EditPageState
-          title="노트를 불러오지 못했어요"
-          description="잠시 후 다시 시도해 주세요."
-          onRetry={() => void noteQuery.refetch()}
+          title={queryErrorInfo.title}
+          description={queryErrorInfo.message}
+          onRetry={queryErrorInfo.canRetry ? () => void noteQuery.refetch() : undefined}
         />
       ) : (
         <EditNoteForm

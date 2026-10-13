@@ -1,6 +1,7 @@
 "use client";
 
 import MobileNavigation from "../components/MobileNavigation";
+import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
 import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError, hasEmbeddedDataImage } from "../noteFormUtils";
 import NoteEditor from "./components/NoteEditor";
 import NoteMetaPanel from "./components/NoteMetaPanel";
@@ -30,6 +31,7 @@ export default function NewNotePage() {
   const [linkUrl, setLinkUrl] = useState("");
   const [isLinkUrlTouched, setIsLinkUrlTouched] = useState(false);
   const [actionMessage, setActionMessage] = useState("");
+  const [isActionError, setIsActionError] = useState(false);
   const [createdAt] = useState(() => new Date());
   const goals = useMemo<DropDownOption[]>(
     () => goalQuery.data?.data.goals.map((goal) => ({ id: String(goal.id), label: goal.title })) ?? [],
@@ -51,6 +53,9 @@ export default function NewNotePage() {
   const linkUrlError = getLinkUrlError(linkUrl);
   const hasPendingQueries = goalQuery.isPending || todoQuery.isPending;
   const hasQueryError = (goalQuery.isError && !goalQuery.data) || (todoQuery.isError && !todoQuery.data);
+  const connectionError = goalQuery.isError && !goalQuery.data ? goalQuery.error : todoQuery.error;
+  const connectionErrorInfo = getNoteApiError(connectionError, "connectionList");
+  const createErrorInfo = getNoteApiError(createNoteMutation.error, "create");
   const hasPendingImageUpload = hasEmbeddedDataImage(content);
   const canSubmit = Boolean(
     title.trim() &&
@@ -65,11 +70,11 @@ export default function NewNotePage() {
   const submitRequirementMessage = hasPendingQueries
     ? "목표와 할 일을 불러오는 중이에요."
     : hasQueryError
-      ? "목표 또는 할 일을 불러오지 못했어요. 잠시 후 다시 시도해 주세요."
+      ? connectionErrorInfo.message
       : actionMessage
         ? actionMessage
         : createNoteMutation.isError
-          ? "노트를 등록하지 못했어요. 입력 내용을 확인한 뒤 다시 시도해 주세요."
+          ? createErrorInfo.message
           : !title.trim()
             ? "노트 제목을 입력해 주세요."
             : !effectiveGoalId
@@ -83,6 +88,13 @@ export default function NewNotePage() {
                     : createNoteMutation.isPending
                       ? "노트를 등록하는 중이에요."
                       : "";
+  const hasStatusError = hasQueryError || isActionError || createNoteMutation.isError;
+
+  const clearActionState = () => {
+    setActionMessage("");
+    setIsActionError(false);
+    createNoteMutation.reset();
+  };
 
   const handleDraft = () => {};
 
@@ -92,8 +104,7 @@ export default function NewNotePage() {
     const todoId = Number(effectiveTodoId);
     if (!Number.isInteger(todoId)) return;
 
-    setActionMessage("");
-    createNoteMutation.reset();
+    clearActionState();
 
     try {
       await createNoteMutation.mutateAsync({
@@ -103,16 +114,18 @@ export default function NewNotePage() {
         ...(linkUrl.trim() ? { linkUrl: linkUrl.trim() } : {}),
       });
       router.push(ROUTES.notes);
-    } catch {
-      // mutation 상태를 통해 등록 실패 안내를 표시한다.
+    } catch (error) {
+      if (isNoteApiErrorStatus(error, 404)) {
+        setSelectedTodoId("");
+        void todoQuery.refetch();
+      }
     }
   };
 
   const handleGoalChange = (option: DropDownOption) => {
     setSelectedGoalId(option.id);
     setSelectedTodoId("");
-    setActionMessage("");
-    createNoteMutation.reset();
+    clearActionState();
   };
 
   const handleTodoChange = (option: DropDownOption) => {
@@ -120,26 +133,33 @@ export default function NewNotePage() {
     if (String(selectedTodo?.goalId) !== effectiveGoalId) return;
 
     setSelectedTodoId(option.id);
-    setActionMessage("");
-    createNoteMutation.reset();
+    clearActionState();
   };
 
   const handleAddGoal = (label: string) => {
     if (!label) return;
+    createNoteMutation.reset();
     setActionMessage("목표 추가 API가 아직 준비되지 않았어요. 연결된 목표를 선택해 주세요.");
+    setIsActionError(false);
   };
 
   const handleAddTodo = async (label: string) => {
     const goalId = Number(effectiveGoalId);
     if (!Number.isInteger(goalId)) return;
 
-    setActionMessage("");
+    clearActionState();
     try {
       const newTodo = await addTodoMutation.mutateAsync({ title: label, goalId });
       setCreatedTodos((currentTodos) => [...currentTodos.filter((todo) => todo.id !== newTodo.id), newTodo]);
       setSelectedTodoId(String(newTodo.id));
-    } catch {
-      setActionMessage("할 일을 추가하지 못했어요. 잠시 후 다시 시도해 주세요.");
+    } catch (error) {
+      if (isNoteApiErrorStatus(error, 404)) {
+        setSelectedGoalId("");
+        setSelectedTodoId("");
+        void goalQuery.refetch();
+      }
+      setActionMessage(getNoteApiError(error, "todoCreate").message);
+      setIsActionError(true);
     }
   };
 
@@ -160,6 +180,7 @@ export default function NewNotePage() {
           isSubmitDisabled={!canSubmit}
           isSubmitting={createNoteMutation.isPending}
           statusMessage={submitRequirementMessage}
+          statusTone={hasStatusError ? "error" : "default"}
         />
 
         <div className="mb-16 hidden grid-cols-3 gap-20 xl:grid">
@@ -177,8 +198,14 @@ export default function NewNotePage() {
             <NoteEditor
               title={title}
               content={content}
-              onTitleChange={setTitle}
-              onContentChange={(nextContent) => setContent(nextContent)}
+              onTitleChange={(nextTitle) => {
+                setTitle(nextTitle);
+                clearActionState();
+              }}
+              onContentChange={(nextContent) => {
+                setContent(nextContent);
+                clearActionState();
+              }}
             />
           </div>
           <NoteMetaPanel
@@ -195,7 +222,10 @@ export default function NewNotePage() {
             onTodoChange={handleTodoChange}
             onAddGoal={handleAddGoal}
             onAddTodo={handleAddTodo}
-            onLinkUrlChange={setLinkUrl}
+            onLinkUrlChange={(nextLinkUrl) => {
+              setLinkUrl(nextLinkUrl);
+              clearActionState();
+            }}
             onLinkUrlBlur={handleLinkUrlBlur}
           />
         </div>

@@ -7,6 +7,7 @@ interface NoteDeleteDialogProps {
   noteTitle: string;
   isOpen: boolean;
   isDeleting?: boolean;
+  errorTitle?: string;
   errorMessage?: string;
   onClose: () => void;
   onConfirm: () => void;
@@ -17,6 +18,7 @@ export default function NoteDeleteDialog({
   noteTitle,
   isOpen,
   isDeleting = false,
+  errorTitle = "",
   errorMessage = "",
   onClose,
   onConfirm,
@@ -38,12 +40,13 @@ export default function NoteDeleteDialog({
         노트를 삭제하시겠어요? 삭제한 노트는 복구할 수 없습니다.
       </p>
       {errorMessage && (
-        <p
+        <div
           role="alert"
           className="text-body-sm text-error mt-12"
         >
-          {errorMessage}
-        </p>
+          {errorTitle && <strong className="block">{errorTitle}</strong>}
+          <p>{errorMessage}</p>
+        </div>
       )}
       <ModalActions
         onClose={handleClose}
