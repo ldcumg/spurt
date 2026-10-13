@@ -64,3 +64,13 @@ export const ErrorWithRetry: Story = {
     );
   },
 };
+
+export const NotFound: Story = {
+  args: {
+    note: null,
+    isOpen: true,
+    isNotFound: true,
+    onClose: () => {},
+    onNotFoundClose: () => {},
+  },
+};

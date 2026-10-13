@@ -3,6 +3,7 @@ import NOTE_QUERY_KEYS, { type NoteListQueryParams } from "@/constants/queryKeys
 import { clientFetcher } from "@/lib/axios/clientFetcher";
 import type { NoteListResponse, NoteResponse } from "@/types/notes.types";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 
 export const noteQueryOptions = {
   list: (params: NoteListQueryParams) =>
@@ -29,6 +30,10 @@ export const noteQueryOptions = {
         const response = await clientFetcher.get<NoteResponse>(NOTES_API_PATH.detail(noteId), { signal });
 
         return response.data;
+      },
+      retry: (failureCount, error) => {
+        if (isAxiosError(error) && error.response?.status === 404) return false;
+        return failureCount < 1;
       },
     }),
 };

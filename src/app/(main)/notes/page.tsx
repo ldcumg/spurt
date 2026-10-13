@@ -3,9 +3,12 @@
 import { MobileNavigation, NoteDetailPanel, NotesHero, NotesList, NotesToolbar, type SortOrder } from "./components";
 import { toNoteViewModel } from "./noteViewModel";
 import Button from "@/components/ui/Button";
+import NOTE_QUERY_KEYS from "@/constants/queryKeys/note";
 import ROUTES from "@/constants/routes";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 import { useNoteDetailQuery, useNoteListQuery } from "@/hooks/queries/note/useNoteQueries";
+import { useQueryClient } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
@@ -13,6 +16,7 @@ const NOTES_PAGE_SIZE = 6;
 
 export default function NotePage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<SortOrder>("recent");
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
@@ -35,10 +39,12 @@ export default function NotePage() {
     isPending: isDetailPending,
     isError: isDetailError,
     isFetching: isDetailFetching,
+    error: detailError,
     refetch: refetchNoteDetail,
   } = useNoteDetailQuery(selectedNoteId ?? 0, selectedNoteId !== null && isDetailOpen);
   const selectedNote = useMemo(() => (selectedNoteData ? toNoteViewModel(selectedNoteData) : null), [selectedNoteData]);
   const hasDetailLoadError = isDetailError && !selectedNoteData;
+  const isDetailNotFound = hasDetailLoadError && isAxiosError(detailError) && detailError.response?.status === 404;
 
   const handleNewNote = () => {
     router.push(ROUTES.newNote);
@@ -59,6 +65,12 @@ export default function NotePage() {
 
   const handleLoadMore = () => {
     void fetchNextPage();
+  };
+
+  const handleNotFoundClose = () => {
+    closeDetail();
+    setSelectedNoteId(null);
+    void queryClient.invalidateQueries({ queryKey: NOTE_QUERY_KEYS.lists() });
   };
 
   return (
@@ -106,8 +118,10 @@ export default function NotePage() {
           note={selectedNote}
           isOpen={isDetailOpen}
           isLoading={isDetailPending || (hasDetailLoadError && isDetailFetching)}
-          isError={hasDetailLoadError && !isDetailFetching}
+          isError={hasDetailLoadError && !isDetailNotFound && !isDetailFetching}
+          isNotFound={isDetailNotFound && !isDetailFetching}
           onClose={closeDetail}
+          onNotFoundClose={handleNotFoundClose}
           onRetry={() => void refetchNoteDetail()}
         />
       )}

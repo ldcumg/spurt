@@ -24,7 +24,9 @@ interface NoteDetailPanelProps {
   isOpen: boolean;
   isLoading?: boolean;
   isError?: boolean;
+  isNotFound?: boolean;
   onClose: () => void;
+  onNotFoundClose?: () => void;
   onRetry?: () => void;
 }
 
@@ -47,7 +49,9 @@ export default function NoteDetailPanel({
   isOpen,
   isLoading = false,
   isError = false,
+  isNotFound = false,
   onClose,
+  onNotFoundClose,
   onRetry,
 }: NoteDetailPanelProps) {
   useEffect(() => {
@@ -90,7 +94,12 @@ export default function NoteDetailPanel({
             id={DETAIL_TITLE_ID}
             className="text-title-lg text-foreground-title md:text-title-md order-last mt-20 w-full md:order-none md:mt-0 md:min-w-0 md:flex-1"
           >
-            {note?.title ?? (isError ? "노트를 불러오지 못했어요" : "노트를 불러오는 중이에요")}
+            {note?.title ??
+              (isNotFound
+                ? "노트를 찾을 수 없어요"
+                : isError
+                  ? "노트를 불러오지 못했어요"
+                  : "노트를 불러오는 중이에요")}
           </h2>
           <Button
             type="button"
@@ -114,7 +123,28 @@ export default function NoteDetailPanel({
           </div>
         )}
 
-        {isError && !isLoading && (
+        {isNotFound && !isLoading && (
+          <div
+            role="alert"
+            className="mt-32 flex min-h-240 flex-col items-center justify-center rounded-xl bg-neutral-50 px-24 text-center"
+          >
+            <NoteFilled className="mb-12 size-40 text-neutral-400" />
+            <p className="text-body-md text-neutral-600">삭제되었거나 존재하지 않는 노트예요.</p>
+            {onNotFoundClose && (
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                className="mt-16"
+                onClick={onNotFoundClose}
+              >
+                목록으로 돌아가기
+              </Button>
+            )}
+          </div>
+        )}
+
+        {isError && !isLoading && !isNotFound && (
           <div
             role="alert"
             className="mt-32 flex min-h-240 flex-col items-center justify-center rounded-xl bg-neutral-50 px-24 text-center"
@@ -135,7 +165,7 @@ export default function NoteDetailPanel({
           </div>
         )}
 
-        {note && !isLoading && !isError && (
+        {note && !isLoading && !isError && !isNotFound && (
           <>
             <div className="mt-32 flex flex-col gap-16 md:mt-24">
               <DetailRow
