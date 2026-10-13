@@ -1,6 +1,6 @@
 import { AUTH_API_PATH, BASE_URL } from "@/constants/apiEndpoints";
 import ROUTES from "@/constants/routes";
-import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 
 export const clientFetcher = axios.create({ baseURL: BASE_URL.client });
 

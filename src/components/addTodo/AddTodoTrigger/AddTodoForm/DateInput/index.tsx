@@ -1,7 +1,7 @@
 "use client";
 
-import { validateDueDate } from "../../utils";
 import { Calendar } from "@/assets/icons";
+import { validateDueDate } from "@/components/addTodo/utils";
 import MiniCalendar from "@/components/calendar/MiniCalendar";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
@@ -10,11 +10,12 @@ interface DateInputProps {
   selectedDate: Date | null;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
   error?: string;
-  setError: (errorMassage: string) => void;
+  setError: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function DateInput({ selectedDate, setSelectedDate, error, setError }: DateInputProps) {
   const { isOpen: isCalendarOpen, close: calendarClose, toggle: calendarToggle } = useDisclosure();
+  /** 바깥 컨테이너 클릭 시 달력 닫기 */
   const containerRef = useClickOutside(() => {
     validateDueDate(selectedDate, setError);
     calendarClose();

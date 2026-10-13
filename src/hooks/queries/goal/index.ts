@@ -9,6 +9,6 @@ export const goalQueryOptions = {
   all: () =>
     queryOptions({
       queryKey: GOAL_QUERY_KEYS.all,
-      queryFn: () => clientFetcher<GoalListResponse>(GOALS_API_PATH.base),
+      queryFn: () => clientFetcher.get<GoalListResponse>(GOALS_API_PATH.base),
     }),
 };

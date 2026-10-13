@@ -1,0 +1,22 @@
+import * as SelectGoalDropdownStories from "./index.stories";
+import { Meta, Story } from "@storybook/addon-docs/blocks";
+
+<Meta of={SelectGoalDropdownStories} />
+
+# SelectGoalDropdown
+
+## 목표가 선택된 예시
+
+<Story of={SelectGoalDropdownStories.SelectedGoal} />
+
+## 선택할 목표가 없는 예시
+
+<Story of={SelectGoalDropdownStories.NoList} />
+
+## 목표를 선택하지 않아 오류가 표시되는 예시
+
+<Story of={SelectGoalDropdownStories.NoSelect} />
+
+## 목표명이 길어 말줄임 처리되는 예시
+
+<Story of={SelectGoalDropdownStories.Overflow} />
