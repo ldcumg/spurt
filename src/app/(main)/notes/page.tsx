@@ -5,7 +5,7 @@ import { toNoteViewModel } from "./noteViewModel";
 import Button from "@/components/ui/Button";
 import ROUTES from "@/constants/routes";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
-import { useNoteListQuery } from "@/hooks/queries/note/useNoteQueries";
+import { useNoteDetailQuery, useNoteListQuery } from "@/hooks/queries/note/useNoteQueries";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
@@ -30,8 +30,15 @@ export default function NotePage() {
     useNoteListQuery(noteListParams);
   const notes = useMemo(() => data?.pages.flatMap((page) => page.notes.map(toNoteViewModel)) ?? [], [data]);
   const hasInitialLoadError = isError && !data;
-
-  const selectedNote = notes.find((note) => note.id === selectedNoteId) ?? null;
+  const {
+    data: selectedNoteData,
+    isPending: isDetailPending,
+    isError: isDetailError,
+    isFetching: isDetailFetching,
+    refetch: refetchNoteDetail,
+  } = useNoteDetailQuery(selectedNoteId ?? 0, selectedNoteId !== null && isDetailOpen);
+  const selectedNote = useMemo(() => (selectedNoteData ? toNoteViewModel(selectedNoteData) : null), [selectedNoteData]);
+  const hasDetailLoadError = isDetailError && !selectedNoteData;
 
   const handleNewNote = () => {
     router.push(ROUTES.newNote);
@@ -94,11 +101,14 @@ export default function NotePage() {
         )}
       </div>
 
-      {selectedNote && (
+      {selectedNoteId !== null && (
         <NoteDetailPanel
           note={selectedNote}
           isOpen={isDetailOpen}
+          isLoading={isDetailPending || (hasDetailLoadError && isDetailFetching)}
+          isError={hasDetailLoadError && !isDetailFetching}
           onClose={closeDetail}
+          onRetry={() => void refetchNoteDetail()}
         />
       )}
     </div>

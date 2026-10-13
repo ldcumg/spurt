@@ -1,8 +1,8 @@
 import { NOTES_API_PATH } from "@/constants/apiEndpoints";
 import NOTE_QUERY_KEYS, { type NoteListQueryParams } from "@/constants/queryKeys/note";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
-import type { NoteListResponse } from "@/types/notes.types";
-import { infiniteQueryOptions } from "@tanstack/react-query";
+import type { NoteListResponse, NoteResponse } from "@/types/notes.types";
+import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 
 export const noteQueryOptions = {
   list: (params: NoteListQueryParams) =>
@@ -21,5 +21,14 @@ export const noteQueryOptions = {
       },
       initialPageParam: null as number | null,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }),
+  detail: (noteId: number) =>
+    queryOptions({
+      queryKey: NOTE_QUERY_KEYS.detail(noteId),
+      queryFn: async ({ signal }) => {
+        const response = await clientFetcher.get<NoteResponse>(NOTES_API_PATH.detail(noteId), { signal });
+
+        return response.data;
+      },
     }),
 };
