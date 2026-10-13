@@ -13,11 +13,13 @@ export default function GoalBody({ goal, todosList, donesList, handleToggleTodo 
   return (
     <section className="flex flex-1 flex-col gap-24 lg:flex-row">
       <GoalTodoBox
+        variant="todo"
         list={todosList}
         goal={goal}
         handleToggleTodo={handleToggleTodo}
       />
       <GoalTodoBox
+        variant="done"
         list={donesList}
         goal={goal}
         handleToggleTodo={handleToggleTodo}

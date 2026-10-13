@@ -4,28 +4,32 @@ import Button from "@/components/ui/Button";
 import TodoItem from "@/components/ui/TodoItem";
 import { GoalListItem } from "@/types/goals.types";
 import { TodoResponse } from "@/types/todos.types";
+import TodoEmpty from "../TodoEmpty";
 
 interface GoalTodoBoxProps {
+  variant: "todo" | "done";
   list: TodoResponse[];
   goal: GoalListItem;
   handleToggleTodo: (id: number) => void;
 }
 
-export default function GoalTodoBox({ list, goal, handleToggleTodo }: GoalTodoBoxProps) {
+export default function GoalTodoBox({ variant, list, goal, handleToggleTodo }: GoalTodoBoxProps) {
   return (
     <div className="flex-1 rounded-md bg-white p-12 shadow-sm">
       <div className="flex h-60 flex-row items-center justify-between p-8">
         <Badge
-          type="todo"
+          type={variant}
           className="[&>p]:!block"
         />
-        <Button
-          variant={"outline"}
-          className="flex flex-row items-center justify-center gap-8 rounded-full"
-        >
-          <Plus className="size-16 shrink-0" />
-          <p>할 일 추가</p>
-        </Button>
+        {variant === "todo" && (
+          <Button
+            variant={"outline"}
+            className="flex flex-row items-center justify-center gap-8 rounded-full"
+          >
+            <Plus className="size-16 shrink-0" />
+            <p>할 일 추가</p>
+          </Button>
+        )}
       </div>
       <div>
         {/**
@@ -48,10 +52,7 @@ export default function GoalTodoBox({ list, goal, handleToggleTodo }: GoalTodoBo
               );
             })
         ) : (
-          <p>
-            최근 등록한 할 일이 없어요
-            <br />할 일을 등록해 보세요.
-          </p>
+          <TodoEmpty />
         )}
       </div>
     </div>
