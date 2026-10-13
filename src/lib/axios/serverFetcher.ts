@@ -33,7 +33,15 @@ async function refreshTokens(): Promise<string | null> {
   }
 }
 
-export async function serverFetcher<T>(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+type ServerFetcherOptions = {
+  canRefresh?: boolean;
+};
+
+export async function serverFetcher<T>(
+  path: string,
+  config?: AxiosRequestConfig,
+  { canRefresh = false }: ServerFetcherOptions = {},
+): Promise<AxiosResponse<T>> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(ACCESS_TOKEN)?.value;
 
@@ -47,7 +55,7 @@ export async function serverFetcher<T>(path: string, config?: AxiosRequestConfig
       },
     });
   } catch (error) {
-    if (isAxiosError(error) && error.response?.status === 401) {
+    if (canRefresh && isAxiosError(error) && error.response?.status === 401) {
       const newAccessToken = await refreshTokens();
       if (newAccessToken) {
         return axios<T>({
