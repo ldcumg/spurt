@@ -155,7 +155,7 @@ export default function NoteEditor({
   }, [content, editor]);
 
   useEffect(() => {
-    editor?.setEditable(!isDisabled);
+    editor?.setEditable(!isDisabled, false);
   }, [editor, isDisabled]);
 
   useEffect(() => {
