@@ -1,10 +1,11 @@
 "use client";
 
 import { MobileNavigation, NoteDetailPanel, NotesHero, NotesList, NotesToolbar, type SortOrder } from "./components";
-import { useNotesStore } from "./noteStore";
+import { toNoteViewModel } from "./noteViewModel";
 import Button from "@/components/ui/Button";
 import ROUTES from "@/constants/routes";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
+import { useNoteListQuery } from "@/hooks/queries/note/useNoteQueries";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
@@ -12,25 +13,25 @@ const NOTES_PAGE_SIZE = 6;
 
 export default function NotePage() {
   const router = useRouter();
-  const notes = useNotesStore();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<SortOrder>("recent");
-  const [visibleNoteCount, setVisibleNoteCount] = useState(NOTES_PAGE_SIZE);
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
   const { isOpen: isDetailOpen, open: openDetail, close: closeDetail } = useDisclosure();
+  const normalizedSearchTerm = searchTerm.trim();
+  const noteListParams = useMemo(
+    () => ({
+      limit: NOTES_PAGE_SIZE,
+      sort: sortOrder === "recent" ? ("latest" as const) : ("oldest" as const),
+      ...(normalizedSearchTerm ? { search: normalizedSearchTerm } : {}),
+    }),
+    [normalizedSearchTerm, sortOrder],
+  );
+  const { data, isPending, isError, refetch, fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError } =
+    useNoteListQuery(noteListParams);
+  const notes = useMemo(() => data?.pages.flatMap((page) => page.notes.map(toNoteViewModel)) ?? [], [data]);
+  const hasInitialLoadError = isError && !data;
 
   const selectedNote = notes.find((note) => note.id === selectedNoteId) ?? null;
-
-  const filteredAndSortedNotes = useMemo(() => {
-    const normalizedSearch = searchTerm.trim().toLocaleLowerCase("ko-KR");
-    const filteredNotes = notes.filter((note) => note.title.toLocaleLowerCase("ko-KR").includes(normalizedSearch));
-
-    return [...filteredNotes].sort((a, b) =>
-      sortOrder === "recent" ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date),
-    );
-  }, [notes, searchTerm, sortOrder]);
-  const visibleNotes = filteredAndSortedNotes.slice(0, visibleNoteCount);
-  const hasMoreNotes = visibleNoteCount < filteredAndSortedNotes.length;
 
   const handleNewNote = () => {
     router.push(ROUTES.newNote);
@@ -43,16 +44,14 @@ export default function NotePage() {
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
-    setVisibleNoteCount(NOTES_PAGE_SIZE);
   };
 
   const handleSortOrderChange = (value: SortOrder) => {
     setSortOrder(value);
-    setVisibleNoteCount(NOTES_PAGE_SIZE);
   };
 
   const handleLoadMore = () => {
-    setVisibleNoteCount((currentCount) => currentCount + NOTES_PAGE_SIZE);
+    void fetchNextPage();
   };
 
   return (
@@ -70,19 +69,27 @@ export default function NotePage() {
           onSortOrderChange={handleSortOrderChange}
         />
         <NotesList
-          notes={visibleNotes}
+          notes={notes}
           onNoteSelect={handleNoteSelect}
+          isLoading={isPending}
+          isError={hasInitialLoadError}
+          hasSearchTerm={Boolean(normalizedSearchTerm)}
+          onRetry={() => void refetch()}
         />
-        {hasMoreNotes && (
+        {hasNextPage && !isPending && !hasInitialLoadError && (
           <div className="mt-24 flex justify-center md:mt-32">
-            <Button
-              type="button"
-              variant="outline"
-              size="xl"
-              onClick={handleLoadMore}
-            >
-              노트 더 보기
-            </Button>
+            <div className="text-center">
+              {isFetchNextPageError && <p className="text-body-sm text-error mb-8">추가 노트를 불러오지 못했어요.</p>}
+              <Button
+                type="button"
+                variant="outline"
+                size="xl"
+                disabled={isFetchingNextPage}
+                onClick={handleLoadMore}
+              >
+                {isFetchingNextPage ? "불러오는 중..." : isFetchNextPageError ? "다시 시도" : "노트 더 보기"}
+              </Button>
+            </div>
           </div>
         )}
       </div>
