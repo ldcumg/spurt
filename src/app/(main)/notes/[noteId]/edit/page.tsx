@@ -6,6 +6,7 @@ import NoteMetaPanel from "../../new/components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "../../new/components/NoteWriteHeader";
 import { getNoteApiError, isNoteApiErrorStatus } from "../../noteApiError";
 import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError, hasEmbeddedDataImage } from "../../noteFormUtils";
+import { uploadEmbeddedNoteImages } from "../../noteImageUpload";
 import { Left, NoteFilled } from "@/assets/icons";
 import Button from "@/components/ui/Button";
 import NOTE_QUERY_KEYS from "@/constants/queryKeys/note";
@@ -22,6 +23,8 @@ interface EditNoteFormProps {
   note: NoteResponse;
 }
 
+type SubmitPhase = "idle" | "uploadingImages" | "updatingNote";
+
 const ignoreImmutableConnectionChange = () => undefined;
 
 function EditNoteForm({ note }: EditNoteFormProps) {
@@ -33,6 +36,8 @@ function EditNoteForm({ note }: EditNoteFormProps) {
   const [content, setContent] = useState<JSONContent>(initialContent);
   const [linkUrl, setLinkUrl] = useState(note.linkUrl ?? "");
   const [isLinkUrlTouched, setIsLinkUrlTouched] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState("");
+  const [submitPhase, setSubmitPhase] = useState<SubmitPhase>("idle");
   const goalOptions = useMemo(
     () => (note.todo.goal ? [{ id: String(note.todo.goal.id), label: note.todo.goal.title }] : []),
     [note.todo.goal],
@@ -41,29 +46,46 @@ function EditNoteForm({ note }: EditNoteFormProps) {
   const linkUrlError = getLinkUrlError(linkUrl);
   const hasPendingImageUpload = hasEmbeddedDataImage(content);
   const updateErrorInfo = getNoteApiError(updateNoteMutation.error, "update");
-  const canSubmit = Boolean(title.trim() && !linkUrlError && !hasPendingImageUpload && !updateNoteMutation.isPending);
-  const statusMessage = updateNoteMutation.isError
-    ? updateErrorInfo.message
-    : !title.trim()
-      ? "노트 제목을 입력해 주세요."
-      : linkUrlError
-        ? "참고 링크 형식을 확인해 주세요."
-        : hasPendingImageUpload
-          ? "이미지는 업로드 API 연결 후 저장할 수 있어요. 현재 삽입한 이미지를 삭제해 주세요."
-          : updateNoteMutation.isPending
-            ? "노트를 수정하는 중이에요."
-            : "";
+  const isSubmitting = submitPhase !== "idle" || updateNoteMutation.isPending;
+  const canSubmit = Boolean(title.trim() && !linkUrlError && !isSubmitting);
+  const statusMessage =
+    submitPhase === "uploadingImages"
+      ? "이미지를 업로드하는 중이에요."
+      : submitPhase === "updatingNote" || updateNoteMutation.isPending
+        ? "노트를 수정하는 중이에요."
+        : imageUploadError
+          ? imageUploadError
+          : updateNoteMutation.isError
+            ? updateErrorInfo.message
+            : !title.trim()
+              ? "노트 제목을 입력해 주세요."
+              : linkUrlError
+                ? "참고 링크 형식을 확인해 주세요."
+                : "";
 
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
     updateNoteMutation.reset();
+    setImageUploadError("");
+    setSubmitPhase(hasPendingImageUpload ? "uploadingImages" : "updatingNote");
     try {
+      const imageUploadResult = await uploadEmbeddedNoteImages(content);
+      setContent(imageUploadResult.content);
+
+      if (imageUploadResult.failedCount > 0) {
+        setImageUploadError(
+          `이미지 ${imageUploadResult.failedCount}개를 업로드하지 못했어요. 다시 수정하면 실패한 이미지만 재시도해요.`,
+        );
+        return;
+      }
+
+      setSubmitPhase("updatingNote");
       await updateNoteMutation.mutateAsync({
         noteId: note.id,
         body: {
           title: title.trim(),
-          content: content as Record<string, unknown>,
+          content: imageUploadResult.content as Record<string, unknown>,
           linkUrl: linkUrl.trim() || null,
         },
       });
@@ -73,6 +95,8 @@ function EditNoteForm({ note }: EditNoteFormProps) {
         queryClient.removeQueries({ queryKey: NOTE_QUERY_KEYS.detail(note.id), exact: true });
         void queryClient.invalidateQueries({ queryKey: NOTE_QUERY_KEYS.lists() });
       }
+    } finally {
+      setSubmitPhase("idle");
     }
   };
 
@@ -82,6 +106,7 @@ function EditNoteForm({ note }: EditNoteFormProps) {
   };
 
   const clearMutationError = () => {
+    setImageUploadError("");
     if (updateNoteMutation.isError) updateNoteMutation.reset();
   };
 
@@ -100,22 +125,22 @@ function EditNoteForm({ note }: EditNoteFormProps) {
         onBack={() => router.push(ROUTES.notes)}
         onSubmit={handleSubmit}
         isSubmitDisabled={!canSubmit}
-        isSubmitting={updateNoteMutation.isPending}
+        isSubmitting={isSubmitting}
         submitLabel="수정하기"
-        pendingLabel="수정 중..."
+        pendingLabel={submitPhase === "uploadingImages" ? "이미지 업로드 중..." : "수정 중..."}
         heading="노트 수정하기"
         description="기록한 내용을 더 정확하게 다듬어보세요."
         statusMessage={statusMessage}
-        statusTone={updateNoteMutation.isError ? "error" : "default"}
+        statusTone={imageUploadError || updateNoteMutation.isError ? "error" : "default"}
       />
 
       <div className="mb-16 hidden grid-cols-3 gap-20 xl:grid">
         <NoteActions
           onSubmit={handleSubmit}
           isSubmitDisabled={!canSubmit}
-          isSubmitting={updateNoteMutation.isPending}
+          isSubmitting={isSubmitting}
           submitLabel="수정하기"
-          pendingLabel="수정 중..."
+          pendingLabel={submitPhase === "uploadingImages" ? "이미지 업로드 중..." : "수정 중..."}
           className="col-span-2 justify-end"
         />
       </div>
@@ -125,6 +150,7 @@ function EditNoteForm({ note }: EditNoteFormProps) {
           <NoteEditor
             title={title}
             content={content}
+            isDisabled={isSubmitting}
             onTitleChange={(nextTitle) => {
               setTitle(nextTitle);
               clearMutationError();
@@ -146,6 +172,7 @@ function EditNoteForm({ note }: EditNoteFormProps) {
           connectionDescription="목표와 할 일은 노트 수정에서 변경할 수 없습니다."
           isGoalDisabled
           isTodoDisabled
+          isLinkDisabled={isSubmitting}
           onGoalChange={ignoreImmutableConnectionChange}
           onTodoChange={ignoreImmutableConnectionChange}
           onAddGoal={ignoreImmutableConnectionChange}
@@ -162,9 +189,9 @@ function EditNoteForm({ note }: EditNoteFormProps) {
         <NoteActions
           onSubmit={handleSubmit}
           isSubmitDisabled={!canSubmit}
-          isSubmitting={updateNoteMutation.isPending}
+          isSubmitting={isSubmitting}
           submitLabel="수정하기"
-          pendingLabel="수정 중..."
+          pendingLabel={submitPhase === "uploadingImages" ? "이미지 업로드 중..." : "수정 중..."}
         />
       </div>
     </div>

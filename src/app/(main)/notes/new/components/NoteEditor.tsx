@@ -77,22 +77,33 @@ function ToolbarButton({ label, children, onClick, isActive, isDisabled, isDeskt
 interface NoteEditorProps {
   title: string;
   content: JSONContent;
+  isDisabled?: boolean;
   onTitleChange: (title: string) => void;
   onContentChange: (content: JSONContent, plainText: string) => void;
 }
 
-export default function NoteEditor({ title, content, onTitleChange, onContentChange }: NoteEditorProps) {
+export default function NoteEditor({
+  title,
+  content,
+  isDisabled = false,
+  onTitleChange,
+  onContentChange,
+}: NoteEditorProps) {
   const [imageError, setImageError] = useState("");
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const lastEmittedContentRef = useRef<JSONContent | null>(null);
   const moreMenuRef = useRef<HTMLDivElement>(null);
 
   const editor = useEditor({
     extensions: createNoteExtensions(),
     content,
+    editable: !isDisabled,
     immediatelyRender: false,
     onUpdate: ({ editor: currentEditor }) => {
-      onContentChange(currentEditor.getJSON(), currentEditor.getText());
+      const nextContent = currentEditor.getJSON();
+      lastEmittedContentRef.current = nextContent;
+      onContentChange(nextContent, currentEditor.getText());
     },
     editorProps: {
       attributes: {
@@ -129,6 +140,22 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
   const state = editorState ?? EMPTY_EDITOR_STATE;
   const format = state.isHeading2 ? "heading2" : state.isHeading3 ? "heading3" : "paragraph";
   const textWithoutSpaces = state.text.replace(/\s/g, "");
+  const isEditorDisabled = !editor || isDisabled;
+
+  useEffect(() => {
+    if (!editor) return;
+
+    if (lastEmittedContentRef.current === content) {
+      lastEmittedContentRef.current = null;
+      return;
+    }
+
+    editor.commands.setContent(content, { emitUpdate: false });
+  }, [content, editor]);
+
+  useEffect(() => {
+    editor?.setEditable(!isDisabled);
+  }, [editor, isDisabled]);
 
   useEffect(() => {
     if (!isMoreOpen) return;
@@ -170,7 +197,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = "";
-    if (!file || !editor) return;
+    if (!file || !editor || isDisabled) return;
 
     if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
       setImageError("PNG, JPEG, WebP, GIF 이미지만 추가할 수 있습니다.");
@@ -241,6 +268,8 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
   ] as const;
 
   const handleMoreAction = (actionId: (typeof moreActions)[number]["id"]) => {
+    if (isDisabled) return;
+
     if (actionId === "underline") editor?.chain().focus().toggleUnderline().run();
     if (actionId === "strike") editor?.chain().focus().toggleStrike().run();
     if (actionId === "code") editor?.chain().focus().toggleCode().run();
@@ -255,6 +284,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
   return (
     <section
       aria-label="노트 편집기"
+      aria-busy={isDisabled}
       className="border-border bg-surface-card rounded-xl border p-16 shadow-sm md:p-20"
     >
       <div className="[&_input]:text-title-sm relative mb-16 [&_input]:h-64 [&_input]:pr-64 [&_input]:pl-80">
@@ -266,6 +296,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
           value={title}
           maxLength={MAX_NOTE_TITLE_LENGTH}
           placeholder="노트의 제목을 입력해주세요."
+          disabled={isDisabled}
           onChange={(event) => onTitleChange(event.target.value)}
         />
         <span className="text-caption pointer-events-none absolute top-1/2 right-16 -translate-y-1/2 text-neutral-500">
@@ -279,7 +310,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
             label="서식"
             options={FORMAT_OPTIONS}
             value={format}
-            disabled={!editor}
+            disabled={isEditorDisabled}
             onChange={handleFormatChange}
             className="min-w-144 shrink-0 sm:min-w-160 [&>button]:h-36 [&>button]:rounded-lg [&>button]:border-0 [&>button]:shadow-none"
           />
@@ -289,7 +320,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
           <ToolbarButton
             label="굵게"
             isActive={state.isBold}
-            isDisabled={!editor}
+            isDisabled={isEditorDisabled}
             onClick={() => editor?.chain().focus().toggleBold().run()}
           >
             <strong>B</strong>
@@ -297,7 +328,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
           <ToolbarButton
             label="기울임"
             isActive={state.isItalic}
-            isDisabled={!editor}
+            isDisabled={isEditorDisabled}
             onClick={() => editor?.chain().focus().toggleItalic().run()}
           >
             <em>I</em>
@@ -305,7 +336,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
           <ToolbarButton
             label="밑줄"
             isActive={state.isUnderline}
-            isDisabled={!editor}
+            isDisabled={isEditorDisabled}
             isDesktopOnly
             onClick={() => editor?.chain().focus().toggleUnderline().run()}
           >
@@ -314,7 +345,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
           <ToolbarButton
             label="취소선"
             isActive={state.isStrike}
-            isDisabled={!editor}
+            isDisabled={isEditorDisabled}
             isDesktopOnly
             onClick={() => editor?.chain().focus().toggleStrike().run()}
           >
@@ -323,7 +354,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
           <ToolbarButton
             label="인라인 코드"
             isActive={state.isCode}
-            isDisabled={!editor}
+            isDisabled={isEditorDisabled}
             isDesktopOnly
             onClick={() => editor?.chain().focus().toggleCode().run()}
           >
@@ -335,7 +366,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
           <ToolbarButton
             label="링크"
             isActive={state.isLink}
-            isDisabled={!editor}
+            isDisabled={isEditorDisabled}
             isDesktopOnly
             onClick={handleLink}
           >
@@ -343,7 +374,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
           </ToolbarButton>
           <ToolbarButton
             label="이미지 삽입"
-            isDisabled={!editor}
+            isDisabled={isEditorDisabled}
             isDesktopOnly
             onClick={() => imageInputRef.current?.click()}
           >
@@ -354,12 +385,13 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
             type="file"
             accept={ALLOWED_IMAGE_TYPES.join(",")}
             className="hidden"
+            disabled={isDisabled}
             onChange={handleImageChange}
           />
           <ToolbarButton
             label="글머리 기호 목록"
             isActive={state.isBulletList}
-            isDisabled={!editor}
+            isDisabled={isEditorDisabled}
             isDesktopOnly
             onClick={() => editor?.chain().focus().toggleBulletList().run()}
           >
@@ -368,7 +400,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
           <ToolbarButton
             label="번호 목록"
             isActive={state.isOrderedList}
-            isDisabled={!editor}
+            isDisabled={isEditorDisabled}
             isDesktopOnly
             onClick={() => editor?.chain().focus().toggleOrderedList().run()}
           >
@@ -377,7 +409,7 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
           <ToolbarButton
             label="인용문"
             isActive={state.isBlockquote}
-            isDisabled={!editor}
+            isDisabled={isEditorDisabled}
             isDesktopOnly
             onClick={() => editor?.chain().focus().toggleBlockquote().run()}
           >
@@ -394,14 +426,14 @@ export default function NoteEditor({ title, content, onTitleChange, onContentCha
               aria-label="더보기"
               aria-haspopup="menu"
               aria-expanded={isMoreOpen}
-              disabled={!editor}
+              disabled={isEditorDisabled}
               onClick={() => setIsMoreOpen((open) => !open)}
               className="text-neutral-800"
             >
               <More className="size-18" />
             </Button>
 
-            {isMoreOpen && (
+            {isMoreOpen && !isDisabled && (
               <div
                 role="menu"
                 aria-label="추가 편집 기능"

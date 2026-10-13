@@ -41,6 +41,7 @@ interface NoteMetaPanelProps {
   connectionDescription?: string;
   isGoalDisabled?: boolean;
   isTodoDisabled?: boolean;
+  isLinkDisabled?: boolean;
   onGoalChange: (option: DropDownOption) => void;
   onTodoChange: (option: DropDownOption) => void;
   onAddGoal: (label: string) => void;
@@ -60,6 +61,7 @@ export default function NoteMetaPanel({
   connectionDescription = "이 노트는 다음 목표와 할 일에 속합니다.",
   isGoalDisabled = false,
   isTodoDisabled = false,
+  isLinkDisabled = false,
   onGoalChange,
   onTodoChange,
   onAddGoal,
@@ -121,6 +123,7 @@ export default function NoteMetaPanel({
           placeholder="https://example.com"
           value={linkUrl}
           error={linkUrlError}
+          disabled={isLinkDisabled}
           onChange={(event) => onLinkUrlChange(event.target.value)}
           onBlur={onLinkUrlBlur}
         />

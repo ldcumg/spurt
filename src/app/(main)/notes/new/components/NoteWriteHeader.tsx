@@ -31,6 +31,7 @@ export function NoteActions({
           size="xl"
           className="text-title-xs inline-flex flex-1 items-center justify-center gap-8 md:flex-none"
           onClick={onDraft}
+          disabled={isSubmitting}
         >
           <Temporary className="size-20" />
           임시저장
@@ -81,6 +82,7 @@ export default function NoteWriteHeader({
         size="sm"
         className="text-body-md mb-16 inline-flex items-center gap-4 px-4 text-neutral-600"
         onClick={onBack}
+        disabled={isSubmitting}
       >
         <Left className="size-18" />
         {backLabel}

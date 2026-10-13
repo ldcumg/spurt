@@ -3,6 +3,7 @@
 import MobileNavigation from "../components/MobileNavigation";
 import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
 import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError, hasEmbeddedDataImage } from "../noteFormUtils";
+import { uploadEmbeddedNoteImages } from "../noteImageUpload";
 import NoteEditor from "./components/NoteEditor";
 import NoteMetaPanel from "./components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
@@ -16,6 +17,8 @@ import type { TodoResponse } from "@/types/todos.types";
 import type { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+
+type SubmitPhase = "idle" | "uploadingImages" | "creatingNote";
 
 export default function NewNotePage() {
   const router = useRouter();
@@ -32,6 +35,7 @@ export default function NewNotePage() {
   const [isLinkUrlTouched, setIsLinkUrlTouched] = useState(false);
   const [actionMessage, setActionMessage] = useState("");
   const [isActionError, setIsActionError] = useState(false);
+  const [submitPhase, setSubmitPhase] = useState<SubmitPhase>("idle");
   const [createdAt] = useState(() => new Date());
   const goals = useMemo<DropDownOption[]>(
     () => goalQuery.data?.data.goals.map((goal) => ({ id: String(goal.id), label: goal.title })) ?? [],
@@ -57,6 +61,7 @@ export default function NewNotePage() {
   const connectionErrorInfo = getNoteApiError(connectionError, "connectionList");
   const createErrorInfo = getNoteApiError(createNoteMutation.error, "create");
   const hasPendingImageUpload = hasEmbeddedDataImage(content);
+  const isSubmitting = submitPhase !== "idle" || createNoteMutation.isPending;
   const canSubmit = Boolean(
     title.trim() &&
     effectiveGoalId &&
@@ -64,29 +69,28 @@ export default function NewNotePage() {
     !linkUrlError &&
     !hasPendingQueries &&
     !hasQueryError &&
-    !hasPendingImageUpload &&
-    !createNoteMutation.isPending,
+    !isSubmitting,
   );
   const submitRequirementMessage = hasPendingQueries
     ? "목표와 할 일을 불러오는 중이에요."
     : hasQueryError
       ? connectionErrorInfo.message
-      : actionMessage
-        ? actionMessage
-        : createNoteMutation.isError
-          ? createErrorInfo.message
-          : !title.trim()
-            ? "노트 제목을 입력해 주세요."
-            : !effectiveGoalId
-              ? "목표를 추가하고 선택해야 노트를 등록할 수 있어요."
-              : !effectiveTodoId
-                ? "선택한 목표의 할 일을 선택해야 노트를 등록할 수 있어요."
-                : linkUrlError
-                  ? "참고 링크 형식을 확인해 주세요."
-                  : hasPendingImageUpload
-                    ? "이미지는 업로드 API 연결 후 등록할 수 있어요. 현재 삽입한 이미지를 삭제해 주세요."
-                    : createNoteMutation.isPending
-                      ? "노트를 등록하는 중이에요."
+      : submitPhase === "uploadingImages"
+        ? "이미지를 업로드하는 중이에요."
+        : submitPhase === "creatingNote" || createNoteMutation.isPending
+          ? "노트를 등록하는 중이에요."
+          : actionMessage
+            ? actionMessage
+            : createNoteMutation.isError
+              ? createErrorInfo.message
+              : !title.trim()
+                ? "노트 제목을 입력해 주세요."
+                : !effectiveGoalId
+                  ? "목표를 추가하고 선택해야 노트를 등록할 수 있어요."
+                  : !effectiveTodoId
+                    ? "선택한 목표의 할 일을 선택해야 노트를 등록할 수 있어요."
+                    : linkUrlError
+                      ? "참고 링크 형식을 확인해 주세요."
                       : "";
   const hasStatusError = hasQueryError || isActionError || createNoteMutation.isError;
 
@@ -105,12 +109,25 @@ export default function NewNotePage() {
     if (!Number.isInteger(todoId)) return;
 
     clearActionState();
+    setSubmitPhase(hasPendingImageUpload ? "uploadingImages" : "creatingNote");
 
     try {
+      const imageUploadResult = await uploadEmbeddedNoteImages(content);
+      setContent(imageUploadResult.content);
+
+      if (imageUploadResult.failedCount > 0) {
+        setActionMessage(
+          `이미지 ${imageUploadResult.failedCount}개를 업로드하지 못했어요. 다시 등록하면 실패한 이미지만 재시도해요.`,
+        );
+        setIsActionError(true);
+        return;
+      }
+
+      setSubmitPhase("creatingNote");
       await createNoteMutation.mutateAsync({
         todoId,
         title: title.trim(),
-        content: content as Record<string, unknown>,
+        content: imageUploadResult.content as Record<string, unknown>,
         ...(linkUrl.trim() ? { linkUrl: linkUrl.trim() } : {}),
       });
       router.push(ROUTES.notes);
@@ -119,6 +136,8 @@ export default function NewNotePage() {
         setSelectedTodoId("");
         void todoQuery.refetch();
       }
+    } finally {
+      setSubmitPhase("idle");
     }
   };
 
@@ -178,7 +197,8 @@ export default function NewNotePage() {
           onDraft={handleDraft}
           onSubmit={handleSubmit}
           isSubmitDisabled={!canSubmit}
-          isSubmitting={createNoteMutation.isPending}
+          isSubmitting={isSubmitting}
+          pendingLabel={submitPhase === "uploadingImages" ? "이미지 업로드 중..." : "등록 중..."}
           statusMessage={submitRequirementMessage}
           statusTone={hasStatusError ? "error" : "default"}
         />
@@ -188,7 +208,8 @@ export default function NewNotePage() {
             onDraft={handleDraft}
             onSubmit={handleSubmit}
             isSubmitDisabled={!canSubmit}
-            isSubmitting={createNoteMutation.isPending}
+            isSubmitting={isSubmitting}
+            pendingLabel={submitPhase === "uploadingImages" ? "이미지 업로드 중..." : "등록 중..."}
             className="col-span-2 justify-end"
           />
         </div>
@@ -198,6 +219,7 @@ export default function NewNotePage() {
             <NoteEditor
               title={title}
               content={content}
+              isDisabled={isSubmitting}
               onTitleChange={(nextTitle) => {
                 setTitle(nextTitle);
                 clearActionState();
@@ -216,8 +238,11 @@ export default function NewNotePage() {
             linkUrl={linkUrl}
             linkUrlError={isLinkUrlTouched ? linkUrlError : ""}
             createdAt={formatCreatedAt(createdAt)}
-            isGoalDisabled={goalQuery.isPending || (goalQuery.isError && !goalQuery.data)}
-            isTodoDisabled={todoQuery.isPending || (todoQuery.isError && !todoQuery.data) || addTodoMutation.isPending}
+            isGoalDisabled={isSubmitting || goalQuery.isPending || (goalQuery.isError && !goalQuery.data)}
+            isTodoDisabled={
+              isSubmitting || todoQuery.isPending || (todoQuery.isError && !todoQuery.data) || addTodoMutation.isPending
+            }
+            isLinkDisabled={isSubmitting}
             onGoalChange={handleGoalChange}
             onTodoChange={handleTodoChange}
             onAddGoal={handleAddGoal}
@@ -235,7 +260,8 @@ export default function NewNotePage() {
             onDraft={handleDraft}
             onSubmit={handleSubmit}
             isSubmitDisabled={!canSubmit}
-            isSubmitting={createNoteMutation.isPending}
+            isSubmitting={isSubmitting}
+            pendingLabel={submitPhase === "uploadingImages" ? "이미지 업로드 중..." : "등록 중..."}
           />
         </div>
       </div>
