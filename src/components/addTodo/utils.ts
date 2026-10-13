@@ -33,10 +33,10 @@ export function validateGoal(selectedGoal: GoalResponse | null, setError: (error
   }
 }
 
-/** 마감기한 유효성 검사 */
+/** 마감 기한 유효성 검사 */
 export function validateDueDate(selectedDate: Date | null, setError: (errorMassage: string) => void) {
-  if (!selectedDate) {
-    setError("마감 기한을 선택해 주세요");
+  if (selectedDate && selectedDate.toDateString() === "Invalid Date") {
+    setError("잘못된 날짜 형식입니다");
     return;
   }
 }

@@ -74,7 +74,7 @@ export default function AddTodoForm({ addTodoClose, aleadySelectedGoal, aleadySe
       />
       <ModalActions
         onClose={addTodoClose}
-        // isConfirmDisabled={hasError}
+        isConfirmDisabled={hasError}
       />
     </form>
   );
