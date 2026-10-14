@@ -4,10 +4,11 @@ import MobileNavigation from "../components/MobileNavigation";
 import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
 import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError, hasEmbeddedDataImage } from "../noteFormUtils";
 import { uploadEmbeddedNoteImages } from "../noteImageUpload";
+import DraftRestoreModal from "./components/DraftRestoreModal";
 import NoteEditor from "./components/NoteEditor";
 import NoteMetaPanel from "./components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
-import { NOTE_DRAFT_VERSION, saveNoteDraft } from "./noteDraftStorage";
+import { NOTE_DRAFT_VERSION, readNoteDraft, saveNoteDraft, type NoteDraft } from "./noteDraftStorage";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
 import { useCreateNoteMutation } from "@/hooks/mutations/note/useNoteMutations";
@@ -18,7 +19,7 @@ import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import type { TodoResponse } from "@/types/todos.types";
 import type { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type SubmitPhase = "idle" | "uploadingImages" | "creatingNote";
 
@@ -40,6 +41,9 @@ export default function NewNotePage() {
   const [isActionError, setIsActionError] = useState(false);
   const [submitPhase, setSubmitPhase] = useState<SubmitPhase>("idle");
   const [createdAt] = useState(() => new Date());
+  const [draftToRestore, setDraftToRestore] = useState<NoteDraft | null>(null);
+  const [isDraftRestoreOpen, setIsDraftRestoreOpen] = useState(false);
+  const checkedDraftOwnerRef = useRef<string | null>(null);
   const goals = useMemo<DropDownOption[]>(
     () => goalQuery.data?.data.goals.map((goal) => ({ id: String(goal.id), label: goal.title })) ?? [],
     [goalQuery.data],
@@ -97,6 +101,35 @@ export default function NewNotePage() {
                       : "";
   const hasStatusError = hasQueryError || isActionError || createNoteMutation.isError;
 
+  useEffect(() => {
+    const user = userQuery.data;
+    if (!user) return;
+
+    const ownerKey = `${user.teamId}:${user.id}`;
+    if (checkedDraftOwnerRef.current === ownerKey) return;
+
+    let isCancelled = false;
+    queueMicrotask(() => {
+      if (isCancelled || checkedDraftOwnerRef.current === ownerKey) return;
+      checkedDraftOwnerRef.current = ownerKey;
+
+      try {
+        const draft = readNoteDraft({ teamId: user.teamId, userId: user.id });
+        if (!draft) return;
+
+        setDraftToRestore(draft);
+        setIsDraftRestoreOpen(true);
+      } catch {
+        setActionMessage("임시저장한 노트를 확인하지 못했어요. 브라우저 저장 공간을 확인해 주세요.");
+        setIsActionError(true);
+      }
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [userQuery.data]);
+
   const clearActionState = () => {
     setActionMessage("");
     setIsActionError(false);
@@ -141,6 +174,14 @@ export default function NewNotePage() {
       setActionMessage("임시저장하지 못했어요. 브라우저 저장 공간을 확인한 뒤 다시 시도해 주세요.");
       setIsActionError(true);
     }
+  };
+
+  const handleSkipDraftRestore = () => {
+    setIsDraftRestoreOpen(false);
+  };
+
+  const handleRestoreDraft = () => {
+    setIsDraftRestoreOpen(false);
   };
 
   const handleSubmit = async () => {
@@ -231,6 +272,16 @@ export default function NewNotePage() {
   return (
     <div className="bg-surface text-foreground min-h-screen w-full min-w-0 bg-[radial-gradient(circle_at_top_right,var(--color-primary-50),var(--color-surface)_56%)]">
       <MobileNavigation />
+
+      {draftToRestore && (
+        <DraftRestoreModal
+          isOpen={isDraftRestoreOpen}
+          draftTitle={draftToRestore.title}
+          savedAt={draftToRestore.savedAt}
+          onSkip={handleSkipDraftRestore}
+          onRestore={handleRestoreDraft}
+        />
+      )}
 
       <div className="mx-auto w-full max-w-screen-xl px-16 pt-24 pb-100 md:px-32 md:pt-40 md:pb-40 xl:px-40">
         <NoteWriteHeader
