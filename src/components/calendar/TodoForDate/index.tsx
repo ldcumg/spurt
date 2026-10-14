@@ -1,6 +1,6 @@
 "use client";
 
-import TodoItem from "./TodoItem";
+import TodoItem from "../TodoItem";
 import { Plus } from "@/assets/icons";
 import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
 import { formatDate } from "@/components/calendar/utils";
