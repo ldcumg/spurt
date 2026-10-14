@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals.types";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
-import { GOALS_API_PATH } from "@/constants/apiEndpoints";
+import { GOALS_API_PATH, TODOS_API_PATH } from "@/constants/apiEndpoints";
 import { TodoResponse } from "@/types/todos.types";
 import { BarChart, Bar, ResponsiveContainer, LabelList, YAxis, CartesianGrid, XAxis } from "recharts";
 
@@ -45,12 +45,27 @@ export default function DashboardPage() {
     fetchData();
   }, []);
 
-  const handleToggleTodo = (id: number) => {
+  const handleToggleTodo = async (id: number) => {
+    // 변경 전 대상 찾기
+    const targetTodo = todoList.find((item) => item.id === id);
+    if (!targetTodo) return;
+
+    // 낙관 업데이트
+    const nextDone = !targetTodo.done;
+    const now = new Date().toISOString();
     setTodoList((prevList) =>
-      prevList.map((item) =>
-        item.id === id ? { ...item, done: !item.done, updatedAt: new Date().toISOString() } : item,
-      ),
+      prevList.map((item) => (item.id === id ? { ...item, done: !item.done, updatedAt: now } : item)),
     );
+
+    try {
+      await clientFetcher.patch(`${TODOS_API_PATH.base}/${id}`, { done: nextDone });
+    } catch (error) {
+      console.error("할 일 상태 변경 실패:", error);
+      alert("할 일 상태를 변경하지 못했습니다.");
+
+      // 서버 요청 실패 시 이전 상태로 롤백
+      setTodoList((prevList) => prevList.map((item) => (item.id === id ? targetTodo : item)));
+    }
   };
 
   const doneCount = todoList.filter((todo) => todo.done).length;
