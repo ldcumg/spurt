@@ -33,21 +33,21 @@ export default function AddTodoForm({ addTodoClose, aleadySelectedDate }: AddTod
 
   return (
     <form
+      className="mt-16 flex h-full flex-col gap-12 md:mt-32 md:gap-16"
       onSubmit={(event) => handleAddTodo({ event, formState, addTodoMutate, hasError, addTodoClose })}
       ref={formRef}
-      className="flex h-full flex-col gap-16"
     >
       <TextInput
         onBlur={(e) => validateTitle(e, setErrorByKey("title"))}
         error={error.title}
         name="title"
-        label="제목"
-        placeholder="할 일의 제목을 적어 주세요"
+        label="제목 *"
+        placeholder="할 일의 제목을 적어주세요"
       />
       <SelectGoalDropdown
         error={error.goal}
         setError={setErrorByKey("goal")}
-        label="목표"
+        label="목표 *"
         selectedGoal={formState.selectedGoal}
         setSelectedGoal={setFormStateByKey("selectedGoal")}
       />
