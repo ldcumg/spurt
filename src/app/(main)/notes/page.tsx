@@ -12,6 +12,7 @@ import {
 import { getNoteApiError, isNoteApiErrorStatus } from "./noteApiError";
 import { toNoteViewModel } from "./noteViewModel";
 import type { NoteViewModel } from "./noteViewModel";
+import { getNoteTodoGoalLabel, useNoteTodoGoals } from "./useNoteTodoGoals";
 import Button from "@/components/ui/Button";
 import NOTE_QUERY_KEYS from "@/constants/queryKeys/note";
 import ROUTES from "@/constants/routes";
@@ -54,7 +55,7 @@ export default function NotePage() {
     isFetchingNextPage,
     isFetchNextPageError,
   } = useNoteListQuery(noteListParams);
-  const notes = useMemo(() => data?.pages.flatMap((page) => page.notes.map(toNoteViewModel)) ?? [], [data]);
+  const noteResponses = useMemo(() => data?.pages.flatMap((page) => page.notes) ?? [], [data]);
   const hasInitialLoadError = isError && !data;
   const listErrorInfo = getNoteApiError(listError, "list");
   const {
@@ -65,7 +66,31 @@ export default function NotePage() {
     error: detailError,
     refetch: refetchNoteDetail,
   } = useNoteDetailQuery(selectedNoteId ?? 0, selectedNoteId !== null && isDetailOpen);
-  const selectedNote = useMemo(() => (selectedNoteData ? toNoteViewModel(selectedNoteData) : null), [selectedNoteData]);
+  const noteTodoIds = useMemo(
+    () => [
+      ...noteResponses.map((note) => note.todoId),
+      ...(selectedNoteData ? [selectedNoteData.todoId] : []),
+    ],
+    [noteResponses, selectedNoteData],
+  );
+  const todoGoalStateById = useNoteTodoGoals(noteTodoIds);
+  const notes = useMemo(
+    () =>
+      noteResponses.map((note) =>
+        toNoteViewModel(note, getNoteTodoGoalLabel(todoGoalStateById.get(note.todoId))),
+      ),
+    [noteResponses, todoGoalStateById],
+  );
+  const selectedNote = useMemo(
+    () =>
+      selectedNoteData
+        ? toNoteViewModel(
+            selectedNoteData,
+            getNoteTodoGoalLabel(todoGoalStateById.get(selectedNoteData.todoId)),
+          )
+        : null,
+    [selectedNoteData, todoGoalStateById],
+  );
   const hasDetailLoadError = isDetailError && !selectedNoteData;
   const isDetailNotFound = hasDetailLoadError && isNoteApiErrorStatus(detailError, 404);
   const detailErrorInfo = getNoteApiError(detailError, "detail");

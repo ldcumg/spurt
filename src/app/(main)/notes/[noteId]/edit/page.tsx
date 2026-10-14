@@ -7,6 +7,7 @@ import NoteWriteHeader, { NoteActions } from "../../new/components/NoteWriteHead
 import { getNoteApiError, isNoteApiErrorStatus } from "../../noteApiError";
 import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError, hasEmbeddedDataImage } from "../../noteFormUtils";
 import { uploadEmbeddedNoteImages } from "../../noteImageUpload";
+import { getNoteTodoGoalLabel, useNoteTodoGoals } from "../../useNoteTodoGoals";
 import { Left, NoteFilled } from "@/assets/icons";
 import Button from "@/components/ui/Button";
 import NOTE_QUERY_KEYS from "@/constants/queryKeys/note";
@@ -38,10 +39,15 @@ function EditNoteForm({ note }: EditNoteFormProps) {
   const [isLinkUrlTouched, setIsLinkUrlTouched] = useState(false);
   const [imageUploadError, setImageUploadError] = useState("");
   const [submitPhase, setSubmitPhase] = useState<SubmitPhase>("idle");
-  const goalOptions = useMemo(
-    () => (note.todo.goal ? [{ id: String(note.todo.goal.id), label: note.todo.goal.title }] : []),
-    [note.todo.goal],
-  );
+  const todoGoalStateById = useNoteTodoGoals([note.todoId]);
+  const todoGoalState = todoGoalStateById.get(note.todoId);
+  const goalLabel = getNoteTodoGoalLabel(todoGoalState);
+  const resolvedGoal = todoGoalState?.status === "success" ? todoGoalState.goal : null;
+  const goalOptions = [
+    resolvedGoal
+      ? { id: String(resolvedGoal.id), label: resolvedGoal.title }
+      : { id: `todo-${note.todoId}-goal-status`, label: goalLabel },
+  ];
   const todoOptions = useMemo(() => [{ id: String(note.todo.id), label: note.todo.title }], [note.todo]);
   const linkUrlError = getLinkUrlError(linkUrl);
   const hasPendingImageUpload = hasEmbeddedDataImage(content);
@@ -169,7 +175,11 @@ function EditNoteForm({ note }: EditNoteFormProps) {
           linkUrl={linkUrl}
           linkUrlError={isLinkUrlTouched ? linkUrlError : ""}
           createdAt={formatCreatedAt(note.createdAt)}
-          connectionDescription="목표와 할 일은 노트 수정에서 변경할 수 없습니다."
+          connectionDescription={
+            todoGoalState?.status === "error"
+              ? "목표 정보를 불러오지 못했지만 노트 내용은 수정할 수 있습니다."
+              : "목표와 할 일은 노트 수정에서 변경할 수 없습니다."
+          }
           isGoalDisabled
           isTodoDisabled
           isLinkDisabled={isSubmitting}

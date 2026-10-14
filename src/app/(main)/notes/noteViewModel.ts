@@ -7,7 +7,7 @@ export interface NoteViewModel {
   id: number;
   title: string;
   description: string;
-  goal: string | null;
+  goal: string;
   task: string;
   date: string;
   tone: NoteTone;
@@ -39,7 +39,7 @@ const formatNoteDate = (createdAt: string) => {
 
 const getNoteTone = (noteId: number) => NOTE_TONES[Math.abs(noteId - 1) % NOTE_TONES.length];
 
-export const toNoteViewModel = (note: NoteResponse): NoteViewModel => {
+export const toNoteViewModel = (note: NoteResponse, goal: string): NoteViewModel => {
   const content = note.content as JSONContent | null | undefined;
   const description = content ? extractPlainText(content).replace(/\s+/g, " ").trim() : "";
 
@@ -47,7 +47,7 @@ export const toNoteViewModel = (note: NoteResponse): NoteViewModel => {
     id: note.id,
     title: note.title,
     description: description || "작성된 내용이 없습니다.",
-    goal: note.todo.goal?.title ?? null,
+    goal,
     task: note.todo.title,
     date: formatNoteDate(note.createdAt),
     tone: getNoteTone(note.id),

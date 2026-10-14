@@ -36,3 +36,21 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const GoalLoading: Story = {
+  args: {
+    note: {
+      ...meta.args.note,
+      goal: "목표를 불러오는 중이에요.",
+    },
+  },
+};
+
+export const GoalLoadError: Story = {
+  args: {
+    note: {
+      ...meta.args.note,
+      goal: "목표 정보를 불러오지 못했어요.",
+    },
+  },
+};
