@@ -1,166 +1,27 @@
 "use client";
 
-import {
-  MobileNavigation,
-  NoteDeleteDialog,
-  NoteDetailPanel,
-  NotesHero,
-  NotesList,
-  NotesToolbar,
-  type SortOrder,
-} from "./components";
-import { getNoteApiError, isNoteApiErrorStatus } from "./noteApiError";
-import { toNoteViewModel } from "./noteViewModel";
-import type { NoteViewModel } from "./noteViewModel";
-import { getNoteTodoGoalLabel, useNoteTodoGoals } from "./useNoteTodoGoals";
+import { MobileNavigation, NoteDeleteDialog, NoteDetailPanel, NotesHero, NotesList, NotesToolbar } from "./components";
+import { useNoteDelete } from "./hooks/useNoteDelete";
+import { useNoteDetail } from "./hooks/useNoteDetail";
+import { useNotesList } from "./hooks/useNotesList";
 import Button from "@/components/ui/Button";
-import NOTE_QUERY_KEYS from "@/constants/queryKeys/note";
 import ROUTES from "@/constants/routes";
-import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
-import { useDeleteNoteMutation } from "@/hooks/mutations/note/useNoteMutations";
-import { useNoteDetailQuery, useNoteListQuery } from "@/hooks/queries/note/useNoteQueries";
-import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-
-const NOTES_PAGE_SIZE = 6;
 
 export default function NotePage() {
   const router = useRouter();
-  const queryClient = useQueryClient();
-  const deleteNoteMutation = useDeleteNoteMutation();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("recent");
-  const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
-  const [deleteCandidate, setDeleteCandidate] = useState<NoteViewModel | null>(null);
-  const { isOpen: isDetailOpen, open: openDetail, close: closeDetail } = useDisclosure();
-  const { isOpen: isDeleteOpen, open: openDelete, close: closeDelete } = useDisclosure();
-  const normalizedSearchTerm = searchTerm.trim();
-  const noteListParams = useMemo(
-    () => ({
-      limit: NOTES_PAGE_SIZE,
-      sort: sortOrder === "recent" ? ("latest" as const) : ("oldest" as const),
-      ...(normalizedSearchTerm ? { search: normalizedSearchTerm } : {}),
-    }),
-    [normalizedSearchTerm, sortOrder],
-  );
-  const {
-    data,
-    isPending,
-    isError,
-    error: listError,
-    refetch,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isFetchNextPageError,
-  } = useNoteListQuery(noteListParams);
-  const noteResponses = useMemo(() => data?.pages.flatMap((page) => page.notes) ?? [], [data]);
-  const hasInitialLoadError = isError && !data;
-  const listErrorInfo = getNoteApiError(listError, "list");
-  const {
-    data: selectedNoteData,
-    isPending: isDetailPending,
-    isError: isDetailError,
-    isFetching: isDetailFetching,
-    error: detailError,
-    refetch: refetchNoteDetail,
-  } = useNoteDetailQuery(selectedNoteId ?? 0, selectedNoteId !== null && isDetailOpen);
-  const noteTodoIds = useMemo(
-    () => [
-      ...noteResponses.map((note) => note.todoId),
-      ...(selectedNoteData ? [selectedNoteData.todoId] : []),
-    ],
-    [noteResponses, selectedNoteData],
-  );
-  const todoGoalStateById = useNoteTodoGoals(noteTodoIds);
-  const notes = useMemo(
-    () =>
-      noteResponses.map((note) =>
-        toNoteViewModel(note, getNoteTodoGoalLabel(todoGoalStateById.get(note.todoId))),
-      ),
-    [noteResponses, todoGoalStateById],
-  );
-  const selectedNote = useMemo(
-    () =>
-      selectedNoteData
-        ? toNoteViewModel(
-            selectedNoteData,
-            getNoteTodoGoalLabel(todoGoalStateById.get(selectedNoteData.todoId)),
-          )
-        : null,
-    [selectedNoteData, todoGoalStateById],
-  );
-  const hasDetailLoadError = isDetailError && !selectedNoteData;
-  const isDetailNotFound = hasDetailLoadError && isNoteApiErrorStatus(detailError, 404);
-  const detailErrorInfo = getNoteApiError(detailError, "detail");
-  const deleteErrorInfo = getNoteApiError(deleteNoteMutation.error, "delete");
+  const noteList = useNotesList();
+  const noteDetail = useNoteDetail();
+  const noteDelete = useNoteDelete({ onDeleted: noteDetail.handleDeleted });
 
   const handleNewNote = () => {
     router.push(ROUTES.newNote);
   };
 
-  const handleNoteSelect = (id: number) => {
-    setSelectedNoteId(id);
-    openDetail();
-  };
+  const handleEditNote = () => {
+    if (!noteDetail.note) return;
 
-  const handleSearchChange = (value: string) => {
-    setSearchTerm(value);
-  };
-
-  const handleSortOrderChange = (value: SortOrder) => {
-    setSortOrder(value);
-  };
-
-  const handleLoadMore = () => {
-    void fetchNextPage();
-  };
-
-  const handleDeleteRequest = (note: NoteViewModel) => {
-    deleteNoteMutation.reset();
-    setDeleteCandidate(note);
-    openDelete();
-  };
-
-  const handleDeleteClose = () => {
-    if (deleteNoteMutation.isPending) return;
-
-    closeDelete();
-    setDeleteCandidate(null);
-    deleteNoteMutation.reset();
-  };
-
-  const handleDeleteConfirm = async () => {
-    if (!deleteCandidate || deleteNoteMutation.isPending) return;
-
-    try {
-      await deleteNoteMutation.mutateAsync(deleteCandidate.id);
-      if (selectedNoteId === deleteCandidate.id) {
-        closeDetail();
-        setSelectedNoteId(null);
-      }
-      closeDelete();
-      setDeleteCandidate(null);
-    } catch (error) {
-      if (!isNoteApiErrorStatus(error, 404)) return;
-
-      queryClient.removeQueries({ queryKey: NOTE_QUERY_KEYS.detail(deleteCandidate.id), exact: true });
-      await queryClient.invalidateQueries({ queryKey: NOTE_QUERY_KEYS.lists() });
-      if (selectedNoteId === deleteCandidate.id) {
-        closeDetail();
-        setSelectedNoteId(null);
-      }
-      deleteNoteMutation.reset();
-      closeDelete();
-      setDeleteCandidate(null);
-    }
-  };
-
-  const handleNotFoundClose = () => {
-    closeDetail();
-    setSelectedNoteId(null);
-    void queryClient.invalidateQueries({ queryKey: NOTE_QUERY_KEYS.lists() });
+    router.push(ROUTES.editNote(noteDetail.note.id));
   };
 
   return (
@@ -169,70 +30,76 @@ export default function NotePage() {
 
       <div className="mx-auto w-full max-w-screen-xl px-16 pt-24 pb-112 md:px-32 md:pt-40 md:pb-40 xl:px-40">
         <NotesHero
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
+          searchTerm={noteList.searchTerm}
+          onSearchChange={noteList.setSearchTerm}
           onNewNote={handleNewNote}
         />
         <NotesToolbar
-          sortOrder={sortOrder}
-          onSortOrderChange={handleSortOrderChange}
+          sortOrder={noteList.sortOrder}
+          onSortOrderChange={noteList.setSortOrder}
         />
         <NotesList
-          notes={notes}
-          onNoteSelect={handleNoteSelect}
-          onNoteDelete={handleDeleteRequest}
-          isLoading={isPending}
-          isError={hasInitialLoadError}
-          errorTitle={listErrorInfo.title}
-          errorMessage={listErrorInfo.message}
-          canRetry={listErrorInfo.canRetry}
-          hasSearchTerm={Boolean(normalizedSearchTerm)}
-          onRetry={() => void refetch()}
+          notes={noteList.notes}
+          onNoteSelect={noteDetail.selectNote}
+          onNoteDelete={noteDelete.requestDelete}
+          isLoading={noteList.isLoading}
+          isError={noteList.hasInitialLoadError}
+          errorTitle={noteList.errorInfo.title}
+          errorMessage={noteList.errorInfo.message}
+          canRetry={noteList.errorInfo.canRetry}
+          hasSearchTerm={noteList.hasSearchTerm}
+          onRetry={noteList.retry}
         />
-        {hasNextPage && !isPending && !hasInitialLoadError && (
+        {noteList.hasNextPage && !noteList.isLoading && !noteList.hasInitialLoadError && (
           <div className="mt-24 flex justify-center md:mt-32">
             <div className="text-center">
-              {isFetchNextPageError && <p className="text-body-sm text-error mb-8">{listErrorInfo.message}</p>}
+              {noteList.isFetchNextPageError && (
+                <p className="text-body-sm text-error mb-8">{noteList.errorInfo.message}</p>
+              )}
               <Button
                 type="button"
                 variant="outline"
                 size="xl"
-                disabled={isFetchingNextPage}
-                onClick={handleLoadMore}
+                disabled={noteList.isFetchingNextPage}
+                onClick={noteList.loadMore}
               >
-                {isFetchingNextPage ? "불러오는 중..." : isFetchNextPageError ? "다시 시도" : "노트 더 보기"}
+                {noteList.isFetchingNextPage
+                  ? "불러오는 중..."
+                  : noteList.isFetchNextPageError
+                    ? "다시 시도"
+                    : "노트 더 보기"}
               </Button>
             </div>
           </div>
         )}
       </div>
 
-      {selectedNoteId !== null && (
+      {noteDetail.selectedNoteId !== null && (
         <NoteDetailPanel
-          note={selectedNote}
-          isOpen={isDetailOpen}
-          isLoading={isDetailPending || (hasDetailLoadError && isDetailFetching)}
-          isError={hasDetailLoadError && !isDetailNotFound && !isDetailFetching}
-          isNotFound={isDetailNotFound && !isDetailFetching}
-          errorTitle={detailErrorInfo.title}
-          errorMessage={detailErrorInfo.message}
-          canRetry={detailErrorInfo.canRetry}
-          onClose={closeDetail}
-          onEdit={selectedNote ? () => router.push(ROUTES.editNote(selectedNote.id)) : undefined}
-          onNotFoundClose={handleNotFoundClose}
-          onRetry={() => void refetchNoteDetail()}
+          note={noteDetail.note}
+          isOpen={noteDetail.isOpen}
+          isLoading={noteDetail.isLoading}
+          isError={noteDetail.isError}
+          isNotFound={noteDetail.isNotFound}
+          errorTitle={noteDetail.errorInfo.title}
+          errorMessage={noteDetail.errorInfo.message}
+          canRetry={noteDetail.errorInfo.canRetry}
+          onClose={noteDetail.close}
+          onEdit={noteDetail.note ? handleEditNote : undefined}
+          onNotFoundClose={noteDetail.closeNotFound}
+          onRetry={noteDetail.retry}
         />
       )}
 
-      {deleteCandidate && (
+      {noteDelete.candidate && (
         <NoteDeleteDialog
-          noteTitle={deleteCandidate.title}
-          isOpen={isDeleteOpen}
-          isDeleting={deleteNoteMutation.isPending}
-          errorTitle={deleteNoteMutation.isError ? deleteErrorInfo.title : ""}
-          errorMessage={deleteNoteMutation.isError ? deleteErrorInfo.message : ""}
-          onClose={handleDeleteClose}
-          onConfirm={handleDeleteConfirm}
+          noteTitle={noteDelete.candidate.title}
+          isOpen={noteDelete.isOpen}
+          isDeleting={noteDelete.isDeleting}
+          errorTitle={noteDelete.hasError ? noteDelete.errorInfo.title : ""}
+          errorMessage={noteDelete.hasError ? noteDelete.errorInfo.message : ""}
+          onClose={noteDelete.closeDialog}
+          onConfirm={noteDelete.confirmDelete}
         />
       )}
     </div>

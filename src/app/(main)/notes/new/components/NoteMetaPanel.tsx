@@ -1,34 +1,9 @@
 "use client";
 
-import { Calendar, FlagFilled, Link as LinkIcon, Todos, Under } from "@/assets/icons";
-import Dropdown, { type DropDownOption } from "@/components/ui/Dropdown";
-import TextInput from "@/components/ui/TextInput";
-import type { ReactNode } from "react";
-
-interface MetaSectionProps {
-  icon: ReactNode;
-  title: string;
-  description?: string;
-  children: ReactNode;
-}
-
-function MetaSection({ icon, title, description, children }: MetaSectionProps) {
-  return (
-    <section className="border-border bg-surface-card rounded-xl border p-16 shadow-sm md:p-20">
-      <header className="mb-16 flex items-start gap-12">
-        <span className="bg-primary-50 text-primary-600 flex size-40 shrink-0 items-center justify-center rounded-full">
-          {icon}
-        </span>
-        <div className="min-w-0 flex-1">
-          <h2 className="text-title-xs text-foreground-title md:text-title-sm">{title}</h2>
-          {description && <p className="text-body-sm md:text-body-md mt-2 text-neutral-500">{description}</p>}
-        </div>
-        <Under className="size-18 rotate-180 text-neutral-600 md:hidden" />
-      </header>
-      {children}
-    </section>
-  );
-}
+import ConnectionSection from "./note-meta/ConnectionSection";
+import CreatedAtSection from "./note-meta/CreatedAtSection";
+import ReferenceLinkSection from "./note-meta/ReferenceLinkSection";
+import type { DropDownOption } from "@/components/ui/Dropdown";
 
 interface NoteMetaPanelProps {
   goals: DropDownOption[];
@@ -74,67 +49,27 @@ export default function NoteMetaPanel({
       aria-label="노트 부가 정보"
       className="grid gap-16 lg:grid-cols-2 xl:grid-cols-1 xl:self-start"
     >
-      <MetaSection
-        icon={<LinkIcon className="size-20" />}
-        title="연결 정보"
+      <ConnectionSection
+        goals={goals}
+        todos={todos}
+        selectedGoalId={selectedGoalId}
+        selectedTodoId={selectedTodoId}
         description={connectionDescription}
-      >
-        <div className="flex flex-col gap-8">
-          <div className="bg-primary-50 rounded-lg p-12">
-            <div className="mb-8 flex items-center gap-8">
-              <FlagFilled className="text-warning size-20" />
-              <strong className="text-title-xs">목표</strong>
-            </div>
-            <Dropdown
-              options={goals}
-              value={selectedGoalId}
-              disabled={isGoalDisabled}
-              onChange={onGoalChange}
-              onAddOption={onAddGoal}
-            />
-          </div>
-          <div className="bg-blue-light rounded-lg p-12">
-            <div className="mb-8 flex items-center gap-8">
-              <Todos className="text-information size-20" />
-              <strong className="text-title-xs">할 일</strong>
-            </div>
-            <Dropdown
-              variant="todo"
-              options={todos}
-              value={selectedTodoId}
-              placeholder={selectedGoalId ? undefined : "먼저 목표를 추가해 주세요"}
-              disabled={!selectedGoalId || isTodoDisabled}
-              onChange={onTodoChange}
-              onAddOption={onAddTodo}
-            />
-          </div>
-        </div>
-      </MetaSection>
-
-      <MetaSection
-        icon={<LinkIcon className="size-20" />}
-        title="참고 링크"
-        description="노트와 함께 저장할 웹페이지 주소를 입력해 주세요."
-      >
-        <TextInput
-          type="url"
-          inputMode="url"
-          autoComplete="url"
-          placeholder="https://example.com"
-          value={linkUrl}
-          error={linkUrlError}
-          disabled={isLinkDisabled}
-          onChange={(event) => onLinkUrlChange(event.target.value)}
-          onBlur={onLinkUrlBlur}
-        />
-      </MetaSection>
-
-      <MetaSection
-        icon={<Calendar className="size-20" />}
-        title="작성일"
-      >
-        <time className="text-body-md block rounded-lg bg-neutral-50 px-16 py-12 text-neutral-600">{createdAt}</time>
-      </MetaSection>
+        isGoalDisabled={isGoalDisabled}
+        isTodoDisabled={isTodoDisabled}
+        onGoalChange={onGoalChange}
+        onTodoChange={onTodoChange}
+        onAddGoal={onAddGoal}
+        onAddTodo={onAddTodo}
+      />
+      <ReferenceLinkSection
+        linkUrl={linkUrl}
+        linkUrlError={linkUrlError}
+        isDisabled={isLinkDisabled}
+        onChange={onLinkUrlChange}
+        onBlur={onLinkUrlBlur}
+      />
+      <CreatedAtSection createdAt={createdAt} />
     </aside>
   );
 }

@@ -1,27 +1,28 @@
 import type { NoteDraft } from "./noteDraftStorage";
 
-type GoalOption = {
+interface GoalSelectionOption {
   id: string;
-};
+}
 
-type TodoOption = {
+interface TodoSelectionOption {
   id: number;
   goalId: number | null;
-};
+}
 
 export type DraftSelectionStatus = "complete" | "goalRequired" | "goalUnavailable" | "todoRequired" | "todoUnavailable";
 
-export type RestoredDraftSelection = {
+interface ResolvedDraftSelection {
   goalId: string;
   todoId: string;
   status: DraftSelectionStatus;
-};
+}
 
+/** 임시저장된 목표와 할 일이 현재 선택 목록에서도 유효한지 확인한다. */
 export const resolveDraftSelection = (
   draft: Pick<NoteDraft, "goalId" | "todoId">,
-  goals: GoalOption[],
-  todos: TodoOption[],
-): RestoredDraftSelection => {
+  goals: GoalSelectionOption[],
+  todos: TodoSelectionOption[],
+): ResolvedDraftSelection => {
   const fallbackGoalId = goals[0]?.id ?? "";
   const savedGoalId = draft.goalId ? String(draft.goalId) : "";
   const savedTodoId = draft.todoId ? String(draft.todoId) : "";

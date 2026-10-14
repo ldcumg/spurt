@@ -4,12 +4,12 @@ export const NOTE_DRAFT_VERSION = 1 as const;
 
 const NOTE_DRAFT_STORAGE_KEY_PREFIX = `spurt:note-draft:v${NOTE_DRAFT_VERSION}`;
 
-export type NoteDraftOwner = {
+interface NoteDraftOwner {
   teamId: string;
   userId: number;
-};
+}
 
-export type NoteDraft = NoteDraftOwner & {
+export interface NoteDraft extends NoteDraftOwner {
   version: typeof NOTE_DRAFT_VERSION;
   title: string;
   content: JSONContent;
@@ -17,11 +17,11 @@ export type NoteDraft = NoteDraftOwner & {
   goalId: number | null;
   todoId: number | null;
   savedAt: string;
-};
+}
 
 type NoteDraftStorage = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
-export type NoteDraftStorageErrorKind = "quotaExceeded" | "unavailable" | "unknown";
+type NoteDraftStorageErrorKind = "quotaExceeded" | "unavailable" | "unknown";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);

@@ -1,8 +1,8 @@
 import { isAxiosError } from "axios";
 
-export type NoteApiErrorContext = "list" | "detail" | "connectionList" | "todoCreate" | "create" | "update" | "delete";
+type NoteApiErrorContext = "list" | "detail" | "connectionList" | "todoCreate" | "create" | "update" | "delete";
 
-export interface NoteApiErrorInfo {
+interface NoteApiErrorInfo {
   status: number | null;
   title: string;
   message: string;

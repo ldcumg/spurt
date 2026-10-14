@@ -15,14 +15,14 @@ interface EmbeddedImage {
   fileName: string;
 }
 
-export interface NoteImageUploadResult {
+interface NoteImageUploadResult {
   content: JSONContent;
   totalCount: number;
   uploadedCount: number;
   failedCount: number;
 }
 
-export type NoteImageUploader = (file: File) => Promise<string>;
+type NoteImageUploader = (file: File) => Promise<string>;
 
 const getPreferredFileName = (node: JSONContent, index: number) => {
   const candidate = [node.attrs?.title, node.attrs?.alt].find(

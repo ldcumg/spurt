@@ -2,24 +2,15 @@
 
 import MobileNavigation from "../components/MobileNavigation";
 import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
-import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError, hasEmbeddedDataImage } from "../noteFormUtils";
-import { uploadEmbeddedNoteImages } from "../noteImageUpload";
+import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError } from "../noteFormUtils";
 import DraftRestoreModal from "./components/DraftRestoreModal";
 import NoteEditor from "./components/NoteEditor";
 import NoteMetaPanel from "./components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
-import { resolveDraftSelection, type DraftSelectionStatus } from "./noteDraftRestore";
-import {
-  NOTE_DRAFT_VERSION,
-  getNoteDraftStorageErrorKind,
-  readNoteDraft,
-  removeNoteDraft,
-  saveNoteDraft,
-  type NoteDraft,
-} from "./noteDraftStorage";
+import { useCreateNote } from "./hooks/useCreateNote";
+import { useNoteDraft } from "./hooks/useNoteDraft";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
-import { useCreateNoteMutation } from "@/hooks/mutations/note/useNoteMutations";
 import { useAddTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
 import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
@@ -27,45 +18,46 @@ import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import type { TodoResponse } from "@/types/todos.types";
 import type { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 
-type SubmitPhase = "idle" | "uploadingImages" | "creatingNote";
+interface SubmitRequirementMessageParams {
+  hasPendingQueries: boolean;
+  hasQueryError: boolean;
+  connectionErrorMessage: string;
+  isSubmitting: boolean;
+  submitStatusMessage: string;
+  actionMessage: string;
+  hasSubmitError: boolean;
+  title: string;
+  goalId: string;
+  todoId: string;
+  linkUrlError: string;
+}
 
-const getDraftRestoreMessage = (status: DraftSelectionStatus, hasGoals: boolean) => {
-  switch (status) {
-    case "goalRequired":
-      return hasGoals
-        ? "임시저장한 내용을 불러왔어요. 기본 목표를 선택했으니 할 일을 선택해 주세요."
-        : "임시저장한 내용을 불러왔어요. 목표를 추가하고 할 일을 선택해 주세요.";
-    case "goalUnavailable":
-      return hasGoals
-        ? "임시저장한 내용을 불러왔지만 저장된 목표를 찾지 못했어요. 기본 목표의 할 일을 다시 선택해 주세요."
-        : "임시저장한 내용을 불러왔지만 저장된 목표를 찾지 못했어요. 목표를 추가하고 할 일을 선택해 주세요.";
-    case "todoRequired":
-      return "임시저장한 내용을 불러왔어요. 할 일을 선택해 주세요.";
-    case "todoUnavailable":
-      return "임시저장한 내용을 불러왔지만 저장된 할 일을 찾지 못했어요. 할 일을 다시 선택해 주세요.";
-    default:
-      return "임시저장한 노트를 불러왔어요.";
-  }
-};
+const getSubmitRequirementMessage = ({
+  hasPendingQueries,
+  hasQueryError,
+  connectionErrorMessage,
+  isSubmitting,
+  submitStatusMessage,
+  actionMessage,
+  hasSubmitError,
+  title,
+  goalId,
+  todoId,
+  linkUrlError,
+}: SubmitRequirementMessageParams) => {
+  if (hasPendingQueries) return "목표와 할 일을 불러오는 중이에요.";
+  if (hasQueryError) return connectionErrorMessage;
+  if (isSubmitting) return submitStatusMessage;
+  if (actionMessage) return actionMessage;
+  if (hasSubmitError) return submitStatusMessage;
+  if (!title.trim()) return "노트 제목을 입력해 주세요.";
+  if (!goalId) return "목표를 추가하고 선택해야 노트를 등록할 수 있어요.";
+  if (!todoId) return "선택한 목표의 할 일을 선택해야 노트를 등록할 수 있어요.";
+  if (linkUrlError) return "참고 링크 형식을 확인해 주세요.";
 
-const getDraftStorageErrorMessage = (error: unknown, operation: "read" | "save") => {
-  const errorKind = getNoteDraftStorageErrorKind(error);
-
-  if (errorKind === "quotaExceeded") {
-    return "브라우저 임시저장 공간이 부족해요. 이미지 수나 크기를 줄인 뒤 다시 시도해 주세요.";
-  }
-
-  if (errorKind === "unavailable") {
-    return operation === "save"
-      ? "브라우저 설정 때문에 임시저장할 수 없어요. 이 사이트의 저장 권한을 확인해 주세요."
-      : "브라우저 설정 때문에 임시저장한 노트를 확인할 수 없어요. 이 사이트의 저장 권한을 확인해 주세요.";
-  }
-
-  return operation === "save"
-    ? "임시저장하지 못했어요. 잠시 후 다시 시도해 주세요."
-    : "임시저장한 노트를 확인하지 못했어요. 잠시 후 다시 시도해 주세요.";
+  return "";
 };
 
 export default function NewNotePage() {
@@ -73,7 +65,6 @@ export default function NewNotePage() {
   const goalQuery = useAllGoalQuery();
   const todoQuery = useAllTodoQuery();
   const userQuery = useUserQuery();
-  const createNoteMutation = useCreateNoteMutation();
   const addTodoMutation = useAddTodoMutation();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState<JSONContent>(() => createEmptyNoteContent());
@@ -84,11 +75,7 @@ export default function NewNotePage() {
   const [isLinkUrlTouched, setIsLinkUrlTouched] = useState(false);
   const [actionMessage, setActionMessage] = useState("");
   const [isActionError, setIsActionError] = useState(false);
-  const [submitPhase, setSubmitPhase] = useState<SubmitPhase>("idle");
   const [createdAt] = useState(() => new Date());
-  const [draftToRestore, setDraftToRestore] = useState<NoteDraft | null>(null);
-  const [isDraftRestoreOpen, setIsDraftRestoreOpen] = useState(false);
-  const checkedDraftOwnerRef = useRef<string | null>(null);
   const goals = useMemo<DropDownOption[]>(
     () => goalQuery.data?.data.goals.map((goal) => ({ id: String(goal.id), label: goal.title })) ?? [],
     [goalQuery.data],
@@ -106,14 +93,27 @@ export default function NewNotePage() {
     return visibleTodos.map((todo) => ({ id: String(todo.id), label: todo.title }));
   }, [effectiveGoalId, todos]);
   const effectiveTodoId = todoOptions.some((todo) => todo.id === selectedTodoId) ? selectedTodoId : "";
+  const noteDraft = useNoteDraft({
+    user: userQuery.data,
+    isUserPending: userQuery.isPending,
+    goals,
+    todos,
+  });
+  const createNote = useCreateNote({
+    onContentChange: setContent,
+    onTodoNotFound: () => {
+      setSelectedTodoId("");
+      void todoQuery.refetch();
+    },
+    onSuccess: noteDraft.removeDraft,
+  });
+  const visibleActionMessage = actionMessage || noteDraft.statusMessage;
+  const isVisibleActionError = actionMessage ? isActionError : noteDraft.isStatusError;
   const linkUrlError = getLinkUrlError(linkUrl);
   const hasPendingQueries = goalQuery.isPending || todoQuery.isPending;
   const hasQueryError = (goalQuery.isError && !goalQuery.data) || (todoQuery.isError && !todoQuery.data);
   const connectionError = goalQuery.isError && !goalQuery.data ? goalQuery.error : todoQuery.error;
   const connectionErrorInfo = getNoteApiError(connectionError, "connectionList");
-  const createErrorInfo = getNoteApiError(createNoteMutation.error, "create");
-  const hasPendingImageUpload = hasEmbeddedDataImage(content);
-  const isSubmitting = submitPhase !== "idle" || createNoteMutation.isPending;
   const canSubmit = Boolean(
     title.trim() &&
     effectiveGoalId &&
@@ -121,176 +121,53 @@ export default function NewNotePage() {
     !linkUrlError &&
     !hasPendingQueries &&
     !hasQueryError &&
-    !isSubmitting,
+    !createNote.isSubmitting,
   );
-  const submitRequirementMessage = hasPendingQueries
-    ? "목표와 할 일을 불러오는 중이에요."
-    : hasQueryError
-      ? connectionErrorInfo.message
-      : submitPhase === "uploadingImages"
-        ? "이미지를 업로드하는 중이에요."
-        : submitPhase === "creatingNote" || createNoteMutation.isPending
-          ? "노트를 등록하는 중이에요."
-          : actionMessage
-            ? actionMessage
-            : createNoteMutation.isError
-              ? createErrorInfo.message
-              : !title.trim()
-                ? "노트 제목을 입력해 주세요."
-                : !effectiveGoalId
-                  ? "목표를 추가하고 선택해야 노트를 등록할 수 있어요."
-                  : !effectiveTodoId
-                    ? "선택한 목표의 할 일을 선택해야 노트를 등록할 수 있어요."
-                    : linkUrlError
-                      ? "참고 링크 형식을 확인해 주세요."
-                      : "";
-  const hasStatusError = hasQueryError || isActionError || createNoteMutation.isError;
-
-  useEffect(() => {
-    const user = userQuery.data;
-    if (!user) return;
-
-    const ownerKey = `${user.teamId}:${user.id}`;
-    if (checkedDraftOwnerRef.current === ownerKey) return;
-
-    let isCancelled = false;
-    queueMicrotask(() => {
-      if (isCancelled || checkedDraftOwnerRef.current === ownerKey) return;
-      checkedDraftOwnerRef.current = ownerKey;
-
-      try {
-        const draft = readNoteDraft({ teamId: user.teamId, userId: user.id });
-        if (!draft) return;
-
-        setDraftToRestore(draft);
-        setIsDraftRestoreOpen(true);
-      } catch (error) {
-        setActionMessage(getDraftStorageErrorMessage(error, "read"));
-        setIsActionError(true);
-      }
-    });
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [userQuery.data]);
+  const submitRequirementMessage = getSubmitRequirementMessage({
+    hasPendingQueries,
+    hasQueryError,
+    connectionErrorMessage: connectionErrorInfo.message,
+    isSubmitting: createNote.isSubmitting,
+    submitStatusMessage: createNote.statusMessage,
+    actionMessage: visibleActionMessage,
+    hasSubmitError: createNote.isError,
+    title,
+    goalId: effectiveGoalId,
+    todoId: effectiveTodoId,
+    linkUrlError,
+  });
+  const hasStatusError = hasQueryError || isVisibleActionError || createNote.isError;
 
   const clearActionState = () => {
     setActionMessage("");
     setIsActionError(false);
-    createNoteMutation.reset();
+    noteDraft.clearStatus();
+    createNote.reset();
   };
 
   const handleDraft = () => {
     clearActionState();
-
-    const user = userQuery.data;
-    if (!user) {
-      setActionMessage(
-        userQuery.isPending
-          ? "사용자 정보를 확인하는 중이에요. 잠시 후 다시 시도해 주세요."
-          : "사용자 정보를 확인하지 못해 임시저장할 수 없어요. 다시 로그인해 주세요.",
-      );
-      setIsActionError(true);
-      return;
-    }
-
-    const goalId = Number(effectiveGoalId);
-    const todoId = Number(effectiveTodoId);
-
-    try {
-      const isSaved = saveNoteDraft({
-        version: NOTE_DRAFT_VERSION,
-        teamId: user.teamId,
-        userId: user.id,
-        title,
-        content,
-        linkUrl,
-        goalId: Number.isSafeInteger(goalId) && goalId > 0 ? goalId : null,
-        todoId: Number.isSafeInteger(todoId) && todoId > 0 ? todoId : null,
-        savedAt: new Date().toISOString(),
-      });
-
-      if (!isSaved) throw new Error("Local storage is unavailable");
-
-      setActionMessage("작성 중인 노트를 임시저장했어요.");
-      setIsActionError(false);
-    } catch (error) {
-      setActionMessage(getDraftStorageErrorMessage(error, "save"));
-      setIsActionError(true);
-    }
-  };
-
-  const handleSkipDraftRestore = () => {
-    setIsDraftRestoreOpen(false);
-    setDraftToRestore(null);
+    noteDraft.saveDraft({ title, content, linkUrl, goalId: effectiveGoalId, todoId: effectiveTodoId });
   };
 
   const handleRestoreDraft = () => {
-    if (!draftToRestore) return;
+    clearActionState();
+    const restoredDraft = noteDraft.restoreDraft();
+    if (!restoredDraft) return;
 
-    const restoredSelection = resolveDraftSelection(draftToRestore, goals, todos);
-
-    setTitle(draftToRestore.title);
-    setContent(draftToRestore.content);
-    setLinkUrl(draftToRestore.linkUrl);
+    setTitle(restoredDraft.title);
+    setContent(restoredDraft.content);
+    setLinkUrl(restoredDraft.linkUrl);
     setIsLinkUrlTouched(false);
-    setSelectedGoalId(restoredSelection.goalId);
-    setSelectedTodoId(restoredSelection.todoId);
-    setActionMessage(getDraftRestoreMessage(restoredSelection.status, goals.length > 0));
-    setIsActionError(false);
-    createNoteMutation.reset();
-    setIsDraftRestoreOpen(false);
-    setDraftToRestore(null);
+    setSelectedGoalId(restoredDraft.goalId);
+    setSelectedTodoId(restoredDraft.todoId);
   };
 
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
-    const todoId = Number(effectiveTodoId);
-    if (!Number.isInteger(todoId)) return;
-
     clearActionState();
-    setSubmitPhase(hasPendingImageUpload ? "uploadingImages" : "creatingNote");
-
-    try {
-      const imageUploadResult = await uploadEmbeddedNoteImages(content);
-      setContent(imageUploadResult.content);
-
-      if (imageUploadResult.failedCount > 0) {
-        setActionMessage(
-          `이미지 ${imageUploadResult.failedCount}개를 업로드하지 못했어요. 다시 등록하면 실패한 이미지만 재시도해요.`,
-        );
-        setIsActionError(true);
-        return;
-      }
-
-      setSubmitPhase("creatingNote");
-      await createNoteMutation.mutateAsync({
-        todoId,
-        title: title.trim(),
-        content: imageUploadResult.content as Record<string, unknown>,
-        ...(linkUrl.trim() ? { linkUrl: linkUrl.trim() } : {}),
-      });
-
-      const user = userQuery.data;
-      if (user) {
-        try {
-          removeNoteDraft({ teamId: user.teamId, userId: user.id });
-        } catch {
-          // 노트는 이미 생성됐으므로 저장소 정리 실패를 생성 실패로 처리하지 않는다.
-        }
-      }
-
-      router.push(ROUTES.notes);
-    } catch (error) {
-      if (isNoteApiErrorStatus(error, 404)) {
-        setSelectedTodoId("");
-        void todoQuery.refetch();
-      }
-    } finally {
-      setSubmitPhase("idle");
-    }
+    await createNote.submitNote({ title, content, linkUrl, todoId: effectiveTodoId });
   };
 
   const handleGoalChange = (option: DropDownOption) => {
@@ -309,7 +186,7 @@ export default function NewNotePage() {
 
   const handleAddGoal = (label: string) => {
     if (!label) return;
-    createNoteMutation.reset();
+    createNote.reset();
     setActionMessage("목표 추가 API가 아직 준비되지 않았어요. 연결된 목표를 선택해 주세요.");
     setIsActionError(false);
   };
@@ -343,13 +220,13 @@ export default function NewNotePage() {
     <div className="bg-surface text-foreground min-h-screen w-full min-w-0 bg-[radial-gradient(circle_at_top_right,var(--color-primary-50),var(--color-surface)_56%)]">
       <MobileNavigation />
 
-      {draftToRestore && (
+      {noteDraft.draftToRestore && (
         <DraftRestoreModal
-          isOpen={isDraftRestoreOpen}
-          draftTitle={draftToRestore.title}
-          savedAt={draftToRestore.savedAt}
+          isOpen={noteDraft.isRestoreOpen}
+          draftTitle={noteDraft.draftToRestore.title}
+          savedAt={noteDraft.draftToRestore.savedAt}
           isRestoreDisabled={hasPendingQueries}
-          onSkip={handleSkipDraftRestore}
+          onSkip={noteDraft.skipRestore}
           onRestore={handleRestoreDraft}
         />
       )}
@@ -360,8 +237,8 @@ export default function NewNotePage() {
           onDraft={handleDraft}
           onSubmit={handleSubmit}
           isSubmitDisabled={!canSubmit}
-          isSubmitting={isSubmitting}
-          pendingLabel={submitPhase === "uploadingImages" ? "이미지 업로드 중..." : "등록 중..."}
+          isSubmitting={createNote.isSubmitting}
+          pendingLabel={createNote.pendingLabel}
           statusMessage={submitRequirementMessage}
           statusTone={hasStatusError ? "error" : "default"}
         />
@@ -371,8 +248,8 @@ export default function NewNotePage() {
             onDraft={handleDraft}
             onSubmit={handleSubmit}
             isSubmitDisabled={!canSubmit}
-            isSubmitting={isSubmitting}
-            pendingLabel={submitPhase === "uploadingImages" ? "이미지 업로드 중..." : "등록 중..."}
+            isSubmitting={createNote.isSubmitting}
+            pendingLabel={createNote.pendingLabel}
             className="col-span-2 justify-end"
           />
         </div>
@@ -382,7 +259,7 @@ export default function NewNotePage() {
             <NoteEditor
               title={title}
               content={content}
-              isDisabled={isSubmitting}
+              isDisabled={createNote.isSubmitting}
               onTitleChange={(nextTitle) => {
                 setTitle(nextTitle);
                 clearActionState();
@@ -401,11 +278,14 @@ export default function NewNotePage() {
             linkUrl={linkUrl}
             linkUrlError={isLinkUrlTouched ? linkUrlError : ""}
             createdAt={formatCreatedAt(createdAt)}
-            isGoalDisabled={isSubmitting || goalQuery.isPending || (goalQuery.isError && !goalQuery.data)}
+            isGoalDisabled={createNote.isSubmitting || goalQuery.isPending || (goalQuery.isError && !goalQuery.data)}
             isTodoDisabled={
-              isSubmitting || todoQuery.isPending || (todoQuery.isError && !todoQuery.data) || addTodoMutation.isPending
+              createNote.isSubmitting ||
+              todoQuery.isPending ||
+              (todoQuery.isError && !todoQuery.data) ||
+              addTodoMutation.isPending
             }
-            isLinkDisabled={isSubmitting}
+            isLinkDisabled={createNote.isSubmitting}
             onGoalChange={handleGoalChange}
             onTodoChange={handleTodoChange}
             onAddGoal={handleAddGoal}
@@ -423,8 +303,8 @@ export default function NewNotePage() {
             onDraft={handleDraft}
             onSubmit={handleSubmit}
             isSubmitDisabled={!canSubmit}
-            isSubmitting={isSubmitting}
-            pendingLabel={submitPhase === "uploadingImages" ? "이미지 업로드 중..." : "등록 중..."}
+            isSubmitting={createNote.isSubmitting}
+            pendingLabel={createNote.pendingLabel}
           />
         </div>
       </div>

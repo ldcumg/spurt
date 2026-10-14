@@ -1,9 +1,9 @@
 "use client";
 
 import type { NoteTone, NoteViewModel } from "../noteViewModel";
-import NoteContent from "./NoteContent";
-import { Calendar, Edit, Flag, Link, NoteFilled, Todos, X } from "@/assets/icons";
-import Badge from "@/components/ui/Badge";
+import NoteDetailBody from "./NoteDetailBody";
+import NoteDetailState from "./NoteDetailState";
+import { Edit, NoteFilled, X } from "@/assets/icons";
 import Button from "@/components/ui/Button";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
@@ -35,18 +35,6 @@ interface NoteDetailPanelProps {
 }
 
 const DETAIL_TITLE_ID = "note-detail-title";
-
-function DetailRow({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
-  return (
-    <div className="flex min-w-0 items-start gap-12">
-      <div className="flex w-84 shrink-0 items-center gap-8 text-neutral-500">
-        {icon}
-        <span className="text-body-md">{label}</span>
-      </div>
-      <div className="text-body-md md:text-body-lg min-w-0 flex-1 text-neutral-800">{children}</div>
-    </div>
-  );
-}
 
 export default function NoteDetailPanel({
   note,
@@ -131,117 +119,17 @@ export default function NoteDetailPanel({
           </div>
         </header>
 
-        {isLoading && (
-          <div
-            role="status"
-            className="mt-32 flex min-h-240 items-center justify-center rounded-xl bg-neutral-50 px-24 text-center"
-          >
-            <p className="text-body-md text-neutral-600">노트 상세 내용을 불러오는 중이에요.</p>
-          </div>
-        )}
+        <NoteDetailState
+          isLoading={isLoading}
+          isError={isError}
+          isNotFound={isNotFound}
+          errorMessage={errorMessage}
+          canRetry={canRetry}
+          onNotFoundClose={onNotFoundClose}
+          onRetry={onRetry}
+        />
 
-        {isNotFound && !isLoading && (
-          <div
-            role="alert"
-            className="mt-32 flex min-h-240 flex-col items-center justify-center rounded-xl bg-neutral-50 px-24 text-center"
-          >
-            <NoteFilled className="mb-12 size-40 text-neutral-400" />
-            <p className="text-body-md text-neutral-600">삭제되었거나 존재하지 않는 노트예요.</p>
-            {onNotFoundClose && (
-              <Button
-                type="button"
-                variant="outline"
-                size="md"
-                className="mt-16"
-                onClick={onNotFoundClose}
-              >
-                목록으로 돌아가기
-              </Button>
-            )}
-          </div>
-        )}
-
-        {isError && !isLoading && !isNotFound && (
-          <div
-            role="alert"
-            className="mt-32 flex min-h-240 flex-col items-center justify-center rounded-xl bg-neutral-50 px-24 text-center"
-          >
-            <NoteFilled className="mb-12 size-40 text-neutral-400" />
-            <p className="text-body-md text-neutral-600">{errorMessage}</p>
-            {onRetry && canRetry && (
-              <Button
-                type="button"
-                variant="outline"
-                size="md"
-                className="mt-16"
-                onClick={onRetry}
-              >
-                다시 시도
-              </Button>
-            )}
-          </div>
-        )}
-
-        {note && !isLoading && !isError && !isNotFound && (
-          <>
-            <div className="mt-32 flex flex-col gap-16 md:mt-24">
-              <DetailRow
-                icon={<Flag className="size-20" />}
-                label="목표"
-              >
-                {note.goal}
-              </DetailRow>
-              <DetailRow
-                icon={<Todos className="size-20" />}
-                label="할 일"
-              >
-                <div className="flex min-w-0 items-center gap-10">
-                  <Badge
-                    type="todo"
-                    className="shrink-0 [&>p]:block"
-                  />
-                  <span className="min-w-0">{note.task}</span>
-                </div>
-              </DetailRow>
-              <DetailRow
-                icon={<Calendar className="size-20" />}
-                label="날짜"
-              >
-                <time>{note.date}</time>
-              </DetailRow>
-            </div>
-
-            <div className="border-border my-32 border-t" />
-
-            {note.linkUrl && (
-              <a
-                href={note.linkUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="hover:border-primary-300 flex min-w-0 items-center gap-12 rounded-xl border border-transparent bg-neutral-50 p-16 transition-colors"
-              >
-                <span className="bg-primary-50 text-primary-600 flex size-40 shrink-0 items-center justify-center rounded-lg">
-                  <Link className="size-22" />
-                </span>
-                <span className="min-w-0">
-                  <strong className="text-title-xs text-foreground-title block truncate">참고 링크</strong>
-                  <span className="text-body-sm mt-2 block truncate text-neutral-500">{note.linkUrl}</span>
-                </span>
-              </a>
-            )}
-
-            {note.content ? (
-              <NoteContent
-                content={note.content}
-                className={note.linkUrl ? "mt-32" : ""}
-              />
-            ) : (
-              <article className={`text-body-lg text-neutral-800 ${note.linkUrl ? "mt-32" : ""}`}>
-                <p>{note.description}</p>
-              </article>
-            )}
-          </>
-        )}
+        {note && !isLoading && !isError && !isNotFound && <NoteDetailBody note={note} />}
       </aside>
     </Disclosure>
   );
