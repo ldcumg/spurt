@@ -31,11 +31,7 @@ export default function DashboardPage() {
         const params: GetGoalListParams = { limit: 10 };
         const goalRes = await clientFetcher.get<GoalListResponse>(GOALS_API_PATH.base, { params });
 
-        let firstGoal: GoalListItem[] | null = null;
-        if (goalRes.data.goals && goalRes.data.goals.length > 0) {
-          firstGoal = goalRes.data.goals;
-          setGoalList(firstGoal);
-        }
+        setGoalList(goalRes.data.goals);
 
         const todoRes = await clientFetcher.get<{ todos: TodoResponse[] }>("/todos");
         if (todoRes.data.todos) {
@@ -50,7 +46,11 @@ export default function DashboardPage() {
   }, []);
 
   const handleToggleTodo = (id: number) => {
-    setTodoList((prevList) => prevList.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
+    setTodoList((prevList) =>
+      prevList.map((item) =>
+        item.id === id ? { ...item, done: !item.done, updatedAt: new Date().toISOString() } : item,
+      ),
+    );
   };
 
   const doneCount = todoList.filter((todo) => todo.done).length;
@@ -235,6 +235,7 @@ export default function DashboardPage() {
                     key={item.id}
                     goal={item}
                     todos={todoList.filter((todo) => todo.goalId === item.id)}
+                    onToggle={handleToggleTodo}
                   />
                 );
               })
