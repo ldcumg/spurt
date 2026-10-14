@@ -1,5 +1,6 @@
 import {
   NOTE_DRAFT_VERSION,
+  getNoteDraftStorageErrorKind,
   getNoteDraftStorageKey,
   readNoteDraft,
   removeNoteDraft,
@@ -75,5 +76,24 @@ describe("noteDraftStorage", () => {
 
     expect(readNoteDraft(owner)).toBeNull();
     expect(readNoteDraft(otherOwner)).toEqual(otherDraft);
+  });
+
+  it("브라우저 저장소 오류를 용량 초과와 사용 불가로 구분한다", () => {
+    expect(getNoteDraftStorageErrorKind(new DOMException("storage full", "QuotaExceededError"))).toBe("quotaExceeded");
+    expect(getNoteDraftStorageErrorKind(new DOMException("storage blocked", "SecurityError"))).toBe("unavailable");
+    expect(getNoteDraftStorageErrorKind(new Error("unknown"))).toBe("unknown");
+  });
+
+  it("저장소 쓰기 오류를 호출부에 전달한다", () => {
+    const quotaError = new DOMException("storage full", "QuotaExceededError");
+    const unavailableStorage = {
+      getItem: () => null,
+      setItem: () => {
+        throw quotaError;
+      },
+      removeItem: () => undefined,
+    };
+
+    expect(() => saveNoteDraft(createDraft(), unavailableStorage)).toThrow(quotaError);
   });
 });

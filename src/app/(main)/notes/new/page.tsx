@@ -9,7 +9,14 @@ import NoteEditor from "./components/NoteEditor";
 import NoteMetaPanel from "./components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
 import { resolveDraftSelection, type DraftSelectionStatus } from "./noteDraftRestore";
-import { NOTE_DRAFT_VERSION, readNoteDraft, removeNoteDraft, saveNoteDraft, type NoteDraft } from "./noteDraftStorage";
+import {
+  NOTE_DRAFT_VERSION,
+  getNoteDraftStorageErrorKind,
+  readNoteDraft,
+  removeNoteDraft,
+  saveNoteDraft,
+  type NoteDraft,
+} from "./noteDraftStorage";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
 import { useCreateNoteMutation } from "@/hooks/mutations/note/useNoteMutations";
@@ -41,6 +48,24 @@ const getDraftRestoreMessage = (status: DraftSelectionStatus, hasGoals: boolean)
     default:
       return "임시저장한 노트를 불러왔어요.";
   }
+};
+
+const getDraftStorageErrorMessage = (error: unknown, operation: "read" | "save") => {
+  const errorKind = getNoteDraftStorageErrorKind(error);
+
+  if (errorKind === "quotaExceeded") {
+    return "브라우저 임시저장 공간이 부족해요. 이미지 수나 크기를 줄인 뒤 다시 시도해 주세요.";
+  }
+
+  if (errorKind === "unavailable") {
+    return operation === "save"
+      ? "브라우저 설정 때문에 임시저장할 수 없어요. 이 사이트의 저장 권한을 확인해 주세요."
+      : "브라우저 설정 때문에 임시저장한 노트를 확인할 수 없어요. 이 사이트의 저장 권한을 확인해 주세요.";
+  }
+
+  return operation === "save"
+    ? "임시저장하지 못했어요. 잠시 후 다시 시도해 주세요."
+    : "임시저장한 노트를 확인하지 못했어요. 잠시 후 다시 시도해 주세요.";
 };
 
 export default function NewNotePage() {
@@ -139,8 +164,8 @@ export default function NewNotePage() {
 
         setDraftToRestore(draft);
         setIsDraftRestoreOpen(true);
-      } catch {
-        setActionMessage("임시저장한 노트를 확인하지 못했어요. 브라우저 저장 공간을 확인해 주세요.");
+      } catch (error) {
+        setActionMessage(getDraftStorageErrorMessage(error, "read"));
         setIsActionError(true);
       }
     });
@@ -190,8 +215,8 @@ export default function NewNotePage() {
 
       setActionMessage("작성 중인 노트를 임시저장했어요.");
       setIsActionError(false);
-    } catch {
-      setActionMessage("임시저장하지 못했어요. 브라우저 저장 공간을 확인한 뒤 다시 시도해 주세요.");
+    } catch (error) {
+      setActionMessage(getDraftStorageErrorMessage(error, "save"));
       setIsActionError(true);
     }
   };

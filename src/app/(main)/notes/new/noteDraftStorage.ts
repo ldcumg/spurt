@@ -21,8 +21,32 @@ export type NoteDraft = NoteDraftOwner & {
 
 type NoteDraftStorage = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
+export type NoteDraftStorageErrorKind = "quotaExceeded" | "unavailable" | "unknown";
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
+
+export const getNoteDraftStorageErrorKind = (error: unknown): NoteDraftStorageErrorKind => {
+  if (!isRecord(error)) return "unknown";
+
+  const errorName = typeof error.name === "string" ? error.name : "";
+  const errorCode = typeof error.code === "number" ? error.code : null;
+
+  if (errorName === "QuotaExceededError" || errorName === "NS_ERROR_DOM_QUOTA_REACHED" || errorCode === 22) {
+    return "quotaExceeded";
+  }
+
+  if (
+    errorName === "SecurityError" ||
+    errorName === "InvalidStateError" ||
+    errorName === "NotSupportedError" ||
+    errorCode === 18
+  ) {
+    return "unavailable";
+  }
+
+  return "unknown";
+};
 
 const isPositiveIntegerOrNull = (value: unknown): value is number | null =>
   value === null || (Number.isSafeInteger(value) && Number(value) > 0);
