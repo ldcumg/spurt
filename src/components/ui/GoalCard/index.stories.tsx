@@ -1,7 +1,7 @@
 import GoalCard from ".";
 
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { MockGoalList, Todos } from "./mock";
+import { MockGoalList, Todos } from "@/mocks/goalCard.mock";
 
 const meta = {
   title: "components/GoalCard",

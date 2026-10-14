@@ -79,7 +79,7 @@ export default function GoalPage() {
   return (
     <div className="bg-primary-50 flex min-h-full flex-col gap-20 p-24 pt-32">
       <header>
-        <p className="text-display">{user?.name}님의 목표</p>
+        <p className="text-display">{user?.name} 님의 목표</p>
       </header>
       <section>
         <div className="grid h-auto grid-cols-2 gap-12 lg:flex lg:flex-row">

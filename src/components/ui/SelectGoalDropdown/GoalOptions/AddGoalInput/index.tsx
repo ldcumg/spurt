@@ -1,16 +1,17 @@
 "use client";
 
+import type { OpenState } from "../../types";
 import { Plus } from "@/assets/icons";
 import TextInput from "@/components/ui/TextInput";
 import type { SubmitEventHandler } from "react";
 
 interface AddGoalInputProps {
   isGoalInputOpen: boolean;
-  setIsGoalInputOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: React.Dispatch<React.SetStateAction<OpenState>>;
 }
 
 /** 새 목표 입력 폼을 열고 제출하는 드롭다운 항목입니다. */
-export default function AddGoalInput({ isGoalInputOpen, setIsGoalInputOpen }: AddGoalInputProps) {
+export default function AddGoalInput({ isGoalInputOpen, setIsOpen }: AddGoalInputProps) {
   /** 새 목표 추가 */
   const handleAddGoalSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -39,7 +40,7 @@ export default function AddGoalInput({ isGoalInputOpen, setIsGoalInputOpen }: Ad
       ) : (
         <li
           className="text-title-xs flex cursor-pointer justify-center gap-12 rounded-xl p-8"
-          onClick={() => setIsGoalInputOpen(true)}
+          onClick={() => setIsOpen((prev) => ({ ...prev, goalInput: true }))}
         >
           <Plus className="size-24" />새 목표 추가
         </li>

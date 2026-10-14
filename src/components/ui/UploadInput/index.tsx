@@ -8,7 +8,7 @@ interface UploadInputProps {
   error?: string;
   placeholder?: string;
   file: File | null;
-  onFileChange: (file: File | null) => void;
+  onFileChange: React.Dispatch<React.SetStateAction<File | null>>;
 }
 
 export default function UploadInput({

@@ -1,6 +1,10 @@
 import { useEffect, useRef } from "react";
 
-/** containerRef 바깥 클릭 시 clickEvent 실행 */
+/**
+ * containerRef 바깥 클릭 시 clickEvent 실행
+ * @param clickEvent
+ * @returns containerRef
+ */
 export const useClickOutside = (clickEvent: () => void) => {
   const containerRef = useRef<HTMLDivElement>(null);
 

@@ -3,7 +3,7 @@ import { FlagFilled, More, Plus } from "@/assets/icons/index";
 import Button from "../Button";
 import Badge from "../Badge";
 import ProgressBar from "../ProgressBar";
-import TodoListItem from "./Todos";
+import TodoItem from "../TodoItem";
 import { TodoResponse } from "@/types/todos.types";
 import { GoalListItem } from "@/types/goals.types";
 
@@ -48,10 +48,10 @@ export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
       </div>
       <div className="flex flex-1 flex-col justify-between gap-20">
         {/* 할 일 목록 */}
-        <div className="flex flex-1 flex-col gap-8 py-8">
+        <div className="flex-start flex flex-col gap-8 py-8">
           {todos.length > 0 ? (
             todos.slice(0, 3).map((item) => (
-              <TodoListItem
+              <TodoItem
                 key={item.id}
                 todo={item}
               />
