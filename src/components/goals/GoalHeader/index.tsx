@@ -6,16 +6,35 @@ import GoalTitle from "./GoalTitle";
 
 interface GoalHeaderProps {
   goal: GoalListItem;
+  goalList: GoalListItem[];
   totalCount: number;
   doneCount: number;
   percentage: number;
+  onSelectGoal?: (goalId: string) => void;
+  onAddGoal?: (newTitle: string) => void;
+  onUpdateTitle?: (newTitle: string) => void;
 }
 
-export default function GoalHeader({ goal, totalCount, doneCount, percentage }: GoalHeaderProps) {
+export default function GoalHeader({
+  goal,
+  goalList,
+  totalCount,
+  doneCount,
+  percentage,
+  onSelectGoal,
+  onAddGoal,
+  onUpdateTitle,
+}: GoalHeaderProps) {
   return (
     <section>
       <div className="grid h-auto grid-cols-2 gap-12 lg:flex lg:flex-row">
-        <GoalTitle>{goal.title}</GoalTitle>
+        <GoalTitle
+          goal={goal}
+          goalList={goalList}
+          onSelectGoal={onSelectGoal}
+          onAddGoal={onAddGoal}
+          onUpdateTitle={onUpdateTitle}
+        />
         <GoalProgress
           totalCount={totalCount}
           doneCount={doneCount}

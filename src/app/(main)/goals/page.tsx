@@ -15,15 +15,14 @@ import GoalBody from "@/components/goals/GoalBody";
 
 export default function GoalPage() {
   const [thisGoal, setThisGoal] = useState<GoalListItem | null>(null);
+  const [goalList, setGoalList] = useState<GoalListItem[]>([]);
   const [todoList, setTodoList] = useState<TodoResponse[]>([]);
-  //const thisGoal = MockGoalList.goals[0];
   const [isLoading, setIsLoading] = useState(true);
-  // 할 일 목록을 부모 state로 관리
 
   const { data: user } = useUserQuery();
 
   useEffect(() => {
-    async function fetchGoalList() {
+    async function fetchData() {
       try {
         setIsLoading(true);
 
@@ -34,6 +33,7 @@ export default function GoalPage() {
         let firstGoal: GoalListItem | null = null;
         if (goalRes.data.goals && goalRes.data.goals.length > 0) {
           firstGoal = goalRes.data.goals[0];
+          setGoalList(goalRes.data.goals);
           setThisGoal(firstGoal);
         }
 
@@ -49,8 +49,53 @@ export default function GoalPage() {
       }
     }
 
-    fetchGoalList();
+    fetchData();
   }, []);
+
+  // 2. 드롭다운에서 다른 목표 선택 시
+  const handleSelectGoal = (selectedGoalId: string) => {
+    const target = goalList.find((item) => String(item.id) === selectedGoalId);
+    if (target) {
+      setThisGoal(target);
+    }
+  };
+
+  // 3. 목표 제목 수정 API 요청
+  const handleUpdateTitle = async (newTitle: string) => {
+    if (!thisGoal) return;
+    try {
+      // PATCH /{teamId}/goals/{goalId}
+      await clientFetcher.patch(`${GOALS_API_PATH.base}/${thisGoal.id}`, {
+        title: newTitle,
+      });
+
+      // 클라이언트 상태 반영
+      setThisGoal((prev) => (prev ? { ...prev, title: newTitle } : null));
+      setGoalList((prevList) =>
+        prevList.map((item) => (item.id === thisGoal.id ? { ...item, title: newTitle } : item)),
+      );
+    } catch (error) {
+      console.error("목표 제목 수정 실패:", error);
+      alert("목표 제목 수정에 실패했습니다.");
+    }
+  };
+
+  // 4. 새 목표 추가 API 요청
+  const handleAddGoal = async (newTitle: string) => {
+    try {
+      // POST /{teamId}/goals
+      const { data: createdGoal } = await clientFetcher.post<GoalListItem>(GOALS_API_PATH.base, {
+        title: newTitle,
+      });
+
+      // 목록에 추가 후 새로 만든 목표를 선택
+      setGoalList((prev) => [createdGoal, ...prev]);
+      setThisGoal(createdGoal);
+    } catch (error) {
+      console.error("새 목표 생성 실패:", error);
+      alert("새 목표 생성에 실패했습니다.");
+    }
+  };
 
   const handleToggleTodo = (id: number) => {
     setTodoList((prevList) => prevList.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
@@ -81,9 +126,13 @@ export default function GoalPage() {
       </header>
       <GoalHeader
         goal={thisGoal}
+        goalList={goalList!}
         totalCount={totalCount}
         doneCount={doneCount}
         percentage={percentage}
+        onSelectGoal={handleSelectGoal}
+        onAddGoal={handleAddGoal}
+        onUpdateTitle={handleUpdateTitle}
       />
       <GoalBody
         goal={thisGoal}
