@@ -26,21 +26,21 @@ export default function AddTodoForm({ addTodoClose, aleadySelectedGoal, aleadySe
     selectedGoal: aleadySelectedGoal ?? null,
     selectedDate: aleadySelectedDate ?? null,
   });
-  const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goal: "", dueDate: "", file: "", linkUrl: "" });
   const setFormStateByKey = createStateKeySetter(setFormState);
+
+  const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goal: "", dueDate: "", file: "", linkUrl: "" });
   const setErrorByKey = createStateKeySetter(setError);
-  const hasError = !!(error.title || error.goal || error.dueDate || error.file || error.linkUrl);
 
   const { mutate: addTodoMutate } = useAddTodoMutation();
 
   return (
     <form
-      onSubmit={(event) => handleAddTodo({ event, formState, addTodoMutate, hasError, addTodoClose })}
+      onSubmit={(event) => handleAddTodo({ event, formState, addTodoMutate, setErrorByKey, addTodoClose })}
       ref={formRef}
       className="flex h-full flex-col gap-16"
     >
       <TextInput
-        onBlur={(e) => validateTitle(e, setErrorByKey("title"))}
+        onBlur={(e) => validateTitle(e.target.value, setErrorByKey("title"))}
         error={error.title}
         name="title"
         label="제목"
@@ -66,16 +66,13 @@ export default function AddTodoForm({ addTodoClose, aleadySelectedGoal, aleadySe
         onFileChange={setFormStateByKey("file")}
       />
       <TextInput
-        onBlur={(e) => validateLinkUrl(e, setErrorByKey("linkUrl"))}
+        onBlur={(e) => validateLinkUrl(e.target.value, setErrorByKey("linkUrl"))}
         error={error.linkUrl}
         name="linkUrl"
         label="링크"
         placeholder="링크를 업로드해 주세요"
       />
-      <ModalActions
-        onClose={addTodoClose}
-        isConfirmDisabled={hasError}
-      />
+      <ModalActions onClose={addTodoClose} />
     </form>
   );
 }

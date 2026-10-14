@@ -30,20 +30,16 @@ export default function SelectGoalDropdown({
 
   /** 드랍다운 밖 클릭 시 드랍다운 닫기 */
   const containerRef = useClickOutside(() => {
-    if (setError) validateGoal(selectedGoal, setError);
-    closeDropdown();
+    if (isOen.option) {
+      console.log("실행");
+      if (setError) validateGoal(selectedGoal, setError);
+      closeDropdown();
+    }
   });
 
   return (
     <div className="flex w-full flex-col gap-8">
-      {label && (
-        <label
-          className="text-title-xs"
-          htmlFor="option-button"
-        >
-          {label}
-        </label>
-      )}
+      {label && <label className="text-title-xs">{label}</label>}
 
       <div
         className="relative w-full max-w-424"

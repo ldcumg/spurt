@@ -1,5 +1,5 @@
 // 제목
-export const TITLE_MAX_LENGTH = 20;
+export const TITLE_MAX_LENGTH = 100;
 
 // 파일
 /** 10MB */

@@ -1,16 +1,17 @@
-import { formatDate } from "../calendar/utils";
-import type { FormState } from "./types";
+import type { AddTodoErrorMassage, FormState } from "./types";
+import { validateGoal, validateTitle } from "./utils";
 import { postFileUploadUrl } from "@/apis/uploads";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
 import type { PostTodoRequest } from "@/types/todos.types";
 import type { UseMutateFunction } from "@tanstack/react-query";
-import axios from "axios";
 
 export type HandleAddTodoParams<TData, TError> = {
   event: React.SubmitEvent<HTMLFormElement>;
   formState: FormState;
   addTodoMutate: UseMutateFunction<TData, TError, PostTodoRequest>;
-  hasError: boolean;
+  setErrorByKey: <K extends keyof AddTodoErrorMassage>(
+    key: K,
+  ) => React.Dispatch<React.SetStateAction<AddTodoErrorMassage[K]>>;
   addTodoClose: () => void;
 };
 
@@ -18,31 +19,29 @@ export const handleAddTodo = async <TData, TError>({
   event,
   formState,
   addTodoMutate,
-  hasError,
+  setErrorByKey,
   addTodoClose,
 }: HandleAddTodoParams<TData, TError>) => {
   event.preventDefault();
 
-  if (hasError) return;
-
   const formData = new FormData(event.currentTarget);
+  const title = formData.get("title") as string;
   const selectedGoal = formState.selectedGoal;
   const selectedDate = formState.selectedDate;
   const file = formState.file;
   const linkUrl = formData.get("linkUrl");
 
-  const newTodo: PostTodoRequest = {
-    title: formData.get("title") as string,
-  };
+  if (validateTitle(title, setErrorByKey("title"))) return;
+  if (validateGoal(selectedGoal, setErrorByKey("goal")) || !selectedGoal) return;
 
-  // 목표 선택 시 목표 id 추가
-  if (selectedGoal) {
-    newTodo.goalId = selectedGoal.id;
-  }
+  const newTodo: PostTodoRequest = {
+    title,
+    goalId: selectedGoal.id,
+  };
 
   // 마감 날짜 선택 시 마감 날짜 추가
   if (selectedDate) {
-    newTodo.dueDate = formatDate(selectedDate);
+    newTodo.dueDate = selectedDate.toISOString();
   }
 
   // 파일 선택 시 파일 url 추가
@@ -62,37 +61,8 @@ export const handleAddTodo = async <TData, TError>({
 
       newTodo.fileUrl = url;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const status = error.response?.status;
-        console.error(status, error);
-
-        switch (status) {
-          case 400:
-            console.error("잘못된 요청");
-            alert("잘못된 요청입니다.");
-            break;
-
-          case 403:
-            console.error("업로드 권한이 없거나 URL이 만료됨");
-            alert("업로드 권한이 없거나 URL이 만료되었습니다.");
-            break;
-
-          case 413:
-            console.error("파일 크기 초과");
-            alert("파일 크기가 초과되었습니다.");
-            break;
-
-          case 500:
-            console.error("서버 오류");
-            alert("서버 오류가 발생했습니다.");
-            break;
-
-          default:
-            console.error("파일 업로드 실패");
-        }
-      } else {
-        console.error("알 수 없는 오류", error);
-      }
+      console.error(error);
+      alert("파일 업로드 실패");
     }
   }
 
@@ -101,8 +71,7 @@ export const handleAddTodo = async <TData, TError>({
   }
 
   addTodoMutate(newTodo, {
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       alert("할 일이 추가되었습니다.");
       addTodoClose();
     },
