@@ -7,12 +7,14 @@ import { uploadEmbeddedNoteImages } from "../noteImageUpload";
 import NoteEditor from "./components/NoteEditor";
 import NoteMetaPanel from "./components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
+import { NOTE_DRAFT_VERSION, saveNoteDraft } from "./noteDraftStorage";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
 import { useCreateNoteMutation } from "@/hooks/mutations/note/useNoteMutations";
 import { useAddTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
 import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
+import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import type { TodoResponse } from "@/types/todos.types";
 import type { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";
@@ -24,6 +26,7 @@ export default function NewNotePage() {
   const router = useRouter();
   const goalQuery = useAllGoalQuery();
   const todoQuery = useAllTodoQuery();
+  const userQuery = useUserQuery();
   const createNoteMutation = useCreateNoteMutation();
   const addTodoMutation = useAddTodoMutation();
   const [title, setTitle] = useState("");
@@ -100,7 +103,45 @@ export default function NewNotePage() {
     createNoteMutation.reset();
   };
 
-  const handleDraft = () => {};
+  const handleDraft = () => {
+    clearActionState();
+
+    const user = userQuery.data;
+    if (!user) {
+      setActionMessage(
+        userQuery.isPending
+          ? "사용자 정보를 확인하는 중이에요. 잠시 후 다시 시도해 주세요."
+          : "사용자 정보를 확인하지 못해 임시저장할 수 없어요. 다시 로그인해 주세요.",
+      );
+      setIsActionError(true);
+      return;
+    }
+
+    const goalId = Number(effectiveGoalId);
+    const todoId = Number(effectiveTodoId);
+
+    try {
+      const isSaved = saveNoteDraft({
+        version: NOTE_DRAFT_VERSION,
+        teamId: user.teamId,
+        userId: user.id,
+        title,
+        content,
+        linkUrl,
+        goalId: Number.isSafeInteger(goalId) && goalId > 0 ? goalId : null,
+        todoId: Number.isSafeInteger(todoId) && todoId > 0 ? todoId : null,
+        savedAt: new Date().toISOString(),
+      });
+
+      if (!isSaved) throw new Error("Local storage is unavailable");
+
+      setActionMessage("작성 중인 노트를 임시저장했어요.");
+      setIsActionError(false);
+    } catch {
+      setActionMessage("임시저장하지 못했어요. 브라우저 저장 공간을 확인한 뒤 다시 시도해 주세요.");
+      setIsActionError(true);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!canSubmit) return;
