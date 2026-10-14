@@ -9,7 +9,7 @@ import NoteEditor from "./components/NoteEditor";
 import NoteMetaPanel from "./components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
 import { resolveDraftSelection, type DraftSelectionStatus } from "./noteDraftRestore";
-import { NOTE_DRAFT_VERSION, readNoteDraft, saveNoteDraft, type NoteDraft } from "./noteDraftStorage";
+import { NOTE_DRAFT_VERSION, readNoteDraft, removeNoteDraft, saveNoteDraft, type NoteDraft } from "./noteDraftStorage";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
 import { useCreateNoteMutation } from "@/hooks/mutations/note/useNoteMutations";
@@ -247,6 +247,16 @@ export default function NewNotePage() {
         content: imageUploadResult.content as Record<string, unknown>,
         ...(linkUrl.trim() ? { linkUrl: linkUrl.trim() } : {}),
       });
+
+      const user = userQuery.data;
+      if (user) {
+        try {
+          removeNoteDraft({ teamId: user.teamId, userId: user.id });
+        } catch {
+          // 노트는 이미 생성됐으므로 저장소 정리 실패를 생성 실패로 처리하지 않는다.
+        }
+      }
+
       router.push(ROUTES.notes);
     } catch (error) {
       if (isNoteApiErrorStatus(error, 404)) {

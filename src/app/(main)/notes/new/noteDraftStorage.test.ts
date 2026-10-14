@@ -64,4 +64,16 @@ describe("noteDraftStorage", () => {
     expect(removeNoteDraft(owner)).toBe(true);
     expect(readNoteDraft(owner)).toBeNull();
   });
+
+  it("현재 팀과 사용자의 임시저장만 삭제한다", () => {
+    const otherOwner = { teamId: "team3-spurt", userId: 3000 };
+    const otherDraft: NoteDraft = { ...createDraft(), ...otherOwner };
+    saveNoteDraft(createDraft());
+    saveNoteDraft(otherDraft);
+
+    removeNoteDraft(owner);
+
+    expect(readNoteDraft(owner)).toBeNull();
+    expect(readNoteDraft(otherOwner)).toEqual(otherDraft);
+  });
 });
