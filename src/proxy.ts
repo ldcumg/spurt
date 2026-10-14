@@ -55,5 +55,5 @@ export const proxy = async (request: NextRequest) => {
 // proxy 실행 경로
 // route handler, 정적 파일 등 제외
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|.*\\..*).*)"],
 };
