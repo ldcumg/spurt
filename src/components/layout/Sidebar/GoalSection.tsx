@@ -34,7 +34,6 @@ export default function GoalSection() {
         if (goalRes.data.goals && goalRes.data.goals.length > 0) {
           setGoalList(goalRes.data.goals);
         }
-        console.log(pathname);
       } catch (error) {
         console.error("목표 호출 실패", error);
       }
