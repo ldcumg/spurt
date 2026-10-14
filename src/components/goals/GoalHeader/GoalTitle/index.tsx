@@ -91,6 +91,7 @@ export default function GoalTitle({ goal, goalList, onSelectGoal, onAddGoal, onU
           {
             lable: "목표 제목 수정",
             onClick: () => {
+              setTitleInput(goal.title);
               editTitle();
             },
           },
