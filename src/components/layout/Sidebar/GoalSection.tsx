@@ -7,13 +7,23 @@ import { clientFetcher } from "@/lib/axios/clientFetcher";
 import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import Link from "next/link";
 
-// TODO: 목표 상세 페이지 추가 시 usePathname으로 대체
-const ACTIVE_GOAL_ID = 1;
+// TODO: 목표 상세 페이지 추가 시 usePathname으로 대체 (완료: 유진)
+
+/**
+ * /goals/:id 패턴에서 goalId를 추출합니다.
+ * @example getGoalIdFromPath("/goals/12") // "12"
+ * @example getGoalIdFromPath("/goals")    // null
+ */
+function getGoalIdFromPath(pathname: string): string | null {
+  const match = pathname.match(/\/goals\/(\d+)/);
+  return match ? match[1] : null;
+}
 
 export default function GoalSection() {
   const [goalList, setGoalList] = useState<GoalListItem[]>([]);
 
   const pathname = usePathname();
+  const pathId = Number(getGoalIdFromPath(pathname));
 
   useEffect(() => {
     async function fetchGoalList() {
@@ -43,7 +53,7 @@ export default function GoalSection() {
             <button
               type="button"
               className={`text-body-md w-full truncate rounded-lg p-12 text-left ${
-                goal.id === ACTIVE_GOAL_ID ? "bg-primary-100 text-primary-600" : "hover:bg-primary-50 text-neutral-700"
+                goal.id === pathId ? "bg-primary-100 text-primary-600" : "hover:bg-primary-50 text-neutral-700"
               }`}
             >
               {goal.title}
