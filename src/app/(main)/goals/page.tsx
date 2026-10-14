@@ -30,10 +30,11 @@ export default function GoalPage() {
         const params: GetGoalListParams = { limit: 10 };
         const goalRes = await clientFetcher.get<GoalListResponse>(GOALS_API_PATH.base, { params });
 
+        setGoalList(goalRes.data.goals);
+
         let firstGoal: GoalListItem | null = null;
         if (goalRes.data.goals && goalRes.data.goals.length > 0) {
           firstGoal = goalRes.data.goals[0];
-          setGoalList(goalRes.data.goals);
           setThisGoal(firstGoal);
         }
 
@@ -63,16 +64,18 @@ export default function GoalPage() {
   // 3. 목표 제목 수정 API 요청
   const handleUpdateTitle = async (newTitle: string) => {
     if (!thisGoal) return;
+    const targetGoalId = thisGoal.id;
     try {
       // PATCH /{teamId}/goals/{goalId}
       await clientFetcher.patch(`${GOALS_API_PATH.base}/${thisGoal.id}`, {
         title: newTitle,
       });
 
-      // 클라이언트 상태 반영
-      setThisGoal((prev) => (prev ? { ...prev, title: newTitle } : null));
+      // 현재 선택된 목표의 ID가 요청했던 ID와 동일할 때만 제목 갱신 (제목 갱신 중 다른 목표 선택 대응)
+      setThisGoal((prev) => (prev && prev.id === targetGoalId ? { ...prev, title: newTitle } : prev));
+
       setGoalList((prevList) =>
-        prevList.map((item) => (item.id === thisGoal.id ? { ...item, title: newTitle } : item)),
+        prevList.map((item) => (item.id === targetGoalId ? { ...item, title: newTitle } : item)),
       );
     } catch (error) {
       console.error("목표 제목 수정 실패:", error);

@@ -52,7 +52,7 @@ export default function GoalTodoBox({ variant, list, goal, handleToggleTodo }: G
               );
             })
         ) : (
-          <TodoEmpty />
+          <TodoEmpty variant={variant} />
         )}
       </div>
     </div>
