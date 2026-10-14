@@ -9,11 +9,10 @@ import { createPortal } from "react-dom";
 interface DisclosureProps {
   children: React.ReactNode;
   isOpen: boolean;
-  onOverlayClick?: () => void;
   className?: string;
 }
 
-export default function Disclosure({ children, isOpen, onOverlayClick, className }: DisclosureProps) {
+export default function Disclosure({ children, isOpen, className }: DisclosureProps) {
   useEffect(() => {
     if (!isOpen) return;
 
@@ -28,13 +27,5 @@ export default function Disclosure({ children, isOpen, onOverlayClick, className
 
   const overlayClasses = twMerge(clsx("fixed inset-0 z-1000", className));
 
-  return createPortal(
-    <div
-      className={overlayClasses}
-      onClick={onOverlayClick}
-    >
-      {children}
-    </div>,
-    document.getElementById(DISCLOSURE_ROOT_ID)!,
-  );
+  return createPortal(<div className={overlayClasses}>{children}</div>, document.getElementById(DISCLOSURE_ROOT_ID)!);
 }

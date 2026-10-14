@@ -1,11 +1,12 @@
 "use client";
 
 import { More } from "@/assets/icons";
+import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 import { twMerge } from "@/lib/twMerge";
 import clsx from "clsx";
 
-interface OptionDropdownProps {
+interface TextDropdownProps {
   options: {
     lable: string;
     onClick: () => void;
@@ -14,19 +15,23 @@ interface OptionDropdownProps {
   optionClassName?: string;
 }
 
-// FIXME - 임시
-export default function OptionDropdown({ options, layoutClassName, optionClassName }: OptionDropdownProps) {
+export default function TextDropdown({ options, layoutClassName, optionClassName }: TextDropdownProps) {
   const { isOpen, toggle, close } = useDisclosure();
+  const containerRef = useClickOutside(() => {
+    close();
+  });
 
-  const layoutClasses = twMerge(clsx("absolute top-30 right-0 flex flex-col gap-4 bg-white", layoutClassName));
-  const optionClasses = twMerge(clsx("cursor-pointer hover:bg-neutral-300", optionClassName));
+  const layoutClasses = twMerge(clsx("absolute top-40 right-0 bg-white z-10 flex flex-col gap-4", layoutClassName));
+  const optionClasses = twMerge(clsx("w-100 cursor-pointer hover:bg-neutral-300", optionClassName));
 
   return (
-    <button
+    <div
       className="relative"
-      onClick={toggle}
+      ref={containerRef}
     >
-      <More />
+      <button onClick={toggle}>
+        <More className="size-24 shrink-0 cursor-pointer text-neutral-600" />
+      </button>
 
       {isOpen && (
         <div className={layoutClasses}>
@@ -44,6 +49,6 @@ export default function OptionDropdown({ options, layoutClassName, optionClassNa
           ))}
         </div>
       )}
-    </button>
+    </div>
   );
 }
