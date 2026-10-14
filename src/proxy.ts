@@ -2,15 +2,16 @@ import { ACCESS_TOKEN, AUTH_COOKIE_OPTIONS, REFRESH_TOKEN } from "@/config/cooki
 import { AUTH_API_PATH, BASE_URL } from "@/constants/apiEndpoints";
 import ROUTES from "@/constants/routes";
 import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE } from "@/constants/timeConstants";
+import { AuthRefreshResponse } from "@/types/auth.types";
 import axios, { isAxiosError } from "axios";
 import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
-import { AuthRefreshResponse } from "./types/auth.types";
+
+import type { NextRequest } from "next/server";
 
 // 서버 컴포넌트의 토큰 재발급 로직
 const refreshAccessToken = async (request: NextRequest) => {
   try {
-    const {data} = await axios.post<AuthRefreshResponse>(`${BASE_URL.server}${AUTH_API_PATH.refresh}`, {
+    const { data } = await axios.post<AuthRefreshResponse>(`${BASE_URL.server}${AUTH_API_PATH.refresh}`, {
       refreshToken: request.cookies.get(REFRESH_TOKEN)?.value,
     });
 
