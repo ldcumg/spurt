@@ -1,4 +1,7 @@
+"use client";
+
 import { Check } from "@/assets/icons";
+import TodoDetailTrigger from "@/components/todoDetail/TodoDetailTrigger";
 import { twMerge } from "@/lib/twMerge";
 import type { TodoResponse } from "@/types/todos.types";
 import clsx from "clsx";
@@ -18,9 +21,17 @@ export default function TodoItem({ todo, className }: TodoItemProps) {
   );
 
   return (
-    <button className={buttonClasses}>
-      {isDone && <Check className="size-16 text-neutral-500" />}
-      <span className={`text-body-md ${isDone ? "text-neutral-500" : "text-primary-500"}`}>{todo.title}</span>
-    </button>
+    <TodoDetailTrigger
+      todo={todo}
+      renderItem={(todoDetailOpen) => (
+        <button
+          className={buttonClasses}
+          onClick={todoDetailOpen}
+        >
+          {isDone && <Check className="size-16 text-neutral-500" />}
+          <span className={`text-body-md ${isDone ? "text-neutral-500" : "text-primary-500"}`}>{todo.title}</span>
+        </button>
+      )}
+    />
   );
 }
