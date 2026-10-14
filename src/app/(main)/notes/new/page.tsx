@@ -178,10 +178,23 @@ export default function NewNotePage() {
 
   const handleSkipDraftRestore = () => {
     setIsDraftRestoreOpen(false);
+    setDraftToRestore(null);
   };
 
   const handleRestoreDraft = () => {
+    if (!draftToRestore) return;
+
+    setTitle(draftToRestore.title);
+    setContent(draftToRestore.content);
+    setLinkUrl(draftToRestore.linkUrl);
+    setSelectedGoalId(draftToRestore.goalId ? String(draftToRestore.goalId) : "");
+    setSelectedTodoId(draftToRestore.todoId ? String(draftToRestore.todoId) : "");
+    setIsLinkUrlTouched(false);
+    setActionMessage("임시저장한 노트를 불러왔어요.");
+    setIsActionError(false);
+    createNoteMutation.reset();
     setIsDraftRestoreOpen(false);
+    setDraftToRestore(null);
   };
 
   const handleSubmit = async () => {
