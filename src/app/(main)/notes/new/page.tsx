@@ -8,6 +8,7 @@ import DraftRestoreModal from "./components/DraftRestoreModal";
 import NoteEditor from "./components/NoteEditor";
 import NoteMetaPanel from "./components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
+import { resolveDraftSelection, type DraftSelectionStatus } from "./noteDraftRestore";
 import { NOTE_DRAFT_VERSION, readNoteDraft, saveNoteDraft, type NoteDraft } from "./noteDraftStorage";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
@@ -22,6 +23,25 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type SubmitPhase = "idle" | "uploadingImages" | "creatingNote";
+
+const getDraftRestoreMessage = (status: DraftSelectionStatus, hasGoals: boolean) => {
+  switch (status) {
+    case "goalRequired":
+      return hasGoals
+        ? "임시저장한 내용을 불러왔어요. 기본 목표를 선택했으니 할 일을 선택해 주세요."
+        : "임시저장한 내용을 불러왔어요. 목표를 추가하고 할 일을 선택해 주세요.";
+    case "goalUnavailable":
+      return hasGoals
+        ? "임시저장한 내용을 불러왔지만 저장된 목표를 찾지 못했어요. 기본 목표의 할 일을 다시 선택해 주세요."
+        : "임시저장한 내용을 불러왔지만 저장된 목표를 찾지 못했어요. 목표를 추가하고 할 일을 선택해 주세요.";
+    case "todoRequired":
+      return "임시저장한 내용을 불러왔어요. 할 일을 선택해 주세요.";
+    case "todoUnavailable":
+      return "임시저장한 내용을 불러왔지만 저장된 할 일을 찾지 못했어요. 할 일을 다시 선택해 주세요.";
+    default:
+      return "임시저장한 노트를 불러왔어요.";
+  }
+};
 
 export default function NewNotePage() {
   const router = useRouter();
@@ -184,13 +204,15 @@ export default function NewNotePage() {
   const handleRestoreDraft = () => {
     if (!draftToRestore) return;
 
+    const restoredSelection = resolveDraftSelection(draftToRestore, goals, todos);
+
     setTitle(draftToRestore.title);
     setContent(draftToRestore.content);
     setLinkUrl(draftToRestore.linkUrl);
-    setSelectedGoalId(draftToRestore.goalId ? String(draftToRestore.goalId) : "");
-    setSelectedTodoId(draftToRestore.todoId ? String(draftToRestore.todoId) : "");
     setIsLinkUrlTouched(false);
-    setActionMessage("임시저장한 노트를 불러왔어요.");
+    setSelectedGoalId(restoredSelection.goalId);
+    setSelectedTodoId(restoredSelection.todoId);
+    setActionMessage(getDraftRestoreMessage(restoredSelection.status, goals.length > 0));
     setIsActionError(false);
     createNoteMutation.reset();
     setIsDraftRestoreOpen(false);
@@ -291,6 +313,7 @@ export default function NewNotePage() {
           isOpen={isDraftRestoreOpen}
           draftTitle={draftToRestore.title}
           savedAt={draftToRestore.savedAt}
+          isRestoreDisabled={hasPendingQueries}
           onSkip={handleSkipDraftRestore}
           onRestore={handleRestoreDraft}
         />

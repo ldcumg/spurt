@@ -84,4 +84,19 @@ describe("DraftRestoreModal", () => {
     expect(onSkip).toHaveBeenCalledTimes(2);
     expect(onRestore).toHaveBeenCalledOnce();
   });
+
+  it("목표와 할 일을 확인하는 동안 불러오기를 비활성화한다", async () => {
+    render(
+      <DraftRestoreModal
+        isOpen
+        draftTitle="프로젝트 회고 정리"
+        savedAt={savedAt}
+        isRestoreDisabled
+        onSkip={() => undefined}
+        onRestore={() => undefined}
+      />,
+    );
+
+    expect(await screen.findByRole("button", { name: "불러오기" })).toBeDisabled();
+  });
 });

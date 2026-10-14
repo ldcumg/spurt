@@ -8,11 +8,19 @@ interface DraftRestoreModalProps {
   isOpen: boolean;
   draftTitle: string;
   savedAt: string;
+  isRestoreDisabled?: boolean;
   onSkip: () => void;
   onRestore: () => void;
 }
 
-export default function DraftRestoreModal({ isOpen, draftTitle, savedAt, onSkip, onRestore }: DraftRestoreModalProps) {
+export default function DraftRestoreModal({
+  isOpen,
+  draftTitle,
+  savedAt,
+  isRestoreDisabled = false,
+  onSkip,
+  onRestore,
+}: DraftRestoreModalProps) {
   const displayTitle = draftTitle.trim() || "제목 없는 노트";
 
   return (
@@ -43,6 +51,7 @@ export default function DraftRestoreModal({ isOpen, draftTitle, savedAt, onSkip,
           closeButtonLabel="이번에는 불러오지 않기"
           confirmButtonLabel="불러오기"
           confirmButtonType="button"
+          isConfirmDisabled={isRestoreDisabled}
         />
       </div>
     </Modal>

@@ -48,3 +48,10 @@ export const LongTitle: Story = {
   },
   render: Default.render,
 };
+
+export const LoadingOptions: Story = {
+  args: {
+    isRestoreDisabled: true,
+  },
+  render: Default.render,
+};
