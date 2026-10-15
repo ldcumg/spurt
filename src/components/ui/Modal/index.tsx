@@ -10,7 +10,7 @@ const Disclosure = dynamic(() => import("@/components/layout/Disclosure"), {
 interface ModalProps {
   children: React.ReactNode;
   isOpen: boolean;
-  title: string;
+  title: React.ReactNode;
   onClose: () => void;
   isCloseDisabled?: boolean;
 }
@@ -27,9 +27,9 @@ export default function Modal({ children, isOpen, title, onClose, isCloseDisable
       className="fixed inset-0 flex flex-col items-center justify-center bg-black/60"
       isOpen={isOpen}
     >
-      <div className="flex h-full w-full flex-col overflow-y-auto bg-white px-20 pb-15 md:h-auto md:w-360 md:rounded-2xl md:px-24 md:pb-24">
-        <header className="flex w-full flex-row items-center justify-between py-30 md:py-24">
-          <h1 className="text-title-sm">{title}</h1>
+      <div className="flex h-full w-full flex-col overflow-y-auto bg-white p-32 md:h-auto md:w-456 md:rounded-2xl md:p-40">
+        <header className="flex w-full flex-row items-center justify-between">
+          <h1 className="text-title-sm md:text-title-md">{title}</h1>
           <button
             type="button"
             aria-label="모달 닫기"
@@ -37,7 +37,7 @@ export default function Modal({ children, isOpen, title, onClose, isCloseDisable
             className="disabled:cursor-not-allowed disabled:opacity-40"
             onClick={onClose}
           >
-            <X className="size-14" />
+            <X className="size-24 text-neutral-400" />
           </button>
         </header>
         {children}
