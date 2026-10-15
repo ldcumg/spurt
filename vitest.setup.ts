@@ -1,4 +1,4 @@
-import { mockServer } from "@/mocks/server";
+import { mockServer } from "@/mocks";
 import "@testing-library/jest-dom/vitest";
 import { afterAll, afterEach, beforeAll } from "vitest";
 
