@@ -1,4 +1,6 @@
-import { Done, FlagFilled, More, Note, Todo } from "@/assets/icons/index";
+import TextDropdown from "../TextDropdown";
+import { Done, FlagFilled, Note, Todo } from "@/assets/icons/index";
+import TodoDetailTrigger from "@/components/todoDetail/TodoDetailTrigger";
 import { TodoResponse } from "@/types/todos.types";
 
 type TodoType = "default" | "goal";
@@ -51,7 +53,19 @@ export default function TodoItem({ todo, type = "default", onToggle }: TodoListI
         ) : (
           <div className="size-24" />
         )}
-        <More className="size-24 shrink-0 cursor-pointer text-neutral-600" />
+        <TodoDetailTrigger
+          todo={todo}
+          renderItem={(todoDetailOpen) => (
+            <TextDropdown
+              options={[
+                {
+                  lable: "상세 보기",
+                  onClick: todoDetailOpen,
+                },
+              ]}
+            />
+          )}
+        />
       </div>
     </div>
   );
