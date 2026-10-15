@@ -11,8 +11,6 @@ import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import GoalHeader from "@/components/goals/GoalHeader";
 import GoalBody from "@/components/goals/GoalBody";
 
-//import { getGoalList } from "@/apis/goals/api";
-
 export default function GoalPage() {
   const [thisGoal, setThisGoal] = useState<GoalListItem | null>(null);
   const [goalList, setGoalList] = useState<GoalListItem[]>([]);
