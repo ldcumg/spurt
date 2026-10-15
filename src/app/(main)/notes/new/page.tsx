@@ -197,7 +197,7 @@ export default function NewNotePage() {
 
     clearActionState();
     try {
-      const newTodo = await addTodoMutation.mutateAsync({ title: label, goalId });
+      const { data: newTodo } = await addTodoMutation.mutateAsync({ title: label, goalId });
       setCreatedTodos((currentTodos) => [...currentTodos.filter((todo) => todo.id !== newTodo.id), newTodo]);
       setSelectedTodoId(String(newTodo.id));
     } catch (error) {
