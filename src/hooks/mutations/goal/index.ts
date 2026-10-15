@@ -1,7 +1,7 @@
-import { postGoal } from "@/apis/goals/api";
+import { postGoal } from "@/apis/goals/index";
 import GOAL_QUERY_KEYS from "@/constants/queryKeys/goal";
 import { PostGoalRequest } from "@/types/goals.types";
-import { mutationOptions, QueryClient } from "@tanstack/react-query";
+import { mutationOptions, type QueryClient } from "@tanstack/react-query";
 
 export const goalMutationOptions = {
   detail: (queryClient: QueryClient) =>
