@@ -9,7 +9,7 @@ import { handleAddGoal } from "../service";
 import { validateTitle } from "@/components/addTodo/utils";
 import { AddGoalErrorMessage } from "../types";
 import { createStateKeySetter } from "@/utils/stateUtills";
-import { useAddTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
+import { useAddGoalMutation } from "@/hooks/mutations/goal/useGoalMutations";
 
 interface AddGoalTriggerProps {
   children: React.ReactElement<{
@@ -23,7 +23,7 @@ export default function AddGoalTrigger({ children }: AddGoalTriggerProps) {
   const setErrorByKey = createStateKeySetter(setError);
   const hasError = !!error.title;
 
-  const { mutate: addGoalMutate } = useAddTodoMutation();
+  const { mutate: addGoalMutate } = useAddGoalMutation();
 
   console.log("AddGoalTrigger Imports:", { Modal, ModalActions, TextInput });
   return (
