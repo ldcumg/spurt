@@ -4,6 +4,7 @@ import Sidebar from ".";
 import { NAV_ITEMS } from "../navItems";
 import NavSection from "./NavSection";
 import { GoalStoreProvider } from "@/contexts/GoalStoreContext";
+import QueryProvider from "@/providers/QueryProvider";
 
 const meta = {
   title: "Layout/Sidebar",
@@ -29,17 +30,19 @@ export const Default: Story = {};
 export const NavItemStates: Story = {
   parameters: { layout: "centered" },
   render: () => (
-    <GoalStoreProvider>
-      <div className="flex gap-24">
-        {NAV_ITEMS.map((item) => (
-          <div
-            key={item.href}
-            className="w-200"
-          >
-            <NavSection activeHref={item.href} />
-          </div>
-        ))}
-      </div>
-    </GoalStoreProvider>
+    <QueryProvider>
+      <GoalStoreProvider>
+        <div className="flex gap-24">
+          {NAV_ITEMS.map((item) => (
+            <div
+              key={item.href}
+              className="w-200"
+            >
+              <NavSection activeHref={item.href} />
+            </div>
+          ))}
+        </div>
+      </GoalStoreProvider>
+    </QueryProvider>
   ),
 };
