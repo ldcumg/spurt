@@ -1,6 +1,6 @@
-import { THIS_WEEK_INDEX } from "../../../index.constants";
-import type { CalendarWeeks } from "../../../index.types";
-import { getCalendarWeeks, nextWeek, previousWeek } from "../../../index.utils";
+import { THIS_WEEK_INDEX } from "@/app/(main)/calendar/index.constants";
+import type { CalendarWeeks } from "@/app/(main)/calendar/index.types";
+import { getCalendarWeeks, nextWeek, previousWeek } from "@/app/(main)/calendar/index.utils";
 import CalendarTodoItem from "../../CalendarTodoItem";
 import { CalendarDot } from "@/assets/icons";
 import { useViewport } from "@/hooks/viewport/useViewport";
