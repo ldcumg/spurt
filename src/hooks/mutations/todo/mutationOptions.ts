@@ -7,10 +7,17 @@ import { mutationOptions, type QueryClient } from "@tanstack/react-query";
 export const todoMutationOptions = {
   save: (queryClient: QueryClient, todoId: number | undefined) =>
     mutationOptions({
-      mutationFn: (newTodo: PatchTodoRequest | PostTodoRequest) =>
+      mutationFn: (todoData: PatchTodoRequest | PostTodoRequest) =>
         todoId
-          ? clientFetcher.patch(TODOS_API_PATH.detail(todoId), newTodo)
-          : clientFetcher.post(TODOS_API_PATH.base, newTodo),
+          ? clientFetcher.patch(TODOS_API_PATH.detail(todoId), todoData)
+          : clientFetcher.post(TODOS_API_PATH.base, todoData),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: TODO_QUERY_KEYS.all });
+      },
+    }),
+  post: (queryClient: QueryClient, todoId: number) =>
+    mutationOptions({
+      mutationFn: (todoData: PostTodoRequest) => clientFetcher.post(TODOS_API_PATH.detail(todoId), todoData),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: TODO_QUERY_KEYS.all });
       },
