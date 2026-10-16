@@ -10,10 +10,14 @@ import { useUserQuery } from "@/hooks/queries/useUserQuery";
 
 import GoalHeader from "@/components/goals/GoalHeader";
 import GoalBody from "@/components/goals/GoalBody";
-
-//import { getGoalList } from "@/apis/goals/api";
+import { useParams, useRouter } from "next/navigation";
 
 export default function GoalPage() {
+  const router = useRouter();
+  const params = useParams();
+
+  const goalId = params?.goalId as string;
+
   const [thisGoal, setThisGoal] = useState<GoalListItem | null>(null);
   const [goalList, setGoalList] = useState<GoalListItem[]>([]);
   const [todoList, setTodoList] = useState<TodoResponse[]>([]);
@@ -27,15 +31,20 @@ export default function GoalPage() {
         setIsLoading(true);
 
         // 1. 목표 목록 조회
-        const params: GetGoalListParams = { limit: 10 };
-        const goalRes = await clientFetcher.get<GoalListResponse>(GOALS_API_PATH.base, { params });
+        const queryParams: GetGoalListParams = { limit: 10 };
+        const goalRes = await clientFetcher.get<GoalListResponse>(GOALS_API_PATH.base, { params: queryParams });
 
-        setGoalList(goalRes.data.goals);
-
-        let firstGoal: GoalListItem | null = null;
         if (goalRes.data.goals && goalRes.data.goals.length > 0) {
-          firstGoal = goalRes.data.goals[0];
-          setThisGoal(firstGoal);
+          setGoalList(goalRes.data.goals);
+
+          const target = goalRes.data.goals.find((g) => String(g.id) === goalId);
+          const currentGoal = target ?? goalRes.data.goals[0];
+
+          setThisGoal(currentGoal);
+
+          if (currentGoal) {
+            localStorage.setItem("recentGoalId", String(currentGoal.id));
+          }
         }
 
         // 2. 투두 목록 조회
@@ -49,16 +58,14 @@ export default function GoalPage() {
         setIsLoading(false);
       }
     }
-
-    fetchData();
-  }, []);
-
-  // 2. 드롭다운에서 다른 목표 선택 시
-  const handleSelectGoal = (selectedGoalId: string) => {
-    const target = goalList.find((item) => String(item.id) === selectedGoalId);
-    if (target) {
-      setThisGoal(target);
+    if (goalId) {
+      fetchData();
     }
+  }, [goalId]);
+
+  // 드롭다운에서 다른 목표 선택 시
+  const handleSelectGoal = (selectedGoalId: string) => {
+    router.push(`/goals/${selectedGoalId}`);
   };
 
   // 3. 목표 제목 수정 API 요청
@@ -91,9 +98,7 @@ export default function GoalPage() {
         title: newTitle,
       });
 
-      // 목록에 추가 후 새로 만든 목표를 선택
-      setGoalList((prev) => [createdGoal, ...prev]);
-      setThisGoal(createdGoal);
+      router.push(`/goals/${createdGoal.id}`);
     } catch (error) {
       console.error("새 목표 생성 실패:", error);
       alert("새 목표 생성에 실패했습니다.");
@@ -125,7 +130,7 @@ export default function GoalPage() {
   return (
     <div className="bg-primary-50 flex min-h-full flex-col gap-20 p-24 pt-32">
       <header>
-        <p className="text-display">{user?.name} 님의 목표</p>
+        <p className="text-display">{user?.name || "체다치즈"} 님의 목표</p>
       </header>
       <GoalHeader
         goal={thisGoal}
