@@ -1,3 +1,4 @@
+import { USERS_API_PATH } from "@/constants/apiEndpoints";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
 import { useQuery } from "@tanstack/react-query";
 
@@ -19,7 +20,7 @@ export function useUserQuery() {
   return useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const { data } = await clientFetcher.get("/user");
+      const { data } = await clientFetcher.get(USERS_API_PATH.me);
       return data;
     },
     staleTime: Infinity, //브라우저 세션 동안 캐시 유지
