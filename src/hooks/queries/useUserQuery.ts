@@ -1,27 +1,18 @@
+import { USERS_API_PATH } from "@/constants/apiEndpoints";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
+import type { UserResponse } from "@/types/users.types";
 import { useQuery } from "@tanstack/react-query";
 
-{
-  /**
-    사용예시:
-    export default function GoalPage() {
-    const { data: user } = useUser(); // 네트워크 호출 없이 캐시에서 즉시 반환
+export const USER_QUERY_KEY = ["user", "me"] as const;
 
-    return (
-        <header>
-        <p className="text-display">{user?.name}님의 목표</p>
-        </header>
-    );
-    }
- */
-}
 export function useUserQuery() {
   return useQuery({
-    queryKey: ["user"],
+    queryKey: USER_QUERY_KEY,
     queryFn: async () => {
-      const { data } = await clientFetcher.get("/user");
+      const { data } = await clientFetcher.get<UserResponse>(USERS_API_PATH.me);
+
       return data;
     },
-    staleTime: Infinity, //브라우저 세션 동안 캐시 유지
+    staleTime: Infinity,
   });
 }

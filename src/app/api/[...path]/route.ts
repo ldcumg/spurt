@@ -18,7 +18,9 @@ async function handler(request: NextRequest, { params }: Params) {
   try {
     const pathname = `/${path.join("/")}`;
     const method = request.method;
-    const body = request.body ? await request.json() : undefined;
+    const rawBody = request.body ? await request.text() : "";
+    const body = rawBody.trim() ? JSON.parse(rawBody) : undefined;
+    // const body = request.body ? await request.json() : undefined;
     const searchParams = Object.fromEntries(request.nextUrl.searchParams);
 
     const { data, status } = await serverFetcher(pathname, { method, data: body, params: searchParams });
