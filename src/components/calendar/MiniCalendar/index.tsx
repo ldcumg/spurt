@@ -50,7 +50,7 @@ export default function MiniCalendar({ selectedDate, handleDateSelect }: MiniCal
           return (
             <div
               className={clsx(
-                "flex size-28 items-center justify-center",
+                "flex size-28 cursor-pointer items-center justify-center",
                 isSelectedDate && "bg-primary-600 aspect-square rounded-full text-white",
               )}
               onClick={() => handleDateSelect(date)}

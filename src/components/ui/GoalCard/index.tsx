@@ -1,11 +1,11 @@
-import { FlagFilled, More, Plus } from "@/assets/icons/index";
-
-import Button from "../Button";
 import Badge from "../Badge";
+import Button from "../Button";
 import ProgressBar from "../ProgressBar";
 import TodoItem from "../TodoItem";
-import { TodoResponse } from "@/types/todos.types";
+import { FlagFilled, More, Plus } from "@/assets/icons";
+import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
 import { GoalListItem } from "@/types/goals.types";
+import { TodoResponse } from "@/types/todos.types";
 
 interface GoalCardProps {
   goal: GoalListItem;
@@ -60,14 +60,21 @@ export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
             <p className="text-title-xs flex h-full items-center justify-center">등록된 할 일이 없습니다.</p>
           )}
         </div>
-        <Button
-          variant={"outline"}
-          size={"lg"}
-          className="border-primary-500 flex h-48 w-full flex-row items-center justify-center gap-8 bg-white"
-        >
-          <Plus className="text-primary-600 size-16 shrink-0" />
-          <p className="text-primary-600 text-title-xs truncate">할 일 추가</p>
-        </Button>
+        <AddTodoTrigger
+          // TODO - 목표 정보 넣어주기 type: GoalListItem
+          // aleadySelectedGoal={}
+          renderItem={(addTodoOpen) => (
+            <Button
+              onClick={addTodoOpen}
+              variant={"outline"}
+              size={"lg"}
+              className="border-primary-500 flex h-48 w-full flex-row items-center justify-center gap-8 bg-white"
+            >
+              <Plus className="text-primary-600 size-16 shrink-0" />
+              <p className="text-primary-600 text-title-xs truncate">할 일 추가</p>
+            </Button>
+          )}
+        />
       </div>
     </div>
   );
