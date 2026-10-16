@@ -1,20 +1,9 @@
-import type { AddTodoErrorMassage, FormState } from "./index.types";
+import type { HandleAddTodoParams } from "./index.types";
 import { validateGoal, validateTitle } from "./index.utils";
 import { UPLOADS_API_PATH } from "@/constants/apiEndpoints";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
 import type { PostTodoRequest } from "@/types/todos.types";
 import type { UploadUrlResponse } from "@/types/uploads.types";
-import type { UseMutateFunction } from "@tanstack/react-query";
-
-export type HandleAddTodoParams<TData, TError> = {
-  event: React.SubmitEvent<HTMLFormElement>;
-  formState: FormState;
-  addTodoMutate: UseMutateFunction<TData, TError, PostTodoRequest>;
-  setErrorByKey: <K extends keyof AddTodoErrorMassage>(
-    key: K,
-  ) => React.Dispatch<React.SetStateAction<AddTodoErrorMassage[K]>>;
-  addTodoClose: () => void;
-};
 
 export const handleAddTodo = async <TData, TError>({
   event,
@@ -77,8 +66,8 @@ export const handleAddTodo = async <TData, TError>({
       addTodoClose();
     },
     onError: (error) => {
-      console.error(error);
       alert("오류가 발생했습니다.");
+      console.error(error);
     },
   });
 };
