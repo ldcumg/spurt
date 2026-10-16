@@ -18,6 +18,7 @@ export default function AddTodoTrigger({ aleadySelectedGoal, aleadySelectedDate,
     <>
       {renderItem(addTodoOpen)}
       <Modal
+        className="p-24 md:p-32"
         title="할 일 생성"
         isOpen={addTodoIsOpen}
         onClose={addTodoClose}
