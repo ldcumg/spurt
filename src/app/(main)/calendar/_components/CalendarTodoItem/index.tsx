@@ -1,7 +1,7 @@
 "use client";
 
 import { Check } from "@/assets/icons";
-import TodoDetailTrigger from "@/components/todoDetail/TodoDetailTrigger";
+import TodoDetailTrigger from "@/components/ui/TodoDetailTrigger";
 import { twMerge } from "@/lib/twMerge";
 import type { TodoResponse } from "@/types/todos.types";
 import clsx from "clsx";

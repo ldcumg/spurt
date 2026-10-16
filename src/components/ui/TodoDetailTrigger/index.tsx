@@ -1,6 +1,6 @@
 "use client";
 
-import Modal from "../../ui/Modal";
+import Modal from "../Modal";
 import TodoContents from "./TodoContents";
 import TodoInfo from "./TodoInfo";
 import Badge from "@/components/ui/Badge";

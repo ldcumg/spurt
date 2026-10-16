@@ -1,4 +1,4 @@
-import { getFileName } from "../../utils";
+import { getFileName } from "../index.utils";
 import { Download, Link, Temporary } from "@/assets/icons";
 import type { TodoResponse } from "@/types/todos.types";
 
