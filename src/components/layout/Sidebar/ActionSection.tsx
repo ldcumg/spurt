@@ -3,7 +3,9 @@ import AddGoalTrigger from "@/components/addGoal/AddGoalTrigger";
 import Button from "@/components/ui/Button";
 
 export default function ActionSection() {
-  console.log("ActionSection Imports:", { Flag, Todos, AddGoalTrigger, Button });
+  // 로그가 많이 찍혀 주석처리 합니다 - 유진
+  //console.log("ActionSection Imports:", { Flag, Todos, AddGoalTrigger, Button });
+
   return (
     <div className="flex gap-8">
       <AddGoalTrigger>

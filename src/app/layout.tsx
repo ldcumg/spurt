@@ -1,3 +1,4 @@
+import { GoalStoreProvider } from "@/contexts/GoalStoreContext";
 import "./globals.css";
 import { DISCLOSURE_ROOT_ID } from "@/constants/dom";
 import { MockProvider } from "@/providers/MockProvider";
@@ -27,8 +28,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body className="flex min-h-full flex-col">
         <MockProvider>
           <QueryProvider>
-            {children}
-            <div id={DISCLOSURE_ROOT_ID}></div>
+            <GoalStoreProvider>
+              {children}
+              <div id={DISCLOSURE_ROOT_ID}></div>
+            </GoalStoreProvider>
           </QueryProvider>
         </MockProvider>
       </body>
