@@ -3,7 +3,7 @@
 import type { OpenState } from "../types";
 import AddGoalInput from "./AddGoalInput";
 import GoalOptionItem from "./GoalOptionItem";
-import { validateGoal } from "@/components/addTodo/utils";
+import { validateGoal } from "@/components/ui/AddTodoTrigger/index.utils";
 import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
 import type { GoalListItem } from "@/types/goals.types";
 

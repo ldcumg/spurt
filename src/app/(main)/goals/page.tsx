@@ -1,7 +1,7 @@
 "use client";
 
 import { FlagFilled, More, Plus, Right } from "@/assets/icons/index";
-import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
+import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import ProgressRing from "@/components/ui/ProgressRing";

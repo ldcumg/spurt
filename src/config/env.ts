@@ -4,6 +4,8 @@ export const environment = {
   isDevelopment: NODE_ENV === "development",
   isProduction: NODE_ENV === "production",
   isTest: NODE_ENV === "test",
+  isNode: process.env.NEXT_RUNTIME === "nodejs",
+  isEdge: process.env.NEXT_RUNTIME === "edge",
 };
 
 // api base url

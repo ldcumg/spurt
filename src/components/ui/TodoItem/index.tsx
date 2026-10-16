@@ -1,6 +1,6 @@
 import TextDropdown from "../TextDropdown";
 import { Done, FlagFilled, Note, Todo } from "@/assets/icons/index";
-import TodoDetailTrigger from "@/components/todoDetail/TodoDetailTrigger";
+import TodoDetailTrigger from "@/components/ui/TodoDetailTrigger";
 import { TodoResponse } from "@/types/todos.types";
 
 type TodoType = "default" | "goal";
