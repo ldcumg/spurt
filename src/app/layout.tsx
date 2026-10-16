@@ -1,7 +1,6 @@
 import { GoalStoreProvider } from "@/contexts/GoalStoreContext";
 import "./globals.css";
 import { DISCLOSURE_ROOT_ID } from "@/constants/dom";
-import { MockProvider } from "@/providers/MockProvider";
 import QueryProvider from "@/providers/QueryProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -26,14 +25,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
       className={`${pretendard.className} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <MockProvider>
-          <QueryProvider>
-            <GoalStoreProvider>
-              {children}
-              <div id={DISCLOSURE_ROOT_ID}></div>
-            </GoalStoreProvider>
-          </QueryProvider>
-        </MockProvider>
+        <QueryProvider>
+          <GoalStoreProvider>
+            {children}
+            <div id={DISCLOSURE_ROOT_ID}></div>
+          </GoalStoreProvider>
+        </QueryProvider>
       </body>
     </html>
   );

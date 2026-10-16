@@ -11,10 +11,6 @@ export type PostLoginRequest = {
   password: string;
 };
 
-export type PostRefreshRequest = {
-  refreshToken: string;
-};
-
 export type PostLogoutRequest = {
   refreshToken: string;
 };

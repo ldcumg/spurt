@@ -54,7 +54,7 @@ export type TodoResponse = {
   id: number;
   teamId: string;
   userId: number;
-  goalId: number | null;
+  goalId: number;
   title: string;
   done: boolean;
   fileUrl: string | null;
@@ -62,7 +62,7 @@ export type TodoResponse = {
   dueDate: string | null;
   createdAt: string;
   updatedAt: string;
-  goal: TodoGoalSummary | null;
+  goal: TodoGoalSummary;
   noteIds: number[];
   tags: TodoTag[];
   isFavorite: boolean;

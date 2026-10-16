@@ -1,8 +1,8 @@
+import { buildApiUrl } from "../index.utils";
 import { userMocks } from "./mock";
-//import { USERS_API_PATH } from "@/constants/apiEndpoints";
 import { http, HttpResponse } from "msw";
 
-export const userHandlers = (buildApiUrl: (path: string) => string) => [
+export const userHandlers = [
   // 1. 프록시 경로(/api/user) 대응
   http.get("*/api/user", () => {
     return HttpResponse.json(userMocks.users);
