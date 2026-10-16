@@ -1,8 +1,9 @@
-import type { AddTodoErrorMassage, FormState } from "./types";
-import { validateGoal, validateTitle } from "./utils";
-import { postFileUploadUrl } from "@/apis/uploads";
+import type { AddTodoErrorMassage, FormState } from "./index.types";
+import { validateGoal, validateTitle } from "./index.utils";
+import { UPLOADS_API_PATH } from "@/constants/apiEndpoints";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
 import type { PostTodoRequest } from "@/types/todos.types";
+import type { UploadUrlResponse } from "@/types/uploads.types";
 import type { UseMutateFunction } from "@tanstack/react-query";
 
 export type HandleAddTodoParams<TData, TError> = {
@@ -49,7 +50,7 @@ export const handleAddTodo = async <TData, TError>({
     try {
       const {
         data: { uploadUrl, url },
-      } = await postFileUploadUrl({
+      } = await clientFetcher.post<UploadUrlResponse>(UPLOADS_API_PATH.files, {
         fileName: file.name,
       });
 

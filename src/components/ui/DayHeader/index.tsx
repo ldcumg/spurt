@@ -1,4 +1,4 @@
-import { WEEKDAYS } from "../constants";
+import { WEEKDAYS } from "../../../app/(main)/calendar/index.constants";
 import { twMerge } from "@/lib/twMerge";
 import clsx from "clsx";
 

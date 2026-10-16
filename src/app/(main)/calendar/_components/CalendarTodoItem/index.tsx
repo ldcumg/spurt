@@ -6,12 +6,12 @@ import { twMerge } from "@/lib/twMerge";
 import type { TodoResponse } from "@/types/todos.types";
 import clsx from "clsx";
 
-interface TodoItemProps {
+interface CalendarTodoItemProps {
   todo: TodoResponse;
   className?: string;
 }
 
-export default function TodoItem({ todo, className }: TodoItemProps) {
+export default function CalendarTodoItem({ todo, className }: CalendarTodoItemProps) {
   const isDone = todo.done;
   const buttonClasses = twMerge(
     clsx(

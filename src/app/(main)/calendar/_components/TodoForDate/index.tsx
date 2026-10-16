@@ -1,10 +1,10 @@
 "use client";
 
-import TodoItem from "../TodoItem";
+import CalendarTodoItem from "../CalendarTodoItem";
 import { Plus } from "@/assets/icons";
-import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
-import { formatDate } from "@/components/calendar/utils";
+import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 import type { TodoResponse } from "@/types/todos.types";
+import { formatDate } from "@/utils/calendar";
 
 interface SelectedDateProps {
   selectedDate: Date;
@@ -39,7 +39,7 @@ export default function TodoForDate({ selectedDate, todoGroupedByDate }: Selecte
         {todoGroupedByDate[formattedDate] ? (
           <div className="flex h-160 flex-col gap-6 overflow-y-auto">
             {todoGroupedByDate[formattedDate].map((todo) => (
-              <TodoItem
+              <CalendarTodoItem
                 key={todo.id}
                 todo={todo}
               />

@@ -1,8 +1,8 @@
 "use client";
 
 import { Calendar } from "@/assets/icons";
-import { validateDueDate } from "@/components/addTodo/utils";
-import MiniCalendar from "@/components/calendar/MiniCalendar";
+import { validateDueDate } from "@/components/ui/AddTodoTrigger/index.utils";
+import MiniCalendar from "@/components/ui/MiniCalendar";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 

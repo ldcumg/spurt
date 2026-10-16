@@ -1,8 +1,8 @@
 "use client";
 
-import { handleAddTodo } from "../../services";
-import type { AddTodoErrorMassage, FormState } from "../../types";
-import { validateLinkUrl, validateTitle } from "../../utils";
+import { handleAddTodo } from "../index.services";
+import type { AddTodoErrorMassage, FormState } from "../index.types";
+import { validateLinkUrl, validateTitle } from "../index.utils";
 import DateInput from "./DateInput";
 import ModalActions from "@/components/ui/Modal/ModalActions";
 import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";

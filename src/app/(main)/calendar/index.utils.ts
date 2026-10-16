@@ -1,6 +1,7 @@
-import { LAST_WEEK_INDEX } from "./constants";
-import type { CalendarWeeks, Week } from "./types";
+import { LAST_WEEK_INDEX } from "./index.constants";
+import type { CalendarWeeks, Week } from "./index.types";
 import type { TodoResponse } from "@/types/todos.types";
+import { formatDate } from "@/utils/calendar";
 
 /**
  * sunday가 포함된 일요일 ~ 토요일 한 주를 반환
@@ -59,13 +60,6 @@ export function moveMonth(curruntWeeks: CalendarWeeks, isNext: boolean) {
 }
 
 /**
- * @returns YYYY-MM-DD
- */
-export function formatDate(date: Date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-}
-
-/**
  * 할 일 목록을 날짜별로 그룹하여 반환
  * @param todos
  * @returns YYYY-MM-DD : todos
@@ -88,17 +82,4 @@ export function groupTodosByDate(todos: TodoResponse[]): Record<string, TodoResp
   });
 
   return grouped;
-}
-
-/** 작은 달력 - 기준 날짜가 해당하는 월의 일들을 반환 */
-export function getMonthDates(referenceDate: Date): (Date | null)[] {
-  const referenceYear = referenceDate.getFullYear();
-  const referenceMonth = referenceDate.getMonth();
-
-  const firstDay = new Date(referenceYear, referenceMonth, 1).getDay();
-  const lastDate = new Date(referenceYear, referenceMonth + 1, 0).getDate();
-
-  return Array.from({ length: firstDay + lastDate }, (_, index) => {
-    return index < firstDay ? null : new Date(referenceYear, referenceMonth, index - firstDay + 1);
-  });
 }

@@ -1,6 +1,6 @@
 import { Calendar, Flag } from "@/assets/icons";
-import { formatDate } from "@/components/calendar/utils";
 import type { TodoResponse } from "@/types/todos.types";
+import { formatDate } from "@/utils/calendar";
 
 interface TodoInfoProps {
   todo: TodoResponse;

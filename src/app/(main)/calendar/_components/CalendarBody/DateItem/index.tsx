@@ -1,8 +1,8 @@
-import TodoItem from "../../TodoItem";
-import { THIS_WEEK_INDEX } from "../../constants";
-import type { CalendarWeeks } from "../../types";
+import { THIS_WEEK_INDEX } from "../../../index.constants";
+import type { CalendarWeeks } from "../../../index.types";
+import { getCalendarWeeks, nextWeek, previousWeek } from "../../../index.utils";
+import CalendarTodoItem from "../../CalendarTodoItem";
 import { CalendarDot } from "@/assets/icons";
-import { getCalendarWeeks, nextWeek, previousWeek } from "@/components/calendar/utils";
 import { useViewport } from "@/hooks/viewport/useViewport";
 import type { TodoResponse } from "@/types/todos.types";
 import clsx from "clsx";
@@ -120,7 +120,7 @@ export default function DateItem({
                       key={todo.id}
                     >
                       {(isDesktop && isMonthView) || (!isMonthView && isThisWeek) ? (
-                        <TodoItem
+                        <CalendarTodoItem
                           className={`${isMonthView ? "h-24" : "h-30"}`}
                           todo={todo}
                         />

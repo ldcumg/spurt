@@ -1,4 +1,4 @@
-import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE, TITLE_MAX_LENGTH } from "./constants";
+import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE, TITLE_MAX_LENGTH } from "./index.constants";
 import { EMOJI_REGEX } from "@/constants/regex";
 import type { GoalResponse } from "@/types/goals.types";
 

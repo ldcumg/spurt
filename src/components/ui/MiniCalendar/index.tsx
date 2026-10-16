@@ -1,6 +1,6 @@
 import DayHeader from "../DayHeader";
-import { getMonthDates } from "../utils";
 import { Left, Right } from "@/assets/icons";
+import { getMonthDates } from "@/utils/calendar";
 import clsx from "clsx";
 import { useState } from "react";
 

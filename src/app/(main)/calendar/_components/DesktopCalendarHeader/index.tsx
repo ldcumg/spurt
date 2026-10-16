@@ -1,7 +1,7 @@
-import { THIS_WEEK_INDEX } from "../constants";
-import type { CalendarWeeks } from "../types";
+import { THIS_WEEK_INDEX } from "../../index.constants";
+import type { CalendarWeeks } from "../../index.types";
+import { moveMonth } from "../../index.utils";
 import { Left, Right } from "@/assets/icons";
-import { moveMonth } from "@/components/calendar/utils";
 import Button from "@/components/ui/Button";
 import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
 import type { GoalListItem } from "@/types/goals.types";

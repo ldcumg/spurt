@@ -1,9 +1,9 @@
-import { THIS_WEEK_INDEX } from "../constants";
-import { useCalendarWheel } from "../hooks";
-import type { CalendarWeeks } from "../types";
+import { THIS_WEEK_INDEX } from "../../index.constants";
+import { useCalendarWheel } from "../../index.hooks";
+import type { CalendarWeeks } from "../../index.types";
 import DateItem from "./DateItem";
-import { formatDate } from "@/components/calendar/utils";
 import type { TodoResponse } from "@/types/todos.types";
+import { formatDate } from "@/utils/calendar";
 
 interface CalendarBodyProps {
   calendarWeeks: CalendarWeeks;
