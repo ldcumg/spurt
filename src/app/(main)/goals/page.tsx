@@ -1,10 +1,10 @@
 "use client";
 
 import { FlagFilled, More, Plus, Right } from "@/assets/icons/index";
-import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import ProgressRing from "@/components/ui/ProgressRing";
+import TodoFormTrigger from "@/components/ui/TodoFormTrigger";
 import TodoItem from "@/components/ui/TodoItem";
 import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
@@ -121,10 +121,10 @@ export default function GoalPage() {
               type="todo"
               className="[&>p]:!block"
             />
-            <AddTodoTrigger
-              renderItem={(addTodoOpen) => (
+            <TodoFormTrigger
+              renderItem={(todoFormOpen) => (
                 <Button
-                  onClick={addTodoOpen}
+                  onClick={todoFormOpen}
                   variant={"outline"}
                   className="flex flex-row items-center justify-center gap-8 rounded-full"
                 >

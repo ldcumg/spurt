@@ -1,14 +1,15 @@
 "use client";
 
+import type { FormState } from "../../index.types";
 import { Calendar } from "@/assets/icons";
-import { validateDueDate } from "@/components/ui/AddTodoTrigger/index.utils";
 import MiniCalendar from "@/components/ui/MiniCalendar";
+import { validateDueDate } from "@/components/ui/TodoFormTrigger/index.utils";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
 
 interface DateInputProps {
-  selectedDate: Date | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  selectedDate: FormState["selectedDate"];
+  setSelectedDate: React.Dispatch<React.SetStateAction<FormState["selectedDate"]>>;
   error?: string;
   setError: React.Dispatch<React.SetStateAction<string>>;
 }

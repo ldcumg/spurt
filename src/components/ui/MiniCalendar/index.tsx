@@ -1,11 +1,12 @@
 import DayHeader from "../DayHeader";
+import type { FormState } from "../TodoFormTrigger/index.types";
 import { Left, Right } from "@/assets/icons";
 import { getMonthDates } from "@/utils/calendar";
 import clsx from "clsx";
 import { useState } from "react";
 
 interface MiniCalendarProps {
-  selectedDate: Date | null;
+  selectedDate: FormState["selectedDate"];
   handleDateSelect: (date: Date | null) => void;
 }
 

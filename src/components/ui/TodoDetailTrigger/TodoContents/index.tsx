@@ -18,7 +18,7 @@ export default function TodoContents({ todo: { fileUrl, linkUrl, noteIds } }: To
             <div className="flex flex-row items-center justify-between">
               <span className="flex flex-row gap-8">
                 <Temporary className="size-24 text-neutral-400" />
-                <span>{getFileName(fileUrl)}</span>
+                <span>{getFileName(fileUrl, "file")}</span>
               </span>
               <button
                 onClick={() => downloadFile(fileUrl)}

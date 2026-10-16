@@ -1,6 +1,6 @@
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE, TITLE_MAX_LENGTH } from "./index.constants";
+import type { FormState } from "./index.types";
 import { EMOJI_REGEX } from "@/constants/regex";
-import type { GoalResponse } from "@/types/goals.types";
 
 /** title 유효성 검사 */
 export function validateTitle(titleInput: string, setError: (errorMassage: string) => void) {
@@ -26,7 +26,7 @@ export function validateTitle(titleInput: string, setError: (errorMassage: strin
 }
 
 /** 목표 선택 유효성 검사 */
-export function validateGoal(selectedGoal: GoalResponse | null, setError: (errorMassage: string) => void) {
+export function validateGoal(selectedGoal: FormState["selectedGoal"], setError: (errorMassage: string) => void) {
   if (!selectedGoal) {
     setError("목표를 선택해 주세요");
     return true;
@@ -37,7 +37,7 @@ export function validateGoal(selectedGoal: GoalResponse | null, setError: (error
 }
 
 /** 마감 기한 유효성 검사 */
-export function validateDueDate(selectedDate: Date | null, setError: (errorMassage: string) => void) {
+export function validateDueDate(selectedDate: FormState["selectedDate"], setError: (errorMassage: string) => void) {
   if (selectedDate && selectedDate.toDateString() === "Invalid Date") {
     setError("잘못된 날짜 형식입니다");
     return true;
@@ -79,7 +79,6 @@ export function validateFile(
 /** linkUrl 유효성 검사 */
 export function validateLinkUrl(linkInput: string, setError: (errorMassage: string) => void) {
   const linkValue = linkInput.trim();
-
   if (linkValue.length === 0) {
     setError("");
     return false;

@@ -1,10 +1,10 @@
 "use client";
 
 import { Right, Plus } from "@/assets/icons/index";
-import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
 import ProgressRing from "@/components/ui/ProgressRing";
+import TodoFormTrigger from "@/components/ui/TodoFormTrigger";
 import TodoItem from "@/components/ui/TodoItem";
 import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
@@ -78,10 +78,10 @@ export default function DashboardPage() {
         <div className="bg-primary-100 flex flex-col gap-10 rounded-md p-20 shadow-sm">
           <p className="text-title-md leading-none">지금까지 정말 잘하고 있어요!</p>
           <p className="text-body-lg text-neutral-500">작은 반복이 큰 변화를 만들어요.</p>
-          <AddTodoTrigger
-            renderItem={(addTodoOpen) => (
+          <TodoFormTrigger
+            renderItem={(todoFormOpen) => (
               <Button
-                onClick={addTodoOpen}
+                onClick={todoFormOpen}
                 variant={"outline"}
                 className="flex max-w-150 items-center justify-center gap-10 rounded-full bg-white py-20 shadow-sm"
               >

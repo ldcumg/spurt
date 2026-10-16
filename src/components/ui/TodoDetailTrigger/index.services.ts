@@ -1,3 +1,4 @@
+import { getFileName } from "./index.utils";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
 
 export const downloadFile = async (fileUrl: string) => {
@@ -9,7 +10,7 @@ export const downloadFile = async (fileUrl: string) => {
 
     const anchor = document.createElement("a");
     anchor.href = blobUrl;
-    anchor.download = fileUrl.split("/").pop() ?? "download";
+    anchor.download = getFileName(fileUrl, "download");
     anchor.click();
 
     URL.revokeObjectURL(blobUrl);
