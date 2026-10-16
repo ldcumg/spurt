@@ -74,7 +74,10 @@ export function groupTodosByDate(todos: TodoResponse[]): Record<string, TodoResp
   const grouped = todos.reduce<Record<string, TodoResponse[]>>((acc, todo) => {
     if (!todo.dueDate) return acc;
 
-    (acc[todo.dueDate] ??= []).push(todo);
+    const date = new Date(todo.dueDate);
+    const formattedDate = formatDate(date);
+
+    (acc[formattedDate] ??= []).push(todo);
 
     return acc;
   }, {});

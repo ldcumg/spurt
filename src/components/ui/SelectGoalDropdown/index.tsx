@@ -34,8 +34,11 @@ export default function SelectGoalDropdown({
 
   /** 드랍다운 밖 클릭 시 드랍다운 닫기 */
   const containerRef = useClickOutside(() => {
-    if (setError) validateGoal(selectedGoal, setError);
-    closeDropdown();
+    if (isOen.option) {
+      console.log("실행");
+      if (setError) validateGoal(selectedGoal, setError);
+      closeDropdown();
+    }
   });
 
   return (

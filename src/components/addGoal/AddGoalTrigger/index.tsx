@@ -1,15 +1,15 @@
 "use client";
 
+import { handleAddGoal } from "../service";
+import { AddGoalErrorMessage } from "../types";
+import { validateTitle } from "@/components/addTodo/utils";
 import Modal from "@/components/ui/Modal";
 import ModalActions from "@/components/ui/Modal/ModalActions";
 import TextInput from "@/components/ui/TextInput";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
-import { useRef, useState } from "react";
-import { handleAddGoal } from "../service";
-import { validateTitle } from "@/components/addTodo/utils";
-import { AddGoalErrorMessage } from "../types";
-import { createStateKeySetter } from "@/utils/stateUtills";
 import { useAddGoalMutation } from "@/hooks/mutations/goal/useGoalMutations";
+import { createStateKeySetter } from "@/utils/stateUtills";
+import { useRef, useState } from "react";
 
 interface AddGoalTriggerProps {
   children: React.ReactElement<{
@@ -53,7 +53,7 @@ export default function AddGoalTrigger({ children }: AddGoalTriggerProps) {
           className="flex h-full flex-col"
         >
           <TextInput
-            onBlur={(e) => validateTitle(e, setErrorByKey("title"))}
+            onBlur={(e) => validateTitle(e.target.value, setErrorByKey("title"))}
             error={error.title}
             name="title"
             label="목표 타이틀"
