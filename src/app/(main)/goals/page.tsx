@@ -1,36 +1,38 @@
 "use client";
-import { useEffect, useState } from "react";
-import { GOALS_API_PATH } from "@/constants/apiEndpoints";
-import { clientFetcher } from "@/lib/axios/clientFetcher";
 
+import { FlagFilled, More, Plus, Right } from "@/assets/icons/index";
+import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
+import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
+import ProgressRing from "@/components/ui/ProgressRing";
+import TodoItem from "@/components/ui/TodoItem";
+import { GOALS_API_PATH } from "@/constants/apiEndpoints";
+import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import { clientFetcher } from "@/lib/axios/clientFetcher";
 import { GetGoalListParams, GoalListResponse, GoalListItem } from "@/types/goals.types";
 import { TodoResponse } from "@/types/todos.types";
 import calcPercentage from "@/utils/calcPercentage";
-import { useUserQuery } from "@/hooks/queries/useUserQuery";
-
-import GoalHeader from "@/components/goals/GoalHeader";
-import GoalBody from "@/components/goals/GoalBody";
+import { useEffect, useState } from "react";
 
 //import { getGoalList } from "@/apis/goals/api";
 
 export default function GoalPage() {
   const [thisGoal, setThisGoal] = useState<GoalListItem | null>(null);
-  const [goalList, setGoalList] = useState<GoalListItem[]>([]);
   const [todoList, setTodoList] = useState<TodoResponse[]>([]);
+  //const thisGoal = MockGoalList.goals[0];
   const [isLoading, setIsLoading] = useState(true);
+  // 할 일 목록을 부모 state로 관리
 
   const { data: user } = useUserQuery();
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchGoalList() {
       try {
         setIsLoading(true);
 
         // 1. 목표 목록 조회
         const params: GetGoalListParams = { limit: 10 };
         const goalRes = await clientFetcher.get<GoalListResponse>(GOALS_API_PATH.base, { params });
-
-        setGoalList(goalRes.data.goals);
 
         let firstGoal: GoalListItem | null = null;
         if (goalRes.data.goals && goalRes.data.goals.length > 0) {
@@ -50,55 +52,8 @@ export default function GoalPage() {
       }
     }
 
-    fetchData();
+    fetchGoalList();
   }, []);
-
-  // 2. 드롭다운에서 다른 목표 선택 시
-  const handleSelectGoal = (selectedGoalId: string) => {
-    const target = goalList.find((item) => String(item.id) === selectedGoalId);
-    if (target) {
-      setThisGoal(target);
-    }
-  };
-
-  // 3. 목표 제목 수정 API 요청
-  const handleUpdateTitle = async (newTitle: string) => {
-    if (!thisGoal) return;
-    const targetGoalId = thisGoal.id;
-    try {
-      // PATCH /{teamId}/goals/{goalId}
-      await clientFetcher.patch(`${GOALS_API_PATH.base}/${thisGoal.id}`, {
-        title: newTitle,
-      });
-
-      // 현재 선택된 목표의 ID가 요청했던 ID와 동일할 때만 제목 갱신 (제목 갱신 중 다른 목표 선택 대응)
-      setThisGoal((prev) => (prev && prev.id === targetGoalId ? { ...prev, title: newTitle } : prev));
-
-      setGoalList((prevList) =>
-        prevList.map((item) => (item.id === targetGoalId ? { ...item, title: newTitle } : item)),
-      );
-    } catch (error) {
-      console.error("목표 제목 수정 실패:", error);
-      alert("목표 제목 수정에 실패했습니다.");
-    }
-  };
-
-  // 4. 새 목표 추가 API 요청
-  const handleAddGoal = async (newTitle: string) => {
-    try {
-      // POST /{teamId}/goals
-      const { data: createdGoal } = await clientFetcher.post<GoalListItem>(GOALS_API_PATH.base, {
-        title: newTitle,
-      });
-
-      // 목록에 추가 후 새로 만든 목표를 선택
-      setGoalList((prev) => [createdGoal, ...prev]);
-      setThisGoal(createdGoal);
-    } catch (error) {
-      console.error("새 목표 생성 실패:", error);
-      alert("새 목표 생성에 실패했습니다.");
-    }
-  };
 
   const handleToggleTodo = (id: number) => {
     setTodoList((prevList) => prevList.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
@@ -127,22 +82,116 @@ export default function GoalPage() {
       <header>
         <p className="text-display">{user?.name} 님의 목표</p>
       </header>
-      <GoalHeader
-        goal={thisGoal}
-        goalList={goalList!}
-        totalCount={totalCount}
-        doneCount={doneCount}
-        percentage={percentage}
-        onSelectGoal={handleSelectGoal}
-        onAddGoal={handleAddGoal}
-        onUpdateTitle={handleUpdateTitle}
-      />
-      <GoalBody
-        goal={thisGoal}
-        todosList={todosList}
-        donesList={donesList}
-        handleToggleTodo={handleToggleTodo}
-      />
+      <section>
+        <div className="grid h-auto grid-cols-2 gap-12 lg:flex lg:flex-row">
+          <div className="col-span-2 flex flex-2 flex-row items-center justify-between gap-8 rounded-md bg-white p-20 shadow-sm">
+            <div className="flex flex-row items-center justify-center gap-16">
+              <div className="bg-primary-100 flex size-64 shrink-0 items-center justify-center rounded-full">
+                <FlagFilled className="text-primary-600 size-32" />
+              </div>
+              <p className="text-title-md">{thisGoal.title}</p>
+            </div>
+            <More className="size-32" />
+          </div>
+          <div className="bg-primary-200 ratio-1 flex flex-1 flex-row items-center justify-between gap-24 rounded-md p-20 shadow-sm">
+            <ProgressRing
+              totalCount={totalCount || 1}
+              doneCount={doneCount}
+            />
+            <div className="hidden w-full min-[500px]:block">
+              <p className="text-title-xs text-primary-700 text-nowrap">목표 진행도</p>
+              <p className="text-title-md text-primary-700">
+                <span className="text-display text-primary-700">{percentage}</span>%
+              </p>
+            </div>
+          </div>
+          <div className="bg-primary-100 flex flex-1 flex-row items-end gap-12 rounded-md p-20 shadow-sm">
+            <p className="text-title-md text-nowrap">
+              노트 <br />
+              모아보기
+            </p>
+            <Right className="size-32 shrink-0" />
+          </div>
+        </div>
+      </section>
+      <section className="flex flex-1 flex-col gap-24 lg:flex-row">
+        <div className="flex-1 rounded-md bg-white p-12 shadow-sm">
+          <div className="flex h-60 flex-row items-center justify-between p-8">
+            <Badge
+              type="todo"
+              className="[&>p]:!block"
+            />
+            <AddTodoTrigger
+              renderItem={(addTodoOpen) => (
+                <Button
+                  onClick={addTodoOpen}
+                  variant={"outline"}
+                  className="flex flex-row items-center justify-center gap-8 rounded-full"
+                >
+                  <Plus className="size-16 shrink-0" />
+                  <p>할 일 추가</p>
+                </Button>
+              )}
+            />
+          </div>
+          <div>
+            {/**
+             * 목표 상세에서 todo의 타입에 노트와 링크가 없음
+             * -> 목표 상세에서 그 역할을 하려면 api 호출이 두번 필요함
+             *
+             * ==> 할 일 목록 호출해서 goalId 비교하기 !! 로 해결 ~
+             */}
+            {todosList.length > 0 ? (
+              [...todosList]
+                .filter((item) => item.goalId === thisGoal.id)
+                .map((item) => {
+                  //thisGoal.completedCount++;
+                  return (
+                    <TodoItem
+                      key={item.id}
+                      todo={item}
+                      onToggle={handleToggleTodo}
+                    />
+                  );
+                })
+            ) : (
+              <p>
+                최근 등록한 할 일이 없어요
+                <br />할 일을 등록해 보세요.
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="flex-1 rounded-md bg-white p-12 shadow-sm">
+          <div className="flex h-60 flex-row items-center justify-between p-8">
+            <Badge
+              type="done"
+              className="[&>p]:!block"
+            />
+          </div>
+          <div>
+            {donesList.length > 0 ? (
+              [...donesList]
+                .filter((item) => item.goalId === thisGoal.id)
+                .map((item) => {
+                  //thisGoal.completedCount--;
+                  return (
+                    <TodoItem
+                      key={item.id}
+                      todo={item}
+                      onToggle={handleToggleTodo}
+                    />
+                  );
+                })
+            ) : (
+              <p>
+                완료한 할 일이 없어요
+                <br />할 일을 완료해 보세요.
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

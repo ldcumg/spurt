@@ -29,7 +29,6 @@ export default function GoalDropdownButton({
 
   return (
     <button
-      id="option-button"
       type="button"
       onClick={() => setIsOpen(({ option, goalInput }) => ({ option: !option, goalInput }))}
       onKeyDown={handleEscKey}
