@@ -6,7 +6,7 @@ import type { PatchTodoRequest, PostTodoRequest } from "@/types/todos.types";
 import type { UploadUrlResponse } from "@/types/uploads.types";
 
 /** S3에 파일 업로드 */
-export const uploadFile = async (file: File) => {
+const uploadFile = async (file: File) => {
   const {
     data: { uploadUrl, url },
   } = await clientFetcher.post<UploadUrlResponse>(UPLOADS_API_PATH.files, {
@@ -34,6 +34,7 @@ export const handleTodoSubmit = async <TData, TError>({
   event.preventDefault();
 
   const formData = new FormData(event.currentTarget);
+  const isDone = formState.isDone;
   const title = formData.get("title") as string;
   const selectedGoal = formState.selectedGoal;
   const selectedDate = formState.selectedDate;
@@ -51,6 +52,9 @@ export const handleTodoSubmit = async <TData, TError>({
 
   if (isEdit) {
     const editData: PatchTodoRequest = {};
+
+    // 상태 수정 시 상태 반영
+    if (todo.done !== isDone) editData.done = isDone;
 
     // 제목 수정 시 제목 반영
     if (todo.title !== title) editData.title = title;

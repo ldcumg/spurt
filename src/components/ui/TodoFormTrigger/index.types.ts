@@ -5,6 +5,7 @@ export type FormState = {
   selectedGoal: TodoGoalSummary | null;
   selectedDate: Date | null;
   file: File | null;
+  isDone: boolean;
 };
 
 export type TodoFormErrorMassage = {

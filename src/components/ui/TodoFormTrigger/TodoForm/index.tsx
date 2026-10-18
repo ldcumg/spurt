@@ -4,6 +4,7 @@ import { handleTodoSubmit } from "../index.services";
 import type { TodoFormErrorMassage, FormState } from "../index.types";
 import { validateLinkUrl, validateTitle } from "../index.utils";
 import DateInput from "./DateInput";
+import StatusInput from "./StatusInput";
 import ModalActions from "@/components/ui/Modal/ModalActions";
 import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
 import TextInput from "@/components/ui/TextInput";
@@ -27,6 +28,7 @@ export default function TodoForm({ todoFormClose, aleadySelectedGoal, aleadySele
     file: null,
     selectedGoal: todo?.goal ?? aleadySelectedGoal ?? null,
     selectedDate: todo?.dueDate ? new Date(todo.dueDate) : (aleadySelectedDate ?? null),
+    isDone: todo?.done ?? false,
   });
   const setFormStateByKey = createStateKeySetter(setFormState);
 
@@ -41,6 +43,12 @@ export default function TodoForm({ todoFormClose, aleadySelectedGoal, aleadySele
       onSubmit={(event) => handleTodoSubmit({ event, formState, setErrorByKey, mutate, todoFormClose, todo })}
       ref={formRef}
     >
+      {todo && (
+        <StatusInput
+          isDone={formState.isDone}
+          setIsDone={setFormStateByKey("isDone")}
+        />
+      )}
       <TextInput
         onBlur={(e) => validateTitle(e.target.value, setErrorByKey("title"))}
         error={error.title}
