@@ -22,7 +22,7 @@ export default function StatusCheckbox({ isDone, onChange, label, className }: S
         onChange={onChange}
         className="peer sr-only"
       />
-      <Icon className={`size-32 ${isDone ? "text-primary-500" : "text-neutral-600"}`} />
+      <Icon className={`size-32 shrink-0 ${isDone ? "text-primary-600" : "text-neutral-600"}`} />
       {label && <span>{label}</span>}
     </label>
   );
