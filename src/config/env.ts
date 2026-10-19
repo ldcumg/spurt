@@ -1,13 +1,17 @@
 // 실행 환경
 export const NODE_ENV = process.env.NODE_ENV;
-export const environment = {
+export const nodeEnvironment = {
   isDevelopment: NODE_ENV === "development",
   isProduction: NODE_ENV === "production",
   isTest: NODE_ENV === "test",
 };
 
-// 배포 환경
+// vercel 배포 환경
 export const VERCEL_ENV = process.env.VERCEL_ENV;
+export const vercelEnviroment = {
+  isProduction: VERCEL_ENV === "production",
+  isPreview: VERCEL_ENV === "preview",
+};
 
 // api base url
 export const BACKEND_BASE_URL = process.env.API_BASE_URL;

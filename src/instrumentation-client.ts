@@ -1,10 +1,10 @@
 // This file configures the initialization of Sentry on the client.
 // The added config here will be used whenever a users loads a page in their browser.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
-import { environment, SENTRY_DSN, VERCEL_ENV } from "./config/env";
+import { nodeEnvironment, SENTRY_DSN, VERCEL_ENV } from "./config/env";
 import * as Sentry from "@sentry/nextjs";
 
-if (environment.isProduction) {
+if (nodeEnvironment.isProduction) {
   Sentry.init({
     dsn: SENTRY_DSN,
     environment: VERCEL_ENV,
