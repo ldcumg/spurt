@@ -1,9 +1,8 @@
 import Badge from ".";
-
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta: Meta<typeof Badge> = {
-  title: "components/Badge",
+  title: "COMPONENTS/Badge",
   component: Badge,
   tags: ["autodocs"],
   parameters: {

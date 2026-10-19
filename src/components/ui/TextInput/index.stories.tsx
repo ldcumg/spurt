@@ -2,7 +2,7 @@ import TextInput from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "components/TextInput",
+  title: "COMPONENTS/TextInput",
   component: TextInput,
   parameters: {
     layout: "centered",

@@ -1,9 +1,8 @@
+import Profile, { ProfileVariant } from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import Profile, { ProfileVariant } from ".";
-
 const meta: Meta<typeof Profile> = {
-  title: "Components/Profile",
+  title: "COMPONENTS/Profile",
   component: Profile,
   tags: ["autodocs"],
   argTypes: {

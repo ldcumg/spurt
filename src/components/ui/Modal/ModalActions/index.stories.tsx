@@ -2,7 +2,7 @@ import ModalActions from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "components/ModalActions",
+  title: "COMPONENTS/ModalActions",
   component: ModalActions,
   parameters: {
     layout: "centered",

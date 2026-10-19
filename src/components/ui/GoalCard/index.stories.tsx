@@ -1,10 +1,9 @@
 import GoalCard from ".";
-
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { MockGoalList, Todos } from "@/mocks/goalCard.mock";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "components/GoalCard",
+  title: "COMPONENTS/GoalCard",
   component: GoalCard,
   tags: ["autodocs"],
   parameters: {

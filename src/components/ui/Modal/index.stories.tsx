@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { useArgs } from "storybook/preview-api";
 
 const meta = {
-  title: "components/Modal",
+  title: "COMPONENTS/Modal",
   component: Modal,
   parameters: {
     layout: "centered",
