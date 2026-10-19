@@ -6,6 +6,14 @@ export interface DailyDoneStat {
   count: number;
 }
 
+// 로컬 기준 "YYYY-MM-DD" 반환 헬퍼
+function formatDateToYMD(d: Date): string {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const date = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${date}`;
+}
+
 export default function getDoneByDate(todos: TodoResponse[]): DailyDoneStat[] {
   const result: DailyDoneStat[] = [];
   const today = new Date();
@@ -14,10 +22,9 @@ export default function getDoneByDate(todos: TodoResponse[]): DailyDoneStat[] {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
 
-    const year = d.getFullYear();
+    const fullDate = formatDateToYMD(d);
     const month = String(d.getMonth() + 1).padStart(2, "0");
     const date = String(d.getDate()).padStart(2, "0");
-    const fullDate = `${year}-${month}-${date}`;
 
     result.push({
       date: `${month}/${date}`,
@@ -28,14 +35,7 @@ export default function getDoneByDate(todos: TodoResponse[]): DailyDoneStat[] {
 
   todos.forEach((item) => {
     if (item.done && item.updatedAt) {
-      // "2026-09-17T09:00:00.000Z" -> "2026-09-17" 추출
-      const updated = new Date(item.updatedAt);
-      const updatedDate = [
-        updated.getFullYear(),
-        String(updated.getMonth() + 1).padStart(2, "0"),
-        String(updated.getDate()).padStart(2, "0"),
-      ].join("-");
-
+      const updatedDate = formatDateToYMD(new Date(item.updatedAt));
       const targetDay = result.find((day) => day.fullDate === updatedDate);
 
       if (targetDay) {
