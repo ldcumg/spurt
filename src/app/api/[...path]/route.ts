@@ -22,7 +22,11 @@ async function handler(request: NextRequest, { params }: Params) {
     const body = rawBody.trim() ? JSON.parse(rawBody) : undefined;
     const searchParams = Object.fromEntries(request.nextUrl.searchParams);
 
-    const { data, status } = await serverFetcher(pathname, { method, data: body, params: searchParams });
+    const { data, status } = await serverFetcher(
+      pathname,
+      { method, data: body, params: searchParams },
+      { canRefresh: true },
+    );
 
     if (status === 204) return new NextResponse(null, { status });
 
