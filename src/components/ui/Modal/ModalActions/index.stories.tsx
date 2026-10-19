@@ -12,6 +12,7 @@ const meta = {
     onConfirm: () => {},
     closeButtonLabel: "취소",
     confirmButtonLabel: "확인",
+    isCloseDisabled: false,
     isConfirmDisabled: false,
   },
 } satisfies Meta<typeof ModalActions>;
@@ -52,7 +53,7 @@ export const AllStates: Story = {
 };
 
 export const Playground: Story = {
-  render: function Render({ closeButtonLabel, confirmButtonLabel, isConfirmDisabled }) {
+  render: function Render({ closeButtonLabel, confirmButtonLabel, isCloseDisabled, isConfirmDisabled }) {
     return (
       <div className="w-600">
         <ModalActions
@@ -60,6 +61,7 @@ export const Playground: Story = {
           onConfirm={() => alert(`${confirmButtonLabel} 버튼 실행`)}
           closeButtonLabel={closeButtonLabel}
           confirmButtonLabel={confirmButtonLabel}
+          isCloseDisabled={isCloseDisabled}
           isConfirmDisabled={isConfirmDisabled}
         />
       </div>

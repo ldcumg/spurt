@@ -1,6 +1,6 @@
 "use client";
 
-import { environment } from "@/config/env";
+import { nodeEnvironment } from "@/config/env";
 import { ONE_MINUTE_FOR_TANSTACK } from "@/constants/timeConstants";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -34,7 +34,7 @@ const QueryProvider = ({ children }: { children: ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {environment.isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}
+      {nodeEnvironment.isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 };
