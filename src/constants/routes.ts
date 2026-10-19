@@ -5,6 +5,7 @@ const ROUTES = {
   goals: "/goals",
   notes: "/notes",
   newNote: "/notes/new",
+  editNote: (noteId: string | number) => `/notes/${noteId}/edit`,
   login: "/login",
   signup: "/signup",
 } as const;

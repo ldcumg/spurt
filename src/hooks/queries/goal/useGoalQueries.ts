@@ -1,7 +1,12 @@
 import { goalQueryOptions } from ".";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-/** NOTE - 임시 전체 goal 요청 쿼리 */
+// [all] 목표 전체 요청
 export const useAllGoalQuery = () => {
-  return useQuery(goalQueryOptions.all());
+  const queryClient = useQueryClient();
+  return useQuery(goalQueryOptions.all(queryClient));
+};
+
+export const useDetailGoalQuery = (goalId: string | number) => {
+  return useQuery(goalQueryOptions.detail(goalId));
 };
