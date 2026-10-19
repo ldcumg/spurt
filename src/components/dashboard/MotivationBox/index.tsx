@@ -1,7 +1,6 @@
 import { Plus } from "@/assets/icons/index";
 import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
 import Button from "@/components/ui/Button";
-import React from "react";
 
 export default function MotivationBox() {
   return (

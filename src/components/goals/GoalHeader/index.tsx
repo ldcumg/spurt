@@ -43,15 +43,16 @@ export default function GoalHeader({
           doneCount={doneCount}
           percentage={percentage}
         />
-        <div className="bg-primary-100 flex flex-1 flex-row items-end gap-12 rounded-md p-20 shadow-sm">
+        <Link
+          href={"/notes"}
+          className="bg-primary-100 flex flex-1 cursor-pointer flex-row items-end gap-12 rounded-md p-20 shadow-sm"
+        >
           <p className="text-title-md text-nowrap">
             노트 <br />
             모아보기
           </p>
-          <Link href={"/notes"}>
-            <Right className="size-32 shrink-0" />
-          </Link>
-        </div>
+          <Right className="size-32 shrink-0" />
+        </Link>
       </div>
     </section>
   );
