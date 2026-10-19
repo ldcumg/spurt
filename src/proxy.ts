@@ -5,7 +5,21 @@ import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE } from "@/constants/timeCon
 import { AuthRefreshResponse, AuthResponse } from "@/types/auth.types";
 import axios, { isAxiosError } from "axios";
 import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
+
+const setTokenCookies = (request: NextRequest, tokens: { accessToken: string; refreshToken: string | null }) => {
+  const { accessToken, refreshToken } = tokens;
+
+  request.cookies.set(ACCESS_TOKEN, accessToken);
+  if (refreshToken) request.cookies.set(REFRESH_TOKEN, refreshToken);
+
+  const response = NextResponse.next({ request: { headers: request.headers } });
+  response.cookies.set(ACCESS_TOKEN, accessToken, { ...AUTH_COOKIE_OPTIONS, maxAge: ACCESS_TOKEN_MAX_AGE });
+  if (refreshToken) {
+    response.cookies.set(REFRESH_TOKEN, refreshToken, { ...AUTH_COOKIE_OPTIONS, maxAge: REFRESH_TOKEN_MAX_AGE });
+  }
+  return response;
+};
 
 // 서버 컴포넌트의 토큰 재발급 로직
 const refreshAccessToken = async (request: NextRequest) => {
@@ -13,17 +27,8 @@ const refreshAccessToken = async (request: NextRequest) => {
     const { data } = await axios.post<AuthRefreshResponse>(`${BASE_URL.server}${AUTH_API_PATH.refresh}`, {
       refreshToken: request.cookies.get(REFRESH_TOKEN)?.value,
     });
-
-    request.cookies.set(ACCESS_TOKEN, data.accessToken);
     // 10초 유예시간 내 재요청 대응
-    if (data.refreshToken) request.cookies.set(REFRESH_TOKEN, data.refreshToken);
-
-    const response = NextResponse.next({ request: { headers: request.headers } });
-    response.cookies.set(ACCESS_TOKEN, data.accessToken, { ...AUTH_COOKIE_OPTIONS, maxAge: ACCESS_TOKEN_MAX_AGE });
-    if (data.refreshToken) {
-      response.cookies.set(REFRESH_TOKEN, data.refreshToken, { ...AUTH_COOKIE_OPTIONS, maxAge: REFRESH_TOKEN_MAX_AGE });
-    }
-    return response;
+    return setTokenCookies(request, data);
   } catch (error) {
     // 쿠키 삭제 후 로그인 페이지로 이동 (유효하지 않은 refreshToken, 토큰 값 형식 이슈)
     if (isAxiosError(error) && error.response && error.response.status < 500) {
@@ -43,14 +48,7 @@ const loginPerfTestUser = async (request: NextRequest) => {
     email: process.env.PERF_TEST_EMAIL,
     password: process.env.PERF_TEST_PASSWORD,
   });
-
-  request.cookies.set(ACCESS_TOKEN, data.accessToken);
-  request.cookies.set(REFRESH_TOKEN, data.refreshToken);
-
-  const response = NextResponse.next({request: {headers: request.headers}});
-  response.cookies.set(ACCESS_TOKEN, data.accessToken, { ...AUTH_COOKIE_OPTIONS, maxAge: ACCESS_TOKEN_MAX_AGE });
-  response.cookies.set(REFRESH_TOKEN, data.refreshToken, { ...AUTH_COOKIE_OPTIONS, maxAge: REFRESH_TOKEN_MAX_AGE });
-  return response;
+  return setTokenCookies(request, data);
 };
 
 export const proxy = async (request: NextRequest) => {
