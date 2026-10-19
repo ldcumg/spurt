@@ -44,9 +44,16 @@ const refreshAccessToken = async (request: NextRequest) => {
 };
 
 const loginPerfTestUser = async (request: NextRequest) => {
-  const { data } = await axios.post<AuthResponse>(`${BASE_URL.server}${AUTH_API_PATH.login}`, {
-    email: process.env.PERF_TEST_EMAIL,
-    password: process.env.PERF_TEST_PASSWORD,
+  const login = () =>
+    axios.post<AuthResponse>(`${BASE_URL.server}${AUTH_API_PATH.login}`, {
+      email: process.env.PERF_TEST_EMAIL,
+      password: process.env.PERF_TEST_PASSWORD,
+    });
+  const { data } = await login().catch(async (error) => {
+    // 같은 계정으로 동시 로그인하여 409 발생시 1초 뒤 재시도
+    if (!isAxiosError(error) || error.response?.status !== 409) throw error;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return login();
   });
   return setTokenCookies(request, data);
 };
