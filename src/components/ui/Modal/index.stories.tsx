@@ -10,6 +10,12 @@ const meta = {
   parameters: {
     layout: "centered",
   },
+  args: {
+    title: "모달 제목",
+    isOpen: true,
+    onClose: () => {},
+    children: "모달 본문",
+  },
 } satisfies Meta<typeof Modal>;
 
 export default meta;
@@ -17,13 +23,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    title: "모달 제목",
-    isOpen: true,
-    onClose: () => {},
-    children: "모달 본문",
-  },
-
   render: function Render({ title, children }) {
     const [{ isOpen }, updateArgs] = useArgs();
 
@@ -44,13 +43,6 @@ export const Default: Story = {
 };
 
 export const WithActions: Story = {
-  args: {
-    title: "모달 제목",
-    isOpen: true,
-    onClose: () => {},
-    children: "모달 본문",
-  },
-
   render: function Render({ title, children }) {
     const [{ isOpen }, updateArgs] = useArgs();
 
