@@ -1,17 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
-import { GOALS_API_PATH } from "@/constants/apiEndpoints";
-import { clientFetcher } from "@/lib/axios/clientFetcher";
-import { GetGoalListParams, GoalListResponse, GoalListItem } from "@/types/goals.types";
-import { TodoResponse } from "@/types/todos.types";
 
 import { FlagFilled, More, Plus, Right } from "@/assets/icons/index";
+import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import ProgressRing from "@/components/ui/ProgressRing";
 import TodoItem from "@/components/ui/TodoItem";
-import calcPercentage from "@/utils/calcPercentage";
+import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import { clientFetcher } from "@/lib/axios/clientFetcher";
+import { GetGoalListParams, GoalListResponse, GoalListItem } from "@/types/goals.types";
+import { TodoResponse } from "@/types/todos.types";
+import calcPercentage from "@/utils/calcPercentage";
+import { useEffect, useState } from "react";
 
 //import { getGoalList } from "@/apis/goals/api";
 
@@ -120,13 +121,18 @@ export default function GoalPage() {
               type="todo"
               className="[&>p]:!block"
             />
-            <Button
-              variant={"outline"}
-              className="flex flex-row items-center justify-center gap-8 rounded-full"
-            >
-              <Plus className="size-16 shrink-0" />
-              <p>할 일 추가</p>
-            </Button>
+            <AddTodoTrigger
+              renderItem={(addTodoOpen) => (
+                <Button
+                  onClick={addTodoOpen}
+                  variant={"outline"}
+                  className="flex flex-row items-center justify-center gap-8 rounded-full"
+                >
+                  <Plus className="size-16 shrink-0" />
+                  <p>할 일 추가</p>
+                </Button>
+              )}
+            />
           </div>
           <div>
             {/**

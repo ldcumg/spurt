@@ -1,8 +1,8 @@
 import { THIS_WEEK_INDEX } from "../constants";
+import { useCalendarWheel } from "../hooks";
 import type { CalendarWeeks } from "../types";
 import DateItem from "./DateItem";
 import { formatDate } from "@/components/calendar/utils";
-import { useCalendarWheel } from "@/hooks/calendar/useCalendarWheel";
 import type { TodoResponse } from "@/types/todos.types";
 
 interface CalendarBodyProps {
@@ -32,7 +32,6 @@ export default function CalendarBody({
     >
       {calendarWeeks.map((week, weekIdx) => {
         const isThisWeek = weekIdx === THIS_WEEK_INDEX;
-        const isMounthViewOrThisWeek = isMonthView || isThisWeek;
 
         return (
           <div
@@ -43,17 +42,18 @@ export default function CalendarBody({
             {week.map((date) => {
               const hasFirstDay = week.some((date) => date.getDate() === 1);
               const isNextMonthFirstWeek = hasFirstDay && (!isMonthView || date.getDate() <= 7);
+              const isToday = date.toDateString() === today.toDateString();
+              const isSelectedDate = selectedDate.toDateString() === date.toDateString();
 
               return (
                 <DateItem
                   key={date.toDateString()}
                   date={date}
-                  today={today}
+                  isToday={isToday}
+                  isSelectedDate={isSelectedDate}
                   isMonthView={isMonthView}
                   isThisWeek={isThisWeek}
-                  isMounthViewOrThisWeek={isMounthViewOrThisWeek}
                   isNextMonthFirstWeek={isNextMonthFirstWeek}
-                  selectedDate={selectedDate}
                   setSelectedDate={setSelectedDate}
                   setCalendarWeeks={setCalendarWeeks}
                   weekIdx={weekIdx}

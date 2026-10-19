@@ -20,10 +20,14 @@ async function handler(request: NextRequest, { params }: Params) {
     const method = request.method;
     const rawBody = request.body ? await request.text() : "";
     const body = rawBody.trim() ? JSON.parse(rawBody) : undefined;
-    // const body = request.body ? await request.json() : undefined;
+
     const searchParams = Object.fromEntries(request.nextUrl.searchParams);
 
-    const { data, status } = await serverFetcher(pathname, { method, data: body, params: searchParams });
+    const { data, status } = await serverFetcher(
+      pathname,
+      { method, data: body, params: searchParams },
+      { canRefresh: true },
+    );
 
     if (status === 204) return new NextResponse(null, { status });
 
