@@ -4,6 +4,8 @@ export const nodeEnvironment = {
   isDevelopment: NODE_ENV === "development",
   isProduction: NODE_ENV === "production",
   isTest: NODE_ENV === "test",
+  isNode: process.env.NEXT_RUNTIME === "nodejs",
+  isEdge: process.env.NEXT_RUNTIME === "edge",
 };
 
 // vercel 배포 환경

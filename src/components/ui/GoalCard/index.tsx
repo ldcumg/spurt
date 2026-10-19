@@ -10,9 +10,10 @@ import { TodoResponse } from "@/types/todos.types";
 interface GoalCardProps {
   goal: GoalListItem;
   todos?: TodoResponse[];
+  onToggle: (id: number) => void;
 }
 
-export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
+export default function GoalCard({ goal, todos = [], onToggle }: GoalCardProps) {
   // goal 데이터가 아예 없는 경우 방어
   if (!goal) return null;
 
@@ -54,6 +55,7 @@ export default function GoalCard({ goal, todos = [] }: GoalCardProps) {
               <TodoItem
                 key={item.id}
                 todo={item}
+                onToggle={onToggle}
               />
             ))
           ) : (
