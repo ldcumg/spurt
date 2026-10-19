@@ -1,10 +1,10 @@
+import { buildApiUrl } from "../index.utils";
 import { todoMocks } from "./mocks";
 import { TODOS_API_PATH } from "@/constants/apiEndpoints";
 import { TodoResponse } from "@/types/todos.types";
 import { http, HttpResponse } from "msw";
 
-export const todoHandlers = (buildApiUrl: (path: string) => string) => [
-  // 할 일 목록 조회 (GET)
+export const todoHandlers = [
   http.get(buildApiUrl(TODOS_API_PATH.base), () => {
     return HttpResponse.json(todoMocks);
   }),

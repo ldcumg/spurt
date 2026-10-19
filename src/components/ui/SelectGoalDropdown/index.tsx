@@ -6,7 +6,9 @@ import { INITAIL_OPEN_STATE } from "./constants";
 import type { OpenState } from "./types";
 import { validateGoal } from "@/components/addTodo/utils";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
+import { twMerge } from "@/lib/twMerge";
 import type { GoalListItem } from "@/types/goals.types";
+import clsx from "clsx";
 import { useState } from "react";
 
 interface SelectGoalDropdownProps {
@@ -15,6 +17,7 @@ interface SelectGoalDropdownProps {
   setSelectedGoal: React.Dispatch<React.SetStateAction<GoalListItem | null>>;
   error?: string;
   setError?: React.Dispatch<React.SetStateAction<string>>;
+  className?: string;
 }
 
 export default function SelectGoalDropdown({
@@ -23,6 +26,7 @@ export default function SelectGoalDropdown({
   setSelectedGoal,
   error,
   setError,
+  className,
 }: SelectGoalDropdownProps) {
   const [isOen, setIsOpen] = useState<OpenState>(INITAIL_OPEN_STATE);
   /** 드랍다운 닫기 */
@@ -30,12 +34,15 @@ export default function SelectGoalDropdown({
 
   /** 드랍다운 밖 클릭 시 드랍다운 닫기 */
   const containerRef = useClickOutside(() => {
-    if (setError) validateGoal(selectedGoal, setError);
-    closeDropdown();
+    if (isOen.option) {
+      console.log("실행");
+      if (setError) validateGoal(selectedGoal, setError);
+      closeDropdown();
+    }
   });
 
   return (
-    <div className="flex w-full flex-col gap-8">
+    <div className={twMerge(clsx("flex w-full flex-col gap-8", className))}>
       {label && (
         <label
           className="text-title-xs"
@@ -46,7 +53,7 @@ export default function SelectGoalDropdown({
       )}
 
       <div
-        className="relative w-full max-w-424"
+        className="relative w-full"
         ref={containerRef}
       >
         <GoalDropdownButton
