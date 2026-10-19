@@ -20,6 +20,7 @@ async function handler(request: NextRequest, { params }: Params) {
     const method = request.method;
     const rawBody = request.body ? await request.text() : "";
     const body = rawBody.trim() ? JSON.parse(rawBody) : undefined;
+
     const searchParams = Object.fromEntries(request.nextUrl.searchParams);
 
     const { data, status } = await serverFetcher(
