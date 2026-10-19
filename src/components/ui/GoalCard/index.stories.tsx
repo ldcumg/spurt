@@ -3,7 +3,7 @@ import { MockGoalList, Todos } from "@/mocks/goalCard.mock";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "COMPONENTS/GoalCard",
+  title: "UI/GoalCard",
   component: GoalCard,
   tags: ["autodocs"],
   parameters: {

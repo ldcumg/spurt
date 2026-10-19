@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { useArgs } from "storybook/internal/preview-api";
 
 const meta = {
-  title: "COMPONENTS/StatusCheckbox",
+  title: "UI/StatusCheckbox",
   component: StatusCheckbox,
 } satisfies Meta<typeof StatusCheckbox>;
 

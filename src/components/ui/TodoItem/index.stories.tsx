@@ -143,7 +143,7 @@ const Todos = {
 };
 
 const meta = {
-  title: "COMPONENTS/TodoItem",
+  title: "UI/TodoItem",
   component: TodoItem,
   tags: ["autodocs"],
   argTypes: {

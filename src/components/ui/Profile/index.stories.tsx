@@ -2,7 +2,7 @@ import Profile, { ProfileVariant } from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta: Meta<typeof Profile> = {
-  title: "COMPONENTS/Profile",
+  title: "UI/Profile",
   component: Profile,
   tags: ["autodocs"],
   argTypes: {

@@ -2,12 +2,11 @@ import ModalActions from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "COMPONENTS/ModalActions",
+  title: "UI/ModalActions",
   component: ModalActions,
   parameters: {
     layout: "centered",
   },
-  tags: ["autodocs"],
   argTypes: {
     onClose: {
       options: [true, false],

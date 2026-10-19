@@ -2,7 +2,7 @@ import { RADII } from "./constants";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "FOUNDATIONS",
+  title: "FOUNDATION",
 } satisfies Meta;
 
 export default meta;

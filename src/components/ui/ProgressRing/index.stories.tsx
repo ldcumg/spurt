@@ -2,7 +2,7 @@ import ProgressRing from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta: Meta<typeof ProgressRing> = {
-  title: "COMPONENTS/ProgressRing",
+  title: "UI/ProgressRing",
   component: ProgressRing,
   tags: ["autodocs"],
   argTypes: {
