@@ -16,6 +16,8 @@ import MotivationBox from "@/components/dashboard/MotivationBox";
 import ProgressBox from "@/components/dashboard/ProgressBox";
 import RecentTodosBox from "@/components/dashboard/RecentTodosBox";
 import GraphBox from "@/components/dashboard/GraphBox";
+import AddGoalTrigger from "@/components/addGoal/AddGoalTrigger";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const { data: user } = useUserQuery();
@@ -64,7 +66,7 @@ export default function DashboardPage() {
     <div className="flex flex-col gap-20 px-30 py-40">
       <DashBoardHeader userName={user && user.name} />
       {/**1열 */}
-      <section className="flex flex-col gap-20">
+      <section className="grid gap-20 md:grid-cols-2">
         <MotivationBox />
         <ProgressBox
           doneCount={doneCount}
@@ -87,17 +89,21 @@ export default function DashboardPage() {
         <div className="flex flex-row justify-between px-20">
           <p className="text-title-md">목표별 할 일</p>
           <div className="flex flex-row items-center gap-20">
-            <Button
-              variant={"outline"}
-              className="flex flex-row items-center justify-center gap-10 rounded-full bg-white"
-            >
-              <Plus
-                className="h-16 w-16 shrink-0"
-                viewBox="0 0 24 24"
-              />
-              목표 추가
-            </Button>
-            <p className="text-title-xs">더보기</p>
+            <AddGoalTrigger>
+              <Button
+                variant={"outline"}
+                className="flex flex-row items-center justify-center gap-10 rounded-full bg-white"
+              >
+                <Plus
+                  className="h-16 w-16 shrink-0"
+                  viewBox="0 0 24 24"
+                />
+                목표 추가
+              </Button>
+            </AddGoalTrigger>
+            <Link href={`/goals/1`}>
+              <p className="text-title-xs">더보기</p>
+            </Link>
           </div>
         </div>
         <div className="flex flex-col gap-10 md:grid md:grid-cols-2 lg:grid-cols-3">
