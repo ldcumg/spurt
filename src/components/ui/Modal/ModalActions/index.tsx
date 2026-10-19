@@ -4,7 +4,7 @@ import Button from "../../Button";
 
 interface ModalActionsProps {
   onClose?: () => void;
-  onConfirm?: () => void;
+  onConfirm: () => void;
   closeButtonLabel?: string;
   confirmButtonLabel?: string;
   isConfirmDisabled?: boolean;
@@ -24,7 +24,7 @@ export default function ModalActions({
   closeButtonLabel = "취소",
   confirmButtonLabel = "확인",
   isConfirmDisabled,
-  confirmButtonType = "submit",
+  confirmButtonType = "button",
 }: ModalActionsProps) {
   return (
     <div className="mt-auto flex w-full gap-10 pt-15 md:gap-12 md:pt-24">

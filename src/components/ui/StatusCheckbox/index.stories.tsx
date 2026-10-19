@@ -5,6 +5,10 @@ import { useArgs } from "storybook/internal/preview-api";
 const meta = {
   title: "UI/StatusCheckbox",
   component: StatusCheckbox,
+  args: {
+    checked: false,
+    onChange: () => {},
+  },
 } satisfies Meta<typeof StatusCheckbox>;
 
 export default meta;
@@ -12,11 +16,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const AllStates: Story = {
-  args: {
-    checked: false,
-    onChange: () => {},
-  },
-
   render: ({ checked, onChange }) => (
     <div className="flex flex-col gap-20">
       <div>
@@ -46,16 +45,12 @@ export const AllStates: Story = {
 };
 
 export const Playground: Story = {
-  args: {
-    checked: false,
-    onChange: () => {},
-  },
   parameters: {
     layout: "centered",
   },
 
-  render: ({ checked }) => {
-    const [_, updateArgs] = useArgs();
+  render: () => {
+    const [{ checked }, updateArgs] = useArgs();
 
     return (
       <StatusCheckbox

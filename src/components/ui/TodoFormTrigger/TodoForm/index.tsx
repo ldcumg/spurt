@@ -85,7 +85,10 @@ export default function TodoForm({ todoFormClose, aleadySelectedGoal, aleadySele
         placeholder="링크를 업로드해 주세요"
         defaultValue={todo?.linkUrl ?? undefined}
       />
-      <ModalActions onClose={todoFormClose} />
+      <ModalActions
+        onClose={todoFormClose}
+        confirmButtonType="submit"
+      />
     </form>
   );
 }
