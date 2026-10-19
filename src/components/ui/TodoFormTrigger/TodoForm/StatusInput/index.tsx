@@ -13,13 +13,13 @@ export default function StatusInput({ isDone, setIsDone }: StatusInputProps) {
       <label className="text-title-xs">상태 *</label>
       <div className="relative">
         <StatusCheckbox
-          isDone={!isDone}
+          checked={!isDone}
           onChange={() => setIsDone(false)}
           label="TO DO"
         />
         <StatusCheckbox
           className="absolute left-1/2"
-          isDone={isDone}
+          checked={isDone}
           onChange={() => setIsDone(true)}
           label="DONE"
         />

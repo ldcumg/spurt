@@ -13,30 +13,30 @@ type Story = StoryObj<typeof meta>;
 
 export const AllStates: Story = {
   args: {
-    isDone: true,
+    checked: false,
     onChange: () => {},
   },
 
-  render: ({ isDone, onChange }) => (
+  render: ({ checked, onChange }) => (
     <div className="flex flex-col gap-20">
       <div>
         <h2>체크 안된 상태</h2>
         <StatusCheckbox
-          isDone={!isDone}
+          checked={checked}
           onChange={onChange}
         />
       </div>
       <div>
         <h2>체크 상태</h2>
         <StatusCheckbox
-          isDone={isDone}
+          checked={!checked}
           onChange={onChange}
         />
       </div>
       <div>
         <h2>라벨 있는 상태</h2>
         <StatusCheckbox
-          isDone={isDone}
+          checked={!checked}
           onChange={onChange}
           label="라벨"
         />
@@ -47,24 +47,22 @@ export const AllStates: Story = {
 
 export const Playground: Story = {
   args: {
-    isDone: false,
+    checked: false,
     onChange: () => {},
   },
   parameters: {
     layout: "centered",
   },
 
-  render: ({ isDone }) => {
+  render: ({ checked }) => {
     const [_, updateArgs] = useArgs();
 
     return (
-      <div className="flex gap-200">
-        <StatusCheckbox
-          isDone={isDone}
-          onChange={() => updateArgs({ isDone: !isDone })}
-          label="체크 박스"
-        />
-      </div>
+      <StatusCheckbox
+        checked={checked}
+        onChange={() => updateArgs({ isDone: !checked })}
+        label="체크 박스"
+      />
     );
   },
 };
