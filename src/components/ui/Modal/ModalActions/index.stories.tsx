@@ -50,6 +50,14 @@ const meta = {
       },
       description: "확인 버튼 disabled",
     },
+    isCloseDisabled: {
+      table: {
+        defaultValue: {
+          summary: "false",
+        },
+      },
+      description: "닫기 버튼 disabled",
+    },
   },
 } satisfies Meta<typeof ModalActions>;
 
@@ -64,9 +72,17 @@ export const Playground: Story = {
     closeButtonLabel: "취소",
     confirmButtonLabel: "확인",
     isConfirmDisabled: false,
+    isCloseDisabled: false,
   },
 
-  render: function Render({ onClose, onConfirm, closeButtonLabel, confirmButtonLabel, isConfirmDisabled }) {
+  render: function Render({
+    onClose,
+    onConfirm,
+    closeButtonLabel,
+    confirmButtonLabel,
+    isCloseDisabled,
+    isConfirmDisabled,
+  }) {
     return (
       <div className="w-600">
         <ModalActions
@@ -74,6 +90,7 @@ export const Playground: Story = {
           onConfirm={onConfirm}
           closeButtonLabel={closeButtonLabel}
           confirmButtonLabel={confirmButtonLabel}
+          isCloseDisabled={isCloseDisabled}
           isConfirmDisabled={isConfirmDisabled}
         />
       </div>

@@ -35,10 +35,10 @@ export default function TodoItem({ todo, type = "default", onToggle }: TodoListI
           )}
         </button>
         <div
-          className={`flex min-w-0 flex-1 flex-col gap-2 ${type === "goal" ? "@md:grid @md:grid-cols-2 @md:items-center @md:gap-16" : ""} ${todo.done ? "line-through" : ""}`}
+          className={`flex min-w-0 flex-1 flex-col gap-2 ${type === "goal" ? "@md:grid @md:grid-cols-2 @md:items-center @md:gap-16" : ""} `}
         >
           <div className="min-w-0">
-            <p className="text-title-xs truncate">{todo.title}</p>
+            <p className={`text-title-xs truncate ${todo.done ? "line-through" : ""}`}>{todo.title}</p>
           </div>
 
           {type === "goal" ? (

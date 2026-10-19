@@ -36,7 +36,8 @@ function SearchField({ value, onChange }: SearchFieldProps) {
       <TextInput
         aria-label="노트 검색"
         value={value}
-        placeholder="노트 제목, 내용, 할 일, 목표로 검색해보세요."
+        maxLength={200}
+        placeholder="노트 제목으로 검색해보세요."
         onChange={(event) => onChange(event.target.value)}
       />
     </div>

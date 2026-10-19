@@ -6,7 +6,7 @@ import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
 import ProgressRing from "@/components/ui/ProgressRing";
 import TodoItem from "@/components/ui/TodoItem";
-import { GOALS_API_PATH } from "@/constants/apiEndpoints";
+import { GOALS_API_PATH, TODOS_API_PATH } from "@/constants/apiEndpoints";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
 import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals.types";
@@ -31,11 +31,7 @@ export default function DashboardPage() {
         const params: GetGoalListParams = { limit: 10 };
         const goalRes = await clientFetcher.get<GoalListResponse>(GOALS_API_PATH.base, { params });
 
-        let firstGoal: GoalListItem[] | null = null;
-        if (goalRes.data.goals && goalRes.data.goals.length > 0) {
-          firstGoal = goalRes.data.goals;
-          setGoalList(firstGoal);
-        }
+        setGoalList(goalRes.data.goals);
 
         const todoRes = await clientFetcher.get<{ todos: TodoResponse[] }>("/todos");
         if (todoRes.data.todos) {
@@ -49,8 +45,27 @@ export default function DashboardPage() {
     fetchData();
   }, []);
 
-  const handleToggleTodo = (id: number) => {
-    setTodoList((prevList) => prevList.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
+  const handleToggleTodo = async (id: number) => {
+    // 변경 전 대상 찾기
+    const targetTodo = todoList.find((item) => item.id === id);
+    if (!targetTodo) return;
+
+    // 낙관 업데이트
+    const nextDone = !targetTodo.done;
+    const now = new Date().toISOString();
+    setTodoList((prevList) =>
+      prevList.map((item) => (item.id === id ? { ...item, done: !item.done, updatedAt: now } : item)),
+    );
+
+    try {
+      await clientFetcher.patch(`${TODOS_API_PATH.base}/${id}`, { done: nextDone });
+    } catch (error) {
+      console.error("할 일 상태 변경 실패:", error);
+      alert("할 일 상태를 변경하지 못했습니다.");
+
+      // 서버 요청 실패 시 이전 상태로 롤백
+      setTodoList((prevList) => prevList.map((item) => (item.id === id ? targetTodo : item)));
+    }
   };
 
   const doneCount = todoList.filter((todo) => todo.done).length;
@@ -235,6 +250,7 @@ export default function DashboardPage() {
                     key={item.id}
                     goal={item}
                     todos={todoList.filter((todo) => todo.goalId === item.id)}
+                    onToggle={handleToggleTodo}
                   />
                 );
               })
