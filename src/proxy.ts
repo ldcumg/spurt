@@ -2,11 +2,10 @@ import { ACCESS_TOKEN, AUTH_COOKIE_OPTIONS, REFRESH_TOKEN } from "@/config/cooki
 import { AUTH_API_PATH, BASE_URL } from "@/constants/apiEndpoints";
 import ROUTES from "@/constants/routes";
 import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE } from "@/constants/timeConstants";
-import { AuthRefreshResponse } from "@/types/auth.types";
+import { AuthRefreshResponse, AuthResponse } from "@/types/auth.types";
 import axios, { isAxiosError } from "axios";
 import { NextResponse } from "next/server";
-
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 
 // 서버 컴포넌트의 토큰 재발급 로직
 const refreshAccessToken = async (request: NextRequest) => {
@@ -39,8 +38,28 @@ const refreshAccessToken = async (request: NextRequest) => {
   }
 };
 
+const loginPerfTestUser = async (request: NextRequest) => {
+  const { data } = await axios.post<AuthResponse>(`${BASE_URL.server}${AUTH_API_PATH.login}`, {
+    email: process.env.PERF_TEST_EMAIL,
+    password: process.env.PERF_TEST_PASSWORD,
+  });
+
+  request.cookies.set(ACCESS_TOKEN, data.accessToken);
+  request.cookies.set(REFRESH_TOKEN, data.refreshToken);
+
+  const response = NextResponse.next({request: {headers: request.headers}});
+  response.cookies.set(ACCESS_TOKEN, data.accessToken, { ...AUTH_COOKIE_OPTIONS, maxAge: ACCESS_TOKEN_MAX_AGE });
+  response.cookies.set(REFRESH_TOKEN, data.refreshToken, { ...AUTH_COOKIE_OPTIONS, maxAge: REFRESH_TOKEN_MAX_AGE });
+  return response;
+};
+
 export const proxy = async (request: NextRequest) => {
-  const { pathname } = request.nextUrl;
+  const { pathname, searchParams } = request.nextUrl;
+
+  if (process.env.PERF_TEST_KEY && searchParams.get("perf") === process.env.PERF_TEST_KEY) {
+    return loginPerfTestUser(request);
+  }
+
   const isAuthPage = pathname === ROUTES.login || pathname === ROUTES.signup;
   const hasRefreshToken = request.cookies.has(REFRESH_TOKEN);
 
