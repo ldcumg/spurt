@@ -60,7 +60,7 @@ export const Playground: Story = {
     return (
       <StatusCheckbox
         checked={checked}
-        onChange={() => updateArgs({ isDone: !checked })}
+        onChange={() => updateArgs({ checked: !checked })}
         label="체크 박스"
       />
     );
