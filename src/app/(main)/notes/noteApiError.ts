@@ -109,11 +109,3 @@ export const getNoteApiError = (error: unknown, context: NoteApiErrorContext): N
     canRetry: true,
   };
 };
-
-/** 4xx는 재시도하지 않고, 네트워크 및 5xx 오류만 한 번 재시도한다. */
-export const shouldRetryNoteQuery = (failureCount: number, error: unknown) => {
-  if (failureCount >= 1) return false;
-
-  const status = getNoteApiErrorStatus(error);
-  return status === null || status >= 500;
-};

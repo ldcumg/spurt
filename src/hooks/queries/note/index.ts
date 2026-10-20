@@ -1,4 +1,3 @@
-import { shouldRetryNoteQuery } from "@/app/(main)/notes/noteApiError";
 import { NOTES_API_PATH } from "@/constants/apiEndpoints";
 import NOTE_QUERY_KEYS, { type NoteListQueryParams } from "@/constants/queryKeys/note";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
@@ -22,7 +21,6 @@ export const noteQueryOptions = {
       },
       initialPageParam: null as number | null,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      retry: shouldRetryNoteQuery,
     }),
   detail: (noteId: number) =>
     queryOptions({
@@ -32,6 +30,5 @@ export const noteQueryOptions = {
 
         return response.data;
       },
-      retry: shouldRetryNoteQuery,
     }),
 };
