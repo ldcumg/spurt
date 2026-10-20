@@ -25,8 +25,6 @@ export default function GoalPage() {
 
   // zustand 전역 상태 액션
   const setGoalId = useGoalContext((state) => state.setGoalId);
-  const onGoalAdded = useGoalContext((state) => state.onGoalAdded);
-  const onGoalDeleted = useGoalContext((state) => state.onGoalDeleted);
 
   // tanstack query 서버 데이터 조회
   const { data: user } = useUserQuery();
@@ -66,10 +64,10 @@ export default function GoalPage() {
 
   // 목표 식별 시 Zustand 활성 목표 ID 동기화
   useEffect(() => {
-    if (thisGoal) {
+    if (thisGoal?.id) {
       setGoalId(thisGoal.id);
     }
-  }, [thisGoal, setGoalId]);
+  }, [thisGoal?.id, setGoalId]);
 
   // 투두 목록 조회 (투두 API)
   useEffect(() => {
@@ -95,12 +93,12 @@ export default function GoalPage() {
   };
 
   // [추가] 새 목표 추가 API 요청
-  const handleAddGoal = async (newTitle: string) => {
+  const handleAddGoal = (newTitle: string) => {
     addGoalMutate(
       { title: newTitle },
       {
         onSuccess: (createdGoal) => {
-          onGoalAdded(createdGoal);
+          setGoalId(createdGoal.id);
           router.push(`/goals/${createdGoal.id}`);
         },
         onError: (error) => {
@@ -133,13 +131,13 @@ export default function GoalPage() {
 
     deleteGoalMutate(deleteId, {
       onSuccess: () => {
-        // 1) Zustand 전역 스토어에서 다음 활성 목표 ID 계산 (삭제 반영)
-        const nextGoalId = onGoalDeleted(deleteId, goalList);
-
-        // 3) 다음 목표가 있으면 상세 페이지로, 없으면 대시보드로 이동
-        if (nextGoalId) {
-          router.push(`/goals/${nextGoalId}`);
+        const remainingGoals = goalList.filter((g) => g.id !== deleteId);
+        const nextGoal = remainingGoals[0] ?? null;
+        if (nextGoal) {
+          setGoalId(nextGoal.id);
+          router.push(`/goals/${nextGoal.id}`);
         } else {
+          setGoalId(null);
           router.push("/dashboard");
         }
       },
