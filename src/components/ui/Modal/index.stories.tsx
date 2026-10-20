@@ -21,10 +21,11 @@ export const Default: Story = {
     title: "모달 제목",
     isOpen: true,
     onClose: () => {},
+    isCloseDisabled: false,
     children: "모달 본문",
   },
 
-  render: function Render({ title, children }) {
+  render: function Render({ title, children, isCloseDisabled }) {
     const [{ isOpen }, updateArgs] = useArgs();
 
     return (
@@ -32,6 +33,7 @@ export const Default: Story = {
         title={title}
         isOpen={isOpen}
         onClose={() => updateArgs({ isOpen: false })}
+        isCloseDisabled={isCloseDisabled}
       >
         {children}
       </Modal>
@@ -47,7 +49,7 @@ export const WithActions: Story = {
     children: "모달 본문",
   },
 
-  render: function Render({ title, children }) {
+  render: function Render({ title, children, isCloseDisabled }) {
     const [{ isOpen }, updateArgs] = useArgs();
 
     return (
@@ -55,6 +57,7 @@ export const WithActions: Story = {
         title={title}
         isOpen={isOpen}
         onClose={() => updateArgs({ isOpen: false })}
+        isCloseDisabled={isCloseDisabled}
       >
         {children}
         <ModalActions
