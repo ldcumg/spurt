@@ -1,5 +1,3 @@
-import { TodoGoalSummary, TodoTag } from "./todos.types";
-
 // api request
 
 export type PostNoteRequest = {
@@ -49,7 +47,4 @@ export type NoteTodoSummary = {
   id: number;
   title: string;
   done: boolean;
-  createdAt?: string;
-  goal?: TodoGoalSummary | null;
-  tags?: TodoTag[];
 };
