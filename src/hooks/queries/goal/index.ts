@@ -9,7 +9,7 @@ export const goalQueryOptions = {
   list: (queryClient: QueryClient, params?: { cursor?: number | null; limit?: number }) =>
     queryOptions({
       queryKey: GOAL_QUERY_KEYS.list(params),
-      queryFn: async () => {
+      queryFn: async (): Promise<GoalListResponse> => {
         const response = await clientFetcher.get<GoalListResponse>(GOALS_API_PATH.base, { params });
         const { goals } = response.data;
 
@@ -18,16 +18,16 @@ export const goalQueryOptions = {
             if (prevDetail) {
               return { ...prevDetail, title: goal.title };
             }
+            return {
+              id: goal.id,
+              teamId: goal.teamId,
+              userId: goal.userId,
+              title: goal.title,
+              createdAt: goal.createdAt,
+              updatedAt: goal.updatedAt,
+              todos: [],
+            };
           });
-          return {
-            id: goal.id,
-            teamId: goal.teamId,
-            userId: goal.userId,
-            title: goal.title,
-            createdAt: goal.createdAt,
-            updatedAt: goal.updatedAt,
-            todos: [],
-          };
         }
 
         return response.data;
@@ -36,6 +36,12 @@ export const goalQueryOptions = {
   detail: (goalId: string | number) =>
     queryOptions({
       queryKey: GOAL_QUERY_KEYS.detail(goalId),
-      queryFn: () => clientFetcher.get<GoalResponse>(GOALS_API_PATH.detail(goalId)),
+      queryFn: async () => {
+        const { data } = await clientFetcher.get<GoalResponse>(GOALS_API_PATH.detail(goalId));
+        return data;
+      },
+      enabled: !!goalId,
+      staleTime: 1000 * 60 * 5,
+      gcTime: 1000 * 60 * 10,
     }),
 };

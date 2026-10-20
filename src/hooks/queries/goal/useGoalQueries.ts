@@ -8,6 +8,6 @@ export const useGoalListQuery = (params?: { cursor?: number | null; limit?: numb
 };
 
 // 목표 상세 조회
-export const useDetailGoalQuery = (goalId: string | number) => {
+export const useGoalDetailQuery = (goalId: string | number) => {
   return useQuery(goalQueryOptions.detail(goalId));
 };
