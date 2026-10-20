@@ -2,11 +2,24 @@ import { ACCESS_TOKEN, AUTH_COOKIE_OPTIONS, REFRESH_TOKEN } from "@/config/cooki
 import { AUTH_API_PATH, BASE_URL } from "@/constants/apiEndpoints";
 import ROUTES from "@/constants/routes";
 import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE } from "@/constants/timeConstants";
-import { AuthRefreshResponse } from "@/types/auth.types";
+import { AuthRefreshResponse, AuthResponse } from "@/types/auth.types";
 import axios, { isAxiosError } from "axios";
 import { NextResponse } from "next/server";
-
 import type { NextRequest } from "next/server";
+
+const setTokenCookies = (request: NextRequest, tokens: { accessToken: string; refreshToken: string | null }) => {
+  const { accessToken, refreshToken } = tokens;
+
+  request.cookies.set(ACCESS_TOKEN, accessToken);
+  if (refreshToken) request.cookies.set(REFRESH_TOKEN, refreshToken);
+
+  const response = NextResponse.next({ request: { headers: request.headers } });
+  response.cookies.set(ACCESS_TOKEN, accessToken, { ...AUTH_COOKIE_OPTIONS, maxAge: ACCESS_TOKEN_MAX_AGE });
+  if (refreshToken) {
+    response.cookies.set(REFRESH_TOKEN, refreshToken, { ...AUTH_COOKIE_OPTIONS, maxAge: REFRESH_TOKEN_MAX_AGE });
+  }
+  return response;
+};
 
 // 서버 컴포넌트의 토큰 재발급 로직
 const refreshAccessToken = async (request: NextRequest) => {
@@ -14,17 +27,8 @@ const refreshAccessToken = async (request: NextRequest) => {
     const { data } = await axios.post<AuthRefreshResponse>(`${BASE_URL.server}${AUTH_API_PATH.refresh}`, {
       refreshToken: request.cookies.get(REFRESH_TOKEN)?.value,
     });
-
-    request.cookies.set(ACCESS_TOKEN, data.accessToken);
     // 10초 유예시간 내 재요청 대응
-    if (data.refreshToken) request.cookies.set(REFRESH_TOKEN, data.refreshToken);
-
-    const response = NextResponse.next({ request: { headers: request.headers } });
-    response.cookies.set(ACCESS_TOKEN, data.accessToken, { ...AUTH_COOKIE_OPTIONS, maxAge: ACCESS_TOKEN_MAX_AGE });
-    if (data.refreshToken) {
-      response.cookies.set(REFRESH_TOKEN, data.refreshToken, { ...AUTH_COOKIE_OPTIONS, maxAge: REFRESH_TOKEN_MAX_AGE });
-    }
-    return response;
+    return setTokenCookies(request, data);
   } catch (error) {
     // 쿠키 삭제 후 로그인 페이지로 이동 (유효하지 않은 refreshToken, 토큰 값 형식 이슈)
     if (isAxiosError(error) && error.response && error.response.status < 500) {
@@ -39,8 +43,28 @@ const refreshAccessToken = async (request: NextRequest) => {
   }
 };
 
+const loginPerfTestUser = async (request: NextRequest) => {
+  const login = () =>
+    axios.post<AuthResponse>(`${BASE_URL.server}${AUTH_API_PATH.login}`, {
+      email: process.env.PERF_TEST_EMAIL,
+      password: process.env.PERF_TEST_PASSWORD,
+    });
+  const { data } = await login().catch(async (error) => {
+    // 같은 계정으로 동시 로그인하여 409 발생시 1초 뒤 재시도
+    if (!isAxiosError(error) || error.response?.status !== 409) throw error;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return login();
+  });
+  return setTokenCookies(request, data);
+};
+
 export const proxy = async (request: NextRequest) => {
-  const { pathname } = request.nextUrl;
+  const { pathname, searchParams } = request.nextUrl;
+
+  if (process.env.PERF_TEST_KEY && searchParams.get("perf") === process.env.PERF_TEST_KEY) {
+    return loginPerfTestUser(request);
+  }
+
   const isAuthPage = pathname === ROUTES.login || pathname === ROUTES.signup;
   const hasRefreshToken = request.cookies.has(REFRESH_TOKEN);
 
@@ -54,7 +78,7 @@ export const proxy = async (request: NextRequest) => {
 };
 
 // proxy 실행 경로
-// route handler, 정적 파일 등 제외
+// route handler, 정적 파일, sentry tunnel route 등 제외
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\..*).*)"],
+  matcher: ["/((?!api|monitoring|_next/static|_next/image|.*\\..*).*)"],
 };
