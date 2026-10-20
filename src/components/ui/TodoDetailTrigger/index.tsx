@@ -29,6 +29,7 @@ export default function TodoDetailTrigger({ todo, renderItem }: TodoDetailTrigge
 
   /** 노트 상세 패널 열기 */
   const handleNoteDetailOpen = (note: NoteResponse) => {
+    todoDetailClose();
     const noteViewModel = toNoteViewModel(note, note.todo.goal.title);
     setSelectedNote(noteViewModel);
     noteDetailOpen();
