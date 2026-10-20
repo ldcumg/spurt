@@ -15,6 +15,7 @@ export { default as HomeFilled } from "./Home_filled.svg";
 
 export { default as Note } from "./Note.svg";
 export { default as NoteFilled } from "./Note_filled.svg";
+export { default as NoteColor } from "./Note_color.svg";
 
 export { default as Star } from "./Star.svg";
 export { default as StarFilled } from "./Star_filled.svg";

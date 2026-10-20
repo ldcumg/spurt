@@ -1,7 +1,7 @@
 import { TODOS_API_PATH } from "@/constants/apiEndpoints";
 import TODO_QUERY_KEYS from "@/constants/queryKeys/todo";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
-import type { TodoListResponse } from "@/types/todos.types";
+import type { TodoListResponse, TodoResponse } from "@/types/todos.types";
 import { queryOptions, type QueryClient } from "@tanstack/react-query";
 
 export const todoQueryOptions = {
@@ -21,5 +21,10 @@ export const todoQueryOptions = {
 
         return response;
       },
+    }),
+  detail: (todoId: string | number) =>
+    queryOptions({
+      queryKey: TODO_QUERY_KEYS.detail(todoId),
+      queryFn: () => clientFetcher.get<TodoResponse>(TODOS_API_PATH.detail(todoId)),
     }),
 };
