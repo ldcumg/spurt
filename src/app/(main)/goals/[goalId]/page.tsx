@@ -155,8 +155,8 @@ export default function GoalPage() {
   };
 
   // 데이터 로딩 중 처리 (화면 깨짐 방지)
-  if (isLoading || isTodoLoading) {
-    return <div className="p-24">데이터를 불러오는 중입니다...</div>;
+  if (isLoading) {
+    return <div className="p-24">목표를 불러오는 중입니다...</div>;
   }
   // 목표가 아예 없을 때의 빈 상태 처리
   if (!thisGoal) {
@@ -194,6 +194,7 @@ export default function GoalPage() {
         todosList={todosList}
         donesList={donesList}
         handleToggleTodo={handleToggleTodo}
+        isTodoLoading={isTodoLoading}
       />
     </div>
   );

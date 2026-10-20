@@ -31,7 +31,9 @@ export default function GoalSection() {
   const goalList = goalData && "goals" in goalData ? goalData.goals : [];
 
   const handlePrefetchGoal = (targetGoalId: number) => {
-    queryClient.prefetchQuery(goalQueryOptions.detail(targetGoalId));
+    void queryClient.query(goalQueryOptions.detail(targetGoalId)).catch((error: unknown) => {
+      console.error("목표 프리패치 실패:", error);
+    });
   };
 
   if (isLoading) {

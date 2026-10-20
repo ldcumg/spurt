@@ -12,9 +12,10 @@ interface GoalTodoBoxProps {
   list: TodoResponse[];
   goal: GoalListItem;
   handleToggleTodo: (id: number) => void;
+  isLoading: boolean;
 }
 
-export default function GoalTodoBox({ variant, list, goal, handleToggleTodo }: GoalTodoBoxProps) {
+export default function GoalTodoBox({ variant, list, goal, handleToggleTodo, isLoading }: GoalTodoBoxProps) {
   return (
     <div className="flex-1 rounded-md bg-white p-12 shadow-sm">
       <div className="flex h-60 flex-row items-center justify-between p-8">
@@ -58,6 +59,8 @@ export default function GoalTodoBox({ variant, list, goal, handleToggleTodo }: G
                 />
               );
             })
+        ) : isLoading ? (
+          <p className="text-body-sm p-12 text-neutral-400">할 일을 불러오는 중입니다...</p>
         ) : (
           <TodoEmpty variant={variant} />
         )}
