@@ -1,5 +1,5 @@
 import { Bar, BarChart, CartesianGrid, LabelList, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import { dataSet } from "../../../app/(main)/dashboard/_components/types";
+import { dataSet } from "../types";
 
 interface GraphBoxProps {
   dataSet: dataSet[];

@@ -21,6 +21,7 @@ import Link from "next/link";
 
 export default function DashboardPage() {
   const { data: user } = useUserQuery();
+  const userName: string = user?.name || "체다치즈";
   const [goalList, setGoalList] = useState<GoalListItem[] | null>(null);
   const [todoList, setTodoList] = useState<TodoResponse[]>([]);
 
@@ -79,7 +80,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-20 px-30 py-40">
-      <DashBoardHeader userName={user && user.name} />
+      <DashBoardHeader userName={userName} />
       {/**1열 */}
       <section className="grid gap-20 md:grid-cols-2">
         <MotivationBox />
