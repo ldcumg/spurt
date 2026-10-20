@@ -7,7 +7,7 @@ import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
 import type { TodoGoalSummary } from "@/types/todos.types";
 import clsx from "clsx";
 
-interface DesctopCalendarHeaderProps {
+interface DesktopCalendarHeaderProps {
   calendarWeeks: CalendarWeeks;
   isMonthView: boolean;
   setCalendarWeeks: React.Dispatch<React.SetStateAction<CalendarWeeks>>;
@@ -18,7 +18,7 @@ interface DesctopCalendarHeaderProps {
   setSelectedGoal: React.Dispatch<React.SetStateAction<TodoGoalSummary | null>>;
 }
 
-export default function DesctopCalendarHeader({
+export default function DesktopCalendarHeader({
   calendarWeeks,
   isMonthView,
   setCalendarWeeks,
@@ -27,7 +27,7 @@ export default function DesctopCalendarHeader({
   currentWeekCalendar,
   selectedGoal,
   setSelectedGoal,
-}: DesctopCalendarHeaderProps) {
+}: DesktopCalendarHeaderProps) {
   /** 오늘로 이동 */
   const handlerClickToday = () => {
     setCalendarWeeks(currentWeekCalendar);
@@ -45,7 +45,7 @@ export default function DesctopCalendarHeader({
 
       {/* 뷰 전환 */}
       <button
-        className="text-body-lg absolute left-200"
+        className="text-body-lg absolute left-[20%]"
         onClick={() => setIsMonthView((prev) => !prev)}
       >
         <span className={clsx("rounded-2xl px-6", isMonthView && "bg-primary-500 text-white")}>월간</span>
@@ -74,7 +74,7 @@ export default function DesctopCalendarHeader({
       </span>
 
       <SelectGoalDropdown
-        className="h-50 w-350"
+        className="h-50 w-250 xl:w-350"
         selectedGoal={selectedGoal}
         setSelectedGoal={setSelectedGoal}
       />

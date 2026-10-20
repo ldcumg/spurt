@@ -3,7 +3,7 @@
 import type { CalendarWeeks } from "./index.types";
 import { getCalendarWeeks, groupTodosByDate } from "./index.utils";
 import CalendarBody from "@/app/(main)/calendar/_components/CalendarBody";
-import DesctopCalendarHeader from "@/app/(main)/calendar/_components/DesktopCalendarHeader";
+import DesktopCalendarHeader from "@/app/(main)/calendar/_components/DesktopCalendarHeader";
 import MobileCalendarHeader from "@/app/(main)/calendar/_components/MobileCalendarHeader";
 import TodoForDate from "@/app/(main)/calendar/_components/TodoForDate";
 import DayHeader from "@/components/ui/DayHeader";
@@ -19,7 +19,7 @@ export default function CalendarPage() {
   firstSunday.setDate(today.getDate() - today.getDay() - 14);
   const currentWeekCalendar = getCalendarWeeks(firstSunday);
   const [calendarWeeks, setCalendarWeeks] = useState<CalendarWeeks>(currentWeekCalendar);
-  const { isDesktop } = useViewport();
+  const { isTablet, isDesktop } = useViewport();
 
   const [isMonthView, setIsMonthView] = useState<boolean>(true);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
@@ -36,8 +36,8 @@ export default function CalendarPage() {
 
   return (
     <div className="flex min-h-full w-full flex-col items-center gap-16 p-4 md:p-24 xl:py-40">
-      {isDesktop ? (
-        <DesctopCalendarHeader
+      {isTablet || isDesktop ? (
+        <DesktopCalendarHeader
           calendarWeeks={calendarWeeks}
           isMonthView={isMonthView}
           setCalendarWeeks={setCalendarWeeks}
@@ -61,7 +61,7 @@ export default function CalendarPage() {
       )}
 
       {/* 달력 */}
-      <div className="flex min-h-480 w-full flex-col md:h-600 xl:h-800">
+      <div className="flex min-h-480 w-full flex-col md:h-560 xl:h-800">
         <DayHeader className="border" />
 
         <CalendarBody

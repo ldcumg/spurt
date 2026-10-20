@@ -41,6 +41,7 @@ export default function TodoDetailTrigger({ todo, renderItem }: TodoDetailTrigge
       <Modal
         className="p-32 md:p-40"
         ref={containerRef}
+        onClick={(e) => e.stopPropagation()}
         title={
           <span className="flex w-full flex-row gap-12 md:gap-16">
             <span>{todo.title}</span>
