@@ -1,5 +1,5 @@
-import type { NoteMock, NoteTone } from "../mock";
-import { FlagFilled, More, NoteFilled, Star, StarFilled, Todos } from "@/assets/icons";
+import type { NoteTone, NoteViewModel } from "../noteViewModel";
+import { Delete, FlagFilled, NoteFilled, Todos } from "@/assets/icons";
 import Button from "@/components/ui/Button";
 import type { ReactNode } from "react";
 
@@ -10,7 +10,7 @@ const NOTE_TONE_CLASSES: Record<NoteTone, string> = {
   yellow: "bg-yellow-light text-warning",
 };
 
-function NoteInfoRow({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
+function NoteInfoRow({ icon, label, value }: { icon: ReactNode; label: string; value: string | null }) {
   return (
     <div className="flex min-w-0 items-center gap-8 rounded-md bg-neutral-50 px-12 py-4">
       <span className="shrink-0">{icon}</span>
@@ -21,13 +21,13 @@ function NoteInfoRow({ icon, label, value }: { icon: ReactNode; label: string; v
 }
 
 interface NoteCardProps {
-  note: NoteMock;
-  onFavoriteToggle: (id: number) => void;
+  note: NoteViewModel;
   onSelect: (id: number) => void;
+  onDelete: (note: NoteViewModel) => void;
 }
 
-/** 한 건의 노트 내용과 중요 표시 동작을 보여 준다. */
-export default function NoteCard({ note, onFavoriteToggle, onSelect }: NoteCardProps) {
+/** 한 건의 노트 내용과 상세 보기 동작을 보여 준다. */
+export default function NoteCard({ note, onSelect, onDelete }: NoteCardProps) {
   const titleId = `note-card-title-${note.id}`;
 
   return (
@@ -48,26 +48,14 @@ export default function NoteCard({ note, onFavoriteToggle, onSelect }: NoteCardP
             type="button"
             variant="ghost"
             size="sm"
-            aria-label={note.isFavorite ? `${note.title} 중요 해제` : `${note.title} 중요 표시`}
-            aria-pressed={note.isFavorite}
-            onClick={() => onFavoriteToggle(note.id)}
-            className="px-8"
+            aria-label={`${note.title} 삭제`}
+            className="text-error hover:bg-coral-light px-8"
+            onClick={(event) => {
+              event.stopPropagation();
+              onDelete(note);
+            }}
           >
-            {note.isFavorite ? (
-              <StarFilled className="text-warning size-32" />
-            ) : (
-              <Star className="size-32 text-neutral-500" />
-            )}
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            aria-label={`${note.title} 더보기`}
-            className="px-8"
-            onClick={() => {}}
-          >
-            <More className="size-20 text-neutral-500" />
+            <Delete className="size-20" />
           </Button>
         </div>
       </div>
