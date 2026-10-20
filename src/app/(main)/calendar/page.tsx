@@ -35,7 +35,7 @@ export default function CalendarPage() {
   const todoGroupedByDate = groupTodosByDate(filteredTodoByGoal);
 
   return (
-    <div className="flex min-h-full w-full flex-col items-center gap-16 p-4 md:p-24 xl:py-40">
+    <div className="flex min-h-full w-full flex-col items-center gap-12 p-4 md:p-24 xl:py-40">
       {isTablet || isDesktop ? (
         <DesktopCalendarHeader
           calendarWeeks={calendarWeeks}
@@ -61,7 +61,7 @@ export default function CalendarPage() {
       )}
 
       {/* 달력 */}
-      <div className="flex min-h-480 w-full flex-col md:h-560 xl:h-800">
+      <div className="flex h-480 w-full flex-col md:h-560 xl:h-800">
         <DayHeader className="border" />
 
         <CalendarBody

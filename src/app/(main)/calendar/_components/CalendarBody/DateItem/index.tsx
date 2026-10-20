@@ -96,7 +96,7 @@ export default function DateItem({
         aleadySelectedDate={date}
         renderItem={(todoFormOpen) => (
           <div
-            className={`group relative flex w-full flex-col border p-4 hover:cursor-pointer ${isMonthView ? "h-70 md:h-100 xl:h-140" : isThisWeek ? "h-200 md:h-260 xl:h-400" : "h-50 md:h-60"}`}
+            className={`group relative flex w-full flex-col border p-4 hover:cursor-pointer ${isMonthView ? "h-70 md:h-100 xl:h-140" : isThisWeek ? "h-180 md:h-250 xl:h-400" : "h-50 md:h-60"}`}
             onClick={() => handleDateClick(todoFormOpen)}
           >
             <div className="flex">
@@ -113,42 +113,54 @@ export default function DateItem({
               </h4>
             </div>
 
-            <div className="flex h-full min-w-0 overflow-hidden">
+            <div className="flex h-full min-w-0">
               {todoForDate && (
                 <div
-                  className={`flex w-full min-w-0 gap-8 ${
-                    isThisWeek && !isMonthView
-                      ? "flex-col items-start py-12 xl:px-4"
-                      : `flex-row justify-between px-4 md:px-8 xl:px-0 ${isMonthView ? "items-center xl:flex-col xl:items-start xl:gap-4 xl:px-4" : "xl:py-8"}`
+                  className={`flex w-full min-w-0 flex-col ${
+                    isMonthView
+                      ? "mt-8 px-8 md:mt-16 md:gap-8 md:px-8 xl:mt-0 xl:gap-0 xl:px-0"
+                      : isThisWeek
+                        ? "mt-12 gap-4 xl:px-4"
+                        : "mt-4 px-4 md:mt-8 md:px-8 xl:px-12"
                   }`}
                 >
-                  {todoForDate.slice(0, sliceNumber).map((todo) => {
-                    const isDone = todo.done;
-                    return (
-                      <Fragment key={todo.id}>
-                        {(isMonthView ? isDesktop : isThisWeek) ? (
-                          <CalendarTodoItem
-                            className={`${isMonthView ? "h-24" : "h-28 xl:h-32"}`}
-                            todo={todo}
-                          />
-                        ) : (
-                          <CalendarDot
-                            className={`size-8 md:size-10 ${isDone ? "text-neutral-500" : "text-primary-500"}`}
-                          />
-                        )}
-                      </Fragment>
-                    );
-                  })}
+                  <div
+                    className={clsx(
+                      "flex w-full min-w-0 gap-8",
+                      isMonthView || !isThisWeek ? "flex-row" : "flex-col",
+                      isMonthView && "xl:flex-col xl:gap-4",
+                    )}
+                  >
+                    {todoForDate.slice(0, sliceNumber).map((todo) => {
+                      const isDone = todo.done;
+                      return (
+                        <Fragment key={todo.id}>
+                          {(isMonthView ? isDesktop : isThisWeek) ? (
+                            <CalendarTodoItem
+                              className={`${isMonthView ? "h-24" : "h-28 xl:h-32"}`}
+                              todo={todo}
+                            />
+                          ) : (
+                            <CalendarDot
+                              className={`size-8 md:size-10 ${isDone ? "text-neutral-500" : "text-primary-500"}`}
+                            />
+                          )}
+                        </Fragment>
+                      );
+                    })}
+                  </div>
 
-                  {todoForDate.length > sliceNumber && (
-                    <span
-                      className={`flex flex-row whitespace-nowrap text-neutral-400 ${
-                        isMonthView ? "text-body-md xl:mx-auto" : isThisWeek ? "text-body-md mx-auto" : "text-caption"
-                      }`}
-                    >
-                      + {todoForDate.length - sliceNumber}
-                    </span>
-                  )}
+                  <div>
+                    {todoForDate.length > sliceNumber && (
+                      <span
+                        className={`flex flex-row whitespace-nowrap text-neutral-400 ${
+                          isMonthView ? "text-body-md xl:mx-auto" : isThisWeek ? "text-body-md mx-auto" : "text-caption"
+                        }`}
+                      >
+                        +{todoForDate.length - sliceNumber}
+                      </span>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
