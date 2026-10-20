@@ -10,12 +10,12 @@ import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
 import { GOALS_API_PATH, TODOS_API_PATH } from "@/constants/apiEndpoints";
 import { TodoResponse } from "@/types/todos.types";
-import { type dataSet } from "@/components/dashboard/types";
-import DashBoardHeader from "@/components/dashboard/DashboardHeader";
-import MotivationBox from "@/components/dashboard/MotivationBox";
-import ProgressBox from "@/components/dashboard/ProgressBox";
-import RecentTodosBox from "@/components/dashboard/RecentTodosBox";
-import GraphBox from "@/components/dashboard/GraphBox";
+import { type dataSet } from "./_components/types";
+import DashBoardHeader from "./_components/DashboardHeader";
+import MotivationBox from "./_components/MotivationBox";
+import ProgressBox from "./_components/ProgressBox";
+import RecentTodosBox from "./_components/RecentTodosBox";
+import GraphBox from "./_components/GraphBox";
 import AddGoalTrigger from "@/components/addGoal/AddGoalTrigger";
 import Link from "next/link";
 

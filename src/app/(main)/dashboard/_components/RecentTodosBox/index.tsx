@@ -1,5 +1,5 @@
 import { TodoResponse } from "@/types/todos.types";
-import TodoItem from "../../ui/TodoItem";
+import TodoItem from "../../../../../components/ui/TodoItem";
 
 interface RecentTodosBoxProps {
   todoList: TodoResponse[];

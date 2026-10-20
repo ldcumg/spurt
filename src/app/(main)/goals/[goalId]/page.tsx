@@ -8,8 +8,8 @@ import { TodoResponse } from "@/types/todos.types";
 import calcPercentage from "@/utils/calcPercentage";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 
-import GoalHeader from "@/components/goals/GoalHeader";
-import GoalBody from "@/components/goals/GoalBody";
+import GoalHeader from "../_components/GoalHeader";
+import GoalBody from "../_components/GoalBody";
 import { useParams, useRouter } from "next/navigation";
 import { useGoalContext } from "@/hooks/state/goal/useGoalContext";
 
