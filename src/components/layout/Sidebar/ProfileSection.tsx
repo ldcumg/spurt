@@ -2,15 +2,25 @@
 
 import Button from "@/components/ui/Button";
 import Profile from "@/components/ui/Profile";
+import ROUTES from "@/constants/routes";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
 import { useDisclosure } from "@/hooks/disclosure/useDisclosure";
+import { useLogoutMutation } from "@/hooks/mutations/auth/useAuthMutations";
 import { useUserQuery } from "@/hooks/queries/user/useUserQueries";
+import { useRouter } from "next/navigation";
 
 export default function ProfileSection() {
   const { data: user } = useUserQuery();
 
   const { isOpen, toggle, close } = useDisclosure();
   const containerRef = useClickOutside(close);
+
+  const router = useRouter();
+  const { mutate: logout, isPending } = useLogoutMutation();
+
+  const handleLogout = () => {
+    logout(undefined, { onSuccess: () => router.replace(ROUTES.login) });
+  };
 
   return (
     <div
@@ -44,6 +54,8 @@ export default function ProfileSection() {
             type="button"
             variant="ghost"
             size="lg"
+            onClick={handleLogout}
+            disabled={isPending}
             className="text-body-md w-full text-left font-medium text-neutral-500"
           >
             로그아웃

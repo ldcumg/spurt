@@ -12,4 +12,8 @@ export const authMutationOptions = {
     mutationOptions({
       mutationFn: (body: PostSignupRequest) => clientFetcher.post(AUTH_API_PATH.signup, body),
     }),
+  logout: () =>
+    mutationOptions({
+      mutationFn: () => clientFetcher.post(AUTH_API_PATH.logout),
+    }),
 };
