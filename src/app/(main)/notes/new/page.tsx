@@ -1,6 +1,5 @@
 "use client";
 
-import MobileNavigation from "../components/MobileNavigation";
 import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
 import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError } from "../noteFormUtils";
 import DraftRestoreModal from "./components/DraftRestoreModal";
@@ -9,6 +8,7 @@ import NoteMetaPanel from "./components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
 import { useCreateNote } from "./hooks/useCreateNote";
 import { useNoteDraft } from "./hooks/useNoteDraft";
+import MobileNavigation from "@/components/layout/MobileNavigation";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
 import { useAddTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";

@@ -1,6 +1,5 @@
 "use client";
 
-import MobileNavigation from "./components/MobileNavigation";
 import NoteDeleteDialog from "./components/NoteDeleteDialog";
 import NoteDetailPanel from "./components/NoteDetailPanel";
 import NotesHero from "./components/NotesHero";
@@ -9,6 +8,7 @@ import NotesToolbar from "./components/NotesToolbar";
 import { useNoteDelete } from "./hooks/useNoteDelete";
 import { useNoteDetail } from "./hooks/useNoteDetail";
 import { useNotesList } from "./hooks/useNotesList";
+import MobileNavigation from "@/components/layout/MobileNavigation";
 import Button from "@/components/ui/Button";
 import ROUTES from "@/constants/routes";
 import { useRouter } from "next/navigation";

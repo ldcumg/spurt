@@ -1,9 +1,9 @@
 "use client";
 
-import MobileNavigation from "../../components/MobileNavigation";
 import { getNoteApiError, isNoteApiErrorStatus } from "../../noteApiError";
 import EditNoteForm from "./components/EditNoteForm";
 import EditPageState from "./components/EditPageState";
+import MobileNavigation from "@/components/layout/MobileNavigation";
 import { useNoteDetailQuery } from "@/hooks/queries/note/useNoteQueries";
 import { useParams } from "next/navigation";
 
