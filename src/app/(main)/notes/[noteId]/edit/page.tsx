@@ -1,11 +1,10 @@
 "use client";
 
+import { useNoteDetailQuery } from "@/hooks/queries/note/useNoteQueries";
+import { useParams } from "next/navigation";
 import { getNoteApiError, isNoteApiErrorStatus } from "../../noteApiError";
 import EditNoteForm from "./components/EditNoteForm";
 import EditPageState from "./components/EditPageState";
-import MobileNavigation from "@/components/layout/MobileNavigation";
-import { useNoteDetailQuery } from "@/hooks/queries/note/useNoteQueries";
-import { useParams } from "next/navigation";
 
 export default function EditNotePage() {
   const params = useParams<{ noteId: string }>();
@@ -17,8 +16,6 @@ export default function EditNotePage() {
 
   return (
     <div className="bg-surface text-foreground min-h-screen w-full min-w-0 bg-[radial-gradient(circle_at_top_right,var(--color-primary-50),var(--color-surface)_56%)]">
-      <MobileNavigation />
-
       {isNotFound ? (
         <EditPageState
           title="노트를 찾을 수 없어요"
