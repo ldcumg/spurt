@@ -4,7 +4,7 @@ import Button from "@/components/ui/Button";
 import TextInput from "@/components/ui/TextInput";
 import ROUTES from "@/constants/routes";
 import { EMAIL_PATTERN, VALIDATION_MESSAGES } from "@/constants/validation";
-import { useLoginMutation } from "@/hooks/mutations/useLoginMutation";
+import { useLoginMutation } from "@/hooks/mutations/auth/useAuthMutations";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
