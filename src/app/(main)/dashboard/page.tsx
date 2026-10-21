@@ -11,7 +11,7 @@ import AddGoalTrigger from "@/components/addGoal/AddGoalTrigger";
 import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
 import { GOALS_API_PATH, TODOS_API_PATH } from "@/constants/apiEndpoints";
-import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import { useUserQuery } from "@/hooks/queries/user/useUserQueries";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
 import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals.types";
 import { TodoResponse } from "@/types/todos.types";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import { useUserQuery } from "@/hooks/queries/user/useUserQueries";
 import { createGoalStore } from "@/hooks/state/goal/createGoalStore";
 import type { GoalStoreApi, GoalStoreOwner } from "@/hooks/state/goal/createGoalStore";
 import { createContext, ReactNode, useState } from "react";
