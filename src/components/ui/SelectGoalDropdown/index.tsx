@@ -4,7 +4,7 @@ import GoalDropdownButton from "./GoalDropdownButton";
 import GoalOptions from "./GoalOptions";
 import { INITAIL_OPEN_STATE } from "./constants";
 import type { OpenState } from "./types";
-import { validateGoal } from "@/components/addTodo/utils";
+import { validateGoal } from "@/components/ui/AddTodoTrigger/index.utils";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
 import { twMerge } from "@/lib/twMerge";
 import type { GoalListItem } from "@/types/goals.types";
