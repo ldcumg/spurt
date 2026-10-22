@@ -12,7 +12,7 @@ export default function Sidebar() {
       <div className="flex flex-col gap-24">
         <Link
           href={ROUTES.dashboard}
-          className="mr-auto"
+          className="mr-auto hidden md:block"
         >
           <Logo
             variant="horizontalWithTagline"

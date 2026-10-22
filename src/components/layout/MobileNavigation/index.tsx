@@ -23,18 +23,20 @@ export default function MobileNavigation() {
             aria-label="메뉴 닫기"
             onClick={() => setMenuOpen(false)}
           />
-          <div className="relative h-full w-280 [&>aside]:h-full [&>aside]:min-h-0">
+          <div className="relative flex h-full w-280 flex-col bg-white [&>aside]:min-h-0 [&>aside]:flex-1">
+            <div className="flex justify-end px-16 pt-16">
+              <Button
+                type="button"
+                variant="ghost"
+                size="md"
+                aria-label="메뉴 닫기"
+                className="px-6"
+                onClick={() => setMenuOpen(false)}
+              >
+                <X className="size-20" />
+              </Button>
+            </div>
             <Sidebar />
-            <Button
-              type="button"
-              variant="ghost"
-              size="md"
-              aria-label="메뉴 닫기"
-              className="absolute top-16 right-16 px-6"
-              onClick={() => setMenuOpen(false)}
-            >
-              <X className="size-20" />
-            </Button>
           </div>
         </div>
       )}
