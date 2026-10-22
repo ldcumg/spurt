@@ -1,50 +1,61 @@
 "use client";
 
-import { handleAddTodo } from "../index.services";
-import type { AddTodoErrorMassage, FormState } from "../index.types";
+import { handleTodoSubmit } from "../index.services";
+import type { TodoFormErrorMassage, FormState } from "../index.types";
 import { validateLinkUrl, validateTitle } from "../index.utils";
 import DateInput from "./DateInput";
+import StatusInput from "./StatusInput";
 import ModalActions from "@/components/ui/Modal/ModalActions";
 import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
 import TextInput from "@/components/ui/TextInput";
 import UploadInput from "@/components/ui/UploadInput";
-import { useAddTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
+import { useSaveTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import type { GoalListItem } from "@/types/goals.types";
+import type { TodoResponse } from "@/types/todos.types";
 import { createStateKeySetter } from "@/utils/stateUtills";
 import { useRef, useState } from "react";
 
-interface AddTodoFormProps {
-  addTodoClose: () => void;
+interface TodoFormProps {
+  todoFormClose: () => void;
   aleadySelectedGoal?: GoalListItem;
   aleadySelectedDate?: Date;
+  todo?: TodoResponse;
 }
 
-export default function AddTodoForm({ addTodoClose, aleadySelectedGoal, aleadySelectedDate }: AddTodoFormProps) {
+export default function TodoForm({ todoFormClose, aleadySelectedGoal, aleadySelectedDate, todo }: TodoFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [formState, setFormState] = useState<FormState>({
     file: null,
-    selectedGoal: aleadySelectedGoal ?? null,
-    selectedDate: aleadySelectedDate ?? null,
+    selectedGoal: todo?.goal ?? aleadySelectedGoal ?? null,
+    selectedDate: todo?.dueDate ? new Date(todo.dueDate) : (aleadySelectedDate ?? null),
+    isDone: todo?.done ?? false,
   });
   const setFormStateByKey = createStateKeySetter(setFormState);
 
-  const [error, setError] = useState<AddTodoErrorMassage>({ title: "", goal: "", dueDate: "", file: "", linkUrl: "" });
+  const [error, setError] = useState<TodoFormErrorMassage>({ title: "", goal: "", dueDate: "", file: "", linkUrl: "" });
   const setErrorByKey = createStateKeySetter(setError);
 
-  const { mutate: addTodoMutate } = useAddTodoMutation();
+  const { mutate } = useSaveTodoMutation(todo?.id);
 
   return (
     <form
       className="mt-16 flex h-full flex-col gap-12 md:mt-32 md:gap-16"
-      onSubmit={(event) => handleAddTodo({ event, formState, addTodoMutate, setErrorByKey, addTodoClose })}
+      onSubmit={(event) => handleTodoSubmit({ event, formState, setErrorByKey, mutate, todoFormClose, todo })}
       ref={formRef}
     >
+      {todo && (
+        <StatusInput
+          isDone={formState.isDone}
+          setIsDone={setFormStateByKey("isDone")}
+        />
+      )}
       <TextInput
         onBlur={(e) => validateTitle(e.target.value, setErrorByKey("title"))}
         error={error.title}
         name="title"
         label="제목 *"
         placeholder="할 일의 제목을 적어주세요"
+        defaultValue={todo?.title}
       />
       <SelectGoalDropdown
         error={error.goal}
@@ -64,6 +75,7 @@ export default function AddTodoForm({ addTodoClose, aleadySelectedGoal, aleadySe
         label="파일"
         file={formState.file}
         onFileChange={setFormStateByKey("file")}
+        placeholder={todo?.fileUrl ?? "파일을 업로드해주세요"}
       />
       <TextInput
         onBlur={(e) => validateLinkUrl(e.target.value, setErrorByKey("linkUrl"))}
@@ -71,8 +83,12 @@ export default function AddTodoForm({ addTodoClose, aleadySelectedGoal, aleadySe
         name="linkUrl"
         label="링크"
         placeholder="링크를 업로드해 주세요"
+        defaultValue={todo?.linkUrl ?? undefined}
       />
-      <ModalActions onClose={addTodoClose} />
+      <ModalActions
+        onClose={todoFormClose}
+        confirmButtonType="submit"
+      />
     </form>
   );
 }

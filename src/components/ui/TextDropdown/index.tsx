@@ -29,14 +29,18 @@ export default function TextDropdown({ options, layoutClassName, optionClassName
       className="relative"
       ref={containerRef}
     >
-      <button onClick={toggle}>
+      <button
+        className="flex h-full"
+        onClick={toggle}
+        type="button"
+      >
         <More className="size-24 shrink-0 cursor-pointer text-neutral-600" />
       </button>
 
       {isOpen && (
-        <div className={layoutClasses}>
+        <ul className={layoutClasses}>
           {options.map(({ lable, onClick }, idx) => (
-            <button
+            <li
               className={optionClasses}
               onClick={() => {
                 onClick();
@@ -45,9 +49,9 @@ export default function TextDropdown({ options, layoutClassName, optionClassName
               key={`${lable}-${idx}`}
             >
               {lable}
-            </button>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );

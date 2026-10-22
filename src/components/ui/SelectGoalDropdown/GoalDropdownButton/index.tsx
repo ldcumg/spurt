@@ -2,13 +2,13 @@
 
 import type { OpenState } from "../types";
 import { FlagFilled, Under, Up } from "@/assets/icons";
-import type { GoalResponse } from "@/types/goals.types";
+import type { TodoGoalSummary } from "@/types/todos.types";
 
 interface GoalDropdownButtonProps {
   isOptionOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<OpenState>>;
   closeDropdown: () => void;
-  selectedGoal: GoalResponse | null;
+  selectedGoal: TodoGoalSummary | null;
   error?: string;
 }
 

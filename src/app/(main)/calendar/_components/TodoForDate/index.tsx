@@ -2,7 +2,7 @@
 
 import CalendarTodoItem from "../CalendarTodoItem";
 import { Plus } from "@/assets/icons";
-import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
+import TodoFormTrigger from "@/components/ui/TodoFormTrigger";
 import type { TodoResponse } from "@/types/todos.types";
 import { formatDate } from "@/utils/calendar";
 
@@ -21,12 +21,12 @@ export default function TodoForDate({ selectedDate, todoGroupedByDate }: Selecte
           {selectedDate.getFullYear()}.{selectedDate.getMonth() + 1}.{selectedDate.getDate()}
         </h5>
 
-        <AddTodoTrigger
+        <TodoFormTrigger
           aleadySelectedDate={selectedDate}
-          renderItem={(addTodoOpen) => (
+          renderItem={(todoFormOpen) => (
             <button
               className="text-primary-500 text-title-sm flex flex-row items-center gap-4"
-              onClick={addTodoOpen}
+              onClick={todoFormOpen}
             >
               <Plus className="size-20" />
               <span>할 일 추가</span>

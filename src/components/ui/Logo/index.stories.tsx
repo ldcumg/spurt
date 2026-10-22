@@ -1,9 +1,8 @@
+import Logo, { type LogoVariant } from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import Logo, { type LogoVariant } from ".";
-
 const meta = {
-  title: "Components/Logo",
+  title: "UI/Logo",
   component: Logo,
   parameters: {
     layout: "fullscreen",

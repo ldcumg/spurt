@@ -2,8 +2,8 @@
 
 import { Flag, Todos } from "@/assets/icons/index";
 import AddGoalTrigger from "@/components/addGoal/AddGoalTrigger";
-import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 import Button from "@/components/ui/Button";
+import TodoFormTrigger from "@/components/ui/TodoFormTrigger";
 
 export default function ActionSection() {
   // 로그가 많이 찍혀 주석처리 합니다 - 유진
@@ -23,10 +23,10 @@ export default function ActionSection() {
         </Button>
       </AddGoalTrigger>
 
-      <AddTodoTrigger
-        renderItem={(addTodoOpen) => (
+      <TodoFormTrigger
+        renderItem={(todoFormOpen) => (
           <Button
-            onClick={addTodoOpen}
+            onClick={todoFormOpen}
             variant="outline"
             size="square"
             className="text-body-md aspect-square h-auto flex-1 font-semibold"
