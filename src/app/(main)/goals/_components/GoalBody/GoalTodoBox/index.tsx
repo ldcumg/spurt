@@ -5,6 +5,7 @@ import TodoItem from "@/components/ui/TodoItem";
 import { GoalListItem } from "@/types/goals.types";
 import { TodoResponse } from "@/types/todos.types";
 import TodoEmpty from "../TodoEmpty";
+import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 
 interface GoalTodoBoxProps {
   variant: "todo" | "done";
@@ -22,13 +23,19 @@ export default function GoalTodoBox({ variant, list, goal, handleToggleTodo }: G
           className="[&>p]:!block"
         />
         {variant === "todo" && (
-          <Button
-            variant={"outline"}
-            className="flex flex-row items-center justify-center gap-8 rounded-full"
-          >
-            <Plus className="size-16 shrink-0" />
-            <p>할 일 추가</p>
-          </Button>
+          <AddTodoTrigger
+            aleadySelectedGoal={goal}
+            renderItem={(addTodoOpen) => (
+              <Button
+                onClick={addTodoOpen}
+                variant={"outline"}
+                className="flex flex-row items-center justify-center gap-8 rounded-full"
+              >
+                <Plus className="size-16 shrink-0" />
+                <p>할 일 추가</p>
+              </Button>
+            )}
+          />
         )}
       </div>
       <div>
