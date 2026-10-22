@@ -3,7 +3,7 @@
 import TextDropdown from "../TextDropdown";
 import TodoFormTrigger from "../TodoFormTrigger";
 import { handleDeleteTodo } from "./index.services";
-import { Done, FlagFilled, Note, Todo } from "@/assets/icons/index";
+import { Done, FlagFilled, Note, Todo } from "@/assets/icons";
 import TodoDetailTrigger from "@/components/ui/TodoDetailTrigger";
 import { useDeleteTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import { TodoResponse } from "@/types/todos.types";
