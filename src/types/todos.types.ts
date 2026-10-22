@@ -2,7 +2,7 @@
 
 export type PostTodoRequest = {
   title: string;
-  goalId?: number;
+  goalId: number;
   fileUrl?: string;
   linkUrl?: string;
   dueDate?: string;

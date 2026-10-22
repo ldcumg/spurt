@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import TodoItem from ".";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const Todos = {
   todos: [
@@ -143,7 +143,7 @@ const Todos = {
 };
 
 const meta = {
-  title: "components/TodoItem",
+  title: "UI/TodoItem",
   component: TodoItem,
   tags: ["autodocs"],
   argTypes: {

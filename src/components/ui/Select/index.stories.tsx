@@ -8,7 +8,7 @@ const sortOptions: SelectOption[] = [
 ];
 
 const meta = {
-  title: "Components/Select",
+  title: "UI/Select",
   component: Select,
   parameters: { layout: "centered" },
   tags: ["autodocs"],
