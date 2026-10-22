@@ -4,14 +4,14 @@ import { useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
 import type { OpenState } from "../types";
 import AddGoalInput from "./AddGoalInput";
 import GoalOptionItem from "./GoalOptionItem";
-import { validateGoal } from "@/components/ui/AddTodoTrigger/index.utils";
-import type { GoalListItem } from "@/types/goals.types";
+import { validateGoal } from "@/components/ui/TodoFormTrigger/index.utils";
+import type { TodoGoalSummary } from "@/types/todos.types";
 
 interface GoalOptionsProps {
   isGoalInputOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<OpenState>>;
-  selectedGoal: GoalListItem | null;
-  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalListItem | null>>;
+  selectedGoal: TodoGoalSummary | null;
+  setSelectedGoal: React.Dispatch<React.SetStateAction<TodoGoalSummary | null>>;
   closeDropdown: () => void;
   setError: React.Dispatch<React.SetStateAction<string>> | undefined;
 }
@@ -25,7 +25,7 @@ export default function GoalOptions({
   setError,
 }: GoalOptionsProps) {
   /** 목표 선택 */
-  const handleSelect = (option: GoalListItem) => {
+  const handleSelect = (option: TodoGoalSummary) => {
     if (setError) validateGoal(option, setError);
     setSelectedGoal(option);
     closeDropdown();

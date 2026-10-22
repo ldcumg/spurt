@@ -28,6 +28,7 @@ export { default as Check } from "./Check.svg";
 export { default as Unhide } from "./Unhide.svg";
 export { default as Hide } from "./Hide.svg";
 
+export { default as Search } from "./Search_Icon.svg";
 export { default as Temporary } from "./Temporary.svg";
 export { default as Upload } from "./Upload.svg";
 export { default as Download } from "./Download.svg";
@@ -44,8 +45,5 @@ export { default as X } from "./X.svg";
 
 export { default as Up } from "./Up.svg";
 export { default as Under } from "./Under.svg";
-
-export { default as Search } from "./Search_Icon.svg";
-
 export { default as Right } from "./Right.svg";
 export { default as Left } from "./Left.svg";

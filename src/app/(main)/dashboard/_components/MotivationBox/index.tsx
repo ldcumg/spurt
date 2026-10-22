@@ -1,7 +1,7 @@
 import { Plus } from "@/assets/icons/index";
-import Button from "@/components/ui/Button";
 import { MotiveSprout } from "@/assets/images/dashboardpage";
-import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
+import Button from "@/components/ui/Button";
+import TodoFormTrigger from "@/components/ui/TodoFormTrigger";
 
 export default function MotivationBox() {
   return (
@@ -11,10 +11,10 @@ export default function MotivationBox() {
           <p className="text-title-md">지금까지 정말 잘하고 있어요!</p>
           <p className="text-body-lg text-neutral-500">작은 반복이 큰 변화를 만들어요.</p>
         </div>
-        <AddTodoTrigger
-          renderItem={(addTodoOpen) => (
+        <TodoFormTrigger
+          renderItem={(todoFormOpen) => (
             <Button
-              onClick={addTodoOpen}
+              onClick={todoFormOpen}
               variant={"outline"}
               size={"xl"}
               className="flex max-w-150 items-center justify-center gap-10 rounded-full bg-white py-20 shadow-sm"

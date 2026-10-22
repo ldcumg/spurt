@@ -2,62 +2,18 @@ import ModalActions from ".";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "components/ModalActions",
+  title: "UI/ModalActions",
   component: ModalActions,
   parameters: {
     layout: "centered",
   },
-  tags: ["autodocs"],
-  argTypes: {
-    onClose: {
-      options: [true, false],
-      control: "radio",
-      description: "닫기 버튼 함수",
-      type: {
-        name: "function",
-      },
-    },
-    closeButtonLabel: {
-      control: "text",
-      table: {
-        defaultValue: {
-          summary: "취소",
-        },
-      },
-      description: "닫기 버튼 라벨",
-    },
-    onConfirm: {
-      options: [true, false],
-      control: "radio",
-      description: "확인 버튼 함수",
-      type: {
-        name: "function",
-      },
-    },
-    confirmButtonLabel: {
-      table: {
-        defaultValue: {
-          summary: "확인",
-        },
-      },
-      description: "확인 버튼 라벨",
-    },
-    isConfirmDisabled: {
-      table: {
-        defaultValue: {
-          summary: "false",
-        },
-      },
-      description: "확인 버튼 disabled",
-    },
-    isCloseDisabled: {
-      table: {
-        defaultValue: {
-          summary: "false",
-        },
-      },
-      description: "닫기 버튼 disabled",
-    },
+  args: {
+    onClose: () => {},
+    onConfirm: () => {},
+    closeButtonLabel: "취소",
+    confirmButtonLabel: "확인",
+    isCloseDisabled: false,
+    isConfirmDisabled: false,
   },
 } satisfies Meta<typeof ModalActions>;
 
@@ -65,29 +21,44 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {
-  args: {
-    onClose: () => alert("취소 버튼 실행"),
-    onConfirm: () => alert("확인 버튼 실행"),
-    closeButtonLabel: "취소",
-    confirmButtonLabel: "확인",
-    isConfirmDisabled: false,
-    isCloseDisabled: false,
+export const AllStates: Story = {
+  render: function Render({ onClose, onConfirm, closeButtonLabel }) {
+    return (
+      <div className="flex w-500 flex-col gap-60">
+        <div>
+          <h2 className="text-title-lg">onClose가 없는 경우</h2>
+          <ModalActions
+            onConfirm={onConfirm}
+            closeButtonLabel={closeButtonLabel}
+          />
+        </div>
+        <div>
+          <h2 className="text-title-lg">onClose가 있는 경우</h2>
+          <ModalActions
+            onClose={onClose}
+            onConfirm={onConfirm}
+          />
+        </div>
+        <div>
+          <h2 className="text-title-lg">isConfirmDisabled가 true인 경우</h2>
+          <ModalActions
+            onClose={onClose}
+            onConfirm={onConfirm}
+            isConfirmDisabled={true}
+          />
+        </div>
+      </div>
+    );
   },
+};
 
-  render: function Render({
-    onClose,
-    onConfirm,
-    closeButtonLabel,
-    confirmButtonLabel,
-    isCloseDisabled,
-    isConfirmDisabled,
-  }) {
+export const Playground: Story = {
+  render: function Render({ closeButtonLabel, confirmButtonLabel, isCloseDisabled, isConfirmDisabled }) {
     return (
       <div className="w-600">
         <ModalActions
-          onClose={onClose}
-          onConfirm={onConfirm}
+          onClose={() => alert(`${closeButtonLabel} 버튼 실행`)}
+          onConfirm={() => alert(`${confirmButtonLabel} 버튼 실행`)}
           closeButtonLabel={closeButtonLabel}
           confirmButtonLabel={confirmButtonLabel}
           isCloseDisabled={isCloseDisabled}

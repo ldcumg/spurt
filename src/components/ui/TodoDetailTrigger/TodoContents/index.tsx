@@ -1,3 +1,4 @@
+import { downloadFile } from "../index.services";
 import { getFileName } from "../index.utils";
 import { Download, Link, Temporary } from "@/assets/icons";
 import type { TodoResponse } from "@/types/todos.types";
@@ -17,14 +18,14 @@ export default function TodoContents({ todo: { fileUrl, linkUrl, noteIds } }: To
             <div className="flex flex-row items-center justify-between">
               <span className="flex flex-row gap-8">
                 <Temporary className="size-24 text-neutral-400" />
-                <span>{getFileName(fileUrl)}</span>
+                <span>{getFileName(fileUrl, "file")}</span>
               </span>
-              <a
-                href={fileUrl}
-                download
+              <button
+                onClick={() => downloadFile(fileUrl)}
+                type="button"
               >
                 <Download className="size-24" />
-              </a>
+              </button>
             </div>
           )}
 

@@ -1,11 +1,11 @@
+import TodoEmpty from "../TodoEmpty";
 import { Plus } from "@/assets/icons";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import TodoFormTrigger from "@/components/ui/TodoFormTrigger";
 import TodoItem from "@/components/ui/TodoItem";
 import { GoalListItem } from "@/types/goals.types";
 import { TodoResponse } from "@/types/todos.types";
-import TodoEmpty from "../TodoEmpty";
-import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 
 interface GoalTodoBoxProps {
   variant: "todo" | "done";
@@ -24,11 +24,11 @@ export default function GoalTodoBox({ variant, list, goal, handleToggleTodo, isL
           className="[&>p]:!block"
         />
         {variant === "todo" && (
-          <AddTodoTrigger
+          <TodoFormTrigger
             aleadySelectedGoal={goal}
-            renderItem={(addTodoOpen) => (
+            renderItem={(todoFormOpen) => (
               <Button
-                onClick={addTodoOpen}
+                onClick={todoFormOpen}
                 variant={"outline"}
                 className="flex flex-row items-center justify-center gap-8 rounded-full"
               >

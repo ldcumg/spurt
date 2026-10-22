@@ -11,9 +11,9 @@ import { useCreateNote } from "./hooks/useCreateNote";
 import { useNoteDraft } from "./hooks/useNoteDraft";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
-import { useAddTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 // useAllGoalQuery -> useGoalListQuery 로 변경되었습니다.
 import { useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
+import { useSaveTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import type { TodoResponse } from "@/types/todos.types";
@@ -66,7 +66,7 @@ export default function NewNotePage() {
   const goalQuery = useGoalListQuery();
   const todoQuery = useAllTodoQuery();
   const userQuery = useUserQuery();
-  const addTodoMutation = useAddTodoMutation();
+  const addTodoMutation = useSaveTodoMutation();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState<JSONContent>(() => createEmptyNoteContent());
   const [selectedGoalId, setSelectedGoalId] = useState("");
