@@ -2,7 +2,7 @@
 
 import { handleAddGoal } from "../service";
 import { AddGoalErrorMessage } from "../types";
-import { validateTitle } from "@/components/addTodo/utils";
+import { validateTitle } from "@/components/ui/AddTodoTrigger/index.utils";
 import Modal from "@/components/ui/Modal";
 import ModalActions from "@/components/ui/Modal/ModalActions";
 import TextInput from "@/components/ui/TextInput";

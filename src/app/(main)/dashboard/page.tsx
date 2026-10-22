@@ -5,10 +5,9 @@ import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
 import getDoneByDate from "@/utils/getDoneByDate";
 import { useEffect, useState } from "react";
-import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals.types";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
-import { GOALS_API_PATH, TODOS_API_PATH } from "@/constants/apiEndpoints";
+import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals.types";
 import { TodoResponse } from "@/types/todos.types";
 import { type dataSet } from "./_components/types";
 import DashBoardHeader from "./_components/DashboardHeader";
@@ -18,6 +17,7 @@ import RecentTodosBox from "./_components/RecentTodosBox";
 import GraphBox from "./_components/GraphBox";
 import AddGoalTrigger from "@/components/addGoal/AddGoalTrigger";
 import Link from "next/link";
+import { GOALS_API_PATH, TODOS_API_PATH } from "@/constants/apiEndpoints";
 
 export default function DashboardPage() {
   const { data: user } = useUserQuery();

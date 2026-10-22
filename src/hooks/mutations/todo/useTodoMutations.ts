@@ -1,4 +1,4 @@
-import { todoMutationOptions } from ".";
+import { todoMutationOptions } from "./mutationOptions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 /** 전체 todo 요청 쿼리 */
