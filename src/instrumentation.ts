@@ -1,12 +1,12 @@
-import { environment } from "./config/env";
+import { nodeEnvironment } from "./config/env";
 import * as Sentry from "@sentry/nextjs";
 
 export const register = async () => {
-  if (environment.isNode) {
+  if (nodeEnvironment.isNode) {
     await import("../sentry.server.config");
   }
 
-  if (environment.isEdge) {
+  if (nodeEnvironment.isEdge) {
     await import("../sentry.edge.config");
   }
 };

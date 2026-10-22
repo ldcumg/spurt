@@ -1,6 +1,6 @@
 import SelectGoalDropdown from ".";
 import { goalMocks as mocks } from "@/mocks/handlers/goal/mocks";
-import type { GoalListItem } from "@/types/goals.types";
+import type { TodoGoalSummary } from "@/types/todos.types";
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { http, HttpResponse } from "msw";
 import { useState } from "react";
@@ -23,7 +23,7 @@ type Story = StoryObj<typeof meta>;
 
 const goalMocks = mocks.goals;
 
-function mswHandler(goals?: GoalListItem[]) {
+function mswHandler(goals?: TodoGoalSummary[]) {
   return {
     msw: {
       handlers: [
@@ -47,15 +47,9 @@ export const SelectedGoal: Story = {
   parameters: mswHandler(goalMocks),
 
   render: () => {
-    const [selectedOption, setSelectedOption] = useState<GoalListItem | null>({
+    const [selectedOption, setSelectedOption] = useState<TodoGoalSummary | null>({
       id: 3,
       title: "프론트엔드 포트폴리오 완성하기",
-      teamId: "stringnumber",
-      userId: 1,
-      createdAt: "",
-      updatedAt: "",
-      todoCount: 0,
-      completedCount: 0,
     });
 
     return (
@@ -73,7 +67,7 @@ export const NoList: Story = {
   parameters: mswHandler([]),
 
   render: () => {
-    const [selectedOption, setSelectedOption] = useState<GoalListItem | null>(null);
+    const [selectedOption, setSelectedOption] = useState<TodoGoalSummary | null>(null);
 
     return (
       <SelectGoalDropdown
@@ -90,7 +84,7 @@ export const NoSelect: Story = {
   parameters: mswHandler(goalMocks),
 
   render: () => {
-    const [selectedOption, setSelectedOption] = useState<GoalListItem | null>(null);
+    const [selectedOption, setSelectedOption] = useState<TodoGoalSummary | null>(null);
 
     return (
       <SelectGoalDropdown
@@ -120,15 +114,9 @@ export const Overflow: Story = {
   ]),
 
   render: () => {
-    const [selectedOption, setSelectedOption] = useState<GoalListItem | null>({
+    const [selectedOption, setSelectedOption] = useState<TodoGoalSummary | null>({
       id: 4,
       title: "컨텐츠 내용이 오버플로우가 되도록 아주 많이 텍스트를 입력해보자.",
-      teamId: "string",
-      userId: 1,
-      createdAt: "",
-      updatedAt: "",
-      todoCount: 0,
-      completedCount: 0,
     });
 
     return (

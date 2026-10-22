@@ -4,17 +4,17 @@ import GoalDropdownButton from "./GoalDropdownButton";
 import GoalOptions from "./GoalOptions";
 import { INITAIL_OPEN_STATE } from "./constants";
 import type { OpenState } from "./types";
-import { validateGoal } from "@/components/ui/AddTodoTrigger/index.utils";
+import { validateGoal } from "@/components/ui/TodoFormTrigger/index.utils";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
 import { twMerge } from "@/lib/twMerge";
-import type { GoalListItem } from "@/types/goals.types";
+import type { TodoGoalSummary } from "@/types/todos.types";
 import clsx from "clsx";
 import { useState } from "react";
 
 interface SelectGoalDropdownProps {
   label?: string;
-  selectedGoal: GoalListItem | null;
-  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalListItem | null>>;
+  selectedGoal: TodoGoalSummary | null;
+  setSelectedGoal: React.Dispatch<React.SetStateAction<TodoGoalSummary | null>>;
   error?: string;
   setError?: React.Dispatch<React.SetStateAction<string>>;
   className?: string;

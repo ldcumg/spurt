@@ -1,8 +1,9 @@
 "use client";
 
 import TextDropdown from "../TextDropdown";
+import TodoFormTrigger from "../TodoFormTrigger";
 import { handleDeleteTodo } from "./index.services";
-import { Done, FlagFilled, Note, Todo } from "@/assets/icons/index";
+import { Done, FlagFilled, Note, Todo } from "@/assets/icons";
 import TodoDetailTrigger from "@/components/ui/TodoDetailTrigger";
 import { useDeleteTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import { TodoResponse } from "@/types/todos.types";
@@ -34,24 +35,30 @@ export default function TodoItem({ todo, type = "default", onToggle }: TodoListI
             <Todo className="size-32 shrink-0 text-neutral-600" />
           )}
         </button>
-        <div
-          className={`flex min-w-0 flex-1 flex-col gap-2 ${type === "goal" ? "@md:grid @md:grid-cols-2 @md:items-center @md:gap-16" : ""} `}
-        >
-          <div className="min-w-0">
-            <p className={`text-title-xs truncate ${todo.done ? "line-through" : ""}`}>{todo.title}</p>
-          </div>
+        <TodoDetailTrigger
+          todo={todo}
+          renderItem={(todoDetailOpen) => (
+            <div
+              className={`flex min-w-0 flex-1 flex-col gap-2 ${type === "goal" ? "@md:grid @md:grid-cols-2 @md:items-center @md:gap-16" : ""} `}
+              onClick={todoDetailOpen}
+            >
+              <div className="min-w-0">
+                <p className={`text-title-xs truncate ${todo.done ? "line-through" : ""}`}>{todo.title}</p>
+              </div>
 
-          {type === "goal" ? (
-            <div className="flex min-w-0 gap-4">
-              <FlagFilled className="text-primary-600 size-16 shrink-0 @md:size-24" />
-              <p className="text-body-md @md:text-title-xs truncate leading-none @md:leading-normal">
-                {todo.goal?.title}
-              </p>
+              {type === "goal" ? (
+                <div className="flex min-w-0 gap-4">
+                  <FlagFilled className="text-primary-600 size-16 shrink-0 @md:size-24" />
+                  <p className="text-body-md @md:text-title-xs truncate leading-none @md:leading-normal">
+                    {todo.goal?.title}
+                  </p>
+                </div>
+              ) : (
+                <></> // goal이 없을 때도 2번 컬럼 공간 비워두기 (레이아웃 틀어짐 방지)
+              )}
             </div>
-          ) : (
-            <></> // goal이 없을 때도 2번 컬럼 공간 비워두기 (레이아웃 틀어짐 방지)
           )}
-        </div>
+        />
       </div>
       <div className="ml-10 flex flex-row items-center gap-10">
         {todo.noteIds.length > 0 ? (
@@ -59,15 +66,14 @@ export default function TodoItem({ todo, type = "default", onToggle }: TodoListI
         ) : (
           <div className="size-24" />
         )}
-        <TodoDetailTrigger
+        <TodoFormTrigger
           todo={todo}
-          renderItem={(todoDetailOpen) => (
-            //NOTE - 모달 구조 리팩토링 후 할 일 수정 적용
+          renderItem={(todoFormOpen) => (
             <TextDropdown
               options={[
                 {
-                  lable: "상세보기",
-                  onClick: todoDetailOpen,
+                  lable: "수정하기",
+                  onClick: todoFormOpen,
                 },
                 {
                   lable: "삭제하기",

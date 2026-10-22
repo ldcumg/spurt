@@ -7,7 +7,6 @@ const meta = {
   parameters: {
     layout: "centered",
   },
-  tags: ["autodocs"],
   argTypes: {
     size: {
       options: ["xs", "sm", "md", "lg", "xl", "wide", "square"],
@@ -37,8 +36,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Variants: Story = {
-  // name: "Button",
+export const Playground: Story = {
   args: {
     children: "",
     size: "md",
