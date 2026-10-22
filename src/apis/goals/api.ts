@@ -1,5 +1,5 @@
 import { GOALS_API_PATH } from "@/constants/apiEndpoints";
-import { serverFetcher } from "@/lib/axios/serverFetcher";
+import type { Fetcher } from "@/types/api/fetcher.types";
 import {
   GetGoalListParams,
   GoalDetailResponse,
@@ -9,15 +9,15 @@ import {
   PostGoalRequest,
 } from "@/types/goals.types";
 
-export const getGoalList = (params?: GetGoalListParams) =>
-  serverFetcher<GoalListResponse>(GOALS_API_PATH.base, { params });
+export const createGoalsApi = (fetcher: Fetcher) => ({
+  getGoalList: (params?: GetGoalListParams) => fetcher<GoalListResponse>(GOALS_API_PATH.base, { params }),
 
-export const postGoal = (body: PostGoalRequest) =>
-  serverFetcher<GoalResponse>(GOALS_API_PATH.base, { method: "POST", data: body });
+  postGoal: (body: PostGoalRequest) => fetcher<GoalResponse>(GOALS_API_PATH.base, { method: "POST", data: body }),
 
-export const getGoalDetail = (goalId: number) => serverFetcher<GoalDetailResponse>(GOALS_API_PATH.detail(goalId));
+  getGoalDetail: (goalId: number) => fetcher<GoalDetailResponse>(GOALS_API_PATH.detail(goalId)),
 
-export const patchGoal = (goalId: number, body: PatchGoalRequest) =>
-  serverFetcher<GoalResponse>(GOALS_API_PATH.detail(goalId), { method: "PATCH", data: body });
+  patchGoal: (goalId: number, body: PatchGoalRequest) =>
+    fetcher<GoalResponse>(GOALS_API_PATH.detail(goalId), { method: "PATCH", data: body }),
 
-export const deleteGoal = (goalId: number) => serverFetcher(GOALS_API_PATH.detail(goalId), { method: "DELETE" });
+  deleteGoal: (goalId: number) => fetcher(GOALS_API_PATH.detail(goalId), { method: "DELETE" }),
+});
