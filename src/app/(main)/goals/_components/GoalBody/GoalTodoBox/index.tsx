@@ -5,7 +5,7 @@ import TodoItem from "@/components/ui/TodoItem";
 import { GoalListItem } from "@/types/goals.types";
 import { TodoResponse } from "@/types/todos.types";
 import TodoEmpty from "../TodoEmpty";
-import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
+import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 
 interface GoalTodoBoxProps {
   variant: "todo" | "done";
