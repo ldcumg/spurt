@@ -1,7 +1,7 @@
 import { Plus } from "@/assets/icons/index";
-import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
 import Button from "@/components/ui/Button";
 import { MotiveSprout } from "@/assets/images/dashboardpage";
+import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 
 export default function MotivationBox() {
   return (
