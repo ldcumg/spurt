@@ -1,10 +1,8 @@
-import { GoalListItem } from "@/types/goals.types";
 import { createJSONStorage, persist, StateStorage } from "zustand/middleware";
 import { createStore } from "zustand";
 
 export interface GoalState {
   currentGoalId: number | null;
-  goalList: GoalListItem[];
 }
 export interface GoalActions {
   setGoalId: (id: number | null) => void;
@@ -23,10 +21,7 @@ const noOpStorage: StateStorage = {
   removeItem: () => undefined,
 };
 
-export const createGoalStore = (
-  owner: GoalStoreOwner | null,
-  initState: GoalState = { currentGoalId: null, goalList: [] },
-) => {
+export const createGoalStore = (owner: GoalStoreOwner | null, initState: GoalState = { currentGoalId: null }) => {
   return createStore<GoalStore>()(
     persist(
       (set) => ({
