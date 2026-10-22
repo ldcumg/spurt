@@ -1,7 +1,7 @@
 "use client";
 
 import ROUTES from "@/constants/routes";
-import { goalQueryOptions } from "@/hooks/queries/goal";
+import { goalQueryOptions } from "@/hooks/queries/goal/queryOptions";
 import { useGoalContext } from "@/hooks/state/goal/useGoalContext";
 import { twMerge } from "@/lib/twMerge";
 import { useQueryClient } from "@tanstack/react-query";

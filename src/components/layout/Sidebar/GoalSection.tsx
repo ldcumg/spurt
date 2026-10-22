@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useGoalContext } from "@/hooks/state/goal/useGoalContext";
 import { useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
 import { useQueryClient } from "@tanstack/react-query";
-import { goalQueryOptions } from "@/hooks/queries/goal";
+import { goalQueryOptions } from "@/hooks/queries/goal/queryOptions";
 
 // TODO: 목표 상세 페이지 추가 시 usePathname으로 대체 (완료: 유진)
 

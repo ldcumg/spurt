@@ -1,4 +1,4 @@
-import { deleteGoal, patchGoal, postGoal } from "@/apis/goals/index";
+import { deleteGoal, patchGoal, postGoal } from "@/apis/goals/server";
 //import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import GOAL_QUERY_KEYS from "@/constants/queryKeys/goal";
 //import { clientFetcher } from "@/lib/axios/clientFetcher";

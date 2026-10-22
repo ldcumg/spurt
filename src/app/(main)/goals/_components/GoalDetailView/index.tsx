@@ -6,7 +6,6 @@ import type { GoalListItem } from "@/types/goals.types";
 import calcPercentage from "@/utils/calcPercentage";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import { useGoalDetailQuery, useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
-import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
 import {
   useAddGoalMutation,
   useDeleteGoalMutation,
@@ -16,11 +15,15 @@ import { useToggleTodoDoneMutation } from "@/hooks/mutations/todo/useTodoMutatio
 import { useGoalContext } from "@/hooks/state/goal/useGoalContext";
 import GoalHeader from "../GoalHeader";
 import GoalBody from "../GoalBody";
+import { useQuery } from "@tanstack/react-query";
+import TODO_QUERY_KEYS from "@/constants/queryKeys/todo";
+import { getTodoList } from "@/apis/todos/client";
 
 export default function GoalDetailView() {
   const router = useRouter();
   const params = useParams();
   const goalId = params?.goalId as string;
+  const numericGoalId = Number(goalId);
 
   // 1. Zustand: 마지막 방문 목표 ID 저장 전용 액션
   const setGoalId = useGoalContext((state) => state.setGoalId);
@@ -29,9 +32,16 @@ export default function GoalDetailView() {
   const { data: user } = useUserQuery();
   const { data: detailGoal, isLoading: isDetailLoading } = useGoalDetailQuery(goalId);
   const { data: goalData, isLoading: isGoalListLoading } = useGoalListQuery({ limit: 10 });
-  const { data: todoData, isLoading: isTodoLoading } = useAllTodoQuery();
+  const { data: todoData, isLoading: isTodoLoading } = useQuery({
+    queryKey: TODO_QUERY_KEYS.list({ goalId: numericGoalId }),
+    queryFn: async () => {
+      const { data } = await getTodoList({ goalId: numericGoalId });
+
+      return data;
+    },
+  });
   const goalList: GoalListItem[] = goalData && "goals" in goalData ? goalData.goals : [];
-  const todoList = todoData?.data.todos ?? [];
+  const todoList = todoData?.todos ?? [];
 
   // 3. 현재 목표 데이터 조합 (수정된 detailGoal의 최신 제목 우선 반영)
   const matchedGoal = goalList.find((g) => String(g.id) === goalId);

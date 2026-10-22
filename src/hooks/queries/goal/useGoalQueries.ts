@@ -1,4 +1,4 @@
-import { goalQueryOptions } from ".";
+import { goalQueryOptions } from "./queryOptions";
 import { useQuery } from "@tanstack/react-query";
 
 // 목표 목록 조회

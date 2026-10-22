@@ -1,7 +1,7 @@
 import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import GOAL_QUERY_KEYS from "@/constants/queryKeys/goal";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
-import type { GoalResponse, GoalListResponse } from "@/types/goals.types";
+import type { GoalDetailResponse, GoalListResponse } from "@/types/goals.types";
 import { queryOptions } from "@tanstack/react-query";
 
 export const goalQueryOptions = {
@@ -17,7 +17,7 @@ export const goalQueryOptions = {
     queryOptions({
       queryKey: GOAL_QUERY_KEYS.detail(goalId),
       queryFn: async () => {
-        const { data } = await clientFetcher.get<GoalResponse>(GOALS_API_PATH.detail(goalId));
+        const { data } = await clientFetcher.get<GoalDetailResponse>(GOALS_API_PATH.detail(goalId));
         return data;
       },
       enabled: !!goalId,
