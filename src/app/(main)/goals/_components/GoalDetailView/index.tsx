@@ -1,25 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Plus } from "@/assets/icons/index";
-import Badge from "@/components/ui/Badge";
-import Button from "@/components/ui/Button";
-import TodoFormTrigger from "@/components/ui/TodoFormTrigger";
-import TodoItem from "@/components/ui/TodoItem";
-import { clientFetcher } from "@/lib/axios/clientFetcher";
 import type { GoalListItem } from "@/types/goals.types";
-import type { TodoResponse } from "@/types/todos.types";
 import calcPercentage from "@/utils/calcPercentage";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import { useGoalDetailQuery, useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
+import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
 import {
   useAddGoalMutation,
   useDeleteGoalMutation,
   useUpdateGoalMutation,
 } from "@/hooks/mutations/goal/useGoalMutations";
+import { useToggleTodoDoneMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import { useGoalContext } from "@/hooks/state/goal/useGoalContext";
 import GoalHeader from "../GoalHeader";
+import GoalBody from "../GoalBody";
 
 export default function GoalDetailView() {
   const router = useRouter();
@@ -33,7 +29,9 @@ export default function GoalDetailView() {
   const { data: user } = useUserQuery();
   const { data: detailGoal, isLoading: isDetailLoading } = useGoalDetailQuery(goalId);
   const { data: goalData, isLoading: isGoalListLoading } = useGoalListQuery({ limit: 10 });
+  const { data: todoData, isLoading: isTodoLoading } = useAllTodoQuery();
   const goalList: GoalListItem[] = goalData && "goals" in goalData ? goalData.goals : [];
+  const todoList = todoData?.data.todos ?? [];
 
   // 3. 현재 목표 데이터 조합 (수정된 detailGoal의 최신 제목 우선 반영)
   const matchedGoal = goalList.find((g) => String(g.id) === goalId);
@@ -61,10 +59,8 @@ export default function GoalDetailView() {
   const { mutate: addGoalMutate } = useAddGoalMutation();
   const { mutate: updateGoalMutate } = useUpdateGoalMutation();
   const { mutate: deleteGoalMutate } = useDeleteGoalMutation();
+  const { mutate: toggleTodoDone } = useToggleTodoDoneMutation();
 
-  // 5. 투두 임시 로컬 상태
-  const [todoList, setTodoList] = useState<TodoResponse[]>([]);
-  const [isTodoLoading, setIsTodoLoading] = useState(true);
   const isLoading = isDetailLoading || isGoalListLoading;
 
   // 목표 식별 시 Zustand 활성 목표 ID 동기화
@@ -74,25 +70,7 @@ export default function GoalDetailView() {
     }
   }, [thisGoal?.id, setGoalId]);
 
-  // 투두 목록 조회
-  useEffect(() => {
-    async function fetchTodos() {
-      try {
-        setIsTodoLoading(true);
-        const todoRes = await clientFetcher.get<{ todos: TodoResponse[] }>("/todos");
-        if (todoRes.data.todos) {
-          setTodoList(todoRes.data.todos);
-        }
-      } catch (error) {
-        console.error("투두 호출 실패:", error);
-      } finally {
-        setIsTodoLoading(false);
-      }
-    }
-    fetchTodos();
-  }, []);
-
-  // 드롭다운 변경
+  // 드롭다운에서 목표 변경
   const handleSelectGoal = (selectedGoalId: string) => {
     router.push(`/goals/${selectedGoalId}`);
   };
@@ -156,7 +134,10 @@ export default function GoalDetailView() {
   };
 
   const handleToggleTodo = (id: number) => {
-    setTodoList((prevList) => prevList.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
+    const todo = todoList.find((item) => item.id === id);
+    if (!todo) return;
+
+    toggleTodoDone({ todoId: id, done: !todo.done });
   };
 
   if (isLoading || isTodoLoading) {
@@ -195,71 +176,13 @@ export default function GoalDetailView() {
         onDeleteGoal={handleDeleteGoal}
       />
 
-      <section className="flex flex-1 flex-col gap-24 lg:flex-row">
-        {/* 미완료 할 일 */}
-        <div className="flex-1 rounded-md bg-white p-12 shadow-sm">
-          <div className="flex h-60 flex-row items-center justify-between p-8">
-            <Badge
-              type="todo"
-              className="[&>p]:!block"
-            />
-            <TodoFormTrigger
-              renderItem={(todoFormOpen) => (
-                <Button
-                  onClick={todoFormOpen}
-                  variant={"outline"}
-                  className="flex flex-row items-center justify-center gap-8 rounded-full"
-                >
-                  <Plus className="size-16 shrink-0" />
-                  <p>할 일 추가</p>
-                </Button>
-              )}
-            />
-          </div>
-          <div>
-            {todosList.length > 0 ? (
-              todosList.map((item) => (
-                <TodoItem
-                  key={item.id}
-                  todo={item}
-                  onToggle={handleToggleTodo}
-                />
-              ))
-            ) : (
-              <p className="p-12 text-neutral-400">
-                최근 등록한 할 일이 없어요
-                <br />할 일을 등록해 보세요.
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* 완료된 할 일 */}
-        <div className="flex-1 rounded-md bg-white p-12 shadow-sm">
-          <div className="flex h-60 flex-row items-center justify-between p-8">
-            <Badge
-              type="done"
-              className="[&>p]:!block"
-            />
-          </div>
-          <div>
-            {donesList.length > 0 ? (
-              donesList.map((item) => (
-                <TodoItem
-                  key={item.id}
-                  todo={item}
-                  onToggle={handleToggleTodo}
-                />
-              ))
-            ) : (
-              <p className="p-12 text-neutral-400">
-                완료한 할 일이 없어요
-                <br />할 일을 완료해 보세요.
-              </p>
-            )}
-          </div>
-        </div>
-      </section>
+      <GoalBody
+        goal={thisGoal}
+        todosList={todosList}
+        donesList={donesList}
+        handleToggleTodo={handleToggleTodo}
+        isTodoLoading={isTodoLoading}
+      />
     </div>
   );
 }

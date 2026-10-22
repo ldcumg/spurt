@@ -54,7 +54,7 @@ export default function NavItem({ href, label, Icon, ActiveIcon, isActive }: Nav
 
       // (2) 저장된 목표가 없으면 첫 번째 목표를 조회해서 이동
       try {
-        const data = await queryClient.query(goalQueryOptions.list(queryClient, { limit: 1 }));
+        const data = await queryClient.query(goalQueryOptions.list({ limit: 1 }));
         const firstGoal = data.goals[0];
         if (firstGoal) {
           const firstGoalId = firstGoal.id;
