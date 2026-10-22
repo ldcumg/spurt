@@ -1,3 +1,4 @@
+import { GoalStoreProvider } from "@/contexts/GoalStoreContext";
 import "../src/app/globals.css";
 import type { Preview } from "@storybook/nextjs-vite";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -9,7 +10,9 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <QueryClientProvider client={queryClient}>
-        <Story />
+        <GoalStoreProvider>
+          <Story />
+        </GoalStoreProvider>
       </QueryClientProvider>
     ),
   ],

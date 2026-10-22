@@ -11,7 +11,7 @@ import { useCreateNote } from "./hooks/useCreateNote";
 import { useNoteDraft } from "./hooks/useNoteDraft";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
-import { useAddTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
+import { useSaveTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
 import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
@@ -65,7 +65,7 @@ export default function NewNotePage() {
   const goalQuery = useAllGoalQuery();
   const todoQuery = useAllTodoQuery();
   const userQuery = useUserQuery();
-  const addTodoMutation = useAddTodoMutation();
+  const addTodoMutation = useSaveTodoMutation();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState<JSONContent>(() => createEmptyNoteContent());
   const [selectedGoalId, setSelectedGoalId] = useState("");
