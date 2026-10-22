@@ -5,6 +5,8 @@ import Sidebar from "@/components/layout/Sidebar";
 import Button from "@/components/ui/Button";
 import Logo from "@/components/ui/Logo";
 import Profile from "@/components/ui/Profile";
+import ROUTES from "@/constants/routes";
+import Link from "next/link";
 import { useState } from "react";
 
 /** 모바일 헤더와 헤더에서 여는 Sidebar 드로어를 함께 관리한다. */
@@ -50,11 +52,13 @@ export default function MobileNavigation() {
           <Burger className="size-24" />
         </Button>
 
-        <Logo
-          variant="horizontalWithTagline"
-          className="h-52"
-          priority
-        />
+        <Link href={ROUTES.dashboard}>
+          <Logo
+            variant="horizontalWithTagline"
+            className="h-52"
+            priority
+          />
+        </Link>
 
         <Profile
           variant="greeting"
