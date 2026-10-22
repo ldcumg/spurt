@@ -4,7 +4,7 @@ import { moveMonth } from "../../index.utils";
 import { Left, Right } from "@/assets/icons";
 import Button from "@/components/ui/Button";
 import SelectGoalDropdown from "@/components/ui/SelectGoalDropdown";
-import type { GoalListItem } from "@/types/goals.types";
+import type { TodoGoalSummary } from "@/types/todos.types";
 import clsx from "clsx";
 
 interface MobileCalendarHeaderProps {
@@ -14,8 +14,8 @@ interface MobileCalendarHeaderProps {
   selectToday: () => void;
   setIsMonthView: React.Dispatch<React.SetStateAction<boolean>>;
   currentWeekCalendar: CalendarWeeks;
-  selectedGoal: GoalListItem | null;
-  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalListItem | null>>;
+  selectedGoal: TodoGoalSummary | null;
+  setSelectedGoal: React.Dispatch<React.SetStateAction<TodoGoalSummary | null>>;
 }
 
 export default function MobileCalendarHeader({
