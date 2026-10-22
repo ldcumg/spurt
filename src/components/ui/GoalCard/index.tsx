@@ -3,7 +3,7 @@ import Button from "../Button";
 import ProgressBar from "../ProgressBar";
 import TodoItem from "../TodoItem";
 import { FlagFilled, More, Plus } from "@/assets/icons";
-import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
+import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 import { GoalListItem } from "@/types/goals.types";
 import { TodoResponse } from "@/types/todos.types";
 

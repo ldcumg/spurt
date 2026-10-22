@@ -1,18 +1,18 @@
 "use client";
 
 import { Right, Plus } from "@/assets/icons/index";
-import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
+import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
 import ProgressRing from "@/components/ui/ProgressRing";
 import TodoItem from "@/components/ui/TodoItem";
-import getDoneByDate from "@/utils/getDoneByDate";
-import { useEffect, useState } from "react";
-import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals.types";
+import { GOALS_API_PATH, TODOS_API_PATH } from "@/constants/apiEndpoints";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
-import { GOALS_API_PATH, TODOS_API_PATH } from "@/constants/apiEndpoints";
+import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals.types";
 import { TodoResponse } from "@/types/todos.types";
+import getDoneByDate from "@/utils/getDoneByDate";
+import { useEffect, useState } from "react";
 import { BarChart, Bar, ResponsiveContainer, LabelList, YAxis, CartesianGrid, XAxis } from "recharts";
 
 type dataSet = {

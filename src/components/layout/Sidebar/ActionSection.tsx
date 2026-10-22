@@ -2,7 +2,7 @@
 
 import { Flag, Todos } from "@/assets/icons/index";
 import AddGoalTrigger from "@/components/addGoal/AddGoalTrigger";
-import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
+import AddTodoTrigger from "@/components/ui/AddTodoTrigger";
 import Button from "@/components/ui/Button";
 
 export default function ActionSection() {

@@ -1,4 +1,4 @@
-import { todoQueryOptions } from ".";
+import { todoQueryOptions } from "./queryOptions";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 /** 전체 todo 요청 쿼리 */
