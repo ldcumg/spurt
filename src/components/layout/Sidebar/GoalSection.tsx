@@ -6,6 +6,7 @@ import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals
 import { clientFetcher } from "@/lib/axios/clientFetcher";
 import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import Link from "next/link";
+import { useGoalContext } from "@/hooks/state/goal/useGoalContext";
 
 // TODO: 목표 상세 페이지 추가 시 usePathname으로 대체 (완료: 유진)
 
@@ -24,6 +25,9 @@ export default function GoalSection() {
 
   const pathname = usePathname();
   const pathId = Number(getGoalIdFromPath(pathname));
+
+  // 목표를 눌렀을 때 최근 목표 ID로 저장해 줄 함수
+  const setGoalId = useGoalContext((state) => state.setGoalId);
 
   useEffect(() => {
     async function fetchGoalList() {
@@ -48,6 +52,7 @@ export default function GoalSection() {
           <Link
             key={goal.id}
             href={`/goals/${goal.id}`}
+            onClick={() => setGoalId(goal.id)} // 클릭 시 최근 목표 ID 스토어에 기록
           >
             <button
               type="button"

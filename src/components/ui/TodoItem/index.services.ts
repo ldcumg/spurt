@@ -1,6 +1,7 @@
 import type { UseMutateFunction } from "@tanstack/react-query";
 
-export const deleteTodo = async <TData, TError>(deleteTodoMutate: UseMutateFunction<TData, TError>) => {
+/** 할 일 삭제 */
+export const handleDeleteTodo = <TData, TError>(deleteTodoMutate: UseMutateFunction<TData, TError>) => {
   if (!confirm("삭제하시겠습니까?")) {
     return;
   }

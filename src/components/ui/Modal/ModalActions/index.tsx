@@ -4,7 +4,7 @@ import Button from "../../Button";
 
 interface ModalActionsProps {
   onClose?: () => void;
-  onConfirm: () => void;
+  onConfirm?: () => void;
   closeButtonLabel?: string;
   confirmButtonLabel?: string;
   isCloseDisabled?: boolean;
