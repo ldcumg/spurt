@@ -139,7 +139,6 @@ export default function GoalPage() {
     setTodoList((prevList) => prevList.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
   };
 
-  // 데이터 로딩 중 처리 (화면 깨짐 방지)
   if (isLoading) {
     return <div className="p-24">목표를 불러오는 중입니다...</div>;
   }

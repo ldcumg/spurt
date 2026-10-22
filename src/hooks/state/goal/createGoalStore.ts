@@ -1,5 +1,5 @@
 import { GoalListItem } from "@/types/goals.types";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist, StateStorage } from "zustand/middleware";
 import { createStore } from "zustand";
 
 export interface GoalState {
@@ -14,10 +14,23 @@ export interface GoalActions {
   onGoalDeleted: (deletedId: number, remainingGoals: GoalListItem[]) => number | null;
   resetGoalId: () => void;
 }
-
 export type GoalStore = GoalState & GoalActions;
 
-export const createGoalStore = (initState: GoalState = { currentGoalId: null, goalList: [] }) => {
+export interface GoalStoreOwner {
+  teamId: string;
+  userId: number;
+}
+
+const noOpStorage: StateStorage = {
+  getItem: () => null,
+  setItem: () => undefined,
+  removeItem: () => undefined,
+};
+
+export const createGoalStore = (
+  owner: GoalStoreOwner | null,
+  initState: GoalState = { currentGoalId: null, goalList: [] },
+) => {
   return createStore<GoalStore>()(
     persist(
       (set, get) => ({
@@ -58,7 +71,13 @@ export const createGoalStore = (initState: GoalState = { currentGoalId: null, go
 
         resetGoalId: () => set({ currentGoalId: null }),
       }),
-      { name: "recent-goal-storage", partialize: (state) => ({ currentGoalId: state.currentGoalId }) },
+      {
+        name: owner
+          ? `recent-goal-storage:${encodeURIComponent(owner.teamId)}:${owner.userId}`
+          : "recent-goal-storage:unresolved",
+        storage: owner ? undefined : createJSONStorage(() => noOpStorage),
+        partialize: (state) => ({ currentGoalId: state.currentGoalId }),
+      },
     ),
   );
 };
