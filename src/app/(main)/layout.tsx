@@ -1,4 +1,5 @@
 import BottomNav from "@/components/layout/BottomNav";
+import MobileNavigation from "@/components/layout/MobileNavigation";
 import Sidebar from "@/components/layout/Sidebar";
 import { GoalStoreProvider } from "@/contexts/GoalStoreContext";
 
@@ -13,6 +14,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         <div className="hidden md:block">
           <Sidebar />
         </div>
+        <MobileNavigation />
         <main className="flex-1 overflow-y-auto">{children}</main>
         <div className="md:hidden">
           <BottomNav />

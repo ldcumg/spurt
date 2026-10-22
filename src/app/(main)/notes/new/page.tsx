@@ -1,14 +1,5 @@
 "use client";
 
-import MobileNavigation from "../components/MobileNavigation";
-import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
-import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError } from "../noteFormUtils";
-import DraftRestoreModal from "./components/DraftRestoreModal";
-import NoteEditor from "./components/NoteEditor";
-import NoteMetaPanel from "./components/NoteMetaPanel";
-import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
-import { useCreateNote } from "./hooks/useCreateNote";
-import { useNoteDraft } from "./hooks/useNoteDraft";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
 import { useSaveTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
@@ -19,6 +10,14 @@ import type { TodoResponse } from "@/types/todos.types";
 import type { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
+import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError } from "../noteFormUtils";
+import DraftRestoreModal from "./components/DraftRestoreModal";
+import NoteEditor from "./components/NoteEditor";
+import NoteMetaPanel from "./components/NoteMetaPanel";
+import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
+import { useCreateNote } from "./hooks/useCreateNote";
+import { useNoteDraft } from "./hooks/useNoteDraft";
 
 interface SubmitRequirementMessageParams {
   hasPendingQueries: boolean;
@@ -218,8 +217,6 @@ export default function NewNotePage() {
 
   return (
     <div className="bg-surface text-foreground min-h-screen w-full min-w-0 bg-[radial-gradient(circle_at_top_right,var(--color-primary-50),var(--color-surface)_56%)]">
-      <MobileNavigation />
-
       {noteDraft.draftToRestore && (
         <DraftRestoreModal
           isOpen={noteDraft.isRestoreOpen}
