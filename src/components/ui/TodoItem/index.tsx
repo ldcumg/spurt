@@ -1,10 +1,10 @@
 "use client";
 
 import TextDropdown from "../TextDropdown";
+import { handleDeleteTodo } from "./index.services";
 import { Done, FlagFilled, Note, Todo } from "@/assets/icons/index";
 import TodoDetailTrigger from "@/components/ui/TodoDetailTrigger";
 import { useDeleteTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
-import { deleteTodo } from "@/services/deleteTodo";
 import { TodoResponse } from "@/types/todos.types";
 
 type TodoType = "default" | "goal";
@@ -71,7 +71,7 @@ export default function TodoItem({ todo, type = "default", onToggle }: TodoListI
                 },
                 {
                   lable: "삭제하기",
-                  onClick: () => deleteTodo(deleteTodoMutate),
+                  onClick: () => handleDeleteTodo(deleteTodoMutate),
                 },
               ]}
             />
