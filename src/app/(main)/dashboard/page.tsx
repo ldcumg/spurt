@@ -5,22 +5,23 @@ import Button from "@/components/ui/Button";
 import GoalCard from "@/components/ui/GoalCard";
 import getDoneByDate from "@/utils/getDoneByDate";
 import { useEffect, useState } from "react";
-import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals.types";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import { clientFetcher } from "@/lib/axios/clientFetcher";
-import { GOALS_API_PATH, TODOS_API_PATH } from "@/constants/apiEndpoints";
+import { GetGoalListParams, GoalListItem, GoalListResponse } from "@/types/goals.types";
 import { TodoResponse } from "@/types/todos.types";
-import { type dataSet } from "@/components/dashboard/types";
-import DashBoardHeader from "@/components/dashboard/DashboardHeader";
-import MotivationBox from "@/components/dashboard/MotivationBox";
-import ProgressBox from "@/components/dashboard/ProgressBox";
-import RecentTodosBox from "@/components/dashboard/RecentTodosBox";
-import GraphBox from "@/components/dashboard/GraphBox";
+import { type dataSet } from "./_components/types";
+import DashBoardHeader from "./_components/DashboardHeader";
+import MotivationBox from "./_components/MotivationBox";
+import ProgressBox from "./_components/ProgressBox";
+import RecentTodosBox from "./_components/RecentTodosBox";
+import GraphBox from "./_components/GraphBox";
 import AddGoalTrigger from "@/components/addGoal/AddGoalTrigger";
 import Link from "next/link";
+import { GOALS_API_PATH, TODOS_API_PATH } from "@/constants/apiEndpoints";
 
 export default function DashboardPage() {
   const { data: user } = useUserQuery();
+  const userName: string = user?.name || "체다치즈";
   const [goalList, setGoalList] = useState<GoalListItem[] | null>(null);
   const [todoList, setTodoList] = useState<TodoResponse[]>([]);
 
@@ -79,7 +80,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-20 px-30 py-40">
-      <DashBoardHeader userName={user && user.name} />
+      <DashBoardHeader userName={userName} />
       {/**1열 */}
       <section className="grid gap-20 md:grid-cols-2">
         <MotivationBox />

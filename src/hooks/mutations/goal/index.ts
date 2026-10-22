@@ -1,10 +1,10 @@
-import { deleteGoal, patchGoal, postGoal } from "@/apis/goals/index";
+import { deleteGoal, patchGoal, postGoal } from "@/apis/goals/api";
 import GOAL_QUERY_KEYS from "@/constants/queryKeys/goal";
-import { GoalDetailResponse, GoalListItem, GoalListResponse, GoalResponse, PostGoalRequest } from "@/types/goals.types";
+import { GoalDetailResponse, GoalListResponse, GoalResponse, PostGoalRequest } from "@/types/goals.types";
 import { MutationOptions, type QueryClient } from "@tanstack/react-query";
 
 export const goalMutationOptions = {
-  create: (queryClient: QueryClient): MutationOptions<GoalListItem, Error, PostGoalRequest> => ({
+  create: (queryClient: QueryClient): MutationOptions<GoalResponse, Error, PostGoalRequest> => ({
     mutationFn: async (newGoal: PostGoalRequest) => {
       const response = await postGoal(newGoal);
       return response.data;

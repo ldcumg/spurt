@@ -1,10 +1,10 @@
 "use client";
 
+import { useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
 import type { OpenState } from "../types";
 import AddGoalInput from "./AddGoalInput";
 import GoalOptionItem from "./GoalOptionItem";
-import { validateGoal } from "@/components/addTodo/utils";
-import { useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
+import { validateGoal } from "@/components/ui/AddTodoTrigger/index.utils";
 import type { GoalListItem } from "@/types/goals.types";
 
 interface GoalOptionsProps {

@@ -1,4 +1,4 @@
-import { Calendar, CalendarFilled, Flag, FlagFilled, Home, HomeFilled, Note, NoteFilled } from "@/assets/icons";
+import { Calendar, CalendarFilled, Flag, FlagFilled, Home, HomeFilled, Note, NoteFilled } from "@/assets/icons/index";
 import ROUTES from "@/constants/routes";
 import type { FC, SVGProps } from "react";
 

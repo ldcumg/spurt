@@ -7,8 +7,8 @@ import { TodoResponse } from "@/types/todos.types";
 import calcPercentage from "@/utils/calcPercentage";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 
-import GoalHeader from "@/components/goals/GoalHeader";
-import GoalBody from "@/components/goals/GoalBody";
+import GoalHeader from "../_components/GoalHeader";
+import GoalBody from "../_components/GoalBody";
 import { useParams, useRouter } from "next/navigation";
 import { useGoalContext } from "@/hooks/state/goal/useGoalContext";
 import {
@@ -152,7 +152,6 @@ export default function GoalPage() {
     setTodoList((prevList) => prevList.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
   };
 
-  // 데이터 로딩 중 처리 (화면 깨짐 방지)
   if (isLoading) {
     return <div className="p-24">목표를 불러오는 중입니다...</div>;
   }
