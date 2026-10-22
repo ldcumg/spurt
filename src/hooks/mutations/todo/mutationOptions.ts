@@ -12,4 +12,11 @@ export const todoMutationOptions = {
         queryClient.invalidateQueries({ queryKey: TODO_QUERY_KEYS.all });
       },
     }),
+  delete: (queryClient: QueryClient, todoId: number) =>
+    mutationOptions({
+      mutationFn: () => clientFetcher.delete(TODOS_API_PATH.detail(todoId)),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: TODO_QUERY_KEYS.all });
+      },
+    }),
 };

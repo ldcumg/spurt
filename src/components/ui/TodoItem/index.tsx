@@ -1,6 +1,10 @@
+"use client";
+
 import TextDropdown from "../TextDropdown";
+import { handleDeleteTodo } from "./index.services";
 import { Done, FlagFilled, Note, Todo } from "@/assets/icons/index";
 import TodoDetailTrigger from "@/components/ui/TodoDetailTrigger";
+import { useDeleteTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import { TodoResponse } from "@/types/todos.types";
 
 type TodoType = "default" | "goal";
@@ -12,6 +16,8 @@ interface TodoListItemProps {
 }
 
 export default function TodoItem({ todo, type = "default", onToggle }: TodoListItemProps) {
+  const { mutate: deleteTodoMutate } = useDeleteTodoMutation(todo.id);
+
   return (
     <div className="hover:bg-primary-100 @container flex flex-row items-center justify-between rounded-md p-5">
       <div className="flex min-w-0 flex-1 flex-row items-center gap-8">
@@ -56,11 +62,16 @@ export default function TodoItem({ todo, type = "default", onToggle }: TodoListI
         <TodoDetailTrigger
           todo={todo}
           renderItem={(todoDetailOpen) => (
+            //NOTE - 모달 구조 리팩토링 후 할 일 수정 적용
             <TextDropdown
               options={[
                 {
-                  lable: "상세 보기",
+                  lable: "상세보기",
                   onClick: todoDetailOpen,
+                },
+                {
+                  lable: "삭제하기",
+                  onClick: () => handleDeleteTodo(deleteTodoMutate),
                 },
               ]}
             />
