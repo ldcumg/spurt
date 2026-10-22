@@ -1,12 +1,13 @@
-import { deleteGoal, patchGoal, postGoal } from "@/apis/goals/api";
+import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import GOAL_QUERY_KEYS from "@/constants/queryKeys/goal";
+import { clientFetcher } from "@/lib/axios/clientFetcher";
 import { GoalDetailResponse, GoalListResponse, GoalResponse, PostGoalRequest } from "@/types/goals.types";
 import { MutationOptions, type QueryClient } from "@tanstack/react-query";
 
 export const goalMutationOptions = {
   create: (queryClient: QueryClient): MutationOptions<GoalResponse, Error, PostGoalRequest> => ({
     mutationFn: async (newGoal: PostGoalRequest) => {
-      const response = await postGoal(newGoal);
+      const response = await clientFetcher.post<GoalResponse>(GOALS_API_PATH.base, newGoal);
       return response.data;
     },
     onSuccess: () => {
@@ -16,7 +17,7 @@ export const goalMutationOptions = {
 
   update: (queryClient: QueryClient): MutationOptions<GoalResponse, Error, { goalId: number; title: string }> => ({
     mutationFn: async ({ goalId, title }) => {
-      const response = await patchGoal(goalId, { title });
+      const response = await clientFetcher.patch<GoalResponse>(GOALS_API_PATH.detail(goalId), { title });
       return response.data;
     },
     onSuccess: async (data, { goalId }) => {
@@ -40,7 +41,7 @@ export const goalMutationOptions = {
   }),
   delete: (queryClient: QueryClient): MutationOptions<void, Error, number | string> => ({
     mutationFn: async (goalId: number | string) => {
-      await deleteGoal(Number(goalId));
+      await clientFetcher.delete(GOALS_API_PATH.detail(Number(goalId)));
     },
     onSuccess: (_, deletedId) => {
       queryClient.removeQueries({ queryKey: GOAL_QUERY_KEYS.detail(deletedId) });
