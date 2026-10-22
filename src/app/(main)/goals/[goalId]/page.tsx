@@ -11,12 +11,16 @@ import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import GoalHeader from "@/components/goals/GoalHeader";
 import GoalBody from "@/components/goals/GoalBody";
 import { useParams, useRouter } from "next/navigation";
+import { useGoalContext } from "@/hooks/state/goal/useGoalContext";
 
 export default function GoalPage() {
   const router = useRouter();
   const params = useParams();
-
   const goalId = params?.goalId as string;
+
+  const setGoalId = useGoalContext((state) => state.setGoalId);
+  const onGoalAdded = useGoalContext((state) => state.onGoalAdded);
+  const onGoalDeleted = useGoalContext((state) => state.onGoalDeleted);
 
   const [thisGoal, setThisGoal] = useState<GoalListItem | null>(null);
   const [goalList, setGoalList] = useState<GoalListItem[]>([]);
@@ -43,7 +47,7 @@ export default function GoalPage() {
           setThisGoal(currentGoal);
 
           if (currentGoal) {
-            localStorage.setItem("recentGoalId", String(currentGoal.id));
+            setGoalId(currentGoal.id);
           }
         }
 
@@ -68,7 +72,23 @@ export default function GoalPage() {
     router.push(`/goals/${selectedGoalId}`);
   };
 
-  // 3. 목표 제목 수정 API 요청
+  // [추가] 새 목표 추가 API 요청
+  const handleAddGoal = async (newTitle: string) => {
+    try {
+      // POST /{teamId}/goals
+      const { data: createdGoal } = await clientFetcher.post<GoalListItem>(GOALS_API_PATH.base, {
+        title: newTitle,
+      });
+
+      onGoalAdded(createdGoal);
+      router.push(`/goals/${createdGoal.id}`);
+    } catch (error) {
+      console.error("새 목표 생성 실패:", error);
+      alert("새 목표 생성에 실패했습니다.");
+    }
+  };
+
+  // [수정] 목표 제목 수정 API 요청
   const handleUpdateTitle = async (newTitle: string) => {
     if (!thisGoal) return;
     const targetGoalId = thisGoal.id;
@@ -90,18 +110,28 @@ export default function GoalPage() {
     }
   };
 
-  // 4. 새 목표 추가 API 요청
-  const handleAddGoal = async (newTitle: string) => {
-    try {
-      // POST /{teamId}/goals
-      const { data: createdGoal } = await clientFetcher.post<GoalListItem>(GOALS_API_PATH.base, {
-        title: newTitle,
-      });
+  // [삭제] 목표 삭제 API
+  const handleDeleteGoal = async (deleteId: number) => {
+    if (!confirm("정말 이 목표를 삭제하시겠습니까?")) return;
 
-      router.push(`/goals/${createdGoal.id}`);
+    try {
+      await clientFetcher.delete(`${GOALS_API_PATH.base}/${deleteId}`);
+
+      // 스토어에서 다음 목표 ID 계산 후 받아오기
+      const nextGoalId = onGoalDeleted(deleteId, goalList);
+
+      setGoalList((prevList) => prevList.filter((item) => item.id !== deleteId));
+
+      if (nextGoalId) {
+        router.push(`/goals/${nextGoalId}`);
+      } else {
+        router.push("/dashboard");
+      }
+
+      router.refresh();
     } catch (error) {
-      console.error("새 목표 생성 실패:", error);
-      alert("새 목표 생성에 실패했습니다.");
+      console.error("목표 삭제 실패: ", error);
+      alert("목표 삭제에 실패했습니다.");
     }
   };
 
@@ -109,7 +139,6 @@ export default function GoalPage() {
     setTodoList((prevList) => prevList.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
   };
 
-  // 데이터 로딩 중 처리 (화면 깨짐 방지)
   if (isLoading) {
     return <div className="p-24">목표를 불러오는 중입니다...</div>;
   }
@@ -141,6 +170,7 @@ export default function GoalPage() {
         onSelectGoal={handleSelectGoal}
         onAddGoal={handleAddGoal}
         onUpdateTitle={handleUpdateTitle}
+        onDeleteGoal={handleDeleteGoal}
       />
       <GoalBody
         goal={thisGoal}

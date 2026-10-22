@@ -13,14 +13,24 @@ interface GoalTitleProps {
   onSelectGoal?: (goalId: string) => void; // 목표 변경 시 호출할 콜백
   onAddGoal?: (newTitle: string) => void; // 새 목표 추가 시 호출할 콜백
   onUpdateTitle?: (newTitle: string) => void; // 제목 수정 시 호출할 콜백
+  onDeleteGoal?: (goalId: number) => void; // 목표 삭제 시 호출할 콜백
 }
-export default function GoalTitle({ goal, goalList, onSelectGoal, onAddGoal, onUpdateTitle }: GoalTitleProps) {
+
+export default function GoalTitle({
+  goal,
+  goalList,
+  onSelectGoal,
+  onAddGoal,
+  onUpdateTitle,
+  onDeleteGoal,
+}: GoalTitleProps) {
   const { isOpen: isTyping, close: inputClose, toggle: editTitle } = useDisclosure();
   const { isOpen: isModalOpen, close: modalClose, toggle: changeGoal } = useDisclosure();
 
   const [titleInput, setTitleInput] = useState(goal.title);
-  /** 인풋 바깥 클릭 시 달력 닫기 */
-  const containerRef = useClickOutside(() => {
+
+  /** 인풋 바깥 클릭 시 입력창 닫기 */
+  const inputContainerRef = useClickOutside(() => {
     inputClose();
   });
   /** Dropdown 컴포넌트 규격에 맞게 매핑 */
@@ -49,6 +59,10 @@ export default function GoalTitle({ goal, goalList, onSelectGoal, onAddGoal, onU
     inputClose();
   };
 
+  const handleDelete = () => {
+    onDeleteGoal?.(goal.id);
+  };
+
   return (
     <div className="col-span-2 flex flex-2 flex-row items-center justify-between gap-8 rounded-md bg-white p-20 shadow-sm">
       <div className="flex flex-row items-center justify-center gap-16">
@@ -58,12 +72,13 @@ export default function GoalTitle({ goal, goalList, onSelectGoal, onAddGoal, onU
         {isTyping ? (
           <div
             className="flex w-full flex-row gap-12"
-            ref={containerRef}
+            ref={inputContainerRef}
           >
             <TextInput
               value={titleInput}
               onChange={(e) => setTitleInput(e.target.value)}
               placeholder={goal.title}
+              autoFocus
             />
             <button
               type="button"
@@ -91,13 +106,22 @@ export default function GoalTitle({ goal, goalList, onSelectGoal, onAddGoal, onU
           {
             lable: "목표 제목 수정",
             onClick: () => {
+              modalClose();
               setTitleInput(goal.title);
               editTitle();
             },
           },
           {
+            lable: "목표 삭제",
+            onClick: () => {
+              handleDelete();
+            },
+          },
+          {
             lable: "다른 목표",
             onClick: () => {
+              inputClose();
+              modalClose();
               changeGoal();
             },
           },

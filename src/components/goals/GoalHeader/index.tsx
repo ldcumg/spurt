@@ -13,6 +13,7 @@ interface GoalHeaderProps {
   onSelectGoal?: (goalId: string) => void;
   onAddGoal?: (newTitle: string) => void;
   onUpdateTitle?: (newTitle: string) => void;
+  onDeleteGoal?: (goalId: number) => void;
 }
 
 export default function GoalHeader({
@@ -24,6 +25,7 @@ export default function GoalHeader({
   onSelectGoal,
   onAddGoal,
   onUpdateTitle,
+  onDeleteGoal,
 }: GoalHeaderProps) {
   return (
     <section>
@@ -34,6 +36,7 @@ export default function GoalHeader({
           onSelectGoal={onSelectGoal}
           onAddGoal={onAddGoal}
           onUpdateTitle={onUpdateTitle}
+          onDeleteGoal={onDeleteGoal}
         />
         <GoalProgress
           totalCount={totalCount}
