@@ -24,7 +24,7 @@ const todos: DropDownOption[] = [
 ];
 
 const meta = {
-  title: "Components/Dropdown",
+  title: "UI/Dropdown",
   component: Dropdown,
   parameters: {
     layout: "padded",

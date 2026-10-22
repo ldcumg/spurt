@@ -31,17 +31,15 @@ export default function Modal({
   className,
   ...props
 }: ModalProps) {
-  const modalClasses = twMerge(
-    clsx("flex h-full w-full flex-col overflow-y-auto bg-white md:h-auto md:w-456 md:rounded-2xl", className),
-  );
-
   return (
     <Disclosure
       className="fixed inset-0 flex flex-col items-center justify-center bg-black/60"
       isOpen={isOpen}
     >
       <div
-        className={modalClasses}
+        className={twMerge(
+          clsx("flex h-full w-full flex-col overflow-y-auto bg-white md:h-auto md:w-456 md:rounded-2xl", className),
+        )}
         {...props}
       >
         <header className="flex w-full flex-row items-center justify-between">

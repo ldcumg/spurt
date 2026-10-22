@@ -6,7 +6,7 @@ import { http, HttpResponse } from "msw";
 import { useState } from "react";
 
 const meta = {
-  title: "components/SelectGoalDropdown",
+  title: "UI/SelectGoalDropdown",
   component: SelectGoalDropdown,
   parameters: {
     layout: "padded",

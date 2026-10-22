@@ -37,7 +37,7 @@ import {
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "foundations",
+  title: "FOUNDATION",
   parameters: {
     layout: "padded",
   },
