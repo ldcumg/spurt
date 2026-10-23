@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import type { GoalListItem } from "@/types/goals.types";
 import calcPercentage from "@/utils/calcPercentage";
-import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import { useUserQuery } from "@/hooks/queries/user/useUserQueries";
 import { useGoalDetailQuery, useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
 import {
   useAddGoalMutation,

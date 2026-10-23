@@ -10,7 +10,7 @@ import {
   PASSWORD_MIN_LENGTH,
   VALIDATION_MESSAGES,
 } from "@/constants/validation";
-import { useSignupMutation } from "@/hooks/mutations/useSignupMutation";
+import { useSignupMutation } from "@/hooks/mutations/auth/useAuthMutations";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

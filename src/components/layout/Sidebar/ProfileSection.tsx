@@ -1,7 +1,7 @@
 "use client";
 
 import Profile from "@/components/ui/Profile";
-import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import { useUserQuery } from "@/hooks/queries/user/useUserQueries";
 
 export default function ProfileSection() {
   const { data: user } = useUserQuery();

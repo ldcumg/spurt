@@ -14,7 +14,7 @@ import ROUTES from "@/constants/routes";
 import { useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
 import { useSaveTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
-import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import { useUserQuery } from "@/hooks/queries/user/useUserQueries";
 import type { TodoResponse } from "@/types/todos.types";
 import type { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";
