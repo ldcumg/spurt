@@ -41,7 +41,7 @@ export default function ProfileSection() {
       </Button>
 
       {isOpen && (
-        <div className="absolute bottom-full left-0 z-10 mb-8 flex w-full flex-col gap-4 rounded-xl bg-white p-12 shadow-lg">
+        <div className="absolute bottom-full left-0 z-10 mb-8 flex w-full flex-col gap-4 rounded-xl bg-white p-12 shadow-md/16">
           <Button
             type="button"
             variant="ghost"
