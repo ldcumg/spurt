@@ -3,7 +3,9 @@
 import type { OpenState } from "../../types";
 import { Plus } from "@/assets/icons";
 import TextInput from "@/components/ui/TextInput";
-import type { SubmitEventHandler } from "react";
+import { validateTitle } from "@/components/ui/TodoFormTrigger/index.utils";
+import { useAddGoalMutation } from "@/hooks/mutations/goal/useGoalMutations";
+import { useState } from "react";
 
 interface AddGoalInputProps {
   isGoalInputOpen: boolean;
@@ -12,31 +14,38 @@ interface AddGoalInputProps {
 
 /** 새 목표 입력 폼을 열고 제출하는 드롭다운 항목입니다. */
 export default function AddGoalInput({ isGoalInputOpen, setIsOpen }: AddGoalInputProps) {
-  /** 새 목표 추가 */
-  const handleAddGoalSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
+  const { mutate: addGoalMutate } = useAddGoalMutation();
+  const [titleValue, setTitleValue] = useState("");
+  const [errorMassage, setErrorMassage] = useState("");
 
-    // const formData = new FormData(e.currentTarget);
-    // const goal = formData.get("goal");
-    // TODO - 새 목표 추가 로직 완성되면 가져오기
-    // onAddGoal(String(goal));
+  /** 새 목표 추가 */
+  const handleAddGoal = () => {
+    if (validateTitle(titleValue, setErrorMassage)) {
+      alert(errorMassage);
+      return;
+    }
+    addGoalMutate({ title: titleValue });
+    setIsOpen((prev) => ({ ...prev, goalInput: false }));
+    setTitleValue("");
   };
 
   return (
     <>
       {isGoalInputOpen ? (
-        <form
-          className="text-title-xs flex items-center justify-center gap-12 rounded-xl p-8"
-          onSubmit={handleAddGoalSubmit}
-        >
+        <div className="text-title-xs flex items-center justify-center gap-12 rounded-xl p-8">
           <TextInput
             name="goal"
             placeholder="목표를 입력해주세요"
+            value={titleValue}
+            onChange={(e) => setTitleValue(e.target.value)}
           />
-          <button type="submit">
+          <button
+            onClick={handleAddGoal}
+            type="button"
+          >
             <Plus className="size-24" />
           </button>
-        </form>
+        </div>
       ) : (
         <li
           className="text-title-xs flex cursor-pointer justify-center gap-12 rounded-xl p-8"
