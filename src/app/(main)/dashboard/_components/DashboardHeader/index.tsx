@@ -1,5 +1,5 @@
 interface DashBoardHeaderProps {
-  userName: string;
+  userName: string | undefined;
 }
 
 export default function DashBoardHeader({ userName }: DashBoardHeaderProps) {

@@ -7,6 +7,12 @@ export const useSaveTodoMutation = (todoId?: number | undefined) => {
   return useMutation(todoMutationOptions.save(queryClient, todoId));
 };
 
+/** 할 일 완료 상태 변경 mutation */
+export const useToggleTodoDoneMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(todoMutationOptions.toggleDone(queryClient));
+};
+
 /** 할 일 수정 mutation */
 export const useUpdateTodoMutation = (todoId: number) => {
   const queryClient = useQueryClient();
