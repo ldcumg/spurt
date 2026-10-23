@@ -11,21 +11,21 @@ export default async function GoalPage({ params }: { params: Promise<{ goalId: s
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.query({
+    queryClient.prefetchQuery({
       queryKey: GOAL_QUERY_KEYS.list({ limit: 10 }),
       queryFn: async () => {
         const { data } = await getGoalList({ limit: 10 });
         return data;
       },
     }),
-    queryClient.query({
+    queryClient.prefetchQuery({
       queryKey: GOAL_QUERY_KEYS.detail(goalId),
       queryFn: async () => {
         const { data } = await getGoalDetail(Number(goalId));
         return data;
       },
     }),
-    queryClient.query({
+    queryClient.prefetchQuery({
       queryKey: TODO_QUERY_KEYS.list({ goalId: Number(goalId) }),
       queryFn: async () => {
         const { data } = await getTodoList({ goalId: Number(goalId) });
