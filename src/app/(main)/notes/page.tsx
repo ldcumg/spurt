@@ -1,6 +1,8 @@
 "use client";
 
-import MobileNavigation from "./components/MobileNavigation";
+import Button from "@/components/ui/Button";
+import ROUTES from "@/constants/routes";
+import { useRouter } from "next/navigation";
 import NoteDeleteDialog from "./components/NoteDeleteDialog";
 import NoteDetailPanel from "./components/NoteDetailPanel";
 import NotesHero from "./components/NotesHero";
@@ -9,9 +11,6 @@ import NotesToolbar from "./components/NotesToolbar";
 import { useNoteDelete } from "./hooks/useNoteDelete";
 import { useNoteDetail } from "./hooks/useNoteDetail";
 import { useNotesList } from "./hooks/useNotesList";
-import Button from "@/components/ui/Button";
-import ROUTES from "@/constants/routes";
-import { useRouter } from "next/navigation";
 
 export default function NotePage() {
   const router = useRouter();
@@ -31,8 +30,6 @@ export default function NotePage() {
 
   return (
     <div className="bg-surface text-foreground min-h-screen w-full">
-      <MobileNavigation />
-
       <div className="mx-auto w-full max-w-screen-xl px-16 pt-24 pb-112 md:px-32 md:pt-40 md:pb-40 xl:px-40">
         <NotesHero
           searchTerm={noteList.searchTerm}

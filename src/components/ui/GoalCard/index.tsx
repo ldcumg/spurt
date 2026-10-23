@@ -3,7 +3,7 @@ import Button from "../Button";
 import ProgressBar from "../ProgressBar";
 import TodoItem from "../TodoItem";
 import { FlagFilled, More, Plus } from "@/assets/icons";
-import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
+import TodoFormTrigger from "@/components/ui/TodoFormTrigger";
 import { GoalListItem } from "@/types/goals.types";
 import { TodoResponse } from "@/types/todos.types";
 
@@ -62,12 +62,11 @@ export default function GoalCard({ goal, todos = [], onToggle }: GoalCardProps) 
             <p className="text-title-xs flex h-full items-center justify-center">등록된 할 일이 없습니다.</p>
           )}
         </div>
-        <AddTodoTrigger
-          // TODO - 목표 정보 넣어주기 type: GoalListItem
-          // aleadySelectedGoal={}
-          renderItem={(addTodoOpen) => (
+        <TodoFormTrigger
+          aleadySelectedGoal={goal}
+          renderItem={(todoFormOpen) => (
             <Button
-              onClick={addTodoOpen}
+              onClick={todoFormOpen}
               variant={"outline"}
               size={"lg"}
               className="border-primary-500 flex h-48 w-full flex-row items-center justify-center gap-8 bg-white"

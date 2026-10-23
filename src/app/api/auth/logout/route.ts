@@ -1,4 +1,4 @@
-import { postLogout } from "@/apis/auth/api";
+import { postLogout } from "@/apis/auth/server";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/config/cookie";
 import { NextRequest, NextResponse } from "next/server";
 

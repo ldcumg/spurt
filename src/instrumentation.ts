@@ -1,13 +1,14 @@
+import { nodeEnvironment } from "./config/env";
 import * as Sentry from "@sentry/nextjs";
 
-export async function register() {
-  if (process.env.NEXT_RUNTIME === "nodejs") {
+export const register = async () => {
+  if (nodeEnvironment.isNode) {
     await import("../sentry.server.config");
   }
 
-  if (process.env.NEXT_RUNTIME === "edge") {
+  if (nodeEnvironment.isEdge) {
     await import("../sentry.edge.config");
   }
-}
+};
 
 export const onRequestError = Sentry.captureRequestError;
