@@ -1,6 +1,5 @@
 "use client";
 
-import MobileNavigation from "../components/MobileNavigation";
 import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
 import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError } from "../noteFormUtils";
 import DraftRestoreModal from "./components/DraftRestoreModal";
@@ -11,8 +10,9 @@ import { useCreateNote } from "./hooks/useCreateNote";
 import { useNoteDraft } from "./hooks/useNoteDraft";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
-import { useAddTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
-import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
+// useAllGoalQuery -> useGoalListQuery 로 변경되었습니다.
+import { useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
+import { useSaveTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
 import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
 import { useUserQuery } from "@/hooks/queries/useUserQuery";
 import type { TodoResponse } from "@/types/todos.types";
@@ -62,10 +62,10 @@ const getSubmitRequirementMessage = ({
 
 export default function NewNotePage() {
   const router = useRouter();
-  const goalQuery = useAllGoalQuery();
+  const goalQuery = useGoalListQuery();
   const todoQuery = useAllTodoQuery();
   const userQuery = useUserQuery();
-  const addTodoMutation = useAddTodoMutation();
+  const addTodoMutation = useSaveTodoMutation();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState<JSONContent>(() => createEmptyNoteContent());
   const [selectedGoalId, setSelectedGoalId] = useState("");
@@ -76,8 +76,9 @@ export default function NewNotePage() {
   const [actionMessage, setActionMessage] = useState("");
   const [isActionError, setIsActionError] = useState(false);
   const [createdAt] = useState(() => new Date());
+  // goalQuery.data?.data.goals.map --> goalQuery.data?.goals.map 으로 수정했습니다. (유진)
   const goals = useMemo<DropDownOption[]>(
-    () => goalQuery.data?.data.goals.map((goal) => ({ id: String(goal.id), label: goal.title })) ?? [],
+    () => goalQuery.data?.goals.map((goal) => ({ id: String(goal.id), label: goal.title })) ?? [],
     [goalQuery.data],
   );
   const effectiveGoalId = goals.some((goal) => goal.id === selectedGoalId) ? selectedGoalId : (goals[0]?.id ?? "");
@@ -218,8 +219,6 @@ export default function NewNotePage() {
 
   return (
     <div className="bg-surface text-foreground min-h-screen w-full min-w-0 bg-[radial-gradient(circle_at_top_right,var(--color-primary-50),var(--color-surface)_56%)]">
-      <MobileNavigation />
-
       {noteDraft.draftToRestore && (
         <DraftRestoreModal
           isOpen={noteDraft.isRestoreOpen}

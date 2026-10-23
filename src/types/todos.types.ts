@@ -1,27 +1,22 @@
+import type { PaginationParams } from "./api/request.types";
+import type { PaginationMeta, Timestamps } from "./api/response.types";
+
 // api request
 
-export type PostTodoRequest = {
+type TodoRequired = {
   title: string;
-  goalId?: number;
-  fileUrl?: string;
-  linkUrl?: string;
-  dueDate?: string;
-  tags?: string[];
+  goalId: number;
 };
 
-export type PatchTodoRequest = {
-  title?: string;
-  done?: boolean;
-  goalId?: number | null;
-  fileUrl?: string | null;
-  linkUrl?: string | null;
-  dueDate?: string | null;
-  tags?: string[];
-};
+type TodoOptional = Partial<{
+  done: boolean;
+  fileUrl: string;
+  linkUrl: string;
+  dueDate: string;
+  tags: string[];
+}>;
 
 export type GetTodoListParams = {
-  cursor?: number;
-  limit?: number;
   goalId?: number;
   sort?: "latest" | "dueSoon";
   done?: boolean;
@@ -29,25 +24,25 @@ export type GetTodoListParams = {
   date?: string;
   from?: string;
   to?: string;
-};
+} & PaginationParams;
 
-export type GetFavoriteTodoListParams = {
-  cursor?: number;
-  limit?: number;
-};
+export type PostTodoRequest = TodoRequired & TodoOptional;
+
+export type PatchTodoRequest = Partial<TodoRequired> & TodoOptional;
+
+export type GetFavoriteTodoListParams = PaginationParams;
 
 // api response
 
-export type TodoListResponse = {
-  todos: TodoResponse[];
-  nextCursor: number | null;
-  totalCount: number;
+// 할 일이 포함된 목표 타입을 요약
+export type TodoGoalSummary = {
+  id: number;
+  title: string;
 };
 
-export type FavoriteTodoListResponse = {
-  favorites: FavoriteTodoResponse[];
-  nextCursor: number | null;
-  totalCount: number;
+export type TodoTag = {
+  id: number;
+  name: string;
 };
 
 export type TodoResponse = {
@@ -60,30 +55,24 @@ export type TodoResponse = {
   fileUrl: string | null;
   linkUrl: string | null;
   dueDate: string | null;
-  createdAt: string;
-  updatedAt: string;
   goal: TodoGoalSummary;
   noteIds: number[];
   tags: TodoTag[];
   isFavorite: boolean;
-};
+} & Timestamps;
+
+export type TodoListResponse = {
+  todos: TodoResponse[];
+} & PaginationMeta;
 
 export type FavoriteTodoResponse = {
   id: number;
   teamId: string;
   userId: number;
   todoId: number;
-  createdAt: string;
   todo: TodoResponse;
-};
+} & Timestamps;
 
-// 할 일이 포함된 목표 타입을 요약
-export type TodoGoalSummary = {
-  id: number;
-  title: string;
-};
-
-export type TodoTag = {
-  id: number;
-  name: string;
-};
+export type FavoriteTodoListResponse = {
+  favorites: FavoriteTodoResponse[];
+} & PaginationMeta;

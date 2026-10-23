@@ -9,13 +9,11 @@ const Disclosure = dynamic(() => import("@/components/layout/Disclosure"), {
   ssr: false,
 });
 
-interface ModalProps {
-  children: React.ReactNode;
+interface ModalProps extends Omit<React.ComponentProps<"div">, "title"> {
   isOpen: boolean;
   onClose: () => void;
   isCloseDisabled?: boolean;
   title: React.ReactNode;
-  className?: string;
 }
 
 /**
@@ -24,18 +22,30 @@ interface ModalProps {
  * @param onClose - 모달 닫기 함수 const { close } = useDisclosure()
  * @param title - 모달 제목
  */
-export default function Modal({ children, isOpen, onClose, title, className, isCloseDisabled = false }: ModalProps) {
-  const modalClasses = twMerge(
-    clsx("flex h-full w-full flex-col overflow-y-auto bg-white md:h-auto md:w-456 md:rounded-2xl", className),
-  );
-
+export default function Modal({
+  children,
+  isOpen,
+  onClose,
+  title,
+  isCloseDisabled = false,
+  className,
+  ...props
+}: ModalProps) {
   return (
     <Disclosure
       className="fixed inset-0 flex flex-col items-center justify-center bg-black/60"
       isOpen={isOpen}
     >
-      <div className={modalClasses}>
-        <header className="flex w-full flex-row items-center justify-between">
+      <div
+        className={twMerge(
+          clsx(
+            "flex h-full w-full flex-col overflow-y-auto bg-white p-24 md:h-auto md:w-456 md:rounded-2xl md:p-32",
+            className,
+          ),
+        )}
+        {...props}
+      >
+        <header className="mb-16 flex w-full flex-row items-center justify-between md:mb-32">
           <h1 className="text-title-sm md:text-title-md">{title}</h1>
 
           <button
