@@ -1,6 +1,5 @@
-import ProgressRing from "@/components/ui/ProgressRing";
+import ProgressRing from "@/components/ui/ProgressRing/index";
 import { TodoResponse } from "@/types/todos.types";
-import React from "react";
 
 interface ProgressBoxProps {
   doneCount: number;
