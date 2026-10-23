@@ -39,7 +39,7 @@ export default function TodoItem({ todo, type = "default", onToggle }: TodoListI
           todo={todo}
           renderItem={(todoDetailOpen) => (
             <div
-              className={`flex min-w-0 flex-1 flex-col gap-2 ${type === "goal" ? "@md:grid @md:grid-cols-2 @md:items-center @md:gap-16" : ""} `}
+              className={`flex min-w-0 flex-1 cursor-pointer flex-col gap-2 ${type === "goal" ? "@md:grid @md:grid-cols-2 @md:items-center @md:gap-16" : ""} `}
               onClick={todoDetailOpen}
             >
               <div className="min-w-0">

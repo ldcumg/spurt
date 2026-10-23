@@ -1,3 +1,5 @@
+"use client";
+
 import { Burger, X } from "@/assets/icons";
 import Sidebar from "@/components/layout/Sidebar";
 import Button from "@/components/ui/Button";
