@@ -1,15 +1,15 @@
 "use client";
 
-import CalendarBody from "@/components/calendar/CalendarBody";
-import DayHeader from "@/components/calendar/DayHeader";
-import DesctopCalendarHeader from "@/components/calendar/DesktopCalendarHeader";
-import MobileCalendarHeader from "@/components/calendar/MobileCalendarHeader";
-import TodoForDate from "@/components/calendar/TodoForDate";
-import type { CalendarWeeks } from "@/components/calendar/types";
-import { getCalendarWeeks, groupTodosByDate } from "@/components/calendar/utils";
+import type { CalendarWeeks } from "./index.types";
+import { getCalendarWeeks, groupTodosByDate } from "./index.utils";
+import CalendarBody from "@/app/(main)/calendar/_components/CalendarBody";
+import DesctopCalendarHeader from "@/app/(main)/calendar/_components/DesktopCalendarHeader";
+import MobileCalendarHeader from "@/app/(main)/calendar/_components/MobileCalendarHeader";
+import TodoForDate from "@/app/(main)/calendar/_components/TodoForDate";
+import DayHeader from "@/components/ui/DayHeader";
 import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
 import { useViewport } from "@/hooks/viewport/useViewport";
-import type { GoalListItem } from "@/types/goals.types";
+import type { TodoGoalSummary } from "@/types/todos.types";
 import { useState } from "react";
 
 export default function CalendarPage() {
@@ -23,7 +23,7 @@ export default function CalendarPage() {
 
   const [isMonthView, setIsMonthView] = useState<boolean>(true);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
-  const [selectedGoal, setSelectedGoal] = useState<GoalListItem | null>(null);
+  const [selectedGoal, setSelectedGoal] = useState<TodoGoalSummary | null>(null);
 
   const { data: todoData, isPending: isTodoPending, isError: isTodoError, error: Todoerror } = useAllTodoQuery();
   if (isTodoPending) return <div>Loading...</div>;

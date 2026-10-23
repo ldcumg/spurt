@@ -1,14 +1,16 @@
-import { buildApiUrl } from "../index.utils";
 import { goalMocks } from "./mocks";
 import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import { http, HttpResponse } from "msw";
 
-export const goalHandlers = [
+const goalsState = [...goalMocks.goals];
+
+export const goalHandlers = (buildApiUrl: (path: string) => string) => [
+  // 목표 목록 조회
   http.get(buildApiUrl(GOALS_API_PATH.base), () => {
     return HttpResponse.json({
-      goals: goalMocks.goals,
+      goals: goalsState,
       nextCursor: goalMocks.nextCursor,
-      totalCount: goalMocks.goals.length,
+      totalCount: goalsState.length,
     });
   }),
 
@@ -23,7 +25,7 @@ export const goalHandlers = [
 
     const now = new Date().toISOString();
     // 기존 목표들 중 가장 큰 ID에 +1 (없을 경우 Date.now())
-    const nextId = goalMocks.goals.length > 0 ? Math.max(...goalMocks.goals.map((g) => g.id)) + 1 : Date.now();
+    const nextId = goalsState.length > 0 ? Math.max(...goalsState.map((g) => g.id)) + 1 : Date.now();
 
     const newGoal = {
       id: nextId,
@@ -37,7 +39,7 @@ export const goalHandlers = [
     };
 
     // 목 데이터 목록 최상단에 새 목표 추가하여 이후 GET 목록 조회에 반영
-    goalMocks.goals.unshift(newGoal);
+    goalsState.unshift(newGoal);
 
     return HttpResponse.json(newGoal, { status: 201 });
   }),
@@ -51,7 +53,7 @@ export const goalHandlers = [
       return HttpResponse.json({ message: "목표 제목은 필수입니다.", code: "INVALID_TITLE" }, { status: 400 });
     }
 
-    const targetGoal = goalMocks.goals.find((goal) => String(goal.id) === String(goalId));
+    const targetGoal = goalsState.find((goal) => String(goal.id) === String(goalId));
     if (!targetGoal) {
       return HttpResponse.json({ message: "존재하지 않는 목표입니다.", code: "GOAL_NOT_FOUND" }, { status: 404 });
     }
@@ -67,5 +69,18 @@ export const goalHandlers = [
       createdAt: targetGoal.createdAt,
       updatedAt: targetGoal.updatedAt,
     });
+  }),
+
+  // 목표 삭제
+  http.delete(buildApiUrl(`${GOALS_API_PATH.base}/:goalId`), ({ params }) => {
+    const { goalId } = params;
+    const targetId = Number(goalId);
+
+    const index = goalsState.findIndex((g) => String(g.id) === String(goalId));
+    if (index !== -1) {
+      goalsState.splice(index, 1);
+    }
+
+    return HttpResponse.json({ id: targetId }, { status: 200 });
   }),
 ];

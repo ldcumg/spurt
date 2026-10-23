@@ -30,7 +30,10 @@ export const NavItemStates: Story = {
   render: () => (
     <div className="flex gap-24">
       {NAV_ITEMS.map((item) => (
-        <div key={item.href} className="w-200">
+        <div
+          key={item.href}
+          className="w-200"
+        >
           <NavSection activeHref={item.href} />
         </div>
       ))}

@@ -26,7 +26,7 @@ export default function ModalActions({
   confirmButtonLabel = "확인",
   isCloseDisabled = false,
   isConfirmDisabled,
-  confirmButtonType = "submit",
+  confirmButtonType = "button",
 }: ModalActionsProps) {
   return (
     <div className="mt-auto flex w-full gap-10 pt-15 md:gap-12 md:pt-24">
