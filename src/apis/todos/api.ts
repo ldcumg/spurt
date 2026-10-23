@@ -1,5 +1,5 @@
 import { TODOS_API_PATH } from "@/constants/apiEndpoints";
-import { serverFetcher } from "@/lib/axios/serverFetcher";
+import type { Fetcher } from "@/types/api/fetcher.types";
 import {
   FavoriteTodoResponse,
   FavoriteTodoListResponse,
@@ -11,24 +11,23 @@ import {
   TodoListResponse,
 } from "@/types/todos.types";
 
-export const getTodoList = (params?: GetTodoListParams) =>
-  serverFetcher<TodoListResponse>(TODOS_API_PATH.base, { params });
+export const createTodosApi = (fetcher: Fetcher) => ({
+  getTodoList: (params?: GetTodoListParams) => fetcher<TodoListResponse>(TODOS_API_PATH.base, { params }),
 
-export const postTodo = (body: PostTodoRequest) =>
-  serverFetcher<TodoResponse>(TODOS_API_PATH.base, { method: "POST", data: body });
+  postTodo: (body: PostTodoRequest) => fetcher<TodoResponse>(TODOS_API_PATH.base, { method: "POST", data: body }),
 
-export const getTodoDetail = (todoId: number) => serverFetcher<TodoResponse>(TODOS_API_PATH.detail(todoId));
+  getTodoDetail: (todoId: number) => fetcher<TodoResponse>(TODOS_API_PATH.detail(todoId)),
 
-export const patchTodo = (todoId: number, body: PatchTodoRequest) =>
-  serverFetcher<TodoResponse>(TODOS_API_PATH.detail(todoId), { method: "PATCH", data: body });
+  patchTodo: (todoId: number, body: PatchTodoRequest) =>
+    fetcher<TodoResponse>(TODOS_API_PATH.detail(todoId), { method: "PATCH", data: body }),
 
-export const deleteTodo = (todoId: number) => serverFetcher(TODOS_API_PATH.detail(todoId), { method: "DELETE" });
+  deleteTodo: (todoId: number) => fetcher(TODOS_API_PATH.detail(todoId), { method: "DELETE" }),
 
-export const getFavoriteTodoList = (params?: GetFavoriteTodoListParams) =>
-  serverFetcher<FavoriteTodoListResponse>(TODOS_API_PATH.favorites, { params });
+  getFavoriteTodoList: (params?: GetFavoriteTodoListParams) =>
+    fetcher<FavoriteTodoListResponse>(TODOS_API_PATH.favorites, { params }),
 
-export const postFavoriteTodo = (todoId: number) =>
-  serverFetcher<FavoriteTodoResponse>(TODOS_API_PATH.favorite(todoId), { method: "POST" });
+  postFavoriteTodo: (todoId: number) =>
+    fetcher<FavoriteTodoResponse>(TODOS_API_PATH.favorite(todoId), { method: "POST" }),
 
-export const deleteFavoriteTodo = (todoId: number) =>
-  serverFetcher(TODOS_API_PATH.favorite(todoId), { method: "DELETE" });
+  deleteFavoriteTodo: (todoId: number) => fetcher(TODOS_API_PATH.favorite(todoId), { method: "DELETE" }),
+});

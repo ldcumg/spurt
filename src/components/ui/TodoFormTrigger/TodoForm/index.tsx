@@ -39,7 +39,7 @@ export default function TodoForm({ todoFormClose, aleadySelectedGoal, aleadySele
 
   return (
     <form
-      className="mt-16 flex h-full flex-col gap-12 md:mt-32 md:gap-16"
+      className="flex h-full flex-col gap-12 md:gap-16"
       onSubmit={(event) => handleTodoSubmit({ event, formState, setErrorByKey, mutate, todoFormClose, todo })}
       ref={formRef}
     >

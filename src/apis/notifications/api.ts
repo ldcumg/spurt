@@ -1,5 +1,5 @@
 import { NOTIFICATIONS_API_PATH } from "@/constants/apiEndpoints";
-import { serverFetcher } from "@/lib/axios/serverFetcher";
+import type { Fetcher } from "@/types/api/fetcher.types";
 import {
   GetNotificationListParams,
   NotificationResponse,
@@ -7,15 +7,17 @@ import {
   PatchNotificationRequest,
 } from "@/types/notifications.types";
 
-export const getNotificationList = (params?: GetNotificationListParams) =>
-  serverFetcher<NotificationListResponse>(NOTIFICATIONS_API_PATH.base, { params });
+export const createNotificationsApi = (fetcher: Fetcher) => ({
+  getNotificationList: (params?: GetNotificationListParams) =>
+    fetcher<NotificationListResponse>(NOTIFICATIONS_API_PATH.base, { params }),
 
-export const patchAllNotifications = () => serverFetcher(NOTIFICATIONS_API_PATH.base, { method: "PATCH" });
+  patchAllNotifications: () => fetcher(NOTIFICATIONS_API_PATH.base, { method: "PATCH" }),
 
-export const deleteAllNotifications = () => serverFetcher(NOTIFICATIONS_API_PATH.base, { method: "DELETE" });
+  deleteAllNotifications: () => fetcher(NOTIFICATIONS_API_PATH.base, { method: "DELETE" }),
 
-export const patchNotification = (notificationId: number, body: PatchNotificationRequest) =>
-  serverFetcher<NotificationResponse>(NOTIFICATIONS_API_PATH.detail(notificationId), { method: "PATCH", data: body });
+  patchNotification: (notificationId: number, body: PatchNotificationRequest) =>
+    fetcher<NotificationResponse>(NOTIFICATIONS_API_PATH.detail(notificationId), { method: "PATCH", data: body }),
 
-export const deleteNotification = (notificationId: number) =>
-  serverFetcher(NOTIFICATIONS_API_PATH.detail(notificationId), { method: "DELETE" });
+  deleteNotification: (notificationId: number) =>
+    fetcher(NOTIFICATIONS_API_PATH.detail(notificationId), { method: "DELETE" }),
+});

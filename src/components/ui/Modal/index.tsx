@@ -38,11 +38,14 @@ export default function Modal({
     >
       <div
         className={twMerge(
-          clsx("flex h-full w-full flex-col overflow-y-auto bg-white md:h-auto md:w-456 md:rounded-2xl", className),
+          clsx(
+            "flex h-full w-full flex-col overflow-y-auto bg-white p-24 md:h-auto md:w-456 md:rounded-2xl md:p-32",
+            className,
+          ),
         )}
         {...props}
       >
-        <header className="flex w-full flex-row items-center justify-between">
+        <header className="mb-16 flex w-full flex-row items-center justify-between md:mb-32">
           <h1 className="text-title-sm md:text-title-md">{title}</h1>
 
           <button

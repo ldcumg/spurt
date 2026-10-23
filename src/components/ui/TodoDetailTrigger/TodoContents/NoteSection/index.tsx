@@ -1,6 +1,6 @@
 "use client";
 
-import { NoteColor } from "@/assets/icons";
+import { NoteFilled } from "@/assets/icons";
 import { useNoteDetailsQueries } from "@/hooks/queries/note/useNoteQueries";
 import type { NoteResponse } from "@/types/notes.types";
 
@@ -23,11 +23,13 @@ export default function NoteSection({ noteIds, handleNoteDetailOpen }: NoteSecti
 
           return (
             <div
-              className="flex cursor-pointer flex-row items-center gap-12 rounded-xl border p-16"
+              className="flex cursor-pointer flex-row items-center gap-4 rounded-xl border p-16"
               onClick={() => handleNoteDetailOpen(data)}
               key={data.id}
             >
-              <NoteColor className="size-32" />
+              <span className="p-4">
+                <NoteFilled className="size-24" />
+              </span>
               <span className="text-title-xs xl:text-title-sm">{data.title}</span>
             </div>
           );

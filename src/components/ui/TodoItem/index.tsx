@@ -2,10 +2,10 @@
 
 import TextDropdown from "../TextDropdown";
 import TodoFormTrigger from "../TodoFormTrigger";
-import { Done, FlagFilled, Note, Todo } from "@/assets/icons/index";
+import { handleDeleteTodo } from "./index.services";
+import { Done, FlagFilled, Note, Todo } from "@/assets/icons";
 import TodoDetailTrigger from "@/components/ui/TodoDetailTrigger";
 import { useDeleteTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
-import { deleteTodo } from "@/services/deleteTodo";
 import { TodoResponse } from "@/types/todos.types";
 
 type TodoType = "default" | "goal";
@@ -69,7 +69,6 @@ export default function TodoItem({ todo, type = "default", onToggle }: TodoListI
         <TodoFormTrigger
           todo={todo}
           renderItem={(todoFormOpen) => (
-            //NOTE - 모달 구조 리팩토링 예정
             <TextDropdown
               options={[
                 {
@@ -78,7 +77,7 @@ export default function TodoItem({ todo, type = "default", onToggle }: TodoListI
                 },
                 {
                   lable: "삭제하기",
-                  onClick: () => deleteTodo(deleteTodoMutate),
+                  onClick: () => handleDeleteTodo(deleteTodoMutate),
                 },
               ]}
             />

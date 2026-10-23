@@ -1,6 +1,5 @@
 "use client";
 
-import MobileNavigation from "../components/MobileNavigation";
 import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
 import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError } from "../noteFormUtils";
 import DraftRestoreModal from "./components/DraftRestoreModal";
@@ -218,8 +217,6 @@ export default function NewNotePage() {
 
   return (
     <div className="bg-surface text-foreground min-h-screen w-full min-w-0 bg-[radial-gradient(circle_at_top_right,var(--color-primary-50),var(--color-surface)_56%)]">
-      <MobileNavigation />
-
       {noteDraft.draftToRestore && (
         <DraftRestoreModal
           isOpen={noteDraft.isRestoreOpen}
