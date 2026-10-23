@@ -2,6 +2,7 @@
 
 import { nodeEnvironment } from "@/config/env";
 import { ONE_MINUTE_FOR_TANSTACK } from "@/constants/timeConstants";
+import { shouldRetryQuery } from "@/utils/shouldRetryQuery";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { ReactNode } from "react";
@@ -11,7 +12,7 @@ const makeQueryClient = () => {
     defaultOptions: {
       queries: {
         staleTime: ONE_MINUTE_FOR_TANSTACK,
-        retry: 1,
+        retry: shouldRetryQuery,
       },
     },
   });
