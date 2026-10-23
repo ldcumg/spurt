@@ -27,7 +27,7 @@ export default function NoteSection({ noteIds, handleNoteDetailOpen }: NoteSecti
               onClick={() => handleNoteDetailOpen(data)}
               key={data.id}
             >
-              <span className="p-8">
+              <span className="p-4">
                 <NoteFilled className="size-24" />
               </span>
               <span className="text-title-xs xl:text-title-sm">{data.title}</span>
