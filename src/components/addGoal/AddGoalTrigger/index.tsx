@@ -44,13 +44,14 @@ export default function AddGoalTrigger({ children }: AddGoalTriggerProps) {
         title="목표 생성"
         isOpen={addGoalIsOpen}
         onClose={addGoalClose}
+        className="p-24 md:p-32"
       >
         <form
           onSubmit={(event) => {
             handleAddGoal({ event, addGoalMutate, hasError, addGoalClose });
           }}
           ref={formRef}
-          className="flex h-full flex-col"
+          className="mt-16 flex h-full flex-col gap-12 md:mt-32 md:gap-16"
         >
           <TextInput
             onBlur={(e) => validateTitle(e.target.value, setErrorByKey("title"))}
