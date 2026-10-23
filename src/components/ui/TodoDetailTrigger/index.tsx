@@ -18,7 +18,6 @@ interface TodoDetailTriggerProps {
 }
 
 export default function TodoDetailTrigger({ todo, renderItem }: TodoDetailTriggerProps) {
-  console.log("[ ㏒ ] todo =>", todo);
   const { isOpen: todoDetailIsOpen, open: todoDetailOpen, close: todoDetailClose } = useDisclosure();
   const { isOpen: noteDetailIsOpen, open: noteDetailOpen, close: noteDetailClose } = useDisclosure();
   const [selectedNote, setSelectedNote] = useState<NoteViewModel | null>(null);
