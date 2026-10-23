@@ -1,5 +1,13 @@
 "use client";
 
+import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
+import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError } from "../noteFormUtils";
+import DraftRestoreModal from "./components/DraftRestoreModal";
+import NoteEditor from "./components/NoteEditor";
+import NoteMetaPanel from "./components/NoteMetaPanel";
+import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
+import { useCreateNote } from "./hooks/useCreateNote";
+import { useNoteDraft } from "./hooks/useNoteDraft";
 import type { DropDownOption } from "@/components/ui/Dropdown";
 import ROUTES from "@/constants/routes";
 // useAllGoalQuery -> useGoalListQuery 로 변경되었습니다.
@@ -11,14 +19,6 @@ import type { TodoResponse } from "@/types/todos.types";
 import type { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
-import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError } from "../noteFormUtils";
-import DraftRestoreModal from "./components/DraftRestoreModal";
-import NoteEditor from "./components/NoteEditor";
-import NoteMetaPanel from "./components/NoteMetaPanel";
-import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
-import { useCreateNote } from "./hooks/useCreateNote";
-import { useNoteDraft } from "./hooks/useNoteDraft";
 
 interface SubmitRequirementMessageParams {
   hasPendingQueries: boolean;

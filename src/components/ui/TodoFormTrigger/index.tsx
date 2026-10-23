@@ -25,7 +25,6 @@ export default function TodoFormTrigger({
     <>
       {renderItem(todoFormOpen)}
       <Modal
-        className="p-24 md:p-32"
         title={todo ? "할 일 수정" : "할 일 생성"}
         isOpen={todoFormIsOpen}
         onClose={todoFormClose}
