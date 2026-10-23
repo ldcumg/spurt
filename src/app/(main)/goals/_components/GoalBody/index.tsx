@@ -7,9 +7,10 @@ interface GoalBodyProps {
   todosList: TodoResponse[];
   donesList: TodoResponse[];
   handleToggleTodo: (id: number) => void;
+  isTodoLoading: boolean;
 }
 
-export default function GoalBody({ goal, todosList, donesList, handleToggleTodo }: GoalBodyProps) {
+export default function GoalBody({ goal, todosList, donesList, handleToggleTodo, isTodoLoading }: GoalBodyProps) {
   return (
     <section className="flex flex-1 flex-col gap-24 lg:flex-row">
       <GoalTodoBox
@@ -17,12 +18,14 @@ export default function GoalBody({ goal, todosList, donesList, handleToggleTodo 
         list={todosList}
         goal={goal}
         handleToggleTodo={handleToggleTodo}
+        isLoading={isTodoLoading}
       />
       <GoalTodoBox
         variant="done"
         list={donesList}
         goal={goal}
         handleToggleTodo={handleToggleTodo}
+        isLoading={isTodoLoading}
       />
     </section>
   );

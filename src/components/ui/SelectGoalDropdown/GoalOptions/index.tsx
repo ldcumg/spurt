@@ -1,10 +1,10 @@
 "use client";
 
+import { useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
 import type { OpenState } from "../types";
 import AddGoalInput from "./AddGoalInput";
 import GoalOptionItem from "./GoalOptionItem";
 import { validateGoal } from "@/components/ui/TodoFormTrigger/index.utils";
-import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
 import type { TodoGoalSummary } from "@/types/todos.types";
 
 interface GoalOptionsProps {
@@ -31,12 +31,10 @@ export default function GoalOptions({
     closeDropdown();
   };
 
-  const { data: goalData, isPending: isGoalPending, isError: isGoalError, error: goalError } = useAllGoalQuery();
+  const { data: goalData, isPending: isGoalPending, isError: isGoalError, error: goalError } = useGoalListQuery();
   if (isGoalPending) return <div>Loading...</div>;
   if (isGoalError) return <div>Error: {goalError.message}</div>;
-  const {
-    data: { goals },
-  } = goalData;
+  const goals = goalData && "goals" in goalData ? goalData.goals : [];
 
   return (
     // border와 rounded를 담당하는 바깥 컨테이너

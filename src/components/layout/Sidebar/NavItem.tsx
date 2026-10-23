@@ -1,11 +1,10 @@
 "use client";
 
-import { GOALS_API_PATH } from "@/constants/apiEndpoints";
 import ROUTES from "@/constants/routes";
+import { goalQueryOptions } from "@/hooks/queries/goal/queryOptions";
 import { useGoalContext } from "@/hooks/state/goal/useGoalContext";
-import { clientFetcher } from "@/lib/axios/clientFetcher";
 import { twMerge } from "@/lib/twMerge";
-import { GoalListResponse } from "@/types/goals.types";
+import { useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -22,6 +21,7 @@ interface NavItemProps {
 export default function NavItem({ href, label, Icon, ActiveIcon, isActive }: NavItemProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // 최근 목표 ID 및 세터
   const currentGoalId = useGoalContext((state) => state.currentGoalId);
@@ -46,17 +46,18 @@ export default function NavItem({ href, label, Icon, ActiveIcon, isActive }: Nav
     if (isGoalRoute) {
       e.preventDefault();
 
-      // (1) 최근 본 목표가 스토어에 있으면 거기로 이동 후 즉시 종료
+      // (1) 최근 본 목표가 있으면 해당 목표로 이동
       if (currentGoalId) {
         router.push(`${ROUTES.goals}/${currentGoalId}`);
         return;
       }
 
-      // (2) 저장된 목표가 없을 때만 API로 첫 번째 목표 조회해서 이동
+      // (2) 저장된 목표가 없으면 첫 번째 목표를 조회해서 이동
       try {
-        const { data } = await clientFetcher.get<GoalListResponse>(GOALS_API_PATH.base, { params: { limit: 1 } });
-        if (data.goals && data.goals.length > 0) {
-          const firstGoalId = data.goals[0].id;
+        const data = await queryClient.query(goalQueryOptions.list({ limit: 1 }));
+        const firstGoal = data.goals[0];
+        if (firstGoal) {
+          const firstGoalId = firstGoal.id;
           setGoalId(firstGoalId); // 스토어 갱신
           router.push(`${ROUTES.goals}/${firstGoalId}`);
         } else {
@@ -64,6 +65,7 @@ export default function NavItem({ href, label, Icon, ActiveIcon, isActive }: Nav
         }
       } catch (error) {
         console.error("목표 목록 조회 실패:", error);
+        alert("목표 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.");
       }
     }
   };

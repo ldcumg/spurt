@@ -13,23 +13,34 @@ interface CalendarTodoItemProps {
 
 export default function CalendarTodoItem({ todo, className }: CalendarTodoItemProps) {
   const isDone = todo.done;
-  const buttonClasses = twMerge(
-    clsx(
-      `flex w-full flex-row items-center rounded-sm border px-8 py-4 truncate ${isDone ? "border-neutral-200 bg-neutral-100" : "bg-primary-100 border-primary-200"}`,
-      className,
-    ),
-  );
 
   return (
     <TodoDetailTrigger
       todo={todo}
       renderItem={(todoDetailOpen) => (
         <button
-          className={buttonClasses}
-          onClick={todoDetailOpen}
+          type="button"
+          className={twMerge(
+            clsx(
+              "flex w-full min-w-0 flex-row items-center gap-4 rounded-sm border px-8 py-4",
+              isDone ? "border-neutral-200 bg-neutral-100" : "bg-primary-100 border-primary-200",
+              className,
+            ),
+          )}
+          onClick={(e) => {
+            e.stopPropagation();
+            todoDetailOpen();
+          }}
         >
-          {isDone && <Check className="size-16 text-neutral-500" />}
-          <span className={`text-body-md ${isDone ? "text-neutral-500" : "text-primary-500"}`}>{todo.title}</span>
+          {isDone && <Check className="size-16 shrink-0 text-neutral-500" />}
+          <span
+            className={clsx(
+              "text-body-md min-w-0 flex-1 truncate text-left",
+              isDone ? "text-neutral-500" : "text-primary-500",
+            )}
+          >
+            {todo.title}
+          </span>
         </button>
       )}
     />

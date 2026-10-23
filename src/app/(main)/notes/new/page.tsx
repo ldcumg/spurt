@@ -1,15 +1,5 @@
 "use client";
 
-import type { DropDownOption } from "@/components/ui/Dropdown";
-import ROUTES from "@/constants/routes";
-import { useSaveTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
-import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
-import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
-import { useUserQuery } from "@/hooks/queries/useUserQuery";
-import type { TodoResponse } from "@/types/todos.types";
-import type { JSONContent } from "@tiptap/react";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
 import { getNoteApiError, isNoteApiErrorStatus } from "../noteApiError";
 import { createEmptyNoteContent, formatCreatedAt, getLinkUrlError } from "../noteFormUtils";
 import DraftRestoreModal from "./components/DraftRestoreModal";
@@ -18,6 +8,17 @@ import NoteMetaPanel from "./components/NoteMetaPanel";
 import NoteWriteHeader, { NoteActions } from "./components/NoteWriteHeader";
 import { useCreateNote } from "./hooks/useCreateNote";
 import { useNoteDraft } from "./hooks/useNoteDraft";
+import type { DropDownOption } from "@/components/ui/Dropdown";
+import ROUTES from "@/constants/routes";
+// useAllGoalQuery -> useGoalListQuery 로 변경되었습니다.
+import { useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
+import { useSaveTodoMutation } from "@/hooks/mutations/todo/useTodoMutations";
+import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
+import { useUserQuery } from "@/hooks/queries/useUserQuery";
+import type { TodoResponse } from "@/types/todos.types";
+import type { JSONContent } from "@tiptap/react";
+import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
 
 interface SubmitRequirementMessageParams {
   hasPendingQueries: boolean;
@@ -61,7 +62,7 @@ const getSubmitRequirementMessage = ({
 
 export default function NewNotePage() {
   const router = useRouter();
-  const goalQuery = useAllGoalQuery();
+  const goalQuery = useGoalListQuery();
   const todoQuery = useAllTodoQuery();
   const userQuery = useUserQuery();
   const addTodoMutation = useSaveTodoMutation();
@@ -75,8 +76,9 @@ export default function NewNotePage() {
   const [actionMessage, setActionMessage] = useState("");
   const [isActionError, setIsActionError] = useState(false);
   const [createdAt] = useState(() => new Date());
+  // goalQuery.data?.data.goals.map --> goalQuery.data?.goals.map 으로 수정했습니다. (유진)
   const goals = useMemo<DropDownOption[]>(
-    () => goalQuery.data?.data.goals.map((goal) => ({ id: String(goal.id), label: goal.title })) ?? [],
+    () => goalQuery.data?.goals.map((goal) => ({ id: String(goal.id), label: goal.title })) ?? [],
     [goalQuery.data],
   );
   const effectiveGoalId = goals.some((goal) => goal.id === selectedGoalId) ? selectedGoalId : (goals[0]?.id ?? "");
