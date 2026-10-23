@@ -51,7 +51,7 @@ export default function AddGoalTrigger({ children }: AddGoalTriggerProps) {
             handleAddGoal({ event, addGoalMutate, hasError, addGoalClose });
           }}
           ref={formRef}
-          className="mt-16 flex h-full flex-col gap-12 md:mt-32 md:gap-16"
+          className="flex h-full flex-col gap-12 md:gap-16"
         >
           <TextInput
             onBlur={(e) => validateTitle(e.target.value, setErrorByKey("title"))}
