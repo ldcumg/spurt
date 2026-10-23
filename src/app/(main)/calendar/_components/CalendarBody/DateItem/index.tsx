@@ -1,11 +1,13 @@
+import CalendarTodoItem from "../../CalendarTodoItem";
 import { THIS_WEEK_INDEX } from "@/app/(main)/calendar/index.constants";
 import type { CalendarWeeks } from "@/app/(main)/calendar/index.types";
 import { getCalendarWeeks, nextWeek, previousWeek } from "@/app/(main)/calendar/index.utils";
-import CalendarTodoItem from "../../CalendarTodoItem";
-import { CalendarDot } from "@/assets/icons";
+import { CalendarDot, Plus } from "@/assets/icons";
+import TodoFormTrigger from "@/components/ui/TodoFormTrigger";
 import { useViewport } from "@/hooks/viewport/useViewport";
 import type { TodoResponse } from "@/types/todos.types";
 import clsx from "clsx";
+import { Fragment } from "react";
 
 interface DateItemProps {
   date: Date;
@@ -35,7 +37,7 @@ export default function DateItem({
   const month = date.getMonth() + 1;
   const isMounthViewOrThisWeek = isMonthView || isThisWeek;
   const { isDesktop, isTablet } = useViewport();
-  const sliceNumber = isMonthView || !isThisWeek ? 3 : isDesktop ? 10 : isTablet ? 6 : 4;
+  const sliceNumber = isMonthView || !isThisWeek ? 3 : isDesktop ? 10 : isTablet ? 5 : 3;
 
   const handleMonthClick = () => {
     const thisSunday = new Date(date);
@@ -45,11 +47,16 @@ export default function DateItem({
   };
 
   /** 날짜 클릭 */
-  const handleDateClick = () => {
+  const handleDateClick = (todoFormOpen: () => void) => {
     const isPreviousWeek = weekIdx < THIS_WEEK_INDEX;
     const isNextWeek = weekIdx > THIS_WEEK_INDEX;
 
-    if (isMounthViewOrThisWeek) {
+    if (isMounthViewOrThisWeek && isDesktop) {
+      todoFormOpen();
+      return;
+    }
+
+    if (isMounthViewOrThisWeek && !isDesktop) {
       setSelectedDate(date);
       return;
     }
@@ -66,7 +73,7 @@ export default function DateItem({
   };
 
   return (
-    <div className={clsx("flex-1", isMounthViewOrThisWeek || "opacity-30")}>
+    <div className={clsx("min-w-0 flex-1", isMounthViewOrThisWeek || "opacity-30")}>
       {/* 다음 연도, 달 표시 */}
       {isNextMonthFirstWeek && (
         <div className="h-50">
@@ -85,62 +92,87 @@ export default function DateItem({
       )}
 
       {/* 일 */}
-      <div
-        className={`flex w-full flex-col border p-4 hover:cursor-pointer ${isMonthView ? "h-70 md:h-100 xl:h-140" : isThisWeek ? "h-200 md:h-300 xl:h-400" : "h-40 md:h-60"}`}
-        onClick={handleDateClick}
-      >
-        <h4
-          className={clsx(
-            `flex aspect-square w-25 items-center justify-center ${isMonthView ? "text-body-md" : isThisWeek ? "text-title-xs" : "text-body-sm"}`,
-            date.getDay() === 0 && "text-red-700",
-            date.getDay() === 6 && "text-blue-700",
-            (isToday || isSelectedDate) &&
-              `rounded-full text-white ${isSelectedDate ? "bg-primary-500" : "bg-neutral-500"}`,
-          )}
-        >
-          {date.getDate()}
-        </h4>
-
-        <div
-          className={`flex h-full px-4 py-8 md:gap-8 md:py-12 xl:gap-0 xl:py-4 ${isMonthView || isThisWeek ? "flex-col" : "flex-row justify-around"}`}
-        >
-          {todoForDate && (
-            <>
-              <div
+      <TodoFormTrigger
+        aleadySelectedDate={date}
+        renderItem={(todoFormOpen) => (
+          <div
+            className={`group relative flex w-full flex-col border p-4 hover:cursor-pointer ${isMonthView ? "h-70 md:h-100 xl:h-140" : isThisWeek ? "h-180 md:h-250 xl:h-400" : "h-50 md:h-60"}`}
+            onClick={() => handleDateClick(todoFormOpen)}
+          >
+            <div className="flex">
+              <h4
                 className={clsx(
-                  `flex items-center ${(isDesktop && isMonthView) || (!isMonthView && isThisWeek) ? "flex-col" : "flex-row"}`,
-                  isMonthView || isThisWeek ? "gap-4" : "gap-16",
+                  `flex aspect-square items-center justify-center ${isMonthView ? "text-body-md xl:text-body-lg" : isThisWeek ? "text-title-xs xl:text-title-sm" : "text-caption"}`,
+                  date.getDay() === 0 && "text-red-700",
+                  date.getDay() === 6 && "text-blue-700",
+                  isToday && "xl:bg-primary-500 rounded-full bg-neutral-500 text-white",
+                  isSelectedDate && "max-xl:bg-primary-500 max-xl:rounded-full max-xl:text-white",
                 )}
               >
-                {todoForDate.slice(0, sliceNumber).map((todo) => {
-                  const isDone = todo.done;
-                  return (
-                    <span
-                      className="h-full w-full"
-                      key={todo.id}
-                    >
-                      {(isDesktop && isMonthView) || (!isMonthView && isThisWeek) ? (
-                        <CalendarTodoItem
-                          className={`${isMonthView ? "h-24" : "h-30"}`}
-                          todo={todo}
-                        />
-                      ) : (
-                        <CalendarDot className={`size-8 ${isDone ? "text-neutral-500" : "text-primary-500"}`} />
-                      )}
-                    </span>
-                  );
-                })}
-              </div>
+                {date.getDate()}
+              </h4>
+            </div>
 
-              <div>
-                {todoForDate.length > sliceNumber && (
-                  <span className="text-body-md text-neutral-400">+ {todoForDate.length - sliceNumber}</span>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+            <div className="flex h-full min-w-0">
+              {todoForDate && (
+                <div
+                  className={`flex w-full min-w-0 flex-col ${
+                    isMonthView
+                      ? "mt-8 px-8 md:mt-16 md:gap-8 md:px-8 xl:mt-0 xl:gap-0 xl:px-0"
+                      : isThisWeek
+                        ? "mt-12 gap-4 xl:px-4"
+                        : "mt-4 px-4 md:mt-8 md:px-8 xl:px-12"
+                  }`}
+                >
+                  <div
+                    className={clsx(
+                      "flex w-full min-w-0 gap-8",
+                      isMonthView || !isThisWeek ? "flex-row" : "flex-col",
+                      isMonthView && "xl:flex-col xl:gap-4",
+                    )}
+                  >
+                    {todoForDate.slice(0, sliceNumber).map((todo) => {
+                      const isDone = todo.done;
+                      return (
+                        <Fragment key={todo.id}>
+                          {(isMonthView ? isDesktop : isThisWeek) ? (
+                            <CalendarTodoItem
+                              className={`${isMonthView ? "h-24" : "h-28 xl:h-32"}`}
+                              todo={todo}
+                            />
+                          ) : (
+                            <CalendarDot
+                              className={`size-8 md:size-10 ${isDone ? "text-neutral-500" : "text-primary-500"}`}
+                            />
+                          )}
+                        </Fragment>
+                      );
+                    })}
+                  </div>
+
+                  <div>
+                    {todoForDate.length > sliceNumber && (
+                      <span
+                        className={`flex flex-row whitespace-nowrap text-neutral-400 ${
+                          isMonthView ? "text-body-md xl:mx-auto" : isThisWeek ? "text-body-md mx-auto" : "text-caption"
+                        }`}
+                      >
+                        +{todoForDate.length - sliceNumber}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {isDesktop && isMounthViewOrThisWeek && (
+              <span className="pointer-events-none absolute top-8 right-8 hidden size-20 rounded-sm bg-neutral-300 p-4 group-hover:block group-has-[button:hover]:hidden">
+                <Plus className="text-white" />
+              </span>
+            )}
+          </div>
+        )}
+      />
     </div>
   );
 }
