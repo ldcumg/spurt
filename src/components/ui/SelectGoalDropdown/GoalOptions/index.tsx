@@ -1,17 +1,17 @@
 "use client";
 
+import { useGoalListQuery } from "@/hooks/queries/goal/useGoalQueries";
 import type { OpenState } from "../types";
 import AddGoalInput from "./AddGoalInput";
 import GoalOptionItem from "./GoalOptionItem";
-import { validateGoal } from "@/components/addTodo/utils";
-import { useAllGoalQuery } from "@/hooks/queries/goal/useGoalQueries";
-import type { GoalListItem } from "@/types/goals.types";
+import { validateGoal } from "@/components/ui/TodoFormTrigger/index.utils";
+import type { TodoGoalSummary } from "@/types/todos.types";
 
 interface GoalOptionsProps {
   isGoalInputOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<OpenState>>;
-  selectedGoal: GoalListItem | null;
-  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalListItem | null>>;
+  selectedGoal: TodoGoalSummary | null;
+  setSelectedGoal: React.Dispatch<React.SetStateAction<TodoGoalSummary | null>>;
   closeDropdown: () => void;
   setError: React.Dispatch<React.SetStateAction<string>> | undefined;
 }
@@ -25,18 +25,16 @@ export default function GoalOptions({
   setError,
 }: GoalOptionsProps) {
   /** 목표 선택 */
-  const handleSelect = (option: GoalListItem) => {
+  const handleSelect = (option: TodoGoalSummary) => {
     if (setError) validateGoal(option, setError);
     setSelectedGoal(option);
     closeDropdown();
   };
 
-  const { data: goalData, isPending: isGoalPending, isError: isGoalError, error: goalError } = useAllGoalQuery();
+  const { data: goalData, isPending: isGoalPending, isError: isGoalError, error: goalError } = useGoalListQuery();
   if (isGoalPending) return <div>Loading...</div>;
   if (isGoalError) return <div>Error: {goalError.message}</div>;
-  const {
-    data: { goals },
-  } = goalData;
+  const goals = goalData && "goals" in goalData ? goalData.goals : [];
 
   return (
     // border와 rounded를 담당하는 바깥 컨테이너

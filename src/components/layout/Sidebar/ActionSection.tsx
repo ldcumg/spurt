@@ -2,11 +2,13 @@
 
 import { Flag, Todos } from "@/assets/icons/index";
 import AddGoalTrigger from "@/components/addGoal/AddGoalTrigger";
-import AddTodoTrigger from "@/components/addTodo/AddTodoTrigger";
 import Button from "@/components/ui/Button";
+import TodoFormTrigger from "@/components/ui/TodoFormTrigger";
 
 export default function ActionSection() {
-  console.log("ActionSection Imports:", { Flag, Todos, AddGoalTrigger, Button });
+  // 로그가 많이 찍혀 주석처리 합니다 - 유진
+  //console.log("ActionSection Imports:", { Flag, Todos, AddGoalTrigger, Button });
+
   return (
     <div className="flex gap-8">
       <AddGoalTrigger>
@@ -21,10 +23,10 @@ export default function ActionSection() {
         </Button>
       </AddGoalTrigger>
 
-      <AddTodoTrigger
-        renderItem={(addTodoOpen) => (
+      <TodoFormTrigger
+        renderItem={(todoFormOpen) => (
           <Button
-            onClick={addTodoOpen}
+            onClick={todoFormOpen}
             variant="outline"
             size="square"
             className="text-body-md aspect-square h-auto flex-1 font-semibold"

@@ -4,17 +4,17 @@ import GoalDropdownButton from "./GoalDropdownButton";
 import GoalOptions from "./GoalOptions";
 import { INITAIL_OPEN_STATE } from "./constants";
 import type { OpenState } from "./types";
-import { validateGoal } from "@/components/addTodo/utils";
+import { validateGoal } from "@/components/ui/TodoFormTrigger/index.utils";
 import { useClickOutside } from "@/hooks/disclosure/useClickOutside";
 import { twMerge } from "@/lib/twMerge";
-import type { GoalListItem } from "@/types/goals.types";
+import type { TodoGoalSummary } from "@/types/todos.types";
 import clsx from "clsx";
 import { useState } from "react";
 
 interface SelectGoalDropdownProps {
   label?: string;
-  selectedGoal: GoalListItem | null;
-  setSelectedGoal: React.Dispatch<React.SetStateAction<GoalListItem | null>>;
+  selectedGoal: TodoGoalSummary | null;
+  setSelectedGoal: React.Dispatch<React.SetStateAction<TodoGoalSummary | null>>;
   error?: string;
   setError?: React.Dispatch<React.SetStateAction<string>>;
   className?: string;
@@ -29,13 +29,13 @@ export default function SelectGoalDropdown({
   className,
 }: SelectGoalDropdownProps) {
   const [isOen, setIsOpen] = useState<OpenState>(INITAIL_OPEN_STATE);
+
   /** 드랍다운 닫기 */
   const closeDropdown = () => setIsOpen(INITAIL_OPEN_STATE);
 
-  /** 드랍다운 밖 클릭 시 드랍다운 닫기 */
+  /** 드랍다운 바깥 영역 클릭 시 드랍다운 닫기 */
   const containerRef = useClickOutside(() => {
     if (isOen.option) {
-      console.log("실행");
       if (setError) validateGoal(selectedGoal, setError);
       closeDropdown();
     }

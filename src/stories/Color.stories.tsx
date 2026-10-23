@@ -12,7 +12,7 @@ import {
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "foundations",
+  title: "FOUNDATION",
 } satisfies Meta;
 
 export default meta;

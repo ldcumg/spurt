@@ -1,15 +1,15 @@
 "use client";
 
-import CalendarBody from "@/components/calendar/CalendarBody";
-import DayHeader from "@/components/calendar/DayHeader";
-import DesctopCalendarHeader from "@/components/calendar/DesktopCalendarHeader";
-import MobileCalendarHeader from "@/components/calendar/MobileCalendarHeader";
-import TodoForDate from "@/components/calendar/TodoForDate";
-import type { CalendarWeeks } from "@/components/calendar/types";
-import { getCalendarWeeks, groupTodosByDate } from "@/components/calendar/utils";
+import type { CalendarWeeks } from "./index.types";
+import { getCalendarWeeks, groupTodosByDate } from "./index.utils";
+import CalendarBody from "@/app/(main)/calendar/_components/CalendarBody";
+import DesktopCalendarHeader from "@/app/(main)/calendar/_components/DesktopCalendarHeader";
+import MobileCalendarHeader from "@/app/(main)/calendar/_components/MobileCalendarHeader";
+import TodoForDate from "@/app/(main)/calendar/_components/TodoForDate";
+import DayHeader from "@/components/ui/DayHeader";
 import { useAllTodoQuery } from "@/hooks/queries/todo/useTodoQueries";
 import { useViewport } from "@/hooks/viewport/useViewport";
-import type { GoalListItem } from "@/types/goals.types";
+import type { TodoGoalSummary } from "@/types/todos.types";
 import { useState } from "react";
 
 export default function CalendarPage() {
@@ -19,11 +19,11 @@ export default function CalendarPage() {
   firstSunday.setDate(today.getDate() - today.getDay() - 14);
   const currentWeekCalendar = getCalendarWeeks(firstSunday);
   const [calendarWeeks, setCalendarWeeks] = useState<CalendarWeeks>(currentWeekCalendar);
-  const { isDesktop } = useViewport();
+  const { isTablet, isDesktop } = useViewport();
 
   const [isMonthView, setIsMonthView] = useState<boolean>(true);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
-  const [selectedGoal, setSelectedGoal] = useState<GoalListItem | null>(null);
+  const [selectedGoal, setSelectedGoal] = useState<TodoGoalSummary | null>(null);
 
   const { data: todoData, isPending: isTodoPending, isError: isTodoError, error: Todoerror } = useAllTodoQuery();
   if (isTodoPending) return <div>Loading...</div>;
@@ -35,9 +35,9 @@ export default function CalendarPage() {
   const todoGroupedByDate = groupTodosByDate(filteredTodoByGoal);
 
   return (
-    <div className="flex min-h-full w-full flex-col items-center gap-16 p-4 md:p-24 xl:py-40">
-      {isDesktop ? (
-        <DesctopCalendarHeader
+    <div className="flex min-h-full w-full flex-col items-center gap-12 p-4 md:p-24 xl:py-40">
+      {isTablet || isDesktop ? (
+        <DesktopCalendarHeader
           calendarWeeks={calendarWeeks}
           isMonthView={isMonthView}
           setCalendarWeeks={setCalendarWeeks}
@@ -61,7 +61,7 @@ export default function CalendarPage() {
       )}
 
       {/* 달력 */}
-      <div className="flex min-h-480 w-full flex-col md:h-600 xl:h-800">
+      <div className="flex h-480 w-full flex-col md:h-560 xl:h-800">
         <DayHeader className="border" />
 
         <CalendarBody

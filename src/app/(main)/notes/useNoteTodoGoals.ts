@@ -1,6 +1,6 @@
 "use client";
 
-import { todoQueryOptions } from "@/hooks/queries/todo";
+import { todoQueryOptions } from "@/hooks/queries/todo/queryOptions";
 import type { TodoGoalSummary, TodoResponse } from "@/types/todos.types";
 import { useQueries } from "@tanstack/react-query";
 import type { AxiosResponse } from "axios";
@@ -26,7 +26,7 @@ export const getNoteTodoGoalLabel = (state: NoteTodoGoalState | undefined) => {
 export const useNoteTodoGoals = (todoIds: number[]) => {
   const uniqueTodoIds = [...new Set(todoIds.filter((todoId) => Number.isInteger(todoId) && todoId > 0))];
   const queries = useQueries({
-    queries: uniqueTodoIds.map((todoId) => todoQueryOptions.detail(String(todoId))),
+    queries: uniqueTodoIds.map((todoId) => todoQueryOptions.detail(todoId)),
   });
   const goalStateByTodoId = new Map<number, NoteTodoGoalState>();
 

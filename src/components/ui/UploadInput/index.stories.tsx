@@ -15,7 +15,7 @@ function StatefulUploadInput(props: Omit<ComponentProps<typeof UploadInput>, "fi
 }
 
 const meta = {
-  title: "components/UploadInput",
+  title: "UI/UploadInput",
   component: StatefulUploadInput,
   parameters: {
     layout: "centered",

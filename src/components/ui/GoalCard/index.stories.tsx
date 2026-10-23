@@ -1,13 +1,12 @@
 import GoalCard from ".";
-
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { MockGoalList, Todos } from "@/mocks/goalCard.mock";
 import { useState } from "react";
 import { TodoResponse } from "@/types/todos.types";
 import { GoalListItem } from "@/types/goals.types";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta = {
-  title: "components/GoalCard",
+  title: "UI/GoalCard",
   component: GoalCard,
   parameters: {
     layout: "centered",
