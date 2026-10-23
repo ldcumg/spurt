@@ -1,10 +1,16 @@
-import { useMutation } from "@tanstack/react-query";
 import { authMutationOptions } from "./mutationOptions";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useLoginMutation = () => {
-  return useMutation(authMutationOptions.login());
+  const queryClient = useQueryClient();
+  return useMutation(authMutationOptions.login(queryClient));
 };
 
 export const useSignupMutation = () => {
-  return useMutation(authMutationOptions.signup());
+  const queryClient = useQueryClient();
+  return useMutation(authMutationOptions.signup(queryClient));
+};
+
+export const useLogoutMutation = () => {
+  return useMutation(authMutationOptions.logout());
 };
