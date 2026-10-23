@@ -19,7 +19,7 @@ const uploadFile = async (file: File) => {
     },
   });
 
-  return url;
+  return `${url}?fileName=${file.name}`;
 };
 
 /** 할 일 수정 또는 생성 */

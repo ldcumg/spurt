@@ -1,5 +1,5 @@
 import { downloadFile } from "../index.services";
-import { getFileName } from "../index.utils";
+import { parseFileUrl } from "../index.utils";
 import NoteSection from "./NoteSection";
 import { Download, Link, Temporary } from "@/assets/icons";
 import type { NoteResponse } from "@/types/notes.types";
@@ -11,20 +11,22 @@ interface TodoContentsProps {
 }
 
 export default function TodoContents({ todo: { fileUrl, linkUrl, noteIds }, handleNoteDetailOpen }: TodoContentsProps) {
+  const parsedFile = fileUrl ? parseFileUrl(fileUrl) : null;
+
   return (
     <div className="text-body-md md:text-body-lg flex flex-col gap-24">
       {(fileUrl || linkUrl) && (
         <div className="flex flex-col gap-12">
           <h3 className="text-title-xs md:text-title-sm">첨부자료</h3>
 
-          {fileUrl && (
+          {parsedFile && (
             <div className="flex flex-row items-center justify-between">
               <span className="flex flex-row gap-8">
                 <Temporary className="size-24 text-neutral-400" />
-                <span>{getFileName(fileUrl, "file")}</span>
+                <span>{parsedFile.name ?? "file"}</span>
               </span>
               <button
-                onClick={() => downloadFile(fileUrl)}
+                onClick={() => downloadFile(parsedFile.url)}
                 type="button"
               >
                 <Download className="size-24" />
