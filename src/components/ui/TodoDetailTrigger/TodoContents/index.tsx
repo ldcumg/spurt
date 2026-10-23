@@ -1,13 +1,16 @@
 import { downloadFile } from "../index.services";
 import { getFileName } from "../index.utils";
+import NoteSection from "./NoteSection";
 import { Download, Link, Temporary } from "@/assets/icons";
+import type { NoteResponse } from "@/types/notes.types";
 import type { TodoResponse } from "@/types/todos.types";
 
 interface TodoContentsProps {
   todo: TodoResponse;
+  handleNoteDetailOpen: (note: NoteResponse) => void;
 }
 
-export default function TodoContents({ todo: { fileUrl, linkUrl, noteIds } }: TodoContentsProps) {
+export default function TodoContents({ todo: { fileUrl, linkUrl, noteIds }, handleNoteDetailOpen }: TodoContentsProps) {
   return (
     <div className="text-body-md md:text-body-lg flex flex-col gap-24">
       {(fileUrl || linkUrl) && (
@@ -44,11 +47,11 @@ export default function TodoContents({ todo: { fileUrl, linkUrl, noteIds } }: To
         </div>
       )}
 
-      {/* TODO */}
       {noteIds.length > 0 && (
-        <div>
-          <h3 className="text-title-xs md:text-title-sm">작성된 노트</h3>
-        </div>
+        <NoteSection
+          noteIds={noteIds}
+          handleNoteDetailOpen={handleNoteDetailOpen}
+        />
       )}
     </div>
   );

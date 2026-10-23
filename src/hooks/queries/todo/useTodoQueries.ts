@@ -6,8 +6,3 @@ export const useAllTodoQuery = () => {
   const queryClient = useQueryClient();
   return useQuery(todoQueryOptions.all(queryClient));
 };
-
-/** 특정 todo 요청 쿼리 */
-export const useTodoDetailQuery = (todoId: string) => {
-  return useQuery(todoQueryOptions.detail(todoId));
-};

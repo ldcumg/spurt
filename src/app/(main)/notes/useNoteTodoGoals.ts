@@ -26,7 +26,7 @@ export const getNoteTodoGoalLabel = (state: NoteTodoGoalState | undefined) => {
 export const useNoteTodoGoals = (todoIds: number[]) => {
   const uniqueTodoIds = [...new Set(todoIds.filter((todoId) => Number.isInteger(todoId) && todoId > 0))];
   const queries = useQueries({
-    queries: uniqueTodoIds.map((todoId) => todoQueryOptions.detail(String(todoId))),
+    queries: uniqueTodoIds.map((todoId) => todoQueryOptions.detail(todoId)),
   });
   const goalStateByTodoId = new Map<number, NoteTodoGoalState>();
 
