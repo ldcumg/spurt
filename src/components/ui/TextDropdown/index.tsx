@@ -21,8 +21,10 @@ export default function TextDropdown({ options, layoutClassName, optionClassName
     close();
   });
 
-  const layoutClasses = twMerge(clsx("absolute top-40 right-0 bg-white z-10 flex flex-col gap-4", layoutClassName));
-  const optionClasses = twMerge(clsx("w-100 cursor-pointer hover:bg-neutral-300", optionClassName));
+  const layoutClasses = twMerge(
+    clsx("absolute top-35 right-0 bg-white z-10 flex flex-col gap-4 p-12 rounded-sm shadow-md", layoutClassName),
+  );
+  const optionClasses = twMerge(clsx("w-110 cursor-pointer hover:bg-neutral-100 rounded-sm py-6", optionClassName));
 
   return (
     <div
