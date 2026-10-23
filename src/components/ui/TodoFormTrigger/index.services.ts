@@ -63,7 +63,7 @@ export const handleTodoSubmit = async <TData, TError>({
     if (todo.goalId !== selectedGoal.id) editData.goalId = selectedGoal.id;
 
     // 마감 날짜 수정 시 반영
-    const dueDate = selectedDate?.toISOString() ?? null;
+    const dueDate = selectedDate?.toISOString();
     if (todo.dueDate !== dueDate) {
       editData.dueDate = dueDate;
     }

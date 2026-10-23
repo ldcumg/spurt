@@ -22,7 +22,7 @@ export const todoQueryOptions = {
         return response;
       },
     }),
-  detail: (todoId: string) =>
+  detail: (todoId: string | number) =>
     queryOptions({
       queryKey: TODO_QUERY_KEYS.detail(todoId),
       queryFn: () => clientFetcher.get<TodoResponse>(TODOS_API_PATH.detail(todoId)),
